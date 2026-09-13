@@ -3,10 +3,10 @@
 # contract's handoff scan (lead SKILL.md step 3). refuses a team-seat dispatch
 # whose brief carries a file:line coordinate, a verbatim run of an always-loaded
 # rule or of a file the brief itself names, a paraphrase of the user CLAUDE.md
-# machine budget or the comment standard, a hedged term, or no learnings
-# channel — or a planner brief naming no brief.md, or a review brief naming no
-# report path — and hands the reason back so the lead re-anchors and dispatches
-# again. fail open on anything that isn't a clear hit — a gate that misfires
+# machine budget or the comment standard, or a hedged term — or a planner brief
+# naming no brief.md, or a review brief naming no report path — and hands the
+# reason back so the lead re-anchors and dispatches again. the learnings channel
+# is the one item it supplies rather than refuses over (see the tail). fail open on anything that isn't a clear hit — a gate that misfires
 # costs more than one it lets through.
 command -v jq >/dev/null 2>&1 || exit 0
 [ -n "$KRU_NO_GATE" ] && exit 0
@@ -28,7 +28,11 @@ reasons=""
 # a coordinate is a stale cache: file.ext:NN, or a bare "line 91" / "lines 20-21"
 coords=$(printf '%s' "$prompt" | grep -oE '\.(tsx?|jsx?|mjs|cjs|svelte|vue|astro|md|go|py|rs|css|scss|json|sql|html|ya?ml|toml|sh)\b:[0-9]+|\blines? [0-9]+' | head -5 | tr '\n' ' ')
 [ -n "$coords" ] && reasons="coordinates instead of named anchors: ${coords}(re-anchor each to its function/const/section — item 2, scan 1). "
-printf '%s' "$prompt" | grep -q 'inbox.md' || reasons="${reasons}no learnings channel: the brief must carry the literal path ~/.claude/kru/inbox.md and the one-line format (item 7, scan 4). "
+# the learnings channel is the same literal path on every brief, so the hook
+# supplies it rather than refusing over its absence — a refusal costs a whole
+# re-dispatch to re-type text this file already holds.
+inject_channel=false
+printf '%s' "$prompt" | grep -q 'inbox.md' || inject_channel=true
 # a hedge on a term the builder codes against is a decision delegated by
 # accident — scan 3's hedge half. the imperative half stays a reading check.
 hedge=$(printf '%s' "$prompt" | grep -oiE '\b(may|might|could) mean\b|\bunclear (whether|if)\b|\bnot sure (whether|if)\b' | head -1)
@@ -148,6 +152,21 @@ if [ "$seat" = "planner" ] && ! printf '%s' "$prompt" | grep -q 'brief\.md'; the
   reasons="${reasons}planner brief names no brief.md: run /kru:brief first and point the seat at the written file (step 2.6). "
 fi
 
-[ -z "$reasons" ] && exit 0
-printf 'kru handoff gate refused the dispatch to %s — %sFix the brief and dispatch again.\n' "$seat" "$reasons" >&2
-exit 2
+if [ -n "$reasons" ]; then
+  printf 'kru handoff gate refused the dispatch to %s — %sFix the brief and dispatch again.\n' "$seat" "$reasons" >&2
+  exit 2
+fi
+
+# nothing to refuse. updatedInput replaces the whole tool_input, so it is built
+# from the original rather than assembled — and any jq failure falls through to
+# a plain allow, the same fail-open the rest of this gate keeps. the injected
+# text names itself so the auditor reading the stored prompt can tell the hook's
+# paragraph from the lead's own.
+[ "$inject_channel" = false ] && exit 0
+printf '%s' "$input" | jq -c --arg root "$plugin_root" '{
+  hookSpecificOutput: {
+    hookEventName: "PreToolUse",
+    updatedInput: (.tool_input | .prompt += ("\n\nkru hook — learnings channel: a durable, cross-project preference you hit mid-task (the user rejected X twice and chose Y) goes as one line to ~/.claude/kru/inbox.md, format at " + $root + "/PREFERENCES.md. Journaling, not derailing."))
+  }
+}' 2>/dev/null
+exit 0
