@@ -90,7 +90,7 @@ Pull the file that matches the task, not all four.
 - `reference/queries.md` — relational queries vs joins, left-join nullability, `$dynamic()` builders, prepared statements and `placeholder`, the `sql` template and where `sql.raw` becomes injection, transactions.
 
 ## Not this skill's job
-- **Engine semantics** — WAL, `busy_timeout`, `IMMEDIATE` transactions, the official 12-step rebuild, `STRICT`: the **`sqlite`** skill. Indexing strategy, normalization, lock impact of DDL: the **`postgres-architect`** seat's own discipline. This skill is only the ORM layer over them.
+- **Engine semantics** — WAL, `busy_timeout`, `IMMEDIATE` transactions, the official 12-step rebuild, `STRICT`: the **`sqlite`** skill. Lock impact of DDL, enums, index builds: the **`postgres`** skill. Modeling, NULL semantics, expand/contract: the **`sql`** skill. This skill is only the ORM layer over them.
 - **MySQL / SingleStore / MSSQL / CockroachDB dialects** — no seat owns them; the recipes here are pg + sqlite and mislead if stretched.
-- **Cloudflare D1** — `cloudflare-builder`'s. It is the sqlite dialect, but the binding and migration CLI are Workers-shaped.
+- **Cloudflare D1** — the sqlite dialect over the `d1` driver, but the migration CLI and the rebuild are D1's: the `sqlite` skill's `reference/d1.md`.
 - **Typing the query surface** (generics, inference, `.d.ts`) — the `typescript` skill, in whichever seat owns the code.

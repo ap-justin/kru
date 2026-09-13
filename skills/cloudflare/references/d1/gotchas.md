@@ -80,7 +80,7 @@
 ### "Foreign key constraint failed"
 
 **Cause:** Inserting row with FK to non-existent parent, or deleting parent before children  
-**Solution:** Enable FK enforcement: `PRAGMA foreign_keys = ON;` and use ON DELETE CASCADE in schema
+**Solution:** D1 already enforces foreign keys on every query. Insert parents before children; in a migration that must violate them mid-way, `PRAGMA defer_foreign_keys = true` (it does not stop `ON DELETE CASCADE`) — see the `sqlite` skill's `reference/d1.md`
 
 ### "BLOB data corrupted on export"
 

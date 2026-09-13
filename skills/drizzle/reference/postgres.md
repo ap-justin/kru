@@ -1,6 +1,6 @@
 # Drizzle — the pg dialect
 
-Read `SKILL.md` first. Indexing strategy, normalization, and the lock impact of DDL are the `postgres-architect` seat's own discipline — this file is only what the ORM layer changes about them.
+Read `SKILL.md` first. The lock impact of DDL, index builds and enums are the `postgres` skill's — this file is only what the ORM layer changes about them.
 
 ## Drivers
 0.45.2 ships: `node-postgres` · `postgres-js` · `neon-http` · `neon-serverless` · `vercel-postgres` · `pglite` · `aws-data-api/pg` · `xata-http` · `pg-proxy`.
