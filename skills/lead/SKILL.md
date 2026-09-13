@@ -80,7 +80,8 @@ names, a ticket's schema — stay exact, and a builder's handoff stays precise a
 
 ## Run the board
 A delegated builder runs in its own context for minutes and can't be steered mid-run, so the main
-thread is where continuity lives. Keep a running worklist (`TodoWrite` where available):
+thread is where continuity lives. Keep a running worklist in the task tools (`TaskCreate` ·
+`TaskUpdate`, or `TodoWrite` where those are off):
 
 - **In-flight** — which seat is running, on what, and the return you're waiting to review.
 - **Next** — the hops already decided, ordered, so a return moves straight to the next action.

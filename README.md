@@ -26,6 +26,11 @@ Claude Code on the web: commit this to the repo's `.claude/settings.json`:
 ## Requirements
 - **Claude Code 2.1.248 or newer.** An older CLI runs the seats but silently drops the newer settings they carry.
 - **`jq`**, for the hooks. Without it every hook fails open and the team still runs, ungated.
+- **The task tools switched on.** Newer models ship with them off, and the lead tracks its work in them.
+  A plugin can't turn them on for you, so add this to `~/.claude/settings.json` and restart:
+  ```json
+  { "env": { "CLAUDE_CODE_ENABLE_TODO_TOOLS": "1" } }
+  ```
 - **Model access to `claude-opus-5` and `claude-sonnet-5`.**
 - **The `chrome-devtools` MCP server**, for the visual and accessibility reviewers only; without it they audit from source.
   ```
@@ -50,11 +55,12 @@ with you first.
 Then just ask: *"add feature Y"*, *"fix Z"*, *"build a landing page for X"*. The lead picks the seats.
 
 ## What it does to your machine
-The team is opinionated about process, and it enforces that with four hooks. Each one fails open
+The team is opinionated about process, and it enforces that with five hooks. Each one fails open
 without `jq`, and each interruption below is one you can turn off.
 
 | When | What happens | Turn it off |
 |---|---|---|
+| Session start | Warns once if the task tools are off | `export KRU_NO_TASKS_CHECK=1` |
 | First tool call of a session | Blocks once until the lead contract is loaded, so no build starts off-contract | `export KRU_NO_LEAD_GATE=1` |
 | Dispatching a seat | Refuses a handoff that carries stale line numbers, restates a rule the seat already has, or leaves a decision open | `export KRU_NO_GATE=1` |
 | End of a turn that dispatched seats | Blocks once to run the dispatch auditor over the session's routing | `export KRU_NO_AUDIT=1` |

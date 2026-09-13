@@ -112,6 +112,11 @@ a config byte-identical across twenty repos is the duplication the project rule 
 instance of it, and a server sitting in one repo's list out of twenty is a project fact wearing a
 user-scope coat.
 
+**The lead's board is user-scoped too.** The task tools it tracks work in ship off on newer models,
+and their one switch is `CLAUDE_CODE_ENABLE_TODO_TOOLS=1` in `~/.claude/settings.json` → `env`. Check
+`env`; unset, hand the user the line `${CLAUDE_PLUGIN_ROOT}/hooks/check-task-tools.sh` prints — it
+lands on their next restart.
+
 Three that fail with no error:
 
 - **The name is the namespace.** Several seats name `mcp__context7__resolve-library-id` /
