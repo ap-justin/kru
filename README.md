@@ -62,7 +62,7 @@ without `jq`, and each interruption below is one you can turn off.
 |---|---|---|
 | Session start | Warns once if the task tools are off | `export KRU_NO_TASKS_CHECK=1` |
 | First tool call of a session | Blocks once until the lead contract is loaded, so no build starts off-contract | `export KRU_NO_LEAD_GATE=1` |
-| Dispatching a seat | Refuses a handoff that carries stale line numbers, restates a rule the seat already has, or leaves a decision open | `export KRU_NO_GATE=1` |
+| Dispatching a seat | Refuses a handoff that carries stale line numbers, restates a rule the seat already has, or leaves a decision open, and logs the refusal | `export KRU_NO_GATE=1` |
 | End of a turn that dispatched seats | Blocks once to run the dispatch auditor over the session's routing | `export KRU_NO_AUDIT=1` |
 | After each dispatch | Appends one line to a session ledger the auditor reads | — |
 
@@ -72,6 +72,8 @@ that repo's `.claude/CLAUDE.md`:
 - `~/.claude/kru/management/<project>/` — briefs, plans, tickets, todos, issues. Kept at user
   level on purpose: your repo stays clean, and the plan survives branch churn and a re-clone.
 - `~/.claude/kru/inbox.md`, `patterns/` — preferences you bank with `/kru:remember`.
+- `~/.claude/kru/refusals.jsonl` — dispatches the handoff gate refused, capped at 500 lines;
+  `/kru:roster learn` reads it for misfires and drains it.
 - `~/.claude/kru/audit/`, `lead-gate/` — per-session bookkeeping for the hooks above; audit
   ledgers self-delete after 7 days.
 - `${TMPDIR}/kru-review/` — review reports, so an audit trail stays out of the conversation.

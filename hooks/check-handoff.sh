@@ -5,7 +5,8 @@
 # rule or of a file the brief itself names, a paraphrase of the user CLAUDE.md
 # machine budget or the comment standard, or a hedged term — or a planner brief
 # naming no brief.md, or a review brief naming no report path — and hands the
-# reason back so the lead re-anchors and dispatches again. the learnings channel
+# reason back so the lead re-anchors and dispatches again, logging the refusal
+# on the way out (see the refusal branch). the learnings channel
 # is the one item it supplies rather than refuses over (see the tail). fail open on anything that isn't a clear hit — a gate that misfires
 # costs more than one it lets through.
 command -v jq >/dev/null 2>&1 || exit 0
@@ -66,11 +67,13 @@ if [ -f "$USER_CANON" ]; then
   fi
   # "one X at a time" is ordinary English — pacing tickets, rows, migrations,
   # a single writer. it's the machine budget only where a machine word sits in
-  # the same sentence.
+  # the same sentence. the quote is the pacing clause, not the machine word —
+  # that word is often the test command the slice legitimately names.
   [ -z "$budget" ] && budget=$(printf '%s' "$prompt" |
     grep -oiE '[^.]*\b(one|a single)( [a-z-]+){1,3} at a time\b[^.]*' |
-    grep -oiE '.{0,30}\b(ram|memory|swap|cores?|cpu|machine|budget|background shells?|long-running|headless|chromium|vitest|playwright|tsc)\b.{0,30}' | head -1)
-  [ -n "$budget" ] && reasons="${reasons}paraphrases the user CLAUDE.md machine budget: \"${budget}\" — that file loads into every seat on its own; cut the sentence (scan 2). "
+    grep -iE '\b(ram|memory|swap|cores?|cpu|machine|budget|background shells?|long-running|headless|chromium|vitest|playwright|tsc)\b' |
+    grep -oiE '\b(one|a single)( [a-z-]+){1,3} at a time\b' | head -1)
+  [ -n "$budget" ] && reasons="${reasons}paraphrases the user CLAUDE.md machine budget: \"${budget}\" — that file loads into every seat on its own; cut that clause, keep any command the slice runs (scan 2). "
 fi
 comments=$(printf '%s' "$prompt" | grep -oiE '\bcomments?\b[^.]{0,80}\blowercase\b|\blowercase\b[^.]{0,80}\bcomments?\b' | head -1)
 # the standard's other half — comments already in the file survive your edit.
@@ -153,6 +156,32 @@ if [ "$seat" = "planner" ] && ! printf '%s' "$prompt" | grep -q 'brief\.md'; the
 fi
 
 if [ -n "$reasons" ]; then
+  # a refused dispatch never reaches the posttooluse ledger writer, so this
+  # branch writes the catch twice: to the session ledger, where dispatch-auditor
+  # sees a scan the lead keeps walking past, and to a cross-session log
+  # /roster learn sweeps for misfires. log-dispatch.sh's record plus session and
+  # reasons; a logging miss still refuses.
+  sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
+  record=$(printf '%s' "$input" | jq -c --arg seat "$seat" --arg reasons "$reasons" --arg sid "$sid" '{
+    ts: (now | todate),
+    session: $sid,
+    cwd: ((.cwd // "") | split("/") | last),
+    seat: $seat,
+    desc: (.tool_input.description // ""),
+    prompt: ((.tool_input.prompt // "")[0:4000]),
+    truncated: (((.tool_input.prompt // "") | length) > 4000),
+    refused: true,
+    reasons: $reasons
+  }' 2>/dev/null)
+  if [ -n "$record" ] && mkdir -p "$HOME/.claude/kru/audit" 2>/dev/null; then
+    [ -n "$sid" ] && printf '%s\n' "$record" >> "$HOME/.claude/kru/audit/$sid.jsonl" 2>/dev/null
+    # the sweep drains what it reads; the cap bounds a log nobody sweeps
+    rlog="$HOME/.claude/kru/refusals.jsonl"
+    printf '%s\n' "$record" >> "$rlog" 2>/dev/null
+    if [ "$(wc -l < "$rlog" 2>/dev/null | tr -d ' ')" -gt 500 ] 2>/dev/null; then
+      tail -n 500 "$rlog" > "$rlog.tmp" 2>/dev/null && mv "$rlog.tmp" "$rlog" 2>/dev/null
+    fi
+  fi
   printf 'kru handoff gate refused the dispatch to %s — %sFix the brief and dispatch again.\n' "$seat" "$reasons" >&2
   exit 2
 fi

@@ -50,6 +50,7 @@ printf '%s' "$input" | jq -c --arg seat "$seat" \
   desc: (.tool_input.description // ""),
   prompt: ((.tool_input.prompt // "")[0:4000]),
   truncated: (((.tool_input.prompt // "") | length) > 4000),
+  refused: false,
   block_o: $block_o,
   return_pass: $return_pass
 }' >> "$dir/$sid.jsonl" 2>/dev/null
