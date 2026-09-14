@@ -3,7 +3,7 @@
 *(said “crew”)*
 
 An engineering team for Claude Code, as a plugin. One **lead** skill scopes the work, detects the
-stack, and routes it to 31 specialist seats — builders, reviewers, design, platform — each pinned to
+stack, and routes it to 33 specialist seats — builders, reviewers, design, platform — each pinned to
 its framework's official source rather than to training data.
 
 You talk to the lead the way you'd talk to an engineering lead. It does the routing.
@@ -101,7 +101,7 @@ that repo's `.claude/CLAUDE.md`:
 - **UI**: React, Svelte 5, Web Components.
 - **Framework**: React Router 7, Next.js App Router, TanStack Start, SvelteKit, Go-served React, Python.
 - **Data**: Postgres, SQLite, Sanity.
-- **Auth and payments**: Better Auth, Stripe.
+- **Auth, payments and accounting**: Better Auth, Stripe, PayPal, Chariot (DAF grants), QuickBooks Online.
 - **Platform**: Vercel, Cloudflare, Fly.io.
 - **Tooling**: pnpm, Turborepo, Biome.
 
