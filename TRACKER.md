@@ -138,7 +138,7 @@ Every reference cites **`file:line`** — the write-up lives outside the repo, s
 
 ## The brief (`/kru:brief`)
 
-`plan/<effort>/brief.md` — the lead's grill, formalized. One per effort, **rewritten in place** on every re-grill (the old brief is read back as input, never appended to), so the file is always the *current* account of the change rather than an archaeology of every discussion. Prose, not typed: no frontmatter, no id, no status — its existence in the effort dir is the signal.
+`plan/<effort>/brief.md` — the lead's grill, formalized. One per effort, **rewritten in place** on every re-grill (the old brief is read back as input, never appended to), so the file is always the *current* account of the change rather than an archaeology of every discussion. Prose, not typed: no frontmatter, no id, no status — its existence in the effort dir is the signal. Its working half is **`/kru:briefs`** (`skills/briefs/`), which reconciles every effort's ticks against git and waits for the user's pick before writing.
 
 It is **change-shaped, not product-shaped**: it accounts for the change that's going to land, not for what the product should become. No priority score, no framework, no horizon, no success metrics — the user is the PM and already decided *whether*; the brief settles *what, how far, in what order, and when it's done*.
 

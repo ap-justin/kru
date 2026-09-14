@@ -44,6 +44,7 @@ names the seat and its skills has this question answered — take the answer.
 | something the user wants but doesn't want done now — "not yet," "remember this for later" | **`/kru:todo`** — user-invoked, so name it in one line; mid-task it's your Step 4.5 `TODOS.md` capture |
 | something *wrong* the user wants recorded before it evaporates — a bug they just hit, not being fixed now | **`/kru:issue`** — user-invoked, same deal; mid-task it's your Step 4.5 `issues/` capture |
 | the user wants to work what's parked or what's broken — the `TODOS.md` lines, the open defect files | **`/kru:todos`** / **`/kru:issues`** — user-invoked; each reconciles the store against the code, scores, proposes a batch and waits for the pick before building. Name the one they want; only the user can fire them. Mid-task you already read the store directly when a step needs it |
+| the user wants to know where their efforts stand, or to pick one back up — the `plan/<effort>/brief.md` files | **`/kru:briefs`** — user-invoked; reconciles every brief's ticks against git and the code, and waits for the pick before ticking, archiving or resuming |
 | work too big for one context / needs a durable plan of record / decompose a spec into parallelizable slices | `planner` (Step 2.6) |
 | **no specialist matches** | the **user**, naming the seat it would need (*Handling gaps*); the general path only on their say-so |
 

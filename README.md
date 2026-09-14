@@ -92,6 +92,7 @@ that repo's `.claude/CLAUDE.md`:
 
 **Backlog and tech debt**
 - `/kru:todos`, `/kru:issues`: work the backlog; each entry landed is deleted.
+- `/kru:briefs`: check every brief against what shipped; tick, archive, or resume one.
 - `/kru:design-system audit`: audit the design system.
 - `/kru:seo-review`, `/kru:review-animations`, `/kru:improve-animations`, `/kru:design-gallery`: audits on shipped pages.
 - `/kru:ux-review <flow>`: audit a user flow — signup, checkout — end to end through source.
