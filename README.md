@@ -3,7 +3,7 @@
 *(said “crew”)*
 
 An engineering team for Claude Code, as a plugin. One **lead** skill scopes the work, detects the
-stack, and routes it to 34 specialist seats — builders, reviewers, design, platform — each pinned to
+stack, and routes it to 34 specialist seats (builders, reviewers, design, platform), each pinned to
 its framework's official source rather than to training data.
 
 You talk to the lead the way you'd talk to an engineering lead. It does the routing.
@@ -47,7 +47,7 @@ In the repo you want the team to work on:
 /kru:setup
 ```
 
-It reads the repo — stack, framework versions, conventions, test setup, design system — and writes the
+It reads the repo (stack, framework versions, conventions, test setup, design system) and writes the
 answers into that repo's `.claude/CLAUDE.md`, so later sessions don't re-derive them. Run it once per
 repo, again when the repo or the plugin moves. On an empty repo it grills the subject and the stack
 with you first.
@@ -64,19 +64,19 @@ without `jq`, and each interruption below is one you can turn off.
 | First tool call of a session | Blocks once until the lead contract is loaded, so no build starts off-contract | `export KRU_NO_LEAD_GATE=1` |
 | Dispatching a seat | Refuses a handoff that carries stale line numbers, restates a rule the seat already has, or leaves a decision open, and logs the refusal | `export KRU_NO_GATE=1` |
 | End of a turn that dispatched seats | Blocks once to run the dispatch auditor over the session's routing | `export KRU_NO_AUDIT=1` |
-| After each dispatch | Appends one line to a session ledger the auditor reads | — |
+| After each dispatch | Appends one line to a session ledger the auditor reads | Always on |
 
-It writes outside your repo, never inside it — the one exception is `/kru:setup`, which edits
+It writes outside your repo, never inside it. The one exception is `/kru:setup`, which edits
 that repo's `.claude/CLAUDE.md`:
 
-- `~/.claude/kru/management/<project>/` — briefs, plans, tickets, todos, issues. Kept at user
+- `~/.claude/kru/management/<project>/`: briefs, plans, tickets, todos, issues. Kept at user
   level on purpose: your repo stays clean, and the plan survives branch churn and a re-clone.
-- `~/.claude/kru/inbox.md`, `patterns/` — preferences you bank with `/kru:remember`.
-- `~/.claude/kru/refusals.jsonl` — dispatches the handoff gate refused, capped at 500 lines;
+- `~/.claude/kru/inbox.md`, `patterns/`: preferences you bank with `/kru:remember`.
+- `~/.claude/kru/refusals.jsonl`: dispatches the handoff gate refused, capped at 500 lines;
   `/kru:roster learn` reads it for misfires and drains it.
-- `~/.claude/kru/audit/`, `lead-gate/` — per-session bookkeeping for the hooks above; audit
+- `~/.claude/kru/audit/`, `lead-gate/`: per-session bookkeeping for the hooks above; audit
   ledgers self-delete after 7 days.
-- `${TMPDIR}/kru-review/` — review reports, so an audit trail stays out of the conversation.
+- `${TMPDIR}/kru-review/`: review reports, so an audit trail stays out of the conversation.
 
 ## Commands
 **Getting started**
@@ -95,7 +95,7 @@ that repo's `.claude/CLAUDE.md`:
 - `/kru:briefs`: check every brief against what shipped; tick, archive, or resume one.
 - `/kru:design-system audit`: audit the design system.
 - `/kru:seo-review`, `/kru:review-animations`, `/kru:improve-animations`, `/kru:design-gallery`: audits on shipped pages.
-- `/kru:ux-review <flow>`: audit a user flow — signup, checkout — end to end through source.
+- `/kru:ux-review <flow>`: audit a user flow (signup, checkout) end to end through source.
 
 ## Stack
 - **UI**: React, Svelte 5, Web Components.
@@ -112,7 +112,7 @@ A stack with no seat is a question the lead brings to you before it guesses.
 ## Forking the team
 `/kru:roster` (hire a seat, author a skill, sweep banked preferences into the seats) and
 `/kru:update` (sweep what moved upstream) **edit the plugin's own files**. Run them in a clone
-of this repo, not against an installed copy — the install lives in a cache directory that the next
+of this repo, not against an installed copy. The install lives in a cache directory that the next
 plugin update overwrites.
 
 If you just want the team to learn your preferences, `/kru:remember` is the channel that
@@ -122,4 +122,4 @@ How the team is structured and grown: `ROSTER.md`. What each stack's official so
 The preference loop: `PREFERENCES.md`. The plan store's file format: `TRACKER.md`.
 
 ## License
-MIT — see `LICENSE`. Vendored upstream skills keep their own licenses; see `NOTICE`.
+MIT. See `LICENSE`. Vendored upstream skills keep their own licenses; see `NOTICE`.
