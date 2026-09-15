@@ -79,8 +79,11 @@ comments=$(printf '%s' "$prompt" | grep -oiE '\bcomments?\b[^.]{0,80}\blowercase
 # the standard's other half — comments already in the file survive your edit.
 # reworded it escapes the shingle check, and it is the clause whose loss prunes
 # the comment that carried the reason.
-[ -z "$comments" ] && comments=$(printf '%s' "$prompt" | grep -oiE \
-  '\b(preserve|keep|retain|never drop|do not drop|don.t drop)\b[^.]{0,60}\bcomments?\b|\bcomments?\b[^.]{0,60}\b(preserved|retained|survive|kept)\b' | head -1)
+[ -z "$comments" ] && comments=$(printf '%s' "$prompt" | grep -oE '[^.]+' |
+  # "a comment about the email being kept" names what one comment says — the
+  # verb belongs to its subject, not to the standard.
+  grep -viE '\bcomments? (about|explaining|noting|saying|stating|describing|on|why|that|for)\b' |
+  grep -oiE '\b(preserve|keep|retain|never drop|do not drop|don.t drop)\b[^.]{0,60}\bcomments?\b|\bcomments?\b[^.]{0,60}\b(preserved|retained|survive|kept)\b' | head -1)
 [ -n "$comments" ] && reasons="${reasons}paraphrases the comment standard: \"${comments}\" — Block I rides in the seat prompt; cut the sentence (scan 2). "
 
 # a review seat writes its report where the brief says and returns a pointer —
