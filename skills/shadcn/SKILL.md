@@ -1,11 +1,11 @@
 ---
 name: shadcn
-description: Manages shadcn components and projects — adding, searching, fixing, debugging, styling, and composing UI, including chat interfaces. Provides project context, component docs, and usage examples. Applies when working with shadcn/ui, component registries, presets, --preset codes, or any project with a components.json file. Also triggers for "shadcn init", "create an app with --preset", or "switch to --preset".
+description: shadcn/ui work in a repo with a root components.json, or creating one — adding and composing components, updating installed ones from upstream against local edits, theming and CSS variables, chat and conversation UI, authoring a source registry, and init/apply of a --preset code.
 user-invocable: false
 allowed-tools: Bash(npx shadcn@latest *), Bash(pnpm dlx shadcn@latest *), Bash(bunx --bun shadcn@latest *)
 ---
 
-<!-- vendored from `shadcn-ui/ui` (main, sha efac598) → `skills/shadcn`. shadcn's own first-party skill, MIT. Kept verbatim minus `agents/openai.yml` (Codex metadata), `evals/` (fixtures) and `assets/*.png` (branding) — none referenced by the prose. Frontmatter needs no port: `user-invocable: false`, `allowed-tools`, and the `!`cmd`` injection under *Current Project Context* are all native Claude Code fields, so `npx shadcn@latest info --json` really does run before the body is read. Re-sync: re-download `SKILL.md` + `cli.md` + `customization.md` + `mcp.md` + `registry.md` + `rules/*.md` from https://github.com/shadcn-ui/ui/tree/main/skills/shadcn. -->
+<!-- vendored from `shadcn-ui/ui` (main @ 2b3e6d4; `skills/shadcn` last touched by c257f68) → `skills/shadcn`. shadcn's own first-party skill, MIT. Body verbatim minus `agents/openai.yml` (Codex metadata), `evals/` (fixtures) and `assets/*.png` (branding) — none referenced by the prose. Frontmatter needs no port: `user-invocable: false`, `allowed-tools`, and the `!`cmd`` injection under *Current Project Context* are all native Claude Code fields, so `npx shadcn@latest info --json` really does run before the body is read. One deviation, re-applied after any re-sync — the `description`, rewritten to one trigger per branch: `user-invocable: false` makes it the sole invocation lever, and upstream's spends six verbs on the component branch and four phrasings on the preset branch while naming neither the update-installed-from-upstream branch nor the registry-authoring one. Re-sync: re-download `SKILL.md` + `cli.md` + `customization.md` + `mcp.md` + `registry.md` + `rules/*.md` from https://github.com/shadcn-ui/ui/tree/main/skills/shadcn. -->
 
 # shadcn/ui
 
