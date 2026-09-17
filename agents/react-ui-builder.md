@@ -103,6 +103,9 @@ Its `rules/composition.md` toast section settles **which** toast this base impor
 
 **In a shadcn repo the installed theme *is* the design system**, and the token bullet above applies to it unchanged: read the names off the CSS file `tailwindCssFile` points at, use what's there, return a named gap when it's missing something. Stock components stay as the CLI wrote them — `components/ui/*` is the vendor's file, and a restyle there is a diff nobody asked for that the next `add --diff` has to reconcile.
 
+## TanStack Table (only if the repo uses it — no kru skill, it ships its own)
+`@tanstack/react-table` in `package.json` means the playbook ships in the installed packages, version-matched, in two layers: `@tanstack/react-table/skills/` for the React binding (start at `getting-started`) and `@tanstack/table-core/skills/`, one skill per feature. Follow each skill's `requires:` frontmatter into the next — `@tanstack/table-core#core` names a skill in that package. `table-core` is transitive, so under pnpm it resolves in `node_modules/.pnpm/node_modules/@tanstack/`. Your prior is v8 (`useReactTable`); build v9 as the skills write it. The trap that survives a type check: row, cell, column and header methods live on **prototypes**, so destructuring a cell, spreading a row, or `JSON.stringify`-ing one drops every method while the object still looks right — call them through the instance.
+
 ## Modern CSS (shared skill)
 Before writing a JS workaround, an extra wrapper element, or an older CSS hack, load the **`modern-css`** skill and check whether native CSS now does it — container queries, `:has()`, nesting, subgrid, `color-mix()`/relative colors/`light-dark()`, `@starting-style` transitions, scroll-driven/view transitions, `@scope`, and more, each with a Baseline status (Widely/Newly/Limited available) that tells you whether it needs a fallback. Curated for Baseline 2023–2025; verify live for anything newer.
 

@@ -86,6 +86,7 @@ line. What earns deriving is the **library choice inside a lane**: the seat prom
 | `sveltekit-superforms` | `superforms` |
 | `panda.config.*` or a `styled-system/` directory | `panda-css` |
 | `components.json` | `shadcn` — the repo has settled its primitive library, and `ark-ui`'s reach-for section is where that rule lives |
+| `@tanstack/react-table` | **no kru skill** — the playbook ships in the installed `react-table` and `table-core` packages, and the brief names both `skills/` directories |
 | `charmbracelet/bubbletea` (`go.mod`) · `ratatui` (`Cargo.toml`) · `textual` (`pyproject.toml`) · `ink` (`package.json`) | `tui-design` — the repo draws a terminal screen rather than printing to one |
 
 **The TUI frameworks travel in sets**, and it's the framework that answers, not a companion: Bubble Tea brings `lipgloss` + `bubbles` (+ `huh`, `glamour`, `x/ansi`); Ratatui brings `crossterm` + `color-eyre` (+ `tui-textarea`, `ratatui-image`); Textual brings `rich` + `textual-dev`; Ink brings `@inkjs/ui` + `ink-testing-library`. A companion alone is a different answer — `rich` or `lipgloss` on its own is *formatted output* (`ui-patterns` → `reference/terminal-output.md`), `crossterm` on its own is raw terminal control, and neither is this skill.
