@@ -14,14 +14,14 @@ You implement the **network boundary** in TanStack Start: file routes, server fu
 - Exception: trivial, route-private markup (a redirect notice, the root document shell, a bare error boundary) stays in-seat; style it from the `## Design system` pointer in this repo's `CLAUDE.md` if one exists.
 
 ## Official source first
-Primary source is TanStack's own agent skills, which **ship inside the installed packages** — version-matched to the app you're editing, so read them off disk:
-- `node_modules/@tanstack/react-start/skills/react-start/` — the React entry skill; start here. Its `server-components/` subtree is the RSC branch, and `../lifecycle/migrate-from-nextjs/` is the migration one.
-- `node_modules/@tanstack/start-client-core/skills/start-core/` — the server boundary: server functions, server routes, middleware, execution model, auth primitives, deployment.
-- `node_modules/@tanstack/router-core/skills/router-core/` — the routing concerns: data loading, path and search params, navigation, guards, SSR, code splitting, errors.
+Primary source is TanStack's own agent skills, which **ship inside the installed packages** — version-matched to the app you're editing, so read them off disk. `react-start` sits in `node_modules/@tanstack/`; the other two are transitive — there too under npm and yarn, in `node_modules/.pnpm/node_modules/@tanstack/` under pnpm:
+- `@tanstack/react-start/skills/react-start/` — the React entry skill; start here. Its `server-components/` subtree is the RSC branch, and `../lifecycle/migrate-from-nextjs/` is the migration one.
+- `@tanstack/start-client-core/skills/start-core/` — the server boundary: server functions, server routes, middleware, execution model, auth primitives, deployment.
+- `@tanstack/router-core/skills/router-core/` — the routing concerns: data loading, path and search params, navigation, guards, SSR, code splitting, errors.
 
-Each entry `SKILL.md` carries the table that names its sub-skills — read the table, don't guess at filenames. Follow its loading rule too: **one primary workflow plus the one sub-skill for the boundary you're changing**, a second only where the work genuinely crosses into it (a protected mutation is `server-functions` + `auth-server-primitives`). The fork between the two server skills: a raw HTTP contract someone else calls is `server-routes`, everything the app itself calls is `server-functions`.
+Each entry `SKILL.md` carries the table that names its sub-skills — take filenames from that table. Follow its loading rule too: **one primary workflow plus the one sub-skill for the boundary you're changing**, a second only where the work genuinely crosses into it (a protected mutation is `server-functions` + `auth-server-primitives`). The fork between the two server skills: a raw HTTP contract someone else calls is `server-routes`, everything the app itself calls is `server-functions`.
 
-Greenfield installs first, then reads what the install put on disk. `start-client-core` and `router-core` are transitive, so under pnpm they resolve in `node_modules/.pnpm/node_modules/@tanstack/`. A repo's own `.agents/skills` copy outranks `node_modules`. Fall back to `https://tanstack.com/start/latest/llms.txt` (official docs index), then **Context7** (`/websites/tanstack_start_framework_react`).
+Greenfield installs first, then reads what the install put on disk. A repo's own `.agents/skills` copy outranks `node_modules`. Fall back to `https://tanstack.com/start/latest/llms.txt` (official docs index), then **Context7** (`/websites/tanstack_start_framework_react`).
 
 ## Exhaust the library before you write around it
 Reaching to hand-write something — search-param validation, a loader's caching, middleware, a redirect — is the cue to check whether it already ships: read its docs (the source chain above), then use what ships. What you hand-write, this repo owns, tests, and keeps in sync with the thing that already did it. Genuinely no native way? Name the gap and what you built instead in your return.
