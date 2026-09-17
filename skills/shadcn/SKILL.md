@@ -1,11 +1,11 @@
 ---
 name: shadcn
-description: shadcn/ui work in a repo with a root components.json, or creating one — adding and composing components, updating installed ones from upstream against local edits, theming and CSS variables, chat and conversation UI, authoring a source registry, and init/apply of a --preset code.
+description: shadcn/ui work in a repo with a root components.json, or creating one — adding and composing components and blocks, updating installed ones from upstream against local edits, theming and CSS variables, chat and conversation UI, authoring a source registry, and init/apply of a --preset code.
 user-invocable: false
 allowed-tools: Bash(npx shadcn@latest *), Bash(pnpm dlx shadcn@latest *), Bash(bunx --bun shadcn@latest *)
 ---
 
-<!-- vendored from `shadcn-ui/ui` (main @ 2b3e6d4; `skills/shadcn` last touched by c257f68) → `skills/shadcn`. shadcn's own first-party skill, MIT. Body verbatim minus `agents/openai.yml` (Codex metadata), `evals/` (fixtures) and `assets/*.png` (branding) — none referenced by the prose. Frontmatter needs no port: `user-invocable: false`, `allowed-tools`, and the `!`cmd`` injection under *Current Project Context* are all native Claude Code fields, so `npx shadcn@latest info --json` really does run before the body is read. One deviation, re-applied after any re-sync — the `description`, rewritten to one trigger per branch: `user-invocable: false` makes it the sole invocation lever, and upstream's spends six verbs on the component branch and four phrasings on the preset branch while naming neither the update-installed-from-upstream branch nor the registry-authoring one. Re-sync: re-download `SKILL.md` + `cli.md` + `customization.md` + `mcp.md` + `registry.md` + `rules/*.md` from https://github.com/shadcn-ui/ui/tree/main/skills/shadcn. -->
+<!-- vendored from `shadcn-ui/ui` (main @ 2b3e6d4; `skills/shadcn` last touched by c257f68) → `skills/shadcn`. shadcn's own first-party skill, MIT. Body verbatim minus `agents/openai.yml` (Codex metadata), `evals/` (fixtures) and `assets/*.png` (branding) — none referenced by the prose. Frontmatter needs no port: `user-invocable: false`, `allowed-tools`, and the `!`cmd`` injection under *Current Project Context* are all native Claude Code fields, so `npx shadcn@latest info --json` really does run before the body is read. Two deviations, both re-applied after any re-sync: (1) the `description`, rewritten to one trigger per branch; (2) **blocks** named as a capability in *Workflow* step 3, plus the `--chart-*` tokens on the *Charts* row. `SOURCES.md` carries the reasoning for both — this comment loads on every invocation, so it holds only what a re-sync has to re-apply. Re-sync: re-download `SKILL.md` + `cli.md` + `customization.md` + `mcp.md` + `registry.md` + `rules/*.md` from https://github.com/shadcn-ui/ui/tree/main/skills/shadcn. -->
 
 # shadcn/ui
 
@@ -141,7 +141,7 @@ These are the most common patterns that differentiate correct shadcn/ui code. Fo
 | Overlays                   | `Dialog` (modal), `Sheet` (side panel), `Drawer` (bottom sheet), `AlertDialog` (confirmation)       |
 | Feedback                   | `toast` (Base UI), `sonner` (Radix/Aria), `Alert`, `Progress`, `Skeleton`, `Spinner`                 |
 | Command palette            | `Command` inside `Dialog`                                                                           |
-| Charts                     | `Chart` (wraps Recharts)                                                                            |
+| Charts                     | `Chart` (wraps Recharts); series colors are the `--chart-1`…`--chart-5` tokens                       |
 | Layout                     | `Card`, `Separator`, `Resizable`, `ScrollArea`, `Accordion`, `Collapsible`                          |
 | Empty states               | `Empty`                                                                                             |
 | Menus                      | `DropdownMenu`, `ContextMenu`, `Menubar`                                                            |
@@ -180,7 +180,7 @@ npx shadcn@latest docs button dialog select
 
 1. **Get project context** — already injected above. Run `npx shadcn@latest info` again if you need to refresh.
 2. **Check installed components first** — before running `add`, always check the `components` list from project context or list the `resolvedPaths.ui` directory. Don't import components that haven't been added, and don't re-add ones already installed.
-3. **Find components** — `npx shadcn@latest search`.
+3. **Find components** — `npx shadcn@latest search`. A **block** installs a whole page or section at once (`@shadcn/dashboard-01`) rather than a single component — the fastest scaffold for a new surface. List them with `-t block`, which is also where the chart compositions live.
 4. **Get docs and examples** — run `npx shadcn@latest docs <component>` to get URLs, then fetch them. Use `npx shadcn@latest view` to browse registry items you haven't installed. To preview changes to installed components, use `npx shadcn@latest add --diff`.
 5. **Install or update** — `npx shadcn@latest add`. When updating existing components, use `--dry-run` and `--diff` to preview changes first (see [Updating Components](#updating-components) below).
 6. **Fix imports in third-party components** — After adding components from community registries (e.g. `@bundui`, `@magicui`), check the added non-UI files for hardcoded import paths like `@/components/ui/...`. These won't match the project's actual aliases. Use `npx shadcn@latest info` to get the correct `ui` alias (e.g. `@workspace/ui/components`) and rewrite the imports accordingly. The CLI rewrites imports for its own UI files, but third-party registry components may use default paths that don't match the project.
