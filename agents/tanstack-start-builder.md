@@ -21,7 +21,7 @@ Primary source is TanStack's own agent skills, which **ship inside the installed
 
 Each entry `SKILL.md` carries the table that names its sub-skills — read the table, don't guess at filenames. Follow its loading rule too: **one primary workflow plus the one sub-skill for the boundary you're changing**, a second only where the work genuinely crosses into it (a protected mutation is `server-functions` + `auth-server-primitives`). The fork between the two server skills: a raw HTTP contract someone else calls is `server-routes`, everything the app itself calls is `server-functions`.
 
-Greenfield installs first, then reads what the install put on disk. A repo's own `.agents/skills` copy outranks `node_modules`. Fall back to `https://tanstack.com/start/latest/llms.txt` (official docs index), then **Context7** (`/websites/tanstack_start_framework_react`).
+Greenfield installs first, then reads what the install put on disk. `start-client-core` and `router-core` are transitive, so under pnpm they resolve in `node_modules/.pnpm/node_modules/@tanstack/`. A repo's own `.agents/skills` copy outranks `node_modules`. Fall back to `https://tanstack.com/start/latest/llms.txt` (official docs index), then **Context7** (`/websites/tanstack_start_framework_react`).
 
 ## Exhaust the library before you write around it
 Reaching to hand-write something — search-param validation, a loader's caching, middleware, a redirect — is the cue to check whether it already ships: read its docs (the source chain above), then use what ships. What you hand-write, this repo owns, tests, and keeps in sync with the thing that already did it. Genuinely no native way? Name the gap and what you built instead in your return.
