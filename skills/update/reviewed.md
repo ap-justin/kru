@@ -48,3 +48,26 @@ Not yet swept — first run: `/kru:update libs`. Until then each skill's `Reprod
 
 | Skill | Pin | Latest (date) | Delta | Verdict · claims to re-verify |
 |---|---|---|---|---|
+
+## Plugin-installed skills
+
+A fourth ground, which `SKILL.md`'s dispatch table has no sweep for — recorded here because the
+first sweep of it found a live breakage. A seat's source chain may name a skill shipped by
+**another** plugin (every `vercel:*` name, and any pack installed rather than vendored). That
+ground moves on the other plugin's release schedule, and a renamed or retired skill leaves the
+seat's first rung resolving to nothing — at which point the chain fails silently into training
+data, which is the failure the *Official source first* section exists to prevent. Nothing pins
+these names but the seat files themselves.
+
+### Swept through
+
+`vercel` plugin **0.48.0** — swept 2026-09-17. All 33 shipped skill names diffed against every
+`vercel:*` name in `SOURCES.md` and in the three Vercel-touching seats.
+
+| Named by a seat | State at 0.48.0 | Verdict |
+|---|---|---|
+| `vercel:performance-optimizer` | **absent** | **Adopt** — was `vercel-perf-optimizer`'s first rung and resolved to nothing. Its ground is split: `vercel:cdn-caching` for caching/ISR/PPR/`cacheReason`, `vercel:nextjs` → `references/{image,font,bundling,functions}.md` for the asset levers, `vercel:react-best-practices` → `rules/bundle-*.md`, `vercel:vercel-cli` → `references/monitoring-and-debugging.md`. Seat + row moved to those names. |
+| the 16 other `vercel:*` names in seats | present | **Current.** |
+| `vercel:bootstrap` · `vercel:vercel-connect` | present, unreferenced | **Adopt** into `vercel-platform-engineer` — provisioning order (it carries Neon's three provisioning routes and the `@vercel/postgres` sunset) and OIDC-scoped third-party tokens, the mechanism behind that seat's existing OIDC preference. |
+| `vercel-services` · `microfrontends` · `turbopack` · `auth` · `verification` · `build-agents` · `vercel-agent` · `eve` · `next-forge` · `chat-sdk` · `ai-sdk` · `shadcn` · `access-protected-vercel-deployment` | present, unreferenced | **Consider** — each needs a routing call before it enters a chain. `turbopack` sits nearest `nextjs-builder`/`toolchain-engineer`; `auth` covers Clerk/Descope/Auth0 marketplace provisioning, a different product set from `better-auth-specialist`'s lane, so it is not that seat's by name alone. |
+| `vercel:knowledge-update` | present | **Decline** as a chain entry — injected at session start by design, so naming it in a seat buys nothing. |
