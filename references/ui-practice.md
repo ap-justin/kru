@@ -21,7 +21,8 @@ The look is made in **Claude Design**, which invents one better than a plan writ
 | **Claude Design** — the canvas (`/design`) or a synced design project | the look, and every value in it |
 | `ui-designer` | the artboards a canvas is seeded from, the publish, the re-seed on every later change — and `design-system.md`: the **foundation** shape (`design-system` skill) and the coverage ledger under it |
 | the lead | the canvas turn's **user channel** — briefing the seat, putting the directions to the user, and handing the pick to a builder |
-| `ux-designer` | flows, IA, the screen + state inventory, copy — and **the conventions file**, in both its eras (*The conventions file*, below) |
+| `ux-designer` | flows, IA, the screen + state inventory, the product's own strings — and **the conventions file**, in both its eras (*The conventions file*, below) |
+| `conversion-copywriter` | a marketing route's argument and its strings — the SECTION deck an artboard is drawn around and a builder mounts verbatim |
 | the UI builder | the token file, the **conformance gate**, the components — and the bundle's machinery where the repo runs the sync lane |
 | the user | the design gate — the eye on the render, which is the only design verdict on this team |
 

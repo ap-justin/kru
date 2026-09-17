@@ -8,7 +8,7 @@ Each block below has **invariant clauses** (copy verbatim — `audit` checks the
 
 ## Block A — `## Context hygiene (stay lean)`
 
-Required on every seat that **reads or edits repo files**. The three text-producing seats (`ux-designer`, `graphic-designer`, `planner`) are exempt by decision: their input is a brief handed to them, and they already carry an `## Output`/`## Handoff` contract. `ui-designer` carries it despite being an artifact seat: matching the existing app means hunting tokens, stylesheets and the closest screens across the tree, which is exactly the read this block bounds.
+Required on every seat that **reads or edits repo files**. The four text-producing seats (`ux-designer`, `graphic-designer`, `planner`, `conversion-copywriter`) are exempt by decision: their input is a brief handed to them, and they already carry an `## Output`/`## Handoff` contract. `ui-designer` carries it despite being an artifact seat: matching the existing app means hunting tokens, stylesheets and the closest screens across the tree, which is exactly the read this block bounds.
 
 ```
 ## Context hygiene (stay lean)
@@ -138,7 +138,7 @@ Required on every seat that implements **executable behavior with a specifiable 
 - `ui-designer` — its artifact is a mockup, not a running behavior: the `.dc.html` it drafts is transcribed by a builder and never ships, and the gate on it is the user's eye on the render.
 - `vercel-perf-optimizer` — already carries the same discipline in a different currency: `## Prove the win` demands a measured before/after.
 - `toolchain-engineer`, `vercel-platform-engineer`, `fly-platform-engineer` — config, not behavior. The Fly seat's artifact is an image plus `fly.toml`; what verifies it is a health check against a real deploy, not a red test.
-- reviewers and the four text-producing seats — they don't write the code.
+- reviewers and the five text-producing seats — they don't write the code.
 
 ```
 ## Test-first (shared skill)
@@ -329,7 +329,7 @@ Reaching to hand-write something — {four examples from this seat's surface} �
 
 ## Block O — `## The return pass`
 
-Required on the same 23 seats as Block N — every seat that **writes code or config**. Reviewers and the four text-producing seats don't build, so there is no slice to read back; `code-reviewer` carries the **read side** instead (below).
+Required on the same 23 seats as Block N — every seat that **writes code or config**. Reviewers and the five text-producing seats don't build, so there is no slice to read back; `code-reviewer` carries the **read side** instead (below).
 
 **Exempt by decision** — record the reason, don't just omit:
 - `test-writer` — its completion criterion is already hard and external (*the suite is green*), and a green suite is the one bound that resists premature completion without being asked to. It writes tests, not app code, which is also why it sits outside Blocks F and N.

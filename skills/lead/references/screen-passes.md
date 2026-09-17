@@ -29,9 +29,9 @@ Three things bound the batch:
 These have no seat and you never dispatch them — they run inline in the main thread when the user names one, on the target they name:
 
 - `/seo-review` — technical SEO/AEO audit, markup fixes on request.
-- `/copywriting` · `/copy-editing` · `/cro` — write/rewrite a marketing page's copy · line edit · conversion audit of an underperforming page/form.
+- `/copywriting` · `/copy-editing` · `/cro` — rewrite a marketing page's copy · line edit · conversion audit of an underperforming page/form. All three act on a page that already ships; a marketing page that has *not been written yet* is `conversion-copywriter`'s, routed before design or build (`${CLAUDE_PLUGIN_ROOT}/references/routing.md`).
 - `/review-animations` · `/improve-animations` — motion craft review · prioritized motion roadmap.
 
 These are cheap to run after the fact and each carries its own **taste** — which is exactly why they stayed the user's when the two screen passes didn't: a copy rewrite or a motion roadmap is a preference, and dispatching one as a gate means the team quietly editing the user's voice.
 
-There's no copy or SEO seat: builders ship the page with working draft text, checked the way visuals and motion are — by the user, when they care. Copy for lay/client audiences explains deliverables by what they're for, not by category label (learned preference). In-product microcopy stays `ux-designer`/`ux-copy`'s lane; channels/campaigns stay out of scope (`ROSTER.md`).
+These act on words that exist. The words themselves arrive earlier: a marketing page's argument and strings are `conversion-copywriter`'s, written before the page is designed or built, and what these passes then edit is a deck the user already approved rather than text a builder invented. On every other surface a builder still ships working draft text, checked the way visuals and motion are — by the user, when they care. Copy for lay/client audiences explains deliverables by what they're for, not by category label (learned preference). In-product microcopy stays `ux-designer`/`ux-copy`'s lane; technical SEO markup stays `/seo-review`'s; channels/campaigns stay out of scope (`ROSTER.md`).
