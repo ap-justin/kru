@@ -74,6 +74,7 @@ line. What earns deriving is the **library choice inside a lane**: the seat prom
 | Detected in the repo | Skill |
 |---|---|
 | `drizzle-orm` | `drizzle` |
+| `@neondatabase/serverless` | `neon` — the driver seam beneath whatever ORM sits on it, so a Drizzle-on-Neon repo answers yes twice and the brief names both |
 | `zod` | `zod` |
 | `valibot` | `valibot` |
 | `@conform-to/react` | `conform` |
