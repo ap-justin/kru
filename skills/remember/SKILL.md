@@ -13,8 +13,8 @@ Park what the user liked into the team's preference inbox so a later `/roster le
 
 1. **Read `$ARGUMENTS`** — the thing the user wants remembered. If empty, ask one line ("What should I bank — and is it design, code, or workflow?") and stop.
 2. **Classify the lane** — `[design]` (visual/UI/motion), `[code]` (API shape, architecture, conventions), or `[workflow]` (how the user wants the team to operate). Infer from context; don't interrogate.
-3. **Concrete pattern with code?** If the user is banking an actual snippet/component/layout (not just a stated preference), save the artifact to `~/.claude/kru/patterns/<slug>.md` (kebab-case slug from the pattern) and index it with `→ patterns/<slug>.md` on the inbox line. A stated preference with no artifact is just the line.
-4. **Append one line** to `~/.claude/kru/inbox.md` (create `~/.claude/kru/` and the file if missing), in the `PREFERENCES.md` format:
+3. **Concrete pattern with code?** If the user is banking an actual snippet/component/layout (not just a stated preference), save the artifact to `~/.kru/patterns/<slug>.md` (kebab-case slug from the pattern) and index it with `→ patterns/<slug>.md` on the inbox line. A stated preference with no artifact is just the line.
+4. **Append one line** to `~/.kru/inbox.md` (create `~/.kru/` and the file if missing), in the `PREFERENCES.md` format:
 
    ```markdown
    - [<lane>] <the preference, tightly worded> — _user · <project-slug> · <YYYY-MM-DD>_
@@ -26,5 +26,5 @@ Park what the user liked into the team's preference inbox so a later `/roster le
 ## Don't
 
 - Don't promote it now — capture is lossless and untriaged; the sweep is the gated step that edits the team.
-- Don't write into the plan store (`~/.claude/kru/management/<project-slug>/`) — that's project-specific plan state (`TRACKER.md`); preferences are cross-project and live in `inbox.md` / `patterns/` at the kru root.
+- Don't write into the plan store (`~/.kru/management/<project-slug>/`) — that's project-specific plan state (`TRACKER.md`); preferences are cross-project and live in `inbox.md` / `patterns/` at the kru root.
 - Don't dedupe or curate against existing lines — the sweep does that. Just append.

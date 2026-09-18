@@ -27,7 +27,7 @@ it is a bigger hammer than the pruning needs.
 | *(none)* | this repo, both jobs — every step below |
 | a repo path | both jobs, there |
 | `prose` | the pass alone — every step below not marked *full run*. Read the surface, run the bars over every line already in it, propose the cuts. |
-| *(a blank repo)* | no manifest, lockfile or source to derive from — step 1b, then steps 4–6 |
+| *(a blank repo)* | no manifest, lockfile or source to derive from — step 1b, then 1c–1d and steps 4–6 |
 
 ## Do
 
@@ -67,7 +67,7 @@ for its own subsystem knows something the plugin does not.
 **What the repo knows that a skill lacks goes upstream.** The derivation reads the repo's own testing
 docs, configs and `.claude/skills/*`; where one carries a recipe a plugin skill would need in the next
 repo too — a `vitest` gotcha `skills/vitest/` has no row for, a runner cost the skill doesn't state, a
-convention its docs are silent on — append it to `~/.claude/kru/inbox.md` in
+convention its docs are silent on — append it to `~/.kru/inbox.md` in
 `${CLAUDE_PLUGIN_ROOT}/PREFERENCES.md`'s line format: lane `[code]`, source `setup`, citing the repo
 file it came from. The sheet still cites the fact for this repo (*The line between the plugin and the
 repo*, below).
@@ -90,7 +90,7 @@ Nothing on disk answers step 1, so the user does, and the sheet is written from 
 3. **Finalize the stack** — the user accepts, swaps or strikes per lane. Completion: every lane the
    subject needs has a named library, or is struck.
 
-Then **deploy the team**: steps 4–6 as on a full run, each line citing the decision it came from
+Then **deploy the team**: 1c–1d and steps 4–6 as on a full run, each line citing the decision it came from
 (shape in `sheet.md`). The scaffold that follows is `lead`'s (its Step 2); the first re-run after it
 lands swaps each decision citation for the manifest that now carries it.
 
@@ -141,6 +141,38 @@ stdio form spawns a process per session and re-resolves `@latest` on every start
 
 Completion: every seat the derivation named can reach the source its row names, or the user has been
 told which one it can't and what enabling it would cost.
+
+### 1d. Grant what the team does on every run — *full run*
+Two sets of actions repeat in every project, and each prompts until something grants it — with no
+error and no log line, so the gap survives by being answered rather than noticed.
+
+**The store, once, at user scope.** `~/.kru/` is reached from every engagement — the case the scope
+rule above reserves, not an instance of the habit it warns about. In `~/.claude/settings.json`:
+
+| grant | covers |
+|---|---|
+| `"additionalDirectories": ["~/.kru"]` | reads outside the working dir; under `acceptEdits` it also auto-approves `mkdir`/`touch`/`rm`/`mv`/`cp` there |
+| `Read(~/.kru/**)` · `Edit(~/.kru/**)` · `Write(~/.kru/**)` | a todo appended, a defect file written, a brief rewritten |
+| `Bash(rm <home>/.kru/audit/*)` · `Bash(rm <home>/.kru/management/*/issues/*)` | the two deletions the contract *mandates* — the audit closeout (`agents/dispatch-auditor.md`) and the defect file a landed fix closes (`skills/lead/references/reconcile.md`) |
+
+Two things decide whether those last rules ever fire:
+
+- **A Bash rule matches the command text, not the file it resolves to.** `planner` and
+  `dispatch-auditor` carry no `Write` tool, so every store write of theirs is a shell command — and
+  the rule has to be written in the form the seat actually types. Expand `<home>`: `~` in a Bash rule
+  matches a literal tilde, and a seat writing an absolute path walks straight past it.
+- **Confirm the store sits at `~/.kru/` before writing its rules** — a grant against a path the files
+  left silently covers nothing. `TRACKER.md` carries why that path and no other.
+
+**The repo's gates, per repo, at project-local scope.** Step 1 derived `test` and `verify`, and each
+of those commands prompts on first use in each repo. They go in `.claude/settings.local.json` — the
+gates run on this machine, not a teammate's. **Narrow to the commands the sheet names**:
+`Bash(pnpm test:*)` grants the suite, `Bash(pnpm:*)` grants the install and the publish with it. The
+settings file is the record, so no sheet field states it — a `CLAUDE.md` line would be the cache bar
+3 rejects.
+
+Completion: every grant traces to evidence the derivation already produced, and the user has seen
+each one (step 5).
 
 ### 2. Read what the repo already says
 Open the repo's `CLAUDE.md`, `.claude/CLAUDE.md`, `.claude/rules/*`, `AGENTS.md`, and any nested

@@ -18,12 +18,12 @@
 # never trips a gate meant for the lead.
 #
 # fail open on anything that isn't a clear miss. kill switch: touch the file
-# ~/.claude/kru/lead-gate/off. a marker file rather than a flag alone, because
+# ~/.kru/lead-gate/off. a marker file rather than a flag alone, because
 # a bypass flag typed into a command string is what the harness's auto-mode
 # classifier denies — the env var is honoured too, where auto mode is off.
 command -v jq >/dev/null 2>&1 || exit 0
 [ -n "$KRU_NO_LEAD_GATE" ] && exit 0
-[ -e "$HOME/.claude/kru/lead-gate/off" ] && exit 0
+[ -e "$HOME/.kru/lead-gate/off" ] && exit 0
 plugin_root="${1:-$CLAUDE_PLUGIN_ROOT}"
 [ -f "$plugin_root/skills/lead/SKILL.md" ] || exit 0
 input=$(cat) || exit 0
@@ -90,10 +90,10 @@ if [ -n "$cmd_line" ]; then
   [ "$say_line" -le "$cmd_line" ] && exit 0
 fi
 
-mark_dir="$HOME/.claude/kru/lead-gate"
+mark_dir="$HOME/.kru/lead-gate"
 mark="$mark_dir/$sid"
 [ -e "$mark" ] && exit 0
 mkdir -p "$mark_dir" 2>/dev/null && : > "$mark" 2>/dev/null
 
-printf 'kru: this session has not loaded the lead contract. Invoke the kru:lead skill, then take the action again — nothing else about the request has changed. This fires once per session, from the kru plugin, and read-only commands are exempt. To run without it: touch ~/.claude/kru/lead-gate/off\n' >&2
+printf 'kru: this session has not loaded the lead contract. Invoke the kru:lead skill, then take the action again — nothing else about the request has changed. This fires once per session, from the kru plugin, and read-only commands are exempt. To run without it: touch ~/.kru/lead-gate/off\n' >&2
 exit 2

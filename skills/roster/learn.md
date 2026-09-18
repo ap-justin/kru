@@ -5,9 +5,9 @@ The **promote** half of the preference loop (`PREFERENCES.md`): read the cross-p
 Run this **from the plugin source repo** (it commits the plugin), not a product repo. The inbox is user-global, so it's the same source wherever you run it.
 
 ## 1. Read the inbox
-Read `~/.claude/kru/inbox.md` (+ `~/.claude/kru/patterns/`). If it and the refusal log below are both missing or empty, say so and stop — nothing to sweep. Group the lines by lane (`design`/`code`/`workflow`), **dedupe** (collapse repeats, merge near-duplicates), and **drop noise** (contradictory, or too vague to act on — call these out so the user can override).
+Read `~/.kru/inbox.md` (+ `~/.kru/patterns/`). If it and the refusal log below are both missing or empty, say so and stop — nothing to sweep. Group the lines by lane (`design`/`code`/`workflow`), **dedupe** (collapse repeats, merge near-duplicates), and **drop noise** (contradictory, or too vague to act on — call these out so the user can override).
 
-**Then the refusal log** — `~/.claude/kru/refusals.jsonl`, one line per brief `hooks/check-handoff.sh` refused, its `reasons` quoting the span the gate fired on. Read each quote against its `prompt` and sort every line: a **misfire** quotes slice content the gate took for a rule (a test command, this repo's own limits) or a span that isn't the problem; a **catch** is the gate right about the brief. Misfires route in step 2. Catches join the `[workflow]` lane under the same engagement count as inbox lines, grouped by scan.
+**Then the refusal log** — `~/.kru/refusals.jsonl`, one line per brief `hooks/check-handoff.sh` refused, its `reasons` quoting the span the gate fired on. Read each quote against its `prompt` and sort every line: a **misfire** quotes slice content the gate took for a rule (a test command, this repo's own limits) or a span that isn't the problem; a **catch** is the gate right about the brief. Misfires route in step 2. Catches join the `[workflow]` lane under the same engagement count as inbox lines, grouped by scan.
 
 **Count engagements, not lines.** Every inbox line is stamped with the project slug it came from, and that stamp is what separates an anecdote from a practice: the same preference from **one** repo is that client, from **two or more** it is the team. Collapse a group to its distinct slugs and carry the count into step 2 — it is what decides destination. The bar is advisory, so a one-slug line the user recognizes as doctrine still promotes; say the count and let them override.
 
@@ -19,7 +19,7 @@ For each surviving preference, pick the narrowest home:
 - **Reusable concrete pattern** → keep the `patterns/<slug>.md` artifact in the plugin (copy it under a repo path if you want it version-shared), referenced from the seat/skill that uses it.
 
 - **One engagement, and it describes that repo rather than the team** (its gate, its runner's cost, its own subsystem) → the repo's **sheet**, the answers `/kru:setup` writes into its `.claude/CLAUDE.md`. Name the repo and the line you'd add, and leave the typing to the user: this skill edits the plugin, and a sweep that reaches into product repos would be the plugin editing engagements it isn't in.
-- **Project-specific and about the *product*** (a want, a defect, a decision) → that project's plan store (`~/.claude/kru/management/<project-slug>/`, `TRACKER.md`).
+- **Project-specific and about the *product*** (a want, a defect, a decision) → that project's plan store (`~/.kru/management/<project-slug>/`, `TRACKER.md`).
 - **A gate misfire** → an edit to that scan's pattern or reason text in `hooks/check-handoff.sh`, with the refused `prompt` as its test case: refused before the edit, passing after.
 
 ## 3. Propose, then gate
@@ -27,7 +27,7 @@ Show the user the full set of proposed diffs (agent-prompt + skill edits), group
 
 ## 4. Apply + drain
 - Write the approved edits (`agents/<seat>.md` insertions, skill edits, kept artifacts).
-- **Drain** the inbox: remove the promoted lines from `~/.claude/kru/inbox.md`, leaving un-promoted/deferred lines for next time. Drain `~/.claude/kru/refusals.jsonl` the same way. Move kept artifacts out of the inbox's `patterns/` if you copied them into the repo.
+- **Drain** the inbox: remove the promoted lines from `~/.kru/inbox.md`, leaving un-promoted/deferred lines for next time. Drain `~/.kru/refusals.jsonl` the same way. Move kept artifacts out of the inbox's `patterns/` if you copied them into the repo.
 
 ## 5. Version + hand off (wiring map #6–#8)
 No agent added → **count stays the same** (don't touch the `plugin.json`/`marketplace.json` count). Bump version: **minor** if it adds a new default or capability, **patch** for a tiny prompt tweak. Set `VERSION`, `plugin.json` `version`, and the `ROSTER.md` header — all equal. Then **run `audit` (`audit.md`) — it must pass.** Report what landed where; leave `commit`+`tag` to the user (git rule).

@@ -15,7 +15,7 @@ Write the defect file from what the user just told you and get out. They hit som
 
 1. **Read `$ARGUMENTS`** — what's wrong. If empty, ask one line ("What's wrong?") and stop.
 2. **Glance at `issues/`** (`ls`, nothing more). Same defect already has a file → append the user's new detail to it and stop. One directory listing isn't investigation; two files for one bug is drift.
-3. **Write `issues/<kebab-slug>.md`** at the store root — `~/.claude/kru/management/<project-slug>/`, where `<project-slug>` is the working repo's dir name (no repo → the cwd's). **No precondition**: create the dir if it isn't there.
+3. **Write `issues/<kebab-slug>.md`** at the store root — `~/.kru/management/<project-slug>/`, where `<project-slug>` is the working repo's dir name (no repo → the cwd's). **No precondition**: create the dir if it isn't there.
 
    ```markdown
    ---

@@ -40,7 +40,7 @@ Same cost rule as expansion — score from what you already hold, never from a f
 ## Do
 
 1. **Read `$ARGUMENTS`** — the thing to log. If empty, ask one line ("What do you want logged?") and stop.
-2. **Append** to `TODOS.md` at the store root — `~/.claude/kru/management/<project-slug>/`, where `<project-slug>` is the working repo's dir name (no repo → the cwd's). **No precondition**: create the dir and the file if they don't exist.
+2. **Append** to `TODOS.md` at the store root — `~/.kru/management/<project-slug>/`, where `<project-slug>` is the working repo's dir name (no repo → the cwd's). **No precondition**: create the dir and the file if they don't exist.
 
    Cold — one line, the standing format:
 

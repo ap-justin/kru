@@ -69,12 +69,15 @@ without `jq`, and each interruption below is one you can turn off.
 It writes outside your repo, never inside it. The one exception is `/kru:setup`, which edits
 that repo's `.claude/CLAUDE.md`:
 
-- `~/.claude/kru/management/<project>/`: briefs, plans, tickets, todos, issues. Kept at user
+- `~/.kru/management/<project>/`: briefs, plans, tickets, todos, issues. Kept at user
   level on purpose: your repo stays clean, and the plan survives branch churn and a re-clone.
-- `~/.claude/kru/inbox.md`, `patterns/`: preferences you bank with `/kru:remember`.
-- `~/.claude/kru/refusals.jsonl`: dispatches the handoff gate refused, capped at 500 lines;
+  Beside `~/.claude`, never inside it — that directory is protected, and a store under it makes
+  every routine write of the team's a permission prompt no grant can silence. `/kru:setup` grants
+  it once, user-wide.
+- `~/.kru/inbox.md`, `patterns/`: preferences you bank with `/kru:remember`.
+- `~/.kru/refusals.jsonl`: dispatches the handoff gate refused, capped at 500 lines;
   `/kru:roster learn` reads it for misfires and drains it.
-- `~/.claude/kru/audit/`, `lead-gate/`: per-session bookkeeping for the hooks above; audit
+- `~/.kru/audit/`, `lead-gate/`: per-session bookkeeping for the hooks above; audit
   ledgers self-delete after 7 days.
 - `${TMPDIR}/kru-review/`: review reports, so an audit trail stays out of the conversation.
 

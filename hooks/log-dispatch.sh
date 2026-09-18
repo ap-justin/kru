@@ -42,7 +42,7 @@ while [ -n "$d" ] && [ "$d" != "/" ] && [ "$d" != "." ]; do
 done
 [ -z "$cwd_slug" ] && [ -n "$cwd" ] && cwd_slug=$(basename "$cwd")
 
-dir="$HOME/.claude/kru/audit"
+dir="$HOME/.kru/audit"
 mkdir -p "$dir" 2>/dev/null || exit 0
 # crashed sessions leave ledgers nothing will audit, and the stop nudge's mark
 # beside each one; keep the dir bounded

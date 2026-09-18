@@ -119,7 +119,7 @@ When a dev server is running, prefer **measured** evidence over eyeballing — d
 
 The upstream skill branched on Figma / project-tracker MCP connectors. In this team those map to sources you already have:
 - **Design source** → read the rendered page through `local-browser`, or the design itself; inspect font sizes and touch targets there.
-- **Tracker** → file findings via `TRACKER.md` (user-level files under `~/.claude/kru/management/<project-slug>/`) when the lead asks for tickets; otherwise return the audit inline.
+- **Tracker** → file findings via `TRACKER.md` (user-level files under `~/.kru/management/<project-slug>/`) when the lead asks for tickets; otherwise return the audit inline.
 
 ## Tips
 

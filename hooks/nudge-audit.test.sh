@@ -11,7 +11,7 @@ hook="$here/nudge-audit.sh"
 sandbox=$(mktemp -d)
 trap 'rm -rf "$sandbox"' EXIT
 home="$sandbox/home"
-audit="$home/.claude/kru/audit"
+audit="$home/.kru/audit"
 mkdir -p "$audit"
 
 pass=0 fail=0

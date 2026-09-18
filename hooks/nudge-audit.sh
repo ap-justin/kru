@@ -14,7 +14,7 @@ active=$(printf '%s' "$input" | jq -r '.stop_hook_active // false' 2>/dev/null)
 
 sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
 [ -z "$sid" ] && exit 0
-ledger="$HOME/.claude/kru/audit/$sid.jsonl"
+ledger="$HOME/.kru/audit/$sid.jsonl"
 # the mark holds the dispatch count already nudged for. an audit that never
 # runs — declined, interrupted, a session that ends somewhere else — leaves the
 # ledger behind for the rest of the session, and the ledger only grows, so that

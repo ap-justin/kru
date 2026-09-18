@@ -112,9 +112,9 @@ check refuse Bash "find . -name '*.tmp' -delete" "$p"
 check refuse Bash "env rm -rf build" "$p"
 
 # kill switches
-mkdir -p "$home/.claude/kru/lead-gate" && : > "$home/.claude/kru/lead-gate/off"
+mkdir -p "$home/.kru/lead-gate" && : > "$home/.kru/lead-gate/off"
 check allow Edit "" "$p"
-rm -f "$home/.claude/kru/lead-gate/off"
+rm -f "$home/.kru/lead-gate/off"
 check allow Edit "" "$p" "" KRU_NO_LEAD_GATE=1
 # and with both lifted the same call is gated, so the passes above are the switches'
 check refuse Edit "" "$p"

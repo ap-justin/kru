@@ -13,7 +13,7 @@ Take the parking lot to the user as a decision, not a listing. The artifact is `
 
 ## 1. Reconcile — every line against the code
 
-Read `TODOS.md` at `~/.claude/kru/management/<project-slug>/` (`<project-slug>` = the working repo's dir name; no repo → the cwd's). Missing or empty → say so, name `/kru:todo <the thing>`, stop.
+Read `TODOS.md` at `~/.kru/management/<project-slug>/` (`<project-slug>` = the working repo's dir name; no repo → the cwd's). Missing or empty → say so, name `/kru:todo <the thing>`, stop.
 
 Then check each **candidate** against the codebase — a targeted grep or file-open per line, `Explore` for the vague ones, budgeted at a read pass, not an investigation. Every candidate lands in one bucket:
 

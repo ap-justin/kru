@@ -10,7 +10,7 @@ for t in hooks/*.test.sh; do bash "$t" || break; done
 
 Copy the closest existing `*.test.sh`. They share one shape:
 
-- **Sandboxed `HOME`** from `mktemp -d`, removed by an `EXIT` trap. Hooks write under `~/.claude/kru/`, and a test that reaches the real one pollutes the audit ledger and refusal log.
+- **Sandboxed `HOME`** from `mktemp -d`, removed by an `EXIT` trap. Hooks write under `~/.kru/`, and a test that reaches the real one pollutes the audit ledger and refusal log.
 - **Hook stdin built with `jq -nc`**, in the shape the harness sends (`session_id`, `tool_name`, `tool_input`, `transcript_path`).
 - **Every run under `env -u`** for the `KRU_*` kill switches and `CLAUDE_PLUGIN_ROOT`, so a switch set in the parent shell can't turn a refusal case green.
 - **The plugin root passed as `$1`**: the repo root, so the hooks find the real `agents/` and `skills/`.

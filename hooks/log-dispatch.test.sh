@@ -9,7 +9,7 @@ hook="$here/log-dispatch.sh"
 sandbox=$(mktemp -d)
 trap 'rm -rf "$sandbox"' EXIT
 home="$sandbox/home"
-audit="$home/.claude/kru/audit"
+audit="$home/.kru/audit"
 mkdir -p "$home" "$sandbox/noagents"
 
 # a seat carrying Block O and one without; the hook reads both from agents/
