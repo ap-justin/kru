@@ -14,7 +14,8 @@ mkdir -p "$sandbox/home/.claude" "$sandbox/cwd"
 printf '# machine\n- MacBook Air — **8 cores, 8 GB RAM**.\n' > "$sandbox/home/.claude/CLAUDE.md"
 
 pass=0 fail=0
-# expect: refuse | allow. needle: text the refusal reason must contain.
+# expect: refuse | allow | supply. needle: text the refusal reason must contain,
+# or on supply, the text the hook appends to the brief instead of refusing.
 check() {
   local expect=$1 seat=$2 prompt=$3 needle=${4:-}
   local input out code
@@ -27,8 +28,12 @@ check() {
   if [ "$expect" = refuse ]; then
     [ "$code" -eq 2 ] || ok=false
     [ -n "$needle" ] && ! printf '%s' "$out" | grep -qF "$needle" && ok=false
+  elif [ "$expect" = supply ]; then
+    [ "$code" -eq 0 ] || ok=false
+    printf '%s' "$out" | grep -qF "$needle" || ok=false
   else
     [ "$code" -eq 0 ] || ok=false
+    printf '%s' "$out" | grep -q 'updatedInput' && printf '%s' "$out" | grep -qv 'learnings channel' && ok=$ok
   fi
   if $ok; then pass=$((pass + 1)); else
     fail=$((fail + 1))
@@ -43,6 +48,15 @@ check refuse $ui "Build the form. Preserve existing comments in the file." "comm
 check refuse $ui "Build the form. Comments already in the file survive your edit." "comment standard"
 check refuse $ui "Build the form. Keep all comments." "comment standard"
 check refuse $ui "Build the form. Write comments in lowercase." "comment standard"
+
+# ...and slice content naming one comment is not the standard — each of these
+# was a real refusal the gate had no business making
+check allow $ui "Add \`readonly ticker: string;\` with a lowercase doc comment naming the base asset."
+check allow $ui "Must keep: same 50px field height (\`--field-size\` comment in that css file)."
+check allow $ui "Keep the narrowing on the path that confirms, and keep what its comment says true."
+check allow $ui "Update the comments above the effect to match the new mechanism."
+# a class-wide quantifier holds the refusal even beside a backticked identifier
+check refuse $ui "Keep existing comments; update the \`SKIP_STATUSES\` comment if it goes stale." "comment standard"
 # comment standard — a brief naming what one comment says is not the standard
 check allow $ui "Add a comment about the contact email being kept for receipts."
 check allow $ui "Keep the comment on the fee calc."
@@ -59,8 +73,9 @@ check refuse $ui "Edit src/Form.tsx:42 to add the field." "coordinates"
 check refuse $ui "Status may mean archived here." "hedged term"
 check allow $ui "Edit the SignupForm component in src/Form.tsx."
 
-# review seats need a report path
-check refuse kru:code-reviewer "Review the signup diff." "report path"
+# a review seat's report path is supplied, not refused over — the same literal
+# on every review brief, where a refusal costs a whole re-dispatch
+check supply kru:code-reviewer "Review the signup diff." "kru-review"
 check allow kru:code-reviewer "Review the signup diff. report: /tmp/kru-review/p/code-reviewer-signup.md"
 
 # the gate stays out of unknown seats

@@ -25,6 +25,18 @@ seat="${seat#kru:}"
 prompt=$(printf '%s' "$input" | jq -r '.tool_input.prompt // empty' 2>/dev/null)
 [ -z "$prompt" ] && exit 0
 
+cwd=$(printf '%s' "$input" | jq -r '.cwd // empty' 2>/dev/null)
+# the engagement stamp /roster learn counts distinct repos with — the last path
+# segment names whichever subdirectory the lead ran from, so one repo reads as
+# several engagements and a team-wide preference grades as one client's.
+cwd_slug=""
+d="$cwd"
+while [ -n "$d" ] && [ "$d" != "/" ] && [ "$d" != "." ]; do
+  [ -e "$d/.git" ] && { cwd_slug=$(basename "$d"); break; }
+  d=$(dirname "$d")
+done
+[ -z "$cwd_slug" ] && [ -n "$cwd" ] && cwd_slug=$(basename "$cwd")
+
 reasons=""
 # a coordinate is a stale cache: file.ext:NN, or a bare "line 91" / "lines 20-21"
 coords=$(printf '%s' "$prompt" | grep -oE '\.(tsx?|jsx?|mjs|cjs|svelte|vue|astro|md|go|py|rs|css|scss|json|sql|html|ya?ml|toml|sh)\b:[0-9]+|\blines? [0-9]+' | head -5 | tr '\n' ' ')
@@ -75,22 +87,45 @@ if [ -f "$USER_CANON" ]; then
     grep -oiE '\b(one|a single)( [a-z-]+){1,3} at a time\b' | head -1)
   [ -n "$budget" ] && reasons="${reasons}paraphrases the user CLAUDE.md machine budget: \"${budget}\" — that file loads into every seat on its own; cut that clause, keep any command the slice runs (scan 2). "
 fi
-comments=$(printf '%s' "$prompt" | grep -oiE '\bcomments?\b[^.]{0,80}\blowercase\b|\blowercase\b[^.]{0,80}\bcomments?\b' | head -1)
+# Block I rules on comments as a class; a brief naming one comment — "a
+# lowercase doc comment on `ticker`", "the `SKIP_STATUSES` comment", "keep what
+# its comment says true" — describes its own slice. both halves below match with
+# context either side so that difference is visible; the reason quotes the
+# narrow span.
+CRULE='\bcomments?\b[^.]{0,80}\blowercase\b|\blowercase\b[^.]{0,80}\bcomments?\b'
 # the standard's other half — comments already in the file survive your edit.
 # reworded it escapes the shingle check, and it is the clause whose loss prunes
 # the comment that carried the reason.
-[ -z "$comments" ] && comments=$(printf '%s' "$prompt" | grep -oE '[^.]+' |
+CKEEP='\b(preserve|keep|retain|never drop|do not drop|don.t drop)\b[^.]{0,60}\bcomments?\b|\bcomments?\b[^.]{0,60}\b(preserved|retained|survive|kept)\b'
+cctx=$(printf '%s' "$prompt" | grep -oiE "[^.]{0,40}(${CRULE})[^.]{0,40}" | head -1)
+[ -z "$cctx" ] && cctx=$(printf '%s' "$prompt" | grep -oE '[^.]+' |
   # "a comment about the email being kept" names what one comment says — the
   # verb belongs to its subject, not to the standard.
   grep -viE '\bcomments? (about|explaining|noting|saying|stating|describing|on|why|that|for)\b' |
-  grep -oiE '\b(preserve|keep|retain|never drop|do not drop|don.t drop)\b[^.]{0,60}\bcomments?\b|\bcomments?\b[^.]{0,60}\b(preserved|retained|survive|kept)\b' | head -1)
+  grep -oiE "[^.]{0,40}(${CKEEP})[^.]{0,40}" | head -1)
+comments=""
+if [ -n "$cctx" ]; then
+  comments=$(printf '%s' "$cctx" | grep -oiE "${CRULE}|${CKEEP}" | head -1)
+  # a backtick, a position or a possessive beside the noun points at one comment
+  # in one file. the class-wide quantifiers are what the standard itself spends,
+  # so they hold the refusal even where a nearby identifier is backticked.
+  if printf '%s' "$cctx" | grep -qiE '`|\b(above|below|beside)\b|\b(its|this|that|each|whose) comments?\b' &&
+    ! printf '%s' "$cctx" | grep -qiE '\b(every|all|existing|any) comments?\b'; then
+    comments=""
+  fi
+fi
 [ -n "$comments" ] && reasons="${reasons}paraphrases the comment standard: \"${comments}\" — Block I rides in the seat prompt; cut the sentence (scan 2). "
 
 # a review seat writes its report where the brief says and returns a pointer —
 # no path and the whole report lands in the lead's context (item 7, gates.md).
+# supplied, not refused, on the learnings channel's precedent: the path is the
+# same literal on every review brief, and a refusal spends a whole re-dispatch
+# to re-type text this file already holds.
+inject_report=""
 case "$seat" in
   code-reviewer|architecture-reviewer|accessibility-reviewer|visual-reviewer|ux-auditor)
-    printf '%s' "$prompt" | grep -q 'kru-review' || reasons="${reasons}review brief names no report path: hand it report: \${TMPDIR:-/tmp}/kru-review/<project-slug>/<seat>-<slice-slug>.md (item 7, gates.md). " ;;
+    printf '%s' "$prompt" | grep -q 'kru-review' ||
+      inject_report="\n\nkru hook — report: \${TMPDIR:-/tmp}/kru-review/${cwd_slug:-repo}/${seat}.md. Write the long half of your return there; hand back the capped fix list plus that path (item 7, gates.md)." ;;
 esac
 
 # an always-loaded rule restated in the brief is a second source that drifts —
@@ -104,7 +139,6 @@ esac
 SHINGLE=8
 SHINGLE_REPO=6
 SHINGLE_USER=5
-cwd=$(printf '%s' "$input" | jq -r '.cwd // empty' 2>/dev/null)
 canon=""
 repo_canon=""
 for f in "$cwd/CLAUDE.md" "$cwd/.claude/CLAUDE.md" "$cwd/AGENTS.md" "$cwd"/.claude/rules/*.md; do
@@ -165,10 +199,10 @@ if [ -n "$reasons" ]; then
   # /roster learn sweeps for misfires. log-dispatch.sh's record plus session and
   # reasons; a logging miss still refuses.
   sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
-  record=$(printf '%s' "$input" | jq -c --arg seat "$seat" --arg reasons "$reasons" --arg sid "$sid" '{
+  record=$(printf '%s' "$input" | jq -c --arg seat "$seat" --arg reasons "$reasons" --arg sid "$sid" --arg slug "$cwd_slug" '{
     ts: (now | todate),
     session: $sid,
-    cwd: ((.cwd // "") | split("/") | last),
+    cwd: $slug,
     seat: $seat,
     desc: (.tool_input.description // ""),
     prompt: ((.tool_input.prompt // "")[0:4000]),
@@ -178,9 +212,21 @@ if [ -n "$reasons" ]; then
   }' 2>/dev/null)
   if [ -n "$record" ] && mkdir -p "$HOME/.claude/kru/audit" 2>/dev/null; then
     [ -n "$sid" ] && printf '%s\n' "$record" >> "$HOME/.claude/kru/audit/$sid.jsonl" 2>/dev/null
+    # /roster learn reads each quoted span against the sentence around it, so
+    # the cross-session log stores those windows and the prompt head — most of
+    # its bytes — stays in the session ledger above, where dispatch-auditor
+    # grades the brief's own text.
+    spans=$(printf '%s' "$reasons" | grep -oE '"[^"]{4,120}"' | sed 's/^"//;s/"$//' |
+      while IFS= read -r q; do
+        [ -z "$q" ] && continue
+        printf '%s' "$prompt" | awk -v q="$q" '{ i = index($0, q); if (i) { s = i - 160; if (s < 1) s = 1
+          print substr($0, s, length(q) + 280) } }'
+      done | awk '!seen[$0]++' | head -5)
+    rrecord=$(printf '%s' "$record" |
+      jq -c --arg spans "$spans" 'del(.prompt, .truncated) + { spans: ($spans | split("\n") | map(select(length > 0))) }' 2>/dev/null)
     # the sweep drains what it reads; the cap bounds a log nobody sweeps
     rlog="$HOME/.claude/kru/refusals.jsonl"
-    printf '%s\n' "$record" >> "$rlog" 2>/dev/null
+    printf '%s\n' "${rrecord:-$record}" >> "$rlog" 2>/dev/null
     if [ "$(wc -l < "$rlog" 2>/dev/null | tr -d ' ')" -gt 500 ] 2>/dev/null; then
       tail -n 500 "$rlog" > "$rlog.tmp" 2>/dev/null && mv "$rlog.tmp" "$rlog" 2>/dev/null
     fi
@@ -194,11 +240,14 @@ fi
 # a plain allow, the same fail-open the rest of this gate keeps. the injected
 # text names itself so the auditor reading the stored prompt can tell the hook's
 # paragraph from the lead's own.
-[ "$inject_channel" = false ] && exit 0
-printf '%s' "$input" | jq -c --arg root "$plugin_root" '{
+add=""
+[ "$inject_channel" = true ] && add="\n\nkru hook — learnings channel: a durable, cross-project preference you hit mid-task (the user rejected X twice and chose Y) goes as one line to ~/.claude/kru/inbox.md, format at ${plugin_root}/PREFERENCES.md. Journaling, not derailing."
+add="${add}${inject_report}"
+[ -z "$add" ] && exit 0
+printf '%s' "$input" | jq -c --arg add "$add" '{
   hookSpecificOutput: {
     hookEventName: "PreToolUse",
-    updatedInput: (.tool_input | .prompt += ("\n\nkru hook — learnings channel: a durable, cross-project preference you hit mid-task (the user rejected X twice and chose Y) goes as one line to ~/.claude/kru/inbox.md, format at " + $root + "/PREFERENCES.md. Journaling, not derailing."))
+    updatedInput: (.tool_input | .prompt += ($add | gsub("\\\\n"; "\n")))
   }
 }' 2>/dev/null
 exit 0

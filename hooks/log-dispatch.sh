@@ -32,6 +32,16 @@ printf '%s' "$input" |
 sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
 [ -z "$sid" ] && exit 0
 
+# the git root is the engagement stamp, same walk as check-handoff.sh
+cwd=$(printf '%s' "$input" | jq -r '.cwd // empty' 2>/dev/null)
+cwd_slug=""
+d="$cwd"
+while [ -n "$d" ] && [ "$d" != "/" ] && [ "$d" != "." ]; do
+  [ -e "$d/.git" ] && { cwd_slug=$(basename "$d"); break; }
+  d=$(dirname "$d")
+done
+[ -z "$cwd_slug" ] && [ -n "$cwd" ] && cwd_slug=$(basename "$cwd")
+
 dir="$HOME/.claude/kru/audit"
 mkdir -p "$dir" 2>/dev/null || exit 0
 # crashed sessions leave ledgers nothing will audit, and the stop nudge's mark
@@ -42,10 +52,10 @@ find "$dir" \( -name '*.jsonl' -o -name '*.jsonl.nudged' \) -mtime +7 -delete 2>
 # `truncated` tells the auditor an absent clause past the cut is not evidence.
 # the response itself is never stored — only whether it carried the return-pass
 # line — so the ledger stays a record of the lead's process, not of seat output
-printf '%s' "$input" | jq -c --arg seat "$seat" \
+printf '%s' "$input" | jq -c --arg seat "$seat" --arg slug "$cwd_slug" \
   --argjson block_o "$block_o" --argjson return_pass "$return_pass" '{
   ts: (now | todate),
-  cwd: ((.cwd // "") | split("/") | last),
+  cwd: $slug,
   seat: $seat,
   desc: (.tool_input.description // ""),
   prompt: ((.tool_input.prompt // "")[0:4000]),

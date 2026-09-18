@@ -185,7 +185,7 @@ Ambient binds you too on the edits you make inline (a rename, a copy fix, a conf
 - **Where the eye is not the oracle, there is no exemption** — end-to-end seam code (route → data layer → render → action → write), and anything security- or money-shaped whatever it renders. A skip that isn't one of the four is drift, and **bug fixes have no exemption at all** (Step 4.5).
 
 ## Step 4 — review & verify
-**Which gates this slice earns: `${CLAUDE_PLUGIN_ROOT}/skills/lead/references/gates.md`** — the parallel batch, scaling it to live-versus-latent, the report path that keeps an audit record out of your context, and the fix loop.
+**No gate runs on an unverified return, so that check opens the file: `${CLAUDE_PLUGIN_ROOT}/skills/lead/references/gates.md`** — the `Return pass:` line and how to get one that's absent, then the parallel batch, scaling it to live-versus-latent, the report path that keeps an audit record out of your context, and the fix loop.
 
 ## Step 4.5 — reconcile, at the commit that lands a slice
 **What it writes: `${CLAUDE_PLUGIN_ROOT}/skills/lead/references/reconcile.md`** — ticket status and the frontier, the brief's boxes, and the four captures and closeouts across `TODOS.md` and `issues/`.
