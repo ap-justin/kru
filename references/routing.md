@@ -67,9 +67,16 @@ names the seat and its skills has this question answered — take the answer.
 
 Ambient craft — TypeScript, `tdd` + `testing`, UI patterns, modern CSS/HTML, Ark UI, motion — loads on
 every dispatch in every repo, and a skill a seat *always* loads is already carried by that seat's own
-line. What earns deriving is the **library choice inside a lane**: the seat prompt carries one
-*libraries* section that loads the skill the brief names, and what these skills catch is a call that
-*succeeds* and returns wrong data.
+line. What earns deriving is the **library choice inside a lane**, and what these skills catch is a
+call that *succeeds* and returns wrong data.
+
+**One table, three channels.** The answer reaches a seat in the brief, or on the `skills` line a
+`/kru:setup` sheet writes into the repo's always-loaded docs; a seat that gets neither reads
+`package.json` against the table below. Past one conditional, a seat carries a single *libraries*
+section naming those three channels rather than a section per library, and keeps a named section only
+for a library it has something of its own to say about — a seam that library bends
+(`svelte-ui-builder` on Superforms), or a playbook with no skill to load (`react-ui-builder` on
+TanStack Table). So adding a skill here is a row plus the skill, and the seat files hold still.
 
 | Detected in the repo | Skill |
 |---|---|
@@ -85,6 +92,7 @@ line. What earns deriving is the **library choice inside a lane**: the seat prom
 | `@testing-library/react` or `@testing-library/svelte` | `testing-library` — carried by the same discovery step |
 | `sveltekit-superforms` | `superforms` |
 | `panda.config.*` or a `styled-system/` directory | `panda-css` |
+| `tailwindcss` | `tailwind` — v4, and `v3-lts` is a different product rather than a version behind, so the brief names the installed major |
 | `components.json` | `shadcn` — the repo has settled its primitive library, and `ark-ui`'s reach-for section is where that rule lives |
 | `@tanstack/react-table` | **no kru skill** — the playbook ships in the installed `react-table` and `table-core` packages, and the brief names both `skills/` directories |
 | `charmbracelet/bubbletea` (`go.mod`) · `ratatui` (`Cargo.toml`) · `textual` (`pyproject.toml`) · `ink` (`package.json`) | `tui-design` — the repo draws a terminal screen rather than printing to one |
