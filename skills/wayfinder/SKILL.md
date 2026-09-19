@@ -2,6 +2,7 @@
 name: wayfinder
 description: Plan a huge chunk of work — more than one agent session can hold — as a shared map of decision tickets on your issue tracker, and resolve them one at a time until the way to the destination is clear.
 disable-model-invocation: true
+user-invocable: false
 ---
 
 <!-- vendored from `mattpocock/skills` (v1.2.0, sha 2ffb184) → `skills/wayfinder`. Decision-ticket map for work bigger than one context, backing the `planner` seat. Kept verbatim minus the Codex `agents/openai.yaml` metadata (unused here); re-sync: re-download from https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/wayfinder/. -->

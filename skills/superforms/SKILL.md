@@ -1,6 +1,7 @@
 ---
 name: superforms
 description: "Superforms 2 (`sveltekit-superforms`) recipes — the empty POST that returns `valid: true` with `role: \"admin\"`, nested field values discarded while the form still validates, a form id that's a hash of the schema *shape* so login and register collide, number proxies writing `NaN` that logs as `null`, and `withFiles` being literally the same function as `removeFiles`. Use when writing or reviewing a SvelteKit form action, a `superForm` call, or form components in a repo with `sveltekit-superforms` in `package.json`. Superforms v2 on SvelteKit 2; not Formsnap internals, not React Hook Form."
+user-invocable: false
 ---
 
 **Superforms fills in what the browser didn't send, and then validates what it filled in.** A missing field is not a missing field — it's a generated default that passes. Two consequences drive the rest: `valid: true` is a claim about the *merged* object, never about what the user typed · the client stores hold values (`NaN`, `Invalid Date`, `"42"`) that `JSON.stringify` renders as something else, so SuperDebug shows you a value the form does not have.

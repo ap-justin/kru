@@ -2,6 +2,7 @@
 name: to-spec
 description: Turn the current conversation into a spec and publish it to the project issue tracker — no interview, just synthesis of what you've already discussed.
 disable-model-invocation: true
+user-invocable: false
 ---
 
 <!-- vendored from `mattpocock/skills` (v1.2.0, sha 2ffb184) → `skills/to-spec`. Spec/PRD synthesis backing the `planner` seat. Kept verbatim minus the Codex `agents/openai.yaml` metadata (unused here); re-sync: re-download from https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/to-spec/. -->

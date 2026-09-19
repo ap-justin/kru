@@ -1,6 +1,7 @@
 ---
 name: agents-sdk
 description: Build, debug, or review Cloudflare Agents SDK applications using the agents package.
+user-invocable: false
 ---
 
 <!-- vendored verbatim from `cloudflare/skills` main:skills/agents-sdk (Apache-2.0; LICENSE kept).

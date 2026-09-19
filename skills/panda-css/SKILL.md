@@ -1,6 +1,7 @@
 ---
 name: panda-css
 description: Panda CSS recipes — what the build-time extractor can and cannot see (it reads source text, never types), the config recipe whose runtime variant ships a class with no rule, `cx` conflicts resolved by sheet order instead of argument order, the `include` globs that silently skip `app/` and `.svelte`, `strictTokens` as a type-only gate, and the `_dark` condition that only matches `.dark`. Use when writing or reviewing styles in a repo with a `panda.config.*` / `styled-system/` directory, wiring Panda into a build, or debugging a Panda style that renders with no CSS. Not Tailwind, not vanilla-extract, not StyleX.
+user-invocable: false
 ---
 
 **Panda compiles styles by reading your source as text at build time.** Three consequences drive everything below: only what the extractor can resolve **inside one file, down to a literal**, becomes CSS · `styled-system/` is a generated **artifact**, not source · and nothing here fails loudly — an unextracted style renders as a class name with no rule behind it, and the CLI still prints `Successfully extracted css ✨`.

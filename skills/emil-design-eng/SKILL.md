@@ -1,6 +1,7 @@
 ---
 name: emil-design-eng
 description: This skill encodes Emil Kowalski's philosophy on UI polish, component design, animation decisions, and the invisible details that make software feel great.
+user-invocable: false
 ---
 
 <!-- vendored from `emilkowalski/skills` (main, sha 6bf2443) → `skills/emil-design-eng`.

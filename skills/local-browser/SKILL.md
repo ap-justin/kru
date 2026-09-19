@@ -2,6 +2,7 @@
 name: local-browser
 description: Drive the running local dev app in a real browser at localhost — QA a change, reproduce a UI bug, measure rendered DOM and computed styles. Use whenever the target URL is localhost.
 allowed-tools: mcp__chrome-devtools__new_page, mcp__chrome-devtools__navigate_page, mcp__chrome-devtools__list_pages, mcp__chrome-devtools__select_page, mcp__chrome-devtools__close_page, mcp__chrome-devtools__take_snapshot, mcp__chrome-devtools__take_screenshot, mcp__chrome-devtools__emulate, mcp__chrome-devtools__resize_page, mcp__chrome-devtools__click, mcp__chrome-devtools__hover, mcp__chrome-devtools__fill, mcp__chrome-devtools__fill_form, mcp__chrome-devtools__press_key, mcp__chrome-devtools__wait_for, mcp__chrome-devtools__evaluate_script, mcp__chrome-devtools__list_console_messages, mcp__chrome-devtools__list_network_requests, Read
+user-invocable: false
 ---
 
 <!-- vendored (locally authored — no upstream) → `skills/local-browser`. Thin project wrapper over the `chrome-devtools` MCP server (ChromeDevTools/chrome-devtools-mcp), backing the `/visual-review` and `/accessibility-review` passes. Every fact below was verified against chrome-devtools-mcp@1.7.0 on 2026-08-24 by driving the server directly — re-verify the clamp and the whole-state behaviour after a server upgrade rather than trusting this file. No upstream skill exists → no re-sync source; maintain it here. -->

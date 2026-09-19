@@ -2,6 +2,7 @@
 name: ux-copy
 description: Write or review UX copy — microcopy, error messages, empty states, CTAs. Trigger with "write copy for", "what should this button say?", "review this error message", or when naming a CTA, wording a confirmation dialog, filling an empty state, or writing onboarding text.
 argument-hint: "<context or copy to review>"
+user-invocable: false
 ---
 
 <!-- vendored from the knowledge-work `design` plugin (design@knowledge-work-plugins v1.2.0, sha 15898ec).

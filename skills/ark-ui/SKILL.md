@@ -1,6 +1,7 @@
 ---
 name: ark-ui
 description: Ark UI headless-component reference every UI builder loads for accessible interactive primitives — dialog/modal, dropdown/menu, combobox, select, date-picker, tabs, tooltip, popover, toast, and the rest of Ark's catalog on Zag.js state machines, across React / Vue / Solid / Svelte. Covers when to reach for Ark vs. the repo's existing lib, compound-component part anatomy, the built-in a11y surface (ARIA/focus/keyboard) and how not to defeat it, and the styling hookup (data-attributes / CSS vars) onto the design system's tokens. Use when a feature needs an interactive UI primitive built accessibly instead of hand-rolled — reach for it on the complex ones (overlays, form controls, date pickers), not a styled button. This is ambient component craft woven into the route you're already building — not a separate hand-off.
+user-invocable: false
 ---
 
 Ark UI is the **headless component layer** — accessible, unstyled interactive primitives on Zag.js state machines. It's **ambient craft**: you (the framework builder) build the primitive in-place in the route you're already writing, style it against the design tokens, and place it — no separate hand-off. Load this when a feature needs a real interactive primitive (an overlay, a form control, a date picker) done accessibly, and you're deciding whether to reach for Ark, and how to compose it so its built-in a11y actually fires.

@@ -1,6 +1,7 @@
 ---
 name: valibot
 description: Valibot 1.x recipes — `v.is()` over an async schema returning `true` under strict TypeScript, `v.toBoolean()` on `"false"` being `true`, a failed `safeParse` that still carries `output`, and `fallback` swallowing a validation issue into a typed value. Use when writing or reviewing a Valibot schema, a parse boundary, or issue plumbing in a repo with `valibot` in `package.json`. Not Zod, Yup, or ArkType.
+user-invocable: false
 ---
 
 **Valibot's dangerous failure is the validation that never ran.** Every trap below returns a value: a type guard that says yes to an async schema it never awaited, a coerced truthy string, a fallback that replaced bad data with a typed default, a result whose `output` is populated on failure. Two consequences drive the rest: `success` and `typed` are different flags, and `tsc` is the gate for exactly half of these — the other half compiles clean under `strict`.

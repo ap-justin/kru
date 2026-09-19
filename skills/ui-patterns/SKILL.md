@@ -1,6 +1,7 @@
 ---
 name: ui-patterns
 description: "House rules for how a built surface behaves — when a form validates and where a failed submit puts focus, where a mutation reports its outcome, what a per-row control announces, how an icon sits beside a label that wraps, what prose to leave out, which spans of a CLI's output the reader can act on. Design-system agnostic: behavior, semantics and grouping only, never appearance. Load the one group matching your build target."
+user-invocable: false
 ---
 
 Match what you're about to build in the index, load that **one** `reference/` group, leave the rest. Most patterns don't apply to most components, so loading the corpus is the failure this index exists to prevent.

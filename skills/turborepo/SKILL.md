@@ -10,6 +10,7 @@ description: |
   or has apps/packages directories.
 metadata:
   version: 2.10.6-canary.2
+user-invocable: false
 ---
 
 <!-- vendored verbatim from `vercel/turborepo` main:skills/turborepo (MIT; LICENSE kept).

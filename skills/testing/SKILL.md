@@ -1,6 +1,7 @@
 ---
 name: testing
 description: Testing craft every seat that writes a test loads — discovering how *this* repo tests before writing a line, the portable principles of a test worth keeping (cover the space, deterministic, assert something that can fail, one reason to fail), and the run→fix loop to green. Use when adding coverage for behavior you're building, running the suite over what you just wrote, or deciding what a test should assert. This is ambient craft in the code you're already writing — not a separate hand-off. For the red → green *loop* itself, load `tdd`; this skill is what makes each of its tests a good one.
+user-invocable: false
 ---
 
 Your judgment about **what makes a good test** is portable. Your judgment about **how this repo tests** is not — you learn that from the repo, every time. Never impose a framework, harness, or style from memory.

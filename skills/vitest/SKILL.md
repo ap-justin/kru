@@ -1,6 +1,7 @@
 ---
 name: vitest
 description: "Vitest recipes — a `*.test-d.ts` that never runs under a green `vitest run`, a passing test's `console.log` the agent-detected `minimal` reporter swallows, `.only` and a new snapshot that pass locally and fail the file in CI, `mockReset: true` turning every module-scope `mockResolvedValue` into `undefined`, `advanceTimersByTime` missing a timer queued behind an `await`, and Testing Library's `waitFor` hanging to `testTimeout` under fake timers. Use when writing, running or reviewing a test in a repo with `vitest` in `package.json`, reading a Vitest run's output, or working under Browser Mode (`@vitest/browser-playwright`). Vitest 5 with the v4 forks marked; not Jest, not Playwright Test."
+user-invocable: false
 ---
 
 **Vitest fails quietly.** The runner is Vite-native and fast, and every trap below is a run that reports what you did not ask: a test that was never collected, a log that was never printed, state that walked from one test into the next, a timer that never fired, an element left over from the previous render. Read the run you got, not the run you expected.

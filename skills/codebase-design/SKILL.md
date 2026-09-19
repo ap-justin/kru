@@ -1,6 +1,7 @@
 ---
 name: codebase-design
 description: Shared vocabulary for designing deep modules. Use when the user wants to design or improve a module's interface, find deepening opportunities, decide where a seam goes, make code more testable or AI-navigable, or when another skill needs the deep-module vocabulary.
+user-invocable: false
 ---
 
 <!-- vendored from `mattpocock/skills` (v1.2.0, sha 2ffb184) → `skills/codebase-design`. Deep-module design vocabulary backing the `architecture-reviewer` seat. Kept verbatim minus the Codex `agents/openai.yaml` metadata (unused here), plus one deviation to re-apply after any re-sync: the pointer to `NAVIGATION.md` under *Going deeper* — the repo-owned retrieval branch (read amplification, naming for search, directory topology) upstream has no section for, disclosed behind one line so a re-sync costs only that line; `NAVIGATION.md` itself survives one untouched. Re-sync: re-download from https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/codebase-design/. -->

@@ -91,9 +91,10 @@ that repo's `.claude/CLAUDE.md`:
 - `/kru:todo <the thing>`, `/kru:issue <what's wrong>`: park a want or a defect without breaking the session.
 - `/kru:remember <what you liked>`: bank a preference for the team to absorb later.
 - `/kru:landed`: after the PR merges, sync back onto the base branch.
-- `/kru:comment-fix`, `/kru:prose-fix`, `/kru:doc-fix` `[<path> | <branch> | <pr>]`: fix comments, rendered copy, or doc prose in place.
+- `/kru:text-fix` `[<path> | <branch> | <pr>]`: every text pass the target earns — comments, rendered copy, doc prose, agent docs — in one go. The three verbs under it run alone too: `/kru:comment-fix`, `/kru:prose-fix`, `/kru:doc-fix`.
 
 **Backlog and tech debt**
+- `/kru:reflect` `[<pr> | <branch> | <commit> | everything]`: every seat looks back over its own lane, then the fixes get scoped, sliced and landed.
 - `/kru:todos`, `/kru:issues`: work the backlog; each entry landed is deleted.
 - `/kru:briefs`: check every brief against what shipped; tick, archive, or resume one.
 - `/kru:design-system audit`: audit the design system.

@@ -1,6 +1,7 @@
 ---
 name: tui-design
 description: Terminal UI recipes for Bubble Tea (Go), Ratatui (Rust), Textual (Python) and Ink (React) — the frame measured in cells rather than characters, color on a background you have to detect, I/O that leaves the render loop, the exit path that gives the terminal back in every branch including panic, and resize as an event rather than a startup fact. Use when building or reviewing a terminal app, making an existing CLI interactive, or choosing a TUI framework. Terminal surfaces only — a browser UI is the UI builders' lane.
+user-invocable: false
 ---
 
 Verified against docs on 2026-09-11 — Ratatui 0.30.2 · Bubble Tea v1.3.10 + v2.0.9 · Lip Gloss v1.1.0 + v2.0.6 · Textual 8.2.8 · Ink 7.1.1. Re-verify after a major bump; the per-stack currency check is `reference/frameworks.md`. What's below is the layer the docs don't carry.

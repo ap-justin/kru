@@ -1,6 +1,7 @@
 ---
 name: conform
 description: Conform on React — the `required` message that never fires because `""` is stripped to `undefined` before validation, a `.default()` that turns a cleared field into a silent success, a `reply()` that echoes the submitted password back into the HTML, an intent submission whose `status` is `undefined` and whose `value` doesn't exist, and two parallel APIs (`@conform-to/react` vs `/future`) that the docs teach side by side. Use when writing or reviewing a React form action/server function, a `useForm` call, or form components in a repo with `@conform-to/react` in `package.json`. Conform 1.x with Zod 4; not React Hook Form, not TanStack Form.
+user-invocable: false
 ---
 
 **Conform's parse deletes; it never invents.** Every empty string becomes `undefined` before the schema sees it, so a blank field fails the *type* check rather than the rule you wrote for it — and any wrapper that tolerates `undefined` (`.optional()`, `.default()`) turns *the user cleared this* into a quiet success. Two consequences drive the rest: the message the user reads is Zod's unless yours sits on the **type constructor** · the server's reply is the **payload echoed back**, and it replaces the form's initial value wholesale — carrying what was typed, including what you'd rather not send back.

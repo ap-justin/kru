@@ -1,6 +1,7 @@
 ---
 name: diagnosing-bugs
 description: Diagnosis loop for hard bugs and performance regressions. Use when the user says "diagnose"/"debug this", or reports something broken/throwing/failing/slow.
+user-invocable: false
 ---
 
 <!-- vendored from `mattpocock/skills` (v1.2.0, sha 2ffb184) → `skills/diagnosing-bugs`. Hard-bug + perf-regression diagnosis loop backing the `vercel-perf-optimizer` seat. Kept verbatim minus the Codex `agents/openai.yaml` metadata (unused here); re-sync: re-download from https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/diagnosing-bugs/. -->

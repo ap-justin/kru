@@ -1,6 +1,7 @@
 ---
 name: cloudflare
 description: Discover and choose Cloudflare products for apps, APIs, AI agents, storage, networking, and security. Use for architecture and product selection, including when the user describes a need without naming a Cloudflare product; then find the relevant skill or documentation.
+user-invocable: false
 ---
 
 <!-- vendored verbatim from `cloudflare/skills` main:skills/cloudflare (Apache-2.0; LICENSE kept).

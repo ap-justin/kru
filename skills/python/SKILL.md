@@ -1,6 +1,7 @@
 ---
 name: python
 description: "Use when writing or reviewing Python in a repo with a `pyproject.toml` or `.py` files — an MCP server, a library, a CLI, packaging, or a `test_*.py`. The failures that pass `ruff` and `mypy` and ship quiet: a lint rule that skips every `_`-prefixed name, `x or default` eating a legitimate `0`, an `except` that returns a plausible value, a `dict` return annotation that silently drops structured output, a wheel that builds green and ships none of your package. MCP-server, packaging and test-mechanics halves in `reference/`. Python 3.10+ on the stdlib; not Django/Flask internals, not notebooks."
+user-invocable: false
 ---
 
 **Python's dangerous failure is the one that passes the gate and stays quiet.** `ruff` proves style, `mypy` proves the annotations agree with each other, and every trap below survives both — shipping as corrupted data, an invisible skip, or a distribution that imports nothing. Three consequences drive the file: an annotation is a *claim*, not a check (nothing at runtime enforces `-> int`) · a falsy value is a *value* (`0`, `False`, `""`, `[]` are data, not absence) · a green tool run proves the tool ran, never that it looked at your code. That last one is **vacuous** — a pass that could not have failed — and it is the word for the whole class.

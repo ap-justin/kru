@@ -1,6 +1,7 @@
 ---
 name: postgres
 description: Postgres engine recipes — the migration that queues every read behind its lock, the DDL orderings that keep a live table open (NOT VALID then VALIDATE, a CHECK before SET NOT NULL, a volatile default that rewrites the table, CREATE INDEX CONCURRENTLY and the INVALID index a failed one leaves), enum values that can't be dropped, and the column types to default to. Use when writing or reviewing a Postgres schema, migration, or query. Postgres-the-server only; the ORM layer is `drizzle`'s.
+user-invocable: false
 ---
 
 Reproduced on **PostgreSQL 18.3** (2026-09-13) unless a line says otherwise. A recipe gated on a major names it — check `select version()` on the target before reaching for one.

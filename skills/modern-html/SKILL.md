@@ -1,6 +1,7 @@
 ---
 name: modern-html
 description: Baseline judgment for native HTML — which platform elements and attributes now do a job that used to need a library or hand-rolled JS. Covers <dialog> vs the popover attribute, invoker commands, exclusive <details> accordions, inert, constraint validation and :user-invalid, <output>, <search>, and the loading/priority hints. Use before reaching for a headless primitive, a wrapper element, or JS for something the platform now ships.
+user-invocable: false
 ---
 
 The **native-element** half of the platform judgment: what HTML now does on its own, and which of those are safe to reach for. Load it when you're about to build an overlay, a disclosure, a form control, or a status message — before you reach for a primitive library or write JS.

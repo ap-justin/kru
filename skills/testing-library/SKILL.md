@@ -1,6 +1,7 @@
 ---
 name: testing-library
 description: "Testing Library recipes — the green component test whose query found the wrong element or whose interaction did nothing: `getByText` failing on text split across elements under a regex and `exact: false` alike, a regex `name` matching every button containing the word, `toBeDisabled` passing over `aria-disabled` while `user.click` on it fires, `waitFor` resolving on a falsy return, user-event 14 silently dropping v13 key descriptors, and the act warning that never prints under Vitest's `globals: false`. Use when writing or reviewing a component test in a repo with `@testing-library/react` or `/svelte`, or reading a query failure. Not Playwright, not Vitest Browser Mode locators."
+user-invocable: false
 ---
 
 **A green component test proves what its queries prove, and the queries only ask the accessibility tree what the markup put there.** Every trap below is a green that proves nothing: a matcher reading a different attribute than the one you meant, a keystroke that fell on the floor, a `waitFor` that never waited, a warning with nowhere to print. Read a query failure as a report on the markup before reading it as a report on the query.

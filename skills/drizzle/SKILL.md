@@ -1,6 +1,7 @@
 ---
 name: drizzle
 description: Drizzle ORM recipes for the Postgres and SQLite dialects — the version split between what npm installs and what orm.drizzle.team documents, reading the SQL `drizzle-kit generate` writes before it ships (its SQLite table rebuild deletes child rows), `generate`+`migrate` vs `push`, the connection settings Drizzle does not set for you, and relational queries vs joins. Use when writing or reviewing a Drizzle schema, a drizzle-kit migration, or a query built with Drizzle, in either the pg or sqlite dialect. Not MySQL, not Prisma.
+user-invocable: false
 ---
 
 **Drizzle is a typed SQL builder with a migration generator attached — not a database, and not a safety net.** Three consequences drive everything below: the SQL in `drizzle/` is a *draft the generator wrote*, not a reviewed migration · Drizzle owns neither the connection nor its settings · the types prove a query compiles, never that it is correct against the rows already in the table.
