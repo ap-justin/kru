@@ -1,8 +1,8 @@
 {
   "name": "kru",
   "displayName": "kru",
-  "version": "0.96.1",
-  "description": "A versioned engineering team for Claude Code \u2014 a lead skill that scopes work, detects the stack, and routes to 35 specialist subagents (builders, reviewers, design, platform).",
+  "version": "0.96.2",
+  "description": "A versioned engineering team for Claude Code \u2014 a lead skill that scopes work, detects the stack, and routes to 34 specialist subagents (builders, reviewers, design, platform).",
   "author": {
     "name": "ap-justin"
   },

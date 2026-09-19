@@ -31,7 +31,15 @@ What keeps the first phase affordable: **every seat runs in its own context**, s
 
    **No sheet** → the roster is a guess, and a look-back off a guess reads the wrong lanes. Name **`/kru:setup`** for the user in one line; on their say-so to proceed anyway, derive the lanes from `${CLAUDE_PLUGIN_ROOT}/references/routing.md` and say in the report that the roster was derived, not read. A **stale** sheet — its stamp below the installed `VERSION`, or a cited line that no longer matches disk — gets the same line, and the run continues off it meanwhile.
 
-3. **Assign every file in the target to a seat**, by the grouping rule at `${CLAUDE_PLUGIN_ROOT}/skills/lead/SKILL.md` → Step 3, *Group the change's files by seat* — a file's seat owns its stack, not the feature it was named after. Then add the review-only seats the target earns, by `${CLAUDE_PLUGIN_ROOT}/skills/lead/references/gates.md`, whose *live-versus-latent* rule is what keeps a batch from being spent on code nothing reaches.
+3. **Assign every file in the target to a seat**, by the grouping rule at `${CLAUDE_PLUGIN_ROOT}/skills/lead/SKILL.md` → Step 3, *Group the change's files by seat* — a file's seat owns its stack, not the feature it was named after. Then add the review-only seats the target earns, by `${CLAUDE_PLUGIN_ROOT}/skills/lead/references/gates.md`.
+
+   **That file prices a batch for a slice about to merge, and this code already shipped. Three of its rules are overridden here:**
+
+   - **`architecture-reviewer` runs on every look-back**, whatever the change shape. Structural debt accumulates in landed code precisely because nothing gated it on the way in, so the run that looks back is the first thing that ever reads for it.
+   - **`code-reviewer` reads for what shipping leaves unproven** — the error branch nothing reached, the race no load has hit, the webhook that has never seen a duplicate. Working code is evidence about the paths that ran.
+   - ***live-versus-latent* applies to genuinely dead paths only.** It trims a pre-merge batch down to code something reaches; here, shipping is that evidence, so it trims little.
+
+   The stack seats need no override — their read is the premise of the run.
 
    Every file assigned is checkable: list the target's files, list the assignments, and the two match.
 
