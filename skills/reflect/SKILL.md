@@ -45,11 +45,17 @@ What keeps the first phase affordable: **every seat runs in its own context**, s
    - **Read-only, stated.** A builder seat has write tools and a bias toward using them, so the brief names findings as the deliverable and the working tree as not to move.
    - **What the work was for.** A seat still re-derives intent from code that may have gotten it wrong, which catches *built wrong* and never *built the wrong thing*. Hand down the behaviors: the PR body on a PR target, `brief.md`'s `Done when` where the store has one, the commit messages otherwise.
 
-   Each seat returns **its findings ranked by severity, ten at most, each with `file:line`**, plus the pointer to its report. The report on disk is uncapped and is where the passing rules, the tables and the coverage matrices go. Leave the reports closed — their existence is the record, and reading one into the main thread is the balloon waves and shortlists exist to avoid. Open one only when a returned finding is too thin to act on.
+   What comes back is three things:
+
+   - **The findings** — ranked by severity, ten at most, each with `file:line`.
+   - **The trace** — `Look-back: <what it read> · <the sources it loaded> · <what it found, or `clean`>`, on the contract and for the reasons at `${CLAUDE_PLUGIN_ROOT}/skills/roster/shared-blocks.md` → Block O. The **sources** field is this phase's addition: a seat auditing its lane from training data rather than the source its definition pins it to returns confident findings about a framework version this repo doesn't run.
+   - **The pointer to its report**, which is uncapped and holds the passing rules, the tables and the coverage matrices. Leave the reports closed — their existence is the record, and reading one into the main thread is the balloon waves and shortlists exist to avoid. Open one only when a returned finding is too thin to act on.
 
 ## Then fix it
 
-6. **Merge and rank.** One list, deduplicated — two seats finding the same thing in the same file is one finding, credited to both — ranked by severity **across** seats rather than within them. Then split by `${CLAUDE_PLUGIN_ROOT}/TRACKER.md` → **wrong → `issues/`, wanted → `TODOS.md`, unformed → `notes/`**. A look-back produces all three, and the split is what keeps this phase honest: **only the wrongs are candidates to fix now.** A want dressed as a fix is how a reflection becomes a refactor nobody scoped.
+6. **Merge and rank.** **A return carrying no `Look-back:` line is unverified** — ask that seat for it before its findings enter the list, as `gates.md` does for a build return missing its `Return pass:`.
+
+   Then one list, deduplicated — two seats finding the same thing in the same file is one finding, credited to both — ranked by severity **across** seats rather than within them. Then split by `${CLAUDE_PLUGIN_ROOT}/TRACKER.md` → **wrong → `issues/`, wanted → `TODOS.md`, unformed → `notes/`**. A look-back produces all three, and the split is what keeps this phase honest: **only the wrongs are candidates to fix now.** A want dressed as a fix is how a reflection becomes a refactor nobody scoped.
 
 7. **Scope, slice, partition** — the three cuts, in that order, over the wrongs:
 
@@ -61,9 +67,13 @@ What keeps the first phase affordable: **every seat runs in its own context**, s
 
 8. **Gate.** Show the user the ranked wrongs, the line you drew, and the slices in dependency order. Nothing is written to the store and nothing is dispatched before they answer, because the whole thing is a claim about work they already accepted. Their answer per line: fix it in this run, file it, or drop it. Then write what they chose, each reference anchored `file:line`.
 
+   **One question past the findings:** whether what lands gets a text pass. The builders in step 9 write comments and strings alongside the code, and the drift an agent-written diff carries there is `${CLAUDE_PLUGIN_ROOT}/skills/comment-fix/SKILL.md`'s cut list. `/kru:text-fix` is user-invoked by design, so the run asks once, here, beside the findings.
+
 9. **Land the slices they picked.** Dispatch each to its partitioned seat as an ordinary build — the handoff contract, the test posture, the gates it earns, the fix loop and its 2-round cap are all `lead`'s Step 3 and 4, unchanged by having come from a reflection. Two things this origin adds: each slice's brief names **the finding it closes** and the seat's report path so the builder can read the full write-up, and a fix that lands **deletes its `issues/` file** in the same change (`lead` Step 4.5).
 
-10. **Report.** Which seats ran and in which wave, the per-seat finding counts, the line you drew and what fell below it, the slices and their seats, what landed, and what is still filed.
+   **Then the text pass, if step 8 asked for it** — once every slice has landed, not between them, so one sweep covers the whole remediation. Read `${CLAUDE_PLUGIN_ROOT}/skills/text-fix/SKILL.md` and run it; no invocation reaches it, which is why it reads its own siblings off disk too. Hand it **what the slices landed on** — the branch where Step 4.5 committed them, the default working tree where they are still uncommitted. The wrong target there sweeps the branch's whole history instead of this remediation.
+
+10. **Report.** Which seats ran and in which wave, the per-seat finding counts, the line you drew and what fell below it, the slices and their seats, what landed, what is still filed, and the text pass's own report where step 9 ran one.
 
 ## Don't
 
