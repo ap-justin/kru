@@ -1,6 +1,6 @@
 ---
 name: sqlite
-description: SQLite recipes, for an embedded `.db` file in node/bun and for Cloudflare D1 — STRICT tables vs. type affinity, the 12-step rebuild that stands in for the ALTER TABLE SQLite can't do, and case-insensitive uniqueness, then the branch for each host. Embedded: the per-connection pragma block, single-writer concurrency and what actually fixes SQLITE_BUSY, user_version migrations, VACUUM INTO backups, choosing better-sqlite3 / node:sqlite / bun:sqlite. D1: foreign keys you can't turn off, batch() in place of transactions, wrangler migrations, Time Travel. Use when writing or reviewing SQLite schema, migrations, or queries on either host. Not libSQL/Turso.
+description: "SQLite recipes, for an embedded `.db` file in node/bun and for Cloudflare D1 — STRICT tables vs. type affinity, the 12-step rebuild that stands in for the ALTER TABLE SQLite can't do, and case-insensitive uniqueness, then the branch for each host. Embedded: the per-connection pragma block, single-writer concurrency and what actually fixes SQLITE_BUSY, user_version migrations, VACUUM INTO backups, choosing better-sqlite3 / node:sqlite / bun:sqlite. D1: foreign keys you can't turn off, batch() in place of transactions, wrangler migrations, Time Travel. Use when writing or reviewing SQLite schema, migrations, or queries on either host. Not libSQL/Turso."
 user-invocable: false
 ---
 

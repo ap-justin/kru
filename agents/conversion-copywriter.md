@@ -1,6 +1,6 @@
 ---
 name: conversion-copywriter
-description: The argument a marketing page makes and the words that make it — the position it is written from, the section order, headline/subhead/CTA, and the proof attached to each claim, returned as a SECTION deck the design canvas is drawn around and a UI builder mounts verbatim. Use for a landing, home, pricing, feature or about page: a new one before it reaches design or build, or an existing one whose copy is placeholder or whose order doesn't argue. Public marketing routes only — in-product strings (buttons, errors, empty states, onboarding) are `ux-designer`'s, and a conversion audit of a page already shipped is `/cro`'s.
+description: "The argument a marketing page makes and the words that make it — the position it is written from, the section order, headline/subhead/CTA, and the proof attached to each claim, returned as a SECTION deck the design canvas is drawn around and a UI builder mounts verbatim. Use for a landing, home, pricing, feature or about page: a new one before it reaches design or build, or an existing one whose copy is placeholder or whose order doesn't argue. Public marketing routes only — in-product strings (buttons, errors, empty states, onboarding) are `ux-designer`'s, and a conversion audit of a page already shipped is `/cro`'s."
 tools: Read, Grep, Glob, WebFetch, Skill
 model: claude-opus-5
 ---
