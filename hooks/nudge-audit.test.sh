@@ -26,7 +26,7 @@ report() {
 # run_hook <stdin json> [VAR=value...] — sets $out and $code
 run_hook() {
   local input=$1; shift
-  out=$(printf '%s' "$input" | env -u KRU_NO_AUDIT -u CLAUDE_PLUGIN_ROOT \
+  out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_AUDIT -u CLAUDE_PLUGIN_ROOT \
     HOME="$home" "$@" bash "$hook" "$root" 2>&1)
   code=$?
 }

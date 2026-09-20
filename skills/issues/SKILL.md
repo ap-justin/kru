@@ -11,7 +11,7 @@ Take the defect list to the user as a decision, not a listing. The artifact is `
 
 ## 1. Reconcile — every file against the code
 
-List `issues/` at `~/.kru/management/<project-slug>/` (`<project-slug>` = the working repo's dir name; no repo → the cwd's). Missing or empty → *no known defects*, name `/kru:issue <what's wrong>`, stop.
+List the dir `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" path issues` names. Missing or empty → *no known defects*, name `/kru:issue <what's wrong>`, stop.
 
 Then check each file against the codebase — resolve every cited `file:line`, read the code around it, budgeted at a read pass per file, not a repro. Every file lands in one bucket:
 

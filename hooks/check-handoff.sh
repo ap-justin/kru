@@ -13,6 +13,8 @@ command -v jq >/dev/null 2>&1 || exit 0
 [ -n "$KRU_NO_GATE" ] && exit 0
 plugin_root="${1:-$CLAUDE_PLUGIN_ROOT}"
 [ -d "$plugin_root/agents" ] || exit 0
+# unreadable only on a broken install, and every guard here fails open on those
+. "$plugin_root/scripts/kru-store.sh" 2>/dev/null || exit 0
 input=$(cat) || exit 0
 
 seat=$(printf '%s' "$input" | jq -r '.tool_input.subagent_type // empty' 2>/dev/null)
@@ -210,8 +212,9 @@ if [ -n "$reasons" ]; then
     refused: true,
     reasons: $reasons
   }' 2>/dev/null)
-  if [ -n "$record" ] && mkdir -p "$HOME/.kru/audit" 2>/dev/null; then
-    [ -n "$sid" ] && printf '%s\n' "$record" >> "$HOME/.kru/audit/$sid.jsonl" 2>/dev/null
+  adir=$(kru_path audit)
+  if [ -n "$record" ] && mkdir -p "$adir" 2>/dev/null; then
+    [ -n "$sid" ] && printf '%s\n' "$record" >> "$adir/$sid.jsonl" 2>/dev/null
     # /roster learn reads each quoted span against the sentence around it, so
     # the cross-session log stores those windows and the prompt head — most of
     # its bytes — stays in the session ledger above, where dispatch-auditor
@@ -225,7 +228,7 @@ if [ -n "$reasons" ]; then
     rrecord=$(printf '%s' "$record" |
       jq -c --arg spans "$spans" 'del(.prompt, .truncated) + { spans: ($spans | split("\n") | map(select(length > 0))) }' 2>/dev/null)
     # the sweep drains what it reads; the cap bounds a log nobody sweeps
-    rlog="$HOME/.kru/refusals.jsonl"
+    rlog="$(kru_path refusals)"
     printf '%s\n' "${rrecord:-$record}" >> "$rlog" 2>/dev/null
     if [ "$(wc -l < "$rlog" 2>/dev/null | tr -d ' ')" -gt 500 ] 2>/dev/null; then
       tail -n 500 "$rlog" > "$rlog.tmp" 2>/dev/null && mv "$rlog.tmp" "$rlog" 2>/dev/null
@@ -241,7 +244,7 @@ fi
 # text names itself so the auditor reading the stored prompt can tell the hook's
 # paragraph from the lead's own.
 add=""
-[ "$inject_channel" = true ] && add="\n\nkru hook — learnings channel: a durable, cross-project preference you hit mid-task (the user rejected X twice and chose Y) goes as one line to ~/.kru/inbox.md, format at ${plugin_root}/PREFERENCES.md. Journaling, not derailing."
+[ "$inject_channel" = true ] && add="\n\nkru hook — learnings channel: a durable, cross-project preference you hit mid-task (the user rejected X twice and chose Y) goes as one line to $(kru_path inbox), format at ${plugin_root}/PREFERENCES.md. Journaling, not derailing."
 add="${add}${inject_report}"
 [ -z "$add" ] && exit 0
 printf '%s' "$input" | jq -c --arg add "$add" '{

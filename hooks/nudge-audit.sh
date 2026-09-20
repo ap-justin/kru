@@ -12,9 +12,13 @@ input=$(cat) || exit 0
 active=$(printf '%s' "$input" | jq -r '.stop_hook_active // false' 2>/dev/null)
 [ "$active" = "true" ] && exit 0
 
+plugin_root="${1:-$CLAUDE_PLUGIN_ROOT}"
+# unreadable only on a broken install, and every guard here fails open on those
+. "$plugin_root/scripts/kru-store.sh" 2>/dev/null || exit 0
+
 sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
 [ -z "$sid" ] && exit 0
-ledger="$HOME/.kru/audit/$sid.jsonl"
+ledger="$(kru_path "audit/$sid")"
 # the mark holds the dispatch count already nudged for. an audit that never
 # runs — declined, interrupted, a session that ends somewhere else — leaves the
 # ledger behind for the rest of the session, and the ledger only grows, so that
@@ -26,7 +30,6 @@ if [ ! -s "$ledger" ]; then
   exit 0
 fi
 
-plugin_root="${1:-$CLAUDE_PLUGIN_ROOT}"
 n=$(wc -l < "$ledger" | tr -d ' ')
 prev=$(cat "$mark" 2>/dev/null)
 case "$prev" in ''|*[!0-9]*) prev=0 ;; esac

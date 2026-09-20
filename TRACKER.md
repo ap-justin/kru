@@ -1,15 +1,17 @@
-# Plan Store — user-level files (`~/.kru/management/<project-slug>/`)
+# Plan Store — the project root (`references/store.md`)
 
-`/kru:brief` and the `planner` seat persist plans as **markdown files under `~/.kru/management/<project-slug>/`** — at the **user level**, keyed per project, beside the preference store (`PREFERENCES.md`) — **not** committed to the working repo, and **not** on GitHub Issues. This file **is** the "tracker doc" the vendored planning skills ask for — **do NOT run `/setup-matt-pocock-skills`**. When a vendored skill says "the issue tracker should have been provided to you," or offers a GitHub/Linear path, use the file layout here — it is the skills' own **local-markdown path**, made canonical for this team.
+`/kru:brief` and the `planner` seat persist plans as **markdown files under the project root** — `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" path plan`, resolved by `references/store.md` and keyed per project beside the preference store (`PREFERENCES.md`) — **not** committed to the working repo, and **not** on GitHub Issues. This file **is** the "tracker doc" the vendored planning skills ask for — **do NOT run `/setup-matt-pocock-skills`**. When a vendored skill says "the issue tracker should have been provided to you," or offers a GitHub/Linear path, use the file layout here — it is the skills' own **local-markdown path**, made canonical for this team.
 
-**`<project-slug>` = the working repo's dir name** — the same slug convention `/remember` stamps on inbox lines, so one name identifies a project across both user-level stores. No repo → the cwd's dir name. Create the dir on first write.
+**The resolver owns the slug** (`bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" slug`) — the repo's dir name, a linked worktree resolving to the main repo, and the same name `/remember` stamps on inbox lines, so one name identifies a project across both stores. Create the dir on first write.
 
 Why user-level files, not in-repo and not Issues: the working repo stays clean — **no management files in it, ever**: no `management/` dir, no `issues/`, no plan docs, briefs, or todo lists, and **no pointer in its `CLAUDE.md`**. The store is the user's own CTO-side workspace and the repo must not know it exists — while the plan still survives context resets, branch churn, and even a re-clone. The home dir is the one place writable from every project (the same argument that placed the preference inbox there — `PREFERENCES.md`), and no network / `gh` / tokens are needed. **`~/.kru/`, never `~/.claude/kru/`**: `.claude` is a protected directory, and `permissions.allow` cannot pre-approve a write there — the safety check runs before settings rules are read (`code.claude.com/docs/en/permission-modes` → *Protected paths*). So a store under it makes every routine write of this team's — closing a defect file, clearing the audit ledger — a prompt no grant can silence in `default`/`acceptEdits`, a classifier call in `auto`, and in `dontAsk` a denial, which puts the audit closeout out of reach entirely. Trade-off, recorded: the plan no longer rides into the PR beside the code — commit-time reconciliation (below) is what keeps plan and code honest instead. If you want an audit trail back, `git init` **each project's own dir** (`management/<project-slug>/`) — never one repo at the `management/` root, and never one at the `kru` root: a shared repo makes a routine `git add -A` stage another project's in-flight plan. History returns without touching any product repo.
+
+**One surface inverts this, and the resolver handles it.** A cloud vm has no user level that outlives the session — the clone is the only thing that leaves the machine — so there the project root moves *into* the repo and the plan ships in the branch. Every reason above still holds where there is a home dir to hold it, and `kru-store.sh where` announces the surface that doesn't, so the store is never found by surprise in a diff. The roots, the logical names and the backends behind them: `references/store.md`.
 
 ## Layout
 
 ```
-~/.kru/management/<project-slug>/
+<project root>/
   TODOS.md                 # durable, cross-cutting — captured one-liners, untriaged
   notes/                   # brainstorming — freeform thinking, no format, never authority
     <whatever>.md
@@ -25,7 +27,7 @@ Why user-level files, not in-repo and not Issues: the working repo stays clean �
         <nnn>-<slug>.md    # a single ticket — YAML frontmatter (id/status/blocked_by) + prose body
 ```
 
-**The repo never points at its store.** The store is found by convention, not by a breadcrumb: `<project-slug>` is the working repo's dir name (above), so any session derives the path without the repo carrying a line about it. That's exactly why every write-up here cites **`file:line`** — the prose no longer sits beside the code it describes.
+**The repo never points at its store.** The store is found by resolution, not by a breadcrumb: any session asks `kru-store.sh` and gets the path, so the repo carries no line about it. That's exactly why every write-up here cites **`file:line`** — the prose no longer sits beside the code it describes.
 
 **There is no roadmap layer.** No `ROADMAP.md`, no Now/Next/Later, no per-item briefs, no priority scores — the **user is the PM** and brings the subject; the team's job is to formalize and execute it. What the store holds is (a) the current change, written down, and (b) raw wants nobody has decided on yet.
 

@@ -13,7 +13,7 @@ Two halves of a brief, two owners. The **bookkeeping** — `Landing plan` ticks,
 
 ## 1. Reconcile — every effort against git
 
-List `plan/` at `~/.kru/management/<project-slug>/` (`<project-slug>` = the working repo's dir name; no repo → the cwd's). Missing or empty → *no efforts on file*, name `/kru:brief <subject>`, stop.
+List the dir `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" path plan` names. Missing or empty → *no efforts on file*, name `/kru:brief <subject>`, stop.
 
 For each `plan/<effort>/`, read `brief.md` and the ticket frontmatter under `tickets/`, then record a result for every bookkeeping line — a read pass per effort:
 

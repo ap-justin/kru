@@ -13,7 +13,13 @@ You talk to the lead the way you'd talk to an engineering lead. It does the rout
 /plugin marketplace add ap-justin/kru
 /plugin install kru@kru
 ```
-Claude Code on the web: commit this to the repo's `.claude/settings.json`:
+**Claude Code on the web, and every other machine: enable kru for your claude.ai account.** It then
+loads as a [synced plugin](https://code.claude.com/docs/en/plugins-reference#synced-plugins) in cloud
+sessions, Cowork and any terminal on CLI 2.1.273 or newer, with nothing committed to the repo. A
+marketplace install outranks a synced one, so a machine that has kru installed keeps running its own
+copy.
+
+Per repo instead, committed to `.claude/settings.json`:
 ```json
 {
   "extraKnownMarketplaces": {
@@ -22,6 +28,20 @@ Claude Code on the web: commit this to the repo's `.claude/settings.json`:
   "enabledPlugins": { "kru@kru": true }
 }
 ```
+Either way the **task tools** switch has to reach the session, and user settings don't: put
+`"env": { "CLAUDE_CODE_ENABLE_TODO_TOOLS": "1" }` in that same file, or in the cloud environment's
+variables.
+
+Two things about a cloud session worth knowing before the first run:
+
+- **The plan store moves into the clone** (`<repo>/.kru`) and ships in the branch, because no home
+  dir survives the vm. Commit it, or it dies with the machine, and `KRU_HOME` puts it somewhere
+  else.
+- **The seats' official sources are off the default network allowlist.** Under `Trusted`, a seat
+  can't reach `vitest.dev`, `zod.dev`, `orm.drizzle.team` or the rest of `SOURCES.md`, and answers
+  from training data instead, which is the one thing this team exists to prevent. Wiring **context7
+  as a claude.ai connector** fixes it without touching the allowlist at all: connector traffic goes
+  through Anthropic's servers rather than the session's network.
 
 ## Requirements
 - **Claude Code 2.1.248 or newer.** An older CLI runs the seats but silently drops the newer settings they carry.
@@ -66,8 +86,12 @@ without `jq`, and each interruption below is one you can turn off.
 | End of a turn that dispatched seats | Blocks once to run the dispatch auditor over the session's routing | `export KRU_NO_AUDIT=1` |
 | After each dispatch | Appends one line to a session ledger the auditor reads | Always on |
 
-It writes outside your repo, never inside it. The one exception is `/kru:setup`, which edits
-that repo's `.claude/CLAUDE.md`:
+On your own machine it writes outside your repo. Two things land inside it: `/kru:setup`, which edits
+that repo's `.claude/CLAUDE.md`, and, in a cloud session only, the plan store, which has nowhere
+else durable to go.
+
+Every path below is resolved by `scripts/kru-store.sh`. `bash "$CLAUDE_PLUGIN_ROOT/scripts/kru-store.sh" where`
+prints where yours is when it isn't here.
 
 - `~/.kru/management/<project>/`: briefs, plans, tickets, todos, issues. Kept at user
   level on purpose: your repo stays clean, and the plan survives branch churn and a re-clone.
@@ -80,6 +104,11 @@ that repo's `.claude/CLAUDE.md`:
 - `~/.kru/audit/`, `lead-gate/`: per-session bookkeeping for the hooks above; audit
   ledgers self-delete after 7 days.
 - `${TMPDIR}/kru-review/`: review reports, so an audit trail stays out of the conversation.
+
+Three env vars move it: **`KRU_HOME`** relocates everything (default `~/.kru`),
+**`KRU_PROJECT_STORE`** pins one project's plan store, and **`KRU_STORE_URL`** points the
+preference half at a published artifact's database instead of files, so `/kru:remember` reaches
+your other machines and your cloud sessions. `references/store.md` is the whole map.
 
 ## Commands
 **Getting started**
@@ -118,6 +147,12 @@ A stack with no seat is a question the lead brings to you before it guesses.
 `/kru:update` (sweep what moved upstream) **edit the plugin's own files**. Run them in a clone
 of this repo, not against an installed copy. The install lives in a cache directory that the next
 plugin update overwrites.
+
+This repo's own `.claude/settings.json` turns the **synced** copy off (`"kru@synced": false`), so a
+session working in the clone isn't gated by the shipped version's hooks while you edit them. A
+marketplace install already outranks a synced one, so that line only starts mattering once you drop
+the local install and let the claude.ai copy sync in. To silence the installed copy here too, add
+`"kru@kru": false` beside it, at the cost of not dogfooding the hooks while you work on them.
 
 If you just want the team to learn your preferences, `/kru:remember` is the channel that
 works on an installed copy: it writes to your home directory, and the edits it feeds survive updates.

@@ -67,7 +67,7 @@ for its own subsystem knows something the plugin does not.
 **What the repo knows that a skill lacks goes upstream.** The derivation reads the repo's own testing
 docs, configs and `.claude/skills/*`; where one carries a recipe a plugin skill would need in the next
 repo too — a `vitest` gotcha `skills/vitest/` has no row for, a runner cost the skill doesn't state, a
-convention its docs are silent on — append it to `~/.kru/inbox.md` in
+convention its docs are silent on — append it to the file `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" path inbox` names, in
 `${CLAUDE_PLUGIN_ROOT}/PREFERENCES.md`'s line format: lane `[code]`, source `setup`, citing the repo
 file it came from. The sheet still cites the fact for this repo (*The line between the plugin and the
 repo*, below).
@@ -146,8 +146,11 @@ told which one it can't and what enabling it would cost.
 Two sets of actions repeat in every project, and each prompts until something grants it — with no
 error and no log line, so the gap survives by being answered rather than noticed.
 
-**The store, once, at user scope.** `~/.kru/` is reached from every engagement — the case the scope
-rule above reserves, not an instance of the habit it warns about. In `~/.claude/settings.json`:
+**The store, once, at user scope.** The cross-project root is reached from every engagement — the
+case the scope rule above reserves, not an instance of the habit it warns about. Run
+`bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" home` and write the grants against **what it prints**. In `~/.claude/settings.json`:
+
+The rows spell the default root; substitute what `home` printed when it differs.
 
 | grant | covers |
 |---|---|
@@ -161,8 +164,12 @@ Two things decide whether those last rules ever fire:
   `dispatch-auditor` carry no `Write` tool, so every store write of theirs is a shell command — and
   the rule has to be written in the form the seat actually types. Expand `<home>`: `~` in a Bash rule
   matches a literal tilde, and a seat writing an absolute path walks straight past it.
-- **Confirm the store sits at `~/.kru/` before writing its rules** — a grant against a path the files
-  left silently covers nothing. `TRACKER.md` carries why that path and no other.
+- **Write the rules against the root the resolver prints** — a grant against a path the files left
+  silently covers nothing. `TRACKER.md` carries why that path and no other, and
+  `${CLAUDE_PLUGIN_ROOT}/references/store.md` carries the surfaces that move it.
+- **A cloud session reads none of this.** User settings stay on the machine, so on that surface the
+  same grants go in the repo's own `.claude/settings.json` — and the project half needs none of
+  them, because the resolver puts it inside the clone, where the working-dir grant already reaches.
 
 **The repo's gates, per repo, at project-local scope.** Step 1 derived `test` and `verify`, and each
 of those commands prompts on first use in each repo. They go in `.claude/settings.local.json` — the

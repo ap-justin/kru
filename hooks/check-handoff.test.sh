@@ -22,7 +22,7 @@ check() {
   # inbox.md keeps the channel injection out of the allow path's output
   input=$(jq -nc --arg s "$seat" --arg p "$prompt inbox.md" \
     '{session_id:"test", cwd:"/x", tool_input:{subagent_type:$s, prompt:$p, description:"t"}}')
-  out=$(cd "$sandbox/cwd" && printf '%s' "$input" | HOME="$sandbox/home" bash "$hook" "$root" 2>&1)
+  out=$(cd "$sandbox/cwd" && printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_GATE -u CLAUDE_PLUGIN_ROOT HOME="$sandbox/home" bash "$hook" "$root" 2>&1)
   code=$?
   local ok=true
   if [ "$expect" = refuse ]; then

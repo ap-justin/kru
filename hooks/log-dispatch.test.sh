@@ -32,7 +32,7 @@ dispatch() {
     '{session_id:$s, cwd:"/work/myrepo", tool_name:"Agent",
       tool_input:{subagent_type:$seat, prompt:$p, description:"form"},
       tool_response:$r}')
-  out=$(printf '%s' "$input" | env -u CLAUDE_PLUGIN_ROOT HOME="$home" bash "$hook" "${5:-$root}" 2>&1)
+  out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u CLAUDE_PLUGIN_ROOT HOME="$home" bash "$hook" "${5:-$root}" 2>&1)
   code=$?
 }
 
@@ -72,7 +72,7 @@ dispatch b4 "$plain" "p" "r" "$sandbox/noagents"
 expect_nothing "root without agents/ writes nothing" b4
 
 input=$(jq -nc --arg seat "$plain" '{tool_input:{subagent_type:$seat, prompt:"p"}}')
-out=$(printf '%s' "$input" | env -u CLAUDE_PLUGIN_ROOT HOME="$home" bash "$hook" "$root" 2>&1); code=$?
+out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u CLAUDE_PLUGIN_ROOT HOME="$home" bash "$hook" "$root" 2>&1); code=$?
 ok=true
 # with no session id the hook would otherwise write the nameless ledger .jsonl
 [ "$code" -eq 0 ] && [ -z "$out" ] && [ ! -e "$audit/.jsonl" ] || ok=false
@@ -104,7 +104,7 @@ report "block o seat with return pass is silent" "$ok" "out: $out"
 # a structured (non-string) response is searched too
 input=$(jq -nc --arg seat "$blocko" '{session_id:"d3", tool_input:{subagent_type:$seat, prompt:"p"},
   tool_response:{content:[{type:"text", text:"Return pass: ok"}]}}')
-out=$(printf '%s' "$input" | env -u CLAUDE_PLUGIN_ROOT HOME="$home" bash "$hook" "$root" 2>&1); code=$?
+out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u CLAUDE_PLUGIN_ROOT HOME="$home" bash "$hook" "$root" 2>&1); code=$?
 ok=true
 [ -z "$out" ] || ok=false
 tail -1 "$audit/d3.jsonl" 2>/dev/null | jq -e '.return_pass == true' >/dev/null 2>&1 || ok=false

@@ -40,7 +40,7 @@ check() {
   input=$(jq -nc --arg s "$sid" --arg t "$tool" --arg c "$cmd" --arg p "$transcript" \
     '{session_id:$s, transcript_path:$p, tool_name:$t,
       tool_input:(if $t == "Bash" then {command:$c} elif $t == "Skill" then {skill:"kru:lead"} else {file_path:"/x/a.ts"} end)}')
-  out=$(printf '%s' "$input" | env -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_ROOT \
+  out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_ROOT \
     HOME="$home" "$@" bash "$hook" "$root" 2>&1)
   code=$?
   local ok=true
@@ -126,10 +126,10 @@ check refuse Edit "" "$tx/cmd-then-turn.jsonl"
 # fail open: no transcript, no session, no lead skill under the root
 check allow Edit "" "$sandbox/missing.jsonl"
 input=$(jq -nc --arg p "$p" '{transcript_path:$p, tool_name:"Edit", tool_input:{}}')
-out=$(printf '%s' "$input" | env -u KRU_NO_LEAD_GATE HOME="$home" bash "$hook" "$root" 2>&1); code=$?
+out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_LEAD_GATE HOME="$home" bash "$hook" "$root" 2>&1); code=$?
 if [ "$code" -eq 0 ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (allow, exit %s): missing session_id\n  %s\n' "$code" "$out"; fi
 input=$(jq -nc --arg p "$p" '{session_id:"noroot", transcript_path:$p, tool_name:"Edit", tool_input:{}}')
-out=$(printf '%s' "$input" | env -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_ROOT HOME="$home" bash "$hook" "$sandbox" 2>&1); code=$?
+out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_ROOT HOME="$home" bash "$hook" "$sandbox" 2>&1); code=$?
 if [ "$code" -eq 0 ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (allow, exit %s): root without lead skill\n  %s\n' "$code" "$out"; fi
 
 printf '%d passed, %d failed\n' "$pass" "$fail"

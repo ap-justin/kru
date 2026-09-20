@@ -7,6 +7,8 @@ command -v jq >/dev/null 2>&1 || exit 0
 # guaranteed env var here, and an empty root would silence logging forever
 plugin_root="${1:-$CLAUDE_PLUGIN_ROOT}"
 [ -d "$plugin_root/agents" ] || exit 0
+# unreadable only on a broken install, and every guard here fails open on those
+. "$plugin_root/scripts/kru-store.sh" 2>/dev/null || exit 0
 input=$(cat) || exit 0
 
 seat=$(printf '%s' "$input" | jq -r '.tool_input.subagent_type // empty' 2>/dev/null)
@@ -42,7 +44,7 @@ while [ -n "$d" ] && [ "$d" != "/" ] && [ "$d" != "." ]; do
 done
 [ -z "$cwd_slug" ] && [ -n "$cwd" ] && cwd_slug=$(basename "$cwd")
 
-dir="$HOME/.kru/audit"
+dir="$(kru_path audit)"
 mkdir -p "$dir" 2>/dev/null || exit 0
 # crashed sessions leave ledgers nothing will audit, and the stop nudge's mark
 # beside each one; keep the dir bounded

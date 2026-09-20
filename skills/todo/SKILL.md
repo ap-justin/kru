@@ -40,7 +40,7 @@ Same cost rule as expansion — score from what you already hold, never from a f
 ## Do
 
 1. **Read `$ARGUMENTS`** — the thing to log. If empty, ask one line ("What do you want logged?") and stop.
-2. **Append** to `TODOS.md` at the store root — `~/.kru/management/<project-slug>/`, where `<project-slug>` is the working repo's dir name (no repo → the cwd's). **No precondition**: create the dir and the file if they don't exist.
+2. **Append** to the file `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" path todos` names. **No precondition**: create the dir and the file if they don't exist.
 
    Cold — one line, the standing format:
 
@@ -57,11 +57,11 @@ Same cost rule as expansion — score from what you already hold, never from a f
 
    `pitched` always — this is the user's channel (`discovered` is for what the team turns up mid-task, the lead's Step 4.5 sweep). `plan` is the effort slug it surfaced in, and takes a slug only when the user names one or the store has exactly one `plan/<effort>/`; otherwise `—`. Never guess an effort to make the line look complete. Cite `file:line` for anything you name — the store sits outside the repo, so an unanchored reference is unfollowable.
 3. **Stay short.** The headline stays one line no matter how much you know; the sub-bullets cap at two. If it's genuinely paragraphs of half-formed thinking the user wants kept whole, write `notes/<slug>.md` instead and say which you did — a note is input, never authority.
-4. **Confirm in one line** — echo the headline **with both numbers**, and its path, and say whether you expanded it or logged it as-is. The numbers ride the confirmation so a wrong one is cheap to fix: a `~` number is a proposal awaiting their read — if the user confirms or corrects either, rewrite that line in place with the bare digit and stop. Then return to whatever was in flight. The next `/kru:brief` run reads it back; until then it's a reminder, explicitly **not** a commitment.
+4. **Confirm in one line** — echo the headline **with both numbers**, and its path, and say whether you expanded it or logged it as-is. The numbers ride the confirmation so a wrong one is cheap to fix: a `~` number is a proposal awaiting their read — if the user confirms or corrects either, rewrite that line in place with the bare digit and stop. Then return to whatever was in flight. The next `/kru:brief` run reads it back; until then it's a reminder, explicitly **not** a commitment. Pass through whatever `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" where` prints, which is usually nothing.
 
 ## Don't
 
 - **Don't take a defect.** Something *wrong* (an incorrect result, false info shown to a user, a condition the code claims to handle and doesn't) is `/kru:issue`'s artifact, not this one. Something you merely *want* — a feature, a refactor, a cleanup, a smell worth revisiting — is this one. The store's three-way split holds: **wrong → `issues/`, wanted → `TODOS.md`, unformed → `notes/`**. Say in one line which you did; don't investigate either way.
 - **Score the line alone, and attach nothing else.** `value` and `effort` are the whole score; a place in the order is `todos`' arithmetic, and scope is the user's call at the next grill. Nothing here reads the rest of the file.
 - Don't start it. "Not now" is the entire instruction.
-- Don't write into the working repo. Store files stay at user level, always (`TRACKER.md`).
+- Write through the resolver, never by hand (`TRACKER.md`, `${CLAUDE_PLUGIN_ROOT}/references/store.md`).

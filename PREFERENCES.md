@@ -10,7 +10,7 @@ This file documents the loop that fixes that: **capture → sweep → evolve**. 
 ## The loop
 
 ```
-any project (cwd = someone's repo)         ~/.kru/
+any project (cwd = someone's repo)         the cross-project root
   /kru:remember  ───────────────▶  inbox.md   ◀─── agents append learnings
                                               │            (end-of-run, via lead handoff)
                                               │        ◀─── dispatch-auditor files process
@@ -38,13 +38,13 @@ Three arrows, one circuit. **Cheap lossless capture**, then a **curated, human-g
 
 ## Tier 1 — capture (the inbox)
 
-**Location: `~/.kru/inbox.md`** — a single user-global file, created on first capture. Not per-project (the team is project-agnostic, so captures don't belong in any per-project plan store), and **not** the plugin's install dir (that resolves to a read-only, version-pinned cache when installed from the marketplace — unwritable from other projects and blown away on update). Home dir is the one place writable from every project and durable across plugin updates.
+**Location: the `inbox`** (`bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" path inbox`; roots and backends in `references/store.md`) — a single cross-project file, created on first capture. Not per-project (the team is project-agnostic, so captures don't belong in any per-project plan store), and **not** the plugin's install dir (that resolves to a read-only, version-pinned cache when installed from the marketplace — unwritable from other projects and blown away on update). Home dir is the one place writable from every project and durable across plugin updates.
 
 It has **three writers**:
 
 1. **The user, explicitly** — `/kru:remember <what they liked>`. Never inferred from approval; the team does not guess. A liked *pattern* with concrete code is saved as an artifact under `~/.kru/patterns/<slug>.md` and indexed by an inbox line.
 2. **Agents, as they work** — a builder/reviewer that discovers a durable preference (the user rejected X twice and chose Y; this repo's approved convention is Z) appends one line at end-of-run. This is journaling a *learning*, not reading approval — the same instinct as `test-writer` capturing a repo's testing conventions. The **lead** hands each dispatched seat the inbox path + this format so the learning lands (Step 3).
-3. **`dispatch-auditor`, on the team's own process** — the plugin's hooks log every team-seat dispatch to a session ledger (`~/.kru/audit/`), and a Stop-hook nudge fires the seat to audit it against the `lead` Step 3 contract, filing `[workflow]` lines for durable deviations (routing misses, incomplete handoffs, restated ambient blocks). This is the loop's autonomous half — the team observes how it was run and proposes its own corrections — and it is autonomy at the **capture** tier only: still never inferred from approval (the ledger holds the lead's dispatch text, not the user's reactions), and still gated at the sweep like every other line. The handoff gate's refusals land in that ledger too, and in `~/.kru/refusals.jsonl` across sessions, which the sweep reads beside the inbox for gate misfires (`skills/roster/learn.md`).
+3. **`dispatch-auditor`, on the team's own process** — the plugin's hooks log every team-seat dispatch to a session ledger (`audit/<session>`), and a Stop-hook nudge fires the seat to audit it against the `lead` Step 3 contract, filing `[workflow]` lines for durable deviations (routing misses, incomplete handoffs, restated ambient blocks). This is the loop's autonomous half — the team observes how it was run and proposes its own corrections — and it is autonomy at the **capture** tier only: still never inferred from approval (the ledger holds the lead's dispatch text, not the user's reactions), and still gated at the sweep like every other line. The handoff gate's refusals land in that ledger too, and in `~/.kru/refusals.jsonl` across sessions, which the sweep reads beside the inbox for gate misfires (`skills/roster/learn.md`).
 
 Entry format — one line, untriaged, lossless (mirrors the `TODOS.md` line):
 
@@ -66,7 +66,7 @@ Capture never derails the task — park the line, keep working (`TODOS.md` disci
 
 The **curated, human-gated** half — it edits the team, so it lives under roster-ops (`/kru:roster learn`), reusing the same version/wiring machinery as `hire`/`author`. Run it **from the plugin source repo** periodically (not from a product repo — it commits the plugin). It:
 
-1. Reads `~/.kru/inbox.md` (+ `patterns/`); groups by lane, dedupes, drops noise.
+1. Reads the `inbox` (+ `patterns/`); groups by lane, dedupes, drops noise.
 2. For each keeper, picks a **destination**:
    - **seat-specific** (a default only `graphic-designer`, or only the Svelte builder, should carry) → a **targeted prompt edit** to that `agents/<seat>.md`.
    - **cross-seat** (several seats should carry it) → the same targeted edit in each affected seat, or the owning skill (`lead` SKILL.md for orchestration-wide rules).
