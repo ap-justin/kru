@@ -8,7 +8,7 @@
     {
       "name": "kru",
       "description": "Lead orchestrator skill + 36 specialist subagents and their skills. Same team you run locally, installable anywhere.",
-      "version": "0.98.0",
+      "version": "0.99.0",
       "source": "./",
       "author": {
         "name": "ap-justin"
