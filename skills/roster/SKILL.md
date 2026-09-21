@@ -17,7 +17,7 @@ Every place a **seat (agent)** is registered. `hire` writes all of them, `retire
 
 | # | File | Entry |
 |---|---|---|
-| 1 | `agents/<name>.md` | the definition — frontmatter `name`/`description`/`tools`/**pinned** `model`; seat-specific body copies a peer's shape, **shared blocks copy `shared-blocks.md`** |
+| 1 | `agents/<name>.md` | the definition — frontmatter `name`/`description`/`tools`/**pinned** `model` (+ `memory: local` on a code-writing seat, Block Q); seat-specific body copies a peer's shape, **shared blocks copy `shared-blocks.md`** |
 | 2 | `ROSTER.md` → *Current specialists* | one role row (agent · role · backing source) |
 | 3 | `ROSTER.md` → *Model tiers* | a **pinned** row (explicit full ID) + one-line why — `inherit` is retired |
 | 4 | `SOURCES.md` | backing-source row (skip only for a genuinely stack-agnostic seat, e.g. a pure reviewer — and say so) |

@@ -374,3 +374,27 @@ Required on every seat whose source chain **leads with an MCP server or a plugin
 - `hand the question back` — the second branch, and it has to stay available: where the chain has no rung under the missing one, working on is guessing.
 
 **Tailored slots**: the server's name where the seat's chain names exactly one (`the server above` otherwise), and the host sentence it attaches to. Three seats already carry a fallback instruction of their own — `better-auth-specialist`, `sveltekit-builder`, `svelte-ui-builder` — and the clause **replaces** it rather than sitting beside it; two copies of a fallback rule are the drift this block exists to close.
+
+## Block Q — `## Memory (this repo's facts)`
+
+Required on the 25 seats that **write code or config into the working repo** — Block O's 24 plus `test-writer`, whose repo-specific suite quirks are the facts most worth keeping. Each carries `memory: local` in its frontmatter, and the harness supplies the directory, its read/write instructions and the index on every run. What it can't supply is where a fact goes on *this* team, which is the whole block.
+
+**Exempt by decision** — record the reason, don't just omit:
+- reviewers and auditors — `memory` grants `Write`/`Edit`, and *reports; does not edit* is their contract. A recurring finding still reaches the team as an inbox line.
+- the text-producing seats and `ui-designer` — their input is a brief, not a tree they re-learn each run.
+- **`user` and `project` scopes, on every seat.** `user` is cross-project memory the seat writes and reads back with no gate, which is exactly what the inbox → `/roster learn` sweep exists to gate. `project` is committed into someone else's repo. `local` is the one scope that stays per repo and off the repo's history — the single exception to `TRACKER.md`'s *no management files in it, ever*, taken because the harness offers no out-of-tree path.
+
+It sits **immediately before `## The return pass`** (before `## Context hygiene (stay lean)` on `test-writer`, which carries no return pass) — the pass is where a run learns what it would have wanted to know at the start.
+
+```
+## Memory (this repo's facts)
+Write to your memory only what the next run in this repo would otherwise pay to rediscover: a quirk of its build or suite, a convention its code follows that no file states, an approach that failed here and why. Every other fact has its own home — a preference about how the user wants the team to work is the inbox line your brief carries, a plan, ticket or product decision is the plan store's, and what the repo's own files say stays in them. A memory is input, never authority — where it disagrees with the brief or the tree, they win, and the entry that lost gets corrected or deleted.
+```
+
+**No tailored slot** — on Block O's precedent: what belongs in a repo's memory is seat-independent, and any divergence is drift.
+
+**Invariant clauses:**
+- ⚠ `a preference about how the user wants the team to work` + `the inbox line` — the **routing**, and the reason this block exists. Without it a seat banks a preference where the sweep never reads it, and the gated loop in `PREFERENCES.md` is bypassed by a file that edits nothing but steers every later run.
+- `the plan store's` — keeps plan state in one home; two copies of a ticket's status are two answers to the frontier.
+- ⚠ `would otherwise pay to rediscover` — the **bar**. Softened to *anything useful*, the file fills with what the tree already says and the 200-line window crowds out what it doesn't.
+- ⚠ `input, never authority` + `the entry that lost gets corrected or deleted` — the same rule `TRACKER.md` gives `notes/`, and for the same reason: a memory is a cache of the repo, stale on the first edit that moves what it describes.
