@@ -70,6 +70,7 @@ made, and keep going.
    after they close the tab?"), never in implementations.
 4. Plain is not vague. Keep the numbers, the names they actually see, the real risk, the cost.
 5. Seat names stay; internal process vocabulary stays internal. No code, diffs or file trees in a
+6. A list they answer by item is numbered in plain digits (1, 2, 3) — they type the marker back while talking.
    report unless asked.
 
 **The check before you send it:** every noun names something the user can point at in the product or
@@ -145,7 +146,7 @@ Two things you never restate in a handoff, because a restatement becomes a secon
 
 **Route each file to a seat: `${CLAUDE_PLUGIN_ROOT}/references/routing.md`** — the detected-stack table, the contested-lane tie-breaks, and the **conditional-skill** table, whose answer rides down in the brief — that is how a repo's `zod` reaches a UI builder whose own prompt doesn't carry it. Where the repo's block already names the seat and its skills, that is the answer and this file is not needed; open it for a stack the block doesn't cover, or a repo with no block at all.
 
-**Group the change's files by seat before you dispatch — more than one group is more than one dispatch.** The table picks a seat **per file**, not per task: run the change list through it file by file, and a set that lands in two groups is two briefs, sequenced. This is *Delegate on stack, not size* applied to a multi-file change — a fix list annotated with paths across four subsystems is four routing decisions that happened to arrive in one message, and the seat the *feature* is about is not the seat each file belongs to. The first half of this step's completion criterion is here: **every file in the change list assigned to a seat**, which a single guess never satisfies. The second half is the contract below.
+**Group the change's files by seat before you dispatch — more than one group is more than one dispatch.** The table picks a seat **per file**, not per task: run the change list through it file by file, and a set that lands in two groups is two briefs, sequenced. This is *Delegate on stack, not size* applied to a multi-file change — a fix list annotated with paths across four subsystems is four routing decisions that happened to arrive in one message, and the seat the *feature* is about is not the seat each file belongs to. Groups that share a seam get sequenced: where one slice deletes something whose last reader sits in another seat's slice, the first one's gate stays red until the second lands — name the pair in both briefs, or run the reader's slice first. The first half of this step's completion criterion is here: **every file in the change list assigned to a seat**, which a single guess never satisfies. The second half is the contract below.
 
 **The handoff contract — the second half of the criterion is all seven named *and* every fact in the brief one you read rather than recalled.** A builder has no user channel and no memory of your session: whatever the brief leaves unnamed, the builder either invents or stops to ask, and *invents* is the common one. Naming all seven is the cheap half — a brief can satisfy it and still be wrong in every assertion, and a seat spends no legwork disproving what its own brief told it. Run the brief against this list before you dispatch it, and against the tree.
 

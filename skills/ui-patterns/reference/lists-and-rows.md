@@ -44,3 +44,42 @@ The frame scrolls; the page never does.
 .list { display: grid; gap: var(--space-3); }
 .list > .group-end { margin-block-end: var(--space-2); } /* totals --space-4 */
 ```
+
+## A row's active or open state never changes the label's width
+
+**Trigger:** a nav item, tab, tree row or list row that marks itself current, open or selected.
+**Pattern:** carry the state in ink and ground — anything that paints without re-measuring the text. The label's font weight is the same in every state.
+**Default it corrects:** `font-weight: 600` on `.active` / `[aria-current]` / `[aria-expanded="true"]`.
+**Why:** bold glyphs are wider, so the label re-lays-out as it's pressed — the name shifts under the pointer, a wrapped label changes its line count, and a row of tabs reflows its neighbours. What the ink and ground look like is the token file's; that the state leaves the text's box alone is this entry.
+**Applies when:** the state toggles in place. A heading that is always bold never toggles.
+
+## In a clickable row, the name opens the item and the rest of the row does the row's action
+
+**Trigger:** a row with its own action — expand, select, toggle — that also names an entity with a detail screen.
+**Pattern:** the name is a real link to the detail; the rest of the row runs the row action. Two targets, one each.
+**Default it corrects:** the whole row as one link to the detail, so the row can't also expand — or the whole row expanding, so the only way to the detail is a separate "View" press.
+**Why:** a row that does one thing forces the second into an extra control on every row. The name is where the eye already goes for "open this", and a link there keeps middle-click, copy-link and the screen reader's links list.
+**Shape:**
+```html
+<tr aria-expanded="false" onclick="toggle(event)"><td><a href="/people/42">Ana Ruiz</a> (+3)</td>…</tr>
+```
+The row handler returns early when the event came from the link.
+
+## A column of figures read down keeps one decimal count
+
+**Trigger:** a table column, ledger or stat list of numbers the reader compares down the column.
+**Pattern:** format every row with the same fraction digits (`minimumFractionDigits` = `maximumFractionDigits`), right-aligned with `tabular-nums`.
+**Default it corrects:** stripping a trailing zero off one row — `12.5` above `12.25` — from `Number(x.toFixed(2))`, `parseFloat`, or an `Intl.NumberFormat` given only a maximum.
+**Why:** the reader compares by aligned digit positions; a row with fewer decimals shifts every digit out of its column and reads as a different magnitude, or as less precise, when it's neither.
+
+## A ledger block is one grid with its rows on subgrid
+
+**Trigger:** a label/value block, ledger, or any set of rows whose columns must line up down the block.
+**Pattern:** one grid on the block owns the column tracks; each row is `grid-column: 1 / -1; display: grid; grid-template-columns: subgrid`.
+**Default it corrects:** a grid per row with `auto` or `max-content` tracks.
+**Why:** a per-row grid sizes its tracks from that row's own contents, so the value column starts wherever each row's longest label ends — aligned in the fixture, out on the first long label.
+**Shape:**
+```css
+.ledger { display: grid; grid-template-columns: max-content 1fr; }
+.ledger > .row { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; }
+```

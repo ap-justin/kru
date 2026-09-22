@@ -51,10 +51,10 @@ rec=$(tail -1 "$audit/a1.jsonl" 2>/dev/null)
 ok=true
 [ "$code" -eq 0 ] && [ -z "$out" ] && [ "$(lines a1)" = 1 ] || ok=false
 printf '%s' "$rec" | jq -e --arg seat "$plain" '
-  (keys == (["block_o","cwd","desc","prompt","refused","return_pass","seat","truncated","ts"]))
+  (keys == (["block_o","cwd","desc","prompt","refused","seat","truncated","ts"]))
   and .seat == $seat and .cwd == "myrepo" and .desc == "form"
   and .prompt == "Build the form." and .truncated == false and .refused == false
-  and .block_o == false and .return_pass == false
+  and .block_o == false
   and (.ts | test("^[0-9]{4}-[0-9]{2}-[0-9]{2}T"))' >/dev/null 2>&1 || ok=false
 report "team seat appends one well-formed record" "$ok" "exit $code, lines $(lines a1), rec: $rec, out: $out"
 
@@ -85,30 +85,14 @@ ok=true
 tail -1 "$audit/c1.jsonl" 2>/dev/null | jq -e '(.prompt | length) == 4000 and .truncated == true' >/dev/null 2>&1 || ok=false
 report "long prompt truncated to 4000 and flagged" "$ok" "$(tail -1 "$audit/c1.jsonl" 2>/dev/null | cut -c1-200)"
 
-# block o seat with no return pass line: flagged, and the lead is told
-dispatch d1 "$blocko" "p" "all done"
-ok=true
-tail -1 "$audit/d1.jsonl" 2>/dev/null | jq -e '.block_o == true and .return_pass == false' >/dev/null 2>&1 || ok=false
-printf '%s' "$out" | jq -e --arg seat "$blocko" '
-  .hookSpecificOutput.hookEventName == "PostToolUse"
-  and (.hookSpecificOutput.additionalContext | startswith("kru: \($seat) carries Block O"))' >/dev/null 2>&1 || ok=false
-report "block o seat without return pass warns the lead" "$ok" "exit $code, out: $out"
-
-# block o seat whose return states the line: recorded, no warning
-dispatch d2 "$blocko" "p" "done. Return pass: read whole slice"
-ok=true
-[ -z "$out" ] || ok=false
-tail -1 "$audit/d2.jsonl" 2>/dev/null | jq -e '.block_o == true and .return_pass == true' >/dev/null 2>&1 || ok=false
-report "block o seat with return pass is silent" "$ok" "out: $out"
-
-# a structured (non-string) response is searched too
-input=$(jq -nc --arg seat "$blocko" '{session_id:"d3", tool_input:{subagent_type:$seat, prompt:"p"},
-  tool_response:{content:[{type:"text", text:"Return pass: ok"}]}}')
+# a block o seat is flagged, and a background launch's ack reads no warning
+input=$(jq -nc --arg seat "$blocko" '{session_id:"d1", tool_input:{subagent_type:$seat, prompt:"p"},
+  tool_response:{status:"async_launched", agentId:"a1"}}')
 out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u CLAUDE_PLUGIN_ROOT HOME="$home" bash "$hook" "$root" 2>&1); code=$?
 ok=true
-[ -z "$out" ] || ok=false
-tail -1 "$audit/d3.jsonl" 2>/dev/null | jq -e '.return_pass == true' >/dev/null 2>&1 || ok=false
-report "return pass found in structured response" "$ok" "out: $out"
+[ "$code" -eq 0 ] && [ -z "$out" ] || ok=false
+tail -1 "$audit/d1.jsonl" 2>/dev/null | jq -e '.block_o == true and (has("return_pass") | not)' >/dev/null 2>&1 || ok=false
+report "block o launch is flagged and silent" "$ok" "exit $code, out: $out"
 
 printf '%d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]

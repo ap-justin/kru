@@ -38,6 +38,8 @@ The scan root is the **repo**, not the stylesheet's directory: from `apps/web/sr
 
 This is what breaks the override prop. `<Button className="p-8">` over a base `p-4` works or doesn't depending on which the sorter happened to place later — the same component, the same call, opposite padding as the base changes. **Merge before render** with `tailwind-merge`'s `twMerge(base, props.className)`, which resolves by utility group in argument order, or keep two utilities of the same group from reaching the attribute at all. Match its major to Tailwind's: `tailwind-merge` **3.x** is the v4 line — "this release drops support for Tailwind CSS v3 and in turn adds support for Tailwind CSS v4" (v3.0.0 release notes), so a repo left on 2.x is merging against v3's group table.
 
+**`twMerge` only merges what it recognizes as one group.** A project type role (`text-note`, registered under `--text-*` or as a custom utility) passed into a vendored shadcn component doesn't replace its stock `text-sm`: `tailwind-merge` reads the unknown `text-*` as a colour and keeps both, and Tailwind emits custom roles *before* stock sizes, so the stock size wins. Put the role on an ancestor the vendored component leaves classless, or teach `extendTailwindMerge` the role's group — and check the compiled sheet order rather than trusting the later class in `cn()`.
+
 ## `@theme` publishes a variable; `@theme inline` spends its value
 Both register a utility. What differs is what lands in the sheet — reproduced side by side:
 

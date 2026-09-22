@@ -26,6 +26,7 @@
 **Pattern:** ship the screen without it. When prose is asked for, read the ask as a report that the control, its label, or the step order is unreadable — fix that, and write the line only where the words themselves were what was wanted.
 **Default it corrects:** deciding on your own that the screen needs explaining — "Use the form below to update your profile" above a profile form, "Enter your email address" under a field labeled Email, a caption naming what the picture plainly shows — and then, once someone does ask for a line, pasting the sentence in and shipping, leaving the control that earned the ask exactly as it was.
 **Why:** every redundant line is one more thing between the reader and the control they came for, and each one costs the *next* line credibility: prose that has been useless three times gets skipped on the fourth, including the time it mattered. That skip rate is also why the requested sentence is the wrong fix alone — the line reaches the few who read prose, while the unreadable label meets everyone. It's a second thing to keep true when the UI changes, too.
+**The test before the register:** does the reader do anything differently for having read it? A true sentence in the right vocabulary still fails it if they'd press the same press either way — "18 lines in that range" fails, so would "18 gifts". Three always fail: a message confirming things are fine (working is the silent default; the control appearing is the feedback), a figure the reader can't check against anything they know, and a warning aimed at someone other than the reader. Before a sentence, reach for a mark — a count, a state mark, a rule — and keep the sentence only where no mark can carry it.
 **Applies when:** always, for prose explaining the interface. Empty states, errors and confirmations are the opposite case — they say what happened and what to do next, because there is no UI demonstrating it. An empty state says what to do; a paragraph on what the section is for is the standfirst with fewer rows. Prose survives only for what the UI cannot show: a consequence in a confirm, a refusal, an errand elsewhere. A constraint the control genuinely can't express — a format, a limit, what happens after the button — is not a licence to write it unasked: build the control so it carries the constraint, and where nothing can, name the gap in your return.
 
 ## Copy states what the system guarantees, not the outcome downstream of it
@@ -67,3 +68,43 @@
 **Default it corrects:** stretching the heading's row to the control's target height, so every heading with a button beside it grows to the target minimum — or trimming the control's target to the line to keep the row tight.
 **Why:** the type scale set the heading's line and a target minimum was never a typographic decision; padding the row breaks the vertical rhythm for a sibling's sake, while trimming the control breaks the target. A target that overhangs the line keeps both. The measured size is `accessibility-reviewer`'s.
 **Applies when:** the control's target is taller than the heading's line box. Equal heights need nothing.
+
+## An icon is drawn from the icon set, never typed as a character
+
+**Trigger:** an arrow, check, crown, chevron or any glyph standing beside or inside a label.
+**Pattern:** use the repo's icon set, `aria-hidden` beside a label. A brand's mark (GitHub, Google, Facebook) is the brand's own official SVG, pre-sourced like any asset.
+**Default it corrects:** `→`, `↓`, `✓` or an emoji typed into the string, or a generic icon set's lookalike of a brand's logo.
+**Why:** a character draws in whatever font the platform falls back to, so its size, weight and baseline differ per OS, and a screen reader reads it aloud ("rightwards arrow", "crown"). A lookalike brand mark is the wrong mark, and most brands' guidelines forbid it.
+
+## A figure's scope rides in its label
+
+**Trigger:** a value with a caveat or a fixed period — "rolling 12 months", "excludes refunds", a monthly figure from outside the app — shown beside values that follow a toggle or share a card.
+**Pattern:** put the scope in the value's own label ("Revenue, rolling 12 mo"). Values that can't follow a period toggle sit in their own labelled row, and only values that sum over the period change when it's toggled.
+**Default it corrects:** a sentence under the figures explaining which ones are different, or a period toggle that silently swaps a figure it can't recompute.
+**Why:** the label is read with the number every time; a note is read once, if at all, and the number is later quoted without it. A figure that ignores the toggle while its neighbours follow it reads as a figure that changed.
+
+## A screen whose breadcrumb ends in its own name draws no second heading
+
+**Trigger:** a page heading on a screen with a breadcrumb trail, or on the app's home route.
+**Pattern:** let the last crumb (`aria-current="page"`) name the screen and draw no visible heading repeating it; keep the standfirst. Home draws no visible title either. The document still gets its `<h1>` — make the heading visually hidden rather than dropping it.
+**Default it corrects:** `Home › Donations › Donations` — an `<h1>` one line below the crumb that already says it, or "Home" or "Dashboard" as the title of the page someone just landed on.
+**Why:** the reader has already read the name once; a second copy pushes the content down and teaches the eye to skip the top of the screen. Screen-reader users navigate by heading, so the `<h1>` stays in the markup.
+
+## A 44px target inside a line of text keeps the line its own height
+
+**Trigger:** a link or press inside running text or a label/value line that needs the target minimum.
+**Pattern:** extend the hit area with padding plus an equal negative block margin, so the line box stays the text's height. Where two such targets can land on adjacent lines of one wrapped sentence, the sentence's `line-height` is at least the target height. The control and the value it acts on are one `white-space: nowrap` unit.
+**Default it corrects:** `min-height: 44px` on the inline control, which pushes its line apart from the rest of the paragraph — or keeping the line tight and letting two targets' hit areas overlap across lines, or a line break that orphans "Change" at the head of the next line.
+**Why:** a target taller than its line either breaks the paragraph's rhythm or overlaps its neighbour's target, so a tap lands on the wrong one; an orphaned control reads as belonging to whatever follows it. The measured size is `accessibility-reviewer`'s.
+**Shape:**
+```css
+.inline-press { padding-block: var(--target-pad); margin-block: calc(-1 * var(--target-pad)); }
+.press-with-value { white-space: nowrap; }
+```
+
+## A QR code's quiet zone is part of the drawing
+
+**Trigger:** rendering a QR code, and placing anything next to it.
+**Pattern:** draw the code with its quiet zone inside a symmetric viewBox and no frame — no border, no ground box, no extra padding. Nothing sits inside the quiet zone, and gaps to neighbours are measured in rendered pixels from the nearest module, not from the element's box.
+**Default it corrects:** a bordered or padded card around the code, a caption placed at the box's edge (visually inside the quiet zone), or a viewBox cropped on one side so the space above and below differs.
+**Why:** scanners need the quiet zone (ISO/IEC 18004: four modules), and the eye reads it as space too, so a caption the CSS puts at 8px sits much farther from the ink than from what's above it, and proximity groups it with the wrong thing. The zone is symmetric by construction, so unequal space above and below always comes from the viewBox.

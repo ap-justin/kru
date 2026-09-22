@@ -223,3 +223,10 @@ The held state is `aria-disabled` and the handler ignores the press. `disabled` 
 **Default it corrects:** rendering it in the field-message slot for its key, where the framework's error map files it — a message that mounts against nothing, or mounts somewhere no focus move will ever reach.
 **Why:** submit-time focus walks the form's own controls to find the first refused one, so a key matching no control is skipped: the press validates, refuses, moves nothing and scrolls nothing, and reads as a button that did nothing. The pressed control is the one element the operator is certainly standing on.
 **Applies when:** the key names no control. A key that does name one is marked at that field — or once on its group, above.
+
+## In a compact field stack, fields separate more than a label from its box
+
+**Trigger:** a dense form — a sign-in box, a sidebar filter, a modal — where the gap between fields is tightened.
+**Pattern:** the gap between one field and the next is at least one ladder step larger than the gap from a label to its own box.
+**Default it corrects:** one uniform gap for the whole stack, or a field gap tightened below the label-to-box step.
+**Why:** proximity is how the reader pairs a label with its box. Once the field-to-field gap is less than or equal to the label-to-box gap, each label reads as belonging to the box above it. Which steps are used is the token file's; their order is this entry.

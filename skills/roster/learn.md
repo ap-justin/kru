@@ -1,6 +1,6 @@
 # learn — sweep the preference inbox back into the team
 
-The **promote** half of the preference loop (`PREFERENCES.md`): read the cross-project inbox, and edit the good preferences into the team. It's roster-ops because it edits the orchestration surface (agent prompts) and bumps a version — a subagent can't own that. **Gated**: propose every edit, land nothing unreviewed.
+The **promote** half of the preference loop (`PREFERENCES.md`): read the cross-project inbox, and edit the good preferences into the team. It's roster-ops because it edits the orchestration surface (agent prompts) and bumps a version — a subagent can't own that. **It decides**: every line is kept, routed or dropped by the bars below. The review is the uncommitted diff — commit stays the user's, so an edit they disagree with is reverted before it ships.
 
 Run this **from the plugin source repo** (it commits the plugin), not a product repo. The inbox is user-global, so it's the same source wherever you run it.
 
@@ -22,14 +22,19 @@ For each surviving preference, pick the narrowest home:
 - **Project-specific and about the *product*** (a want, a defect, a decision) → that project's plan store (`TRACKER.md`).
 - **A gate misfire** → an edit to that scan's pattern or reason text in `hooks/check-handoff.sh`, with the refused `prompt` as its test case: refused before the edit, passing after.
 
-## 3. Propose, then gate
-Show the user the full set of proposed diffs (agent-prompt + skill edits), grouped by destination, each with the inbox or refusal line it came from. **Land nothing until the user approves** — editing an agent prompt has global blast radius. The user can accept, drop, or reword per item.
+## 3. Decide
+Every surviving line gets one of three verdicts, and the sweep makes the call.
+- **Land it** when it names a mechanism or a default it corrects, the destination doesn't already say it (grep it before writing), and it has **one home**. A rule that would need the same text in several seat prompts, with no single file those seats all read, waits in the inbox until one exists: copies are the drift this loop exists to prevent.
+- **Route it off-plugin** — a repo's sheet or its plan store (step 2) — when it describes one engagement, or when it's a taste call a design system could make the other way (which icon set, a funnel's arrows, a marker's colour). The user types those; the report names the repo and the line.
+- **Drop it**, with the reason in the report, when it is already covered, contradicts a rule the plugin states (the standing rule wins until the user says otherwise), is too narrow to recur, is a catch showing the gate working (the refusal log's usual case), or is a false positive whose cause is already known.
+
+A request for a new seat or skill goes to `hire` or `author`: leave the line in the inbox and name the verb in the report.
 
 ## 4. Apply + drain
-- Write the approved edits (`agents/<seat>.md` insertions, skill edits, kept artifacts).
-- **Drain** the inbox: remove the promoted lines, leaving un-promoted/deferred lines for next time. Drain the refusal log the same way — on the `artifact` backend a drain deletes from both the artifact document and the local file. Move kept artifacts out of the inbox's `patterns/` if you copied them into the repo.
+- Write the edits (`agents/<seat>.md` insertions, skill edits, kept artifacts).
+- **Drain** the inbox: remove every line landed, routed off-plugin or dropped, leaving the deferred ones for next time. Drain the refusal log the same way — on the `artifact` backend a drain deletes from both the artifact document and the local file. Move kept artifacts out of the inbox's `patterns/` if you copied them into the repo.
 
 ## 5. Version + hand off (wiring map #6–#8)
-No agent added → **count stays the same** (don't touch the `plugin.json`/`marketplace.json` count). Bump version: **minor** if it adds a new default or capability, **patch** for a tiny prompt tweak. Set `VERSION`, `plugin.json` `version`, and the `ROSTER.md` header — all equal. Then **run `audit` (`audit.md`) — it must pass.** Report what landed where; leave `commit`+`tag` to the user (git rule).
+No agent added → **count stays the same** (don't touch the `plugin.json`/`marketplace.json` count). Bump version: **minor** if it adds a new default or capability, **patch** for a tiny prompt tweak. Set `VERSION`, `plugin.json` `version`, and the `ROSTER.md` header — all equal. Then **run `audit` (`audit.md`) — it must pass.** Report by verdict — landed (grouped by destination, each with its source and engagement count), off-plugin (repo + the line to add), dropped (with the reason), deferred — as a list numbered 1, 2, 3 the user can answer by item. Leave `commit`+`tag` to the user (git rule).
 
-Completion: approved preferences edited into seats/skills, inbox drained of them, version bumped, `audit` green.
+Completion: every inbox and refusal line given a verdict, the landed ones edited into seats/skills, the inbox drained of all but the deferred, version bumped, `audit` green.
