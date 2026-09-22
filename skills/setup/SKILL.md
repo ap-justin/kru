@@ -178,9 +178,9 @@ gates run on this machine, not a teammate's. **Narrow to the commands the sheet 
 settings file is the record, so no sheet field states it — a `CLAUDE.md` line would be the cache bar
 3 rejects.
 
-**The seats' repo memory, ignored.** The 25 seats carrying `memory: local` write what they learn
+**The seats' repo memory, ignored.** The seats carrying `memory: local` write what they learn
 about this repo to `.claude/agent-memory-local/<seat>/` — the scope the harness defines as
-per-machine and kept out of version control, which only the repo's `.gitignore` enforces. Add
+per-machine and kept out of version control, and the repo's `.gitignore` is what keeps it out. Add
 `.claude/agent-memory-local/` to it when no line already covers the path (`git check-ignore -q
 .claude/agent-memory-local/x` answers that), so the first `git add -A` after a build leaves it behind.
 
