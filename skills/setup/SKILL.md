@@ -178,8 +178,14 @@ gates run on this machine, not a teammate's. **Narrow to the commands the sheet 
 settings file is the record, so no sheet field states it — a `CLAUDE.md` line would be the cache bar
 3 rejects.
 
-Completion: every grant traces to evidence the derivation already produced, and the user has seen
-each one (step 5).
+**The seats' repo memory, ignored.** The 25 seats carrying `memory: local` write what they learn
+about this repo to `.claude/agent-memory-local/<seat>/` — the scope the harness defines as
+per-machine and kept out of version control, which only the repo's `.gitignore` enforces. Add
+`.claude/agent-memory-local/` to it when no line already covers the path (`git check-ignore -q
+.claude/agent-memory-local/x` answers that), so the first `git add -A` after a build leaves it behind.
+
+Completion: every grant traces to evidence the derivation already produced, the memory path is
+ignored, and the user has seen each one (step 5).
 
 ### 2. Read what the repo already says
 Open the repo's `CLAUDE.md`, `.claude/CLAUDE.md`, `.claude/rules/*`, `AGENTS.md`, and any nested
