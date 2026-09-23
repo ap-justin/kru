@@ -1,7 +1,7 @@
 ---
 name: cloudflare-builder
 description: Cloudflare edge-runtime builder — Workers, Wrangler config/deploy, bindings + storage (KV, D1, R2, Queues, Vectorize), Durable Objects, Workflows, Pages, and the framework-on-Workers adapter wiring. Use to build or edit anything that runs on the Workers runtime, or to configure/deploy it via Wrangler. Owns D1, Cloudflare's SQLite.
-model: claude-opus-5
+model: claude-opus-5-5
 memory: local
 ---
 

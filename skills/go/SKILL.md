@@ -6,9 +6,11 @@ user-invocable: false
 
 **Go's dangerous failure is the one that compiles and stays quiet.** The type checker proves the shape and `go vet` catches a slice of the rest; everything below passes both and ships as wrong data, a dead process, or a hole. Three consequences drive the file: a zero value is a *value* (not absent, not an error, not `null`) · a handler is a plain function (nothing ends it but `return`, nothing catches what it spawns) · the runtime has failures `recover` cannot see.
 
-Reproduced on **go1.26.1** (`darwin/arm64`, 2026-08-30) unless a line says otherwise. Version-gated behavior follows the `go` directive in `go.mod`, not the installed toolchain — check it before reaching for anything marked with a version.
+Reproduced on **go1.27.1** (`darwin/arm64`, 2026-09-23) unless a line says otherwise; the JSON contract also on `GOEXPERIMENT=nojsonv2`, identical output.
+The `golangci-lint` lines in `reference/testing.md` on **go1.26.1** (2026-08-30), not rerun. Version-gated behavior follows the `go` directive in `go.mod`, not the installed toolchain — check it before reaching for anything marked with a version.
 
 ## The JSON contract
+These are `encoding/json`'s semantics, and from 1.27 they hold on the v2 implementation that now backs it — only error text may differ. Importing `encoding/json/v2` (GA in 1.27) flips several defaults: a nil slice is `[]`, `omitempty` drops only `""`/`null`/`[]`/`{}` (so `false` and `0` stay), names match case-sensitively and a duplicate name is an error. Unknown members are still accepted. Check the import before applying a line below.
 - **A nil slice marshals to `null`.** `var items []Item` → `{"items":null}`; the SPA's `data.items.map()` throws on the empty result. Every response slice is `[]Item{}` or `make([]Item, 0, n)`. A `[]byte` field is base64, not an array.
 - **`omitempty` is not "omit the zero value."** It keeps a zero `time.Time` (`"0001-01-01T00:00:00Z"`) and any struct, and it *drops* `false` and `0` as if absent — a `bool` field with `omitempty` cannot say no. `omitzero` (1.24+) is the tag that means what `omitempty` sounds like; pointers are the pre-1.24 shape.
 - **A missing field decodes to the zero value**, indistinguishable from `0`/`""`/`false`. A pointer field (`new(v)` from 1.26) or an explicit required-check is how absence survives decode; the test for it is a decode of `{}` asserting the field is nil.
@@ -40,12 +42,12 @@ Reproduced on **go1.26.1** (`darwin/arm64`, 2026-08-30) unless a line says other
 - **A concurrent map read+write is `fatal error`, not a panic.** No `recover` runs; the process is gone. Reproduced with a shared map behind two goroutines. A cache shared across requests lives behind `sync.RWMutex`, or `sync.Map` for a read-heavy, stable key set. `-race` finds it before production does.
 - **There is no panic middleware until you write one.** `defer func(){ if p := recover(); p != nil { slog.Error("panic", "panic", p, "stack", string(debug.Stack())); http.Error(w, "internal error", 500) } }()` around `next.ServeHTTP`, outermost.
 - **Bounded fan-out.** `errgroup.WithContext` + `SetLimit` (`golang.org/x/sync`, check `go.mod`); `sync.WaitGroup.Go` (1.25) for the unbounded-by-design case.
-- **Timers and loop variables are `go.mod`-gated.** `go 1.22`+ gives per-iteration loop variables; `go 1.23`+ makes timer channels unbuffered and GC-able without `Stop()`. A module pinned lower keeps the old semantics whatever toolchain builds it — `reference/versions.md` has the table.
+- **Loop variables are `go.mod`-gated; timers stopped being gated at go1.27.** `go 1.22`+ gives per-iteration loop variables, and a module pinned lower keeps the shared variable whatever toolchain builds it. Timer channels are unbuffered and GC-able without `Stop()` for `go 1.23`+ modules on go1.26; the go1.27 toolchain does it for every module (a `go 1.21` module reports `cap(t.C) == 0`), and `asynctimerchan=1` now fails the build from a `go.mod` `godebug` line or the start from the env. `reference/versions.md` has the table.
 
 ## Slices, maps, tags
 - **`append` to a sub-slice writes into the parent.** `head := all[:2]; head = append(head, x)` overwrites `all[2]` when capacity allows — reproduced: `[1 2 3 4]` → `[1 2 99 4]`. A slice handed out of a function and appended to by the caller is the same bug one hop away. The full slice expression `all[:2:2]` caps it so `append` must copy; `slices.Clone` when the caller owns it.
 - **Map iteration order is random per run**, by design. A response built by ranging a map is a different order on every request; sort the keys (`slices.Sorted(maps.Keys(m))`) or use a slice.
-- **A rename doesn't see struct tags.** gopls Rename keeps the code compiling; the `json:"userId"` / `db:"user_id"` tag on the field it renamed stays as it was, and the wire or the scan silently changes. After any field rename, grep the tags — and the `text/template` fields, which it can't see either.
+- **A rename doesn't see struct tags.** gopls Rename keeps the code compiling; the `json:"userId"` / `db:"user_id"` tag on the field it renamed stays as it was, so the wire keeps a name the code no longer says, and an untagged field's wire name changes with it. After any field rename, grep the tags — and the `text/template` fields, which it can't see either.
 
 ## Both ends of the wire have no timeout by default
 `http.Server` (`ReadHeaderTimeout`, `ReadTimeout`, `WriteTimeout`, `IdleTimeout`, plus **`MaxHeaderBytes`** — `MaxBytesReader` caps the body, headers are a separate surface) *and* `http.Client` — the zero `http.Client` and `http.Get` wait forever. Outbound: `http.NewRequestWithContext` under a `context.WithTimeout` with `defer cancel()`, and `defer resp.Body.Close()` on every response, error or not.
@@ -53,5 +55,5 @@ Reproduced on **go1.26.1** (`darwin/arm64`, 2026-08-30) unless a line says other
 ## Disclosed
 - `reference/security.md` — sessions and cookies (`__Host-`, `crypto/rand`, constant-time compare), `net/http.CrossOriginProtection` (1.25) for CSRF, the headers middleware, open redirect, `X-Forwarded-For`, rate limiting, Argon2id, `pprof` on the default mux, `os.OpenRoot` for disk paths, what never reaches a log line.
 - `reference/database.md` — `database/sql` traps: the unbounded pool, `Query` vs `Exec`, `rows.Close`/`rows.Err`, `sql.ErrNoRows`, NULL scanning, identifiers a placeholder can't bind, `defer tx.Rollback()` and `FOR UPDATE`.
-- `reference/versions.md` — what the `go.mod` directive gates vs. what the toolchain merely offers, 1.21–1.26, and the deprecations `vet` won't flag.
+- `reference/versions.md` — what the `go.mod` directive gates vs. what the toolchain merely offers, 1.21–1.27, and the deprecations `vet` won't flag.
 - `reference/testing.md` — the gate (`vet` + `shadow`, `-race -shuffle=on -count=1`, `govulncheck`, coverage caveats), integration build tags, port `0`, `t.Context()`, `goleak`, the testify subtest-scope pitfall, file naming.

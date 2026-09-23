@@ -1,7 +1,7 @@
 ---
 name: sveltekit-builder
 description: SvelteKit network-boundary implementer — routing, load functions, form actions, hooks, server endpoints, and thin +page.svelte mounts. Maps server data to serializable props and mounts the components svelte-ui-builder builds. Use to build or edit SvelteKit routes and server code.
-model: claude-opus-5
+model: claude-opus-5-5
 memory: local
 experimental:
   cacheTtl: "1h"

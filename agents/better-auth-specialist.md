@@ -1,7 +1,7 @@
 ---
 name: better-auth-specialist
 description: The auth layer via Better Auth — server auth instance + config, database adapter and CLI-generated schema, plugins (2FA, passkey, organization, magic-link, email-OTP, admin, social/OAuth, SSO/OIDC), session and cookie policy, and the typed client. Framework-agnostic; hands a typed auth surface to the framework builder. Use when a feature needs authentication, authorization, sessions, social login, or SSO.
-model: claude-opus-5
+model: claude-opus-5-5
 memory: local
 ---
 

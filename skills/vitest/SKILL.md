@@ -1,6 +1,6 @@
 ---
 name: vitest
-description: "Vitest recipes — a `*.test-d.ts` that never runs under a green `vitest run`, a passing test's `console.log` the agent-detected `minimal` reporter swallows, `.only` and a new snapshot that pass locally and fail the file in CI, `mockReset: true` turning every module-scope `mockResolvedValue` into `undefined`, `advanceTimersByTime` missing a timer queued behind an `await`, and Testing Library's `waitFor` hanging to `testTimeout` under fake timers. Use when writing, running or reviewing a test in a repo with `vitest` in `package.json`, reading a Vitest run's output, or working under Browser Mode (`@vitest/browser-playwright`). Vitest 5 with the v4 forks marked; not Jest, not Playwright Test."
+description: "Vitest recipes — a `*.test-d.ts` that never runs under a green `vitest run`, a passing test's `console.log` the agent-detected `minimal` reporter swallows, `.only` and a new snapshot that pass locally and fail the file in CI, `mockReset: true` turning every module-scope `mockResolvedValue` into `undefined`, `advanceTimersByTime` missing a timer queued behind an `await`, module state one file leaves for the next under `isolate: false`, and Testing Library's `waitFor` hanging to `testTimeout` under fake timers. Use when writing, running or reviewing a test in a repo with `vitest` in `package.json`, reading a Vitest run's output, working under Browser Mode (`@vitest/browser-playwright`), or speeding up a slow suite. Vitest 5 with the v4 forks marked; not Jest, not Playwright Test."
 user-invocable: false
 ---
 
@@ -47,6 +47,11 @@ test('B', () => { fn.mock.calls.length  // 0   — v5 clearMocks
 
 **`mockReset: true` is the wrong flag, and it fails far from the config line.** It runs `vi.resetAllMocks()` before every test, which resets *every* mock's implementation — reproduced, a module-scope `vi.fn().mockResolvedValue(x)` returns `undefined` in every test, and the failure surfaces as `Cannot read properties of undefined` inside the code under test. **`restoreMocks: true` is the safe one**: it touches only spies made with `vi.spyOn` — reproduced, module-scope and in-test `vi.fn(...).mockReturnValue(...)` both kept their values across `vi.restoreAllMocks()` — so it is what the mock-leak advice means. (`mockReset` on a `vi.fn(impl)` resets to `impl`, not to `undefined` — Jest's rule does not apply.)
 
+## Leave nothing behind when the file ends
+`isolate: false` is a slow suite's fastest setting (`reference/speed.md`), and under it files that land in the same worker share modules and globals. Write every file so it survives that: whatever a test sets up, the same file tears down.
+- **State in a `src/` module** — a cache, a queue, a registry — gets a reset export the test calls in `afterEach`. Reproduced: a `push` from file A was still in the array when file B read it.
+- **Globals go through `vi.stubGlobal` / `vi.stubEnv`**, with `unstubGlobals` / `unstubEnvs` on. A bare `globalThis.x =` assignment carries into the next file even with both on.
+
 ## `vi.mock` runs before your imports
 The call is hoisted above every `import`, wherever it sits in the file. Consequences, each reproduced:
 - **v5 throws** on a `vi.mock`/`vi.unmock`/`vi.hoisted` inside a hook, `describe` or `test`: `1 call in "<file>" was defined outside of the module's top level scope`. `vi.doMock` is the un-hoisted variant, and it mocks only imports that happen *after* it — never the static ones.
@@ -83,6 +88,7 @@ The call is hoisted above every `import`, wherever it sits in the file. Conseque
 ## Recipes
 Pull the one the task needs.
 - `reference/mocks.md` — the module-mocking half: hoisting and `vi.hoisted`, `importOriginal`, `setupFiles` imports that stay real, the automock algorithm and `{ spy: true }`, class mocks and the v5 prototype chain, the clear/reset/restore matrix, `vi.doMock` and `vi.resetModules`.
+- `reference/speed.md` — a slow suite: reading the `Duration` breakdown, `vitest doctor`, pools and `isolate: false` as a per-project opt-in, what carries between files that share a worker, and sharding by file.
 - `reference/dom.md` — the DOM half: jsdom vs happy-dom vs Browser Mode (the v5 config shape; `expect.element` retrying to the test timeout rather than the documented 1 s; exact, strict locators; `toHaveTextContent` exactness; why `vi.spyOn` throws in the browser; the cold run that fails files a second run passes; the fixed api port two browser-mode packages collide on; `projects` includes that overlap; `test.env` never reaching `process.env`), Testing Library wiring under Vitest, the fake-timer recipe for RTL and user-event, and the `setupFiles` stubs jsdom needs.
 
 ## Not this skill's job

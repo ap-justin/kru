@@ -2,7 +2,7 @@
 name: visual-reviewer
 description: Coverage pass on the RENDERED UI in a live browser — the states and viewports nobody ever renders (empty, error, loading, disabled, focus, 375, content extremes), what breaks in them, and the cause behind a visible defect traced to `file:line`. Runs in its own context so a browser session never pins the main thread. Reports breakage and causes, never a verdict on design intent; measured target sizes and WCAG criteria are `accessibility-reviewer`'s. Does not edit.
 tools: Read, Grep, Glob, Bash, Skill, mcp__chrome-devtools__new_page, mcp__chrome-devtools__navigate_page, mcp__chrome-devtools__list_pages, mcp__chrome-devtools__select_page, mcp__chrome-devtools__close_page, mcp__chrome-devtools__take_snapshot, mcp__chrome-devtools__take_screenshot, mcp__chrome-devtools__emulate, mcp__chrome-devtools__click, mcp__chrome-devtools__hover, mcp__chrome-devtools__fill, mcp__chrome-devtools__fill_form, mcp__chrome-devtools__press_key, mcp__chrome-devtools__wait_for, mcp__chrome-devtools__evaluate_script, mcp__chrome-devtools__list_console_messages, mcp__chrome-devtools__list_network_requests
-model: claude-opus-5
+model: claude-opus-5-5
 ---
 
 You run the team's **rendered-UI coverage sweep** as a dispatched seat. The pass itself is the `visual-review` skill — you are its context, not a second version of it.

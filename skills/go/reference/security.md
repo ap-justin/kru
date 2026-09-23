@@ -1,6 +1,6 @@
 # Security — what a Go server does for itself
 
-No framework sets any of this. A Go-served SPA gets exactly the headers, cookie flags and checks the code writes. Severity labels are the pack's (Bearer SAST-derived); the API shapes are checked with `go doc` on go1.26.1.
+No framework sets any of this. A Go-served SPA gets exactly the headers, cookie flags and checks the code writes. Severity labels are the pack's (Bearer SAST-derived); the API shapes are checked with `go doc` on go1.27.1.
 
 ## Sessions and cookies
 - **Token bytes from `crypto/rand`**, never `math/rand` — `math/rand/v2` is auto-seeded and still not cryptographic. 32 bytes, base64url.
@@ -49,5 +49,5 @@ The CSP is the one that breaks a SPA: Vite's dev server injects inline scripts, 
 
 ## What never reaches a log line
 - A user or session struct printed with `%+v` prints the password hash and the token. Log ids, never records; give secret-bearing types a `LogValue()` (`slog.LogValuer`) that redacts.
-- User-supplied strings carry control characters (`\n`, `\r`, ANSI) that forge log lines. `slog` with a JSON handler escapes them; a text handler does not — pick the JSON handler in prod.
+- User-supplied strings carry control characters (`\n`, `\r`, ANSI) that forge log lines. Both `slog` handlers escape them in an attribute value (the text handler quotes it: `user="bob\ntime=…"`); `log.Printf` and `fmt.Fprintf(os.Stderr, …)` write them raw — the user string goes in a `slog` attribute, never the format string.
 - Secrets arrive from env or a mounted file, never a flag (visible in `ps`) and never a default in code.

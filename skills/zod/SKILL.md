@@ -6,7 +6,8 @@ user-invocable: false
 
 **Zod's dangerous failure is not the throw — it's the parse that succeeds.** Every trap below returns a value: an unvalidated default, a coerced truthy string, an unchecked transform output, an error object that can't name the field that failed. Two consequences drive the rest: a schema that parses is not a schema that validated · the type checker proves the shape, never the boundary.
 
-Reproduced on **`zod@4.4.3`** (npm `latest`, 2026-08-04), TypeScript 7.0.2, `strict: true`. Re-verify after a major bump. Pin `zod@^4` rather than installing by dist-tag — `next`/`alpha` resolve to an older major and `beta` is currently behind `latest`.
+Reproduced on **`zod@4.6.5`** (2026-09-23): `.default()`/`.prefault()`, `.catch()`, `flatten()`, records over enums, JSON Schema.
+The rest on **`zod@4.4.3`** (npm `latest`, 2026-08-04), TypeScript 7.0.2, `strict: true`. Re-verify after a major bump. Pin `zod@^4` rather than installing by dist-tag — `next`/`alpha` resolve to an older major and `beta` is currently behind `latest`.
 
 ## `.default()` never validates its own default
 The most dangerous line in this skill, because both layers stay quiet.

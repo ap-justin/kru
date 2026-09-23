@@ -1,7 +1,7 @@
 ---
 name: vercel-platform-engineer
 description: "Vercel platform-ops — the deploy/infra layer around the app: vercel.json, the deploy pipeline/CI-CD, env/secrets, Functions/edge runtime config, Cron, domains, Firewall/WAF, AI Gateway, Marketplace/storage provisioning, and Routing Middleware. Use to deploy, wire env, add a cron, add a firewall rule, or provision a Vercel resource. App code is the framework builder's, Core Web Vitals `vercel-perf-optimizer`'s."
-model: claude-opus-5
+model: claude-opus-5-5
 memory: local
 ---
 

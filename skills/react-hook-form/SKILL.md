@@ -1,21 +1,21 @@
 ---
 name: react-hook-form
-description: "React Hook Form on React — a submit button that can never enable because `!isDirty || !isValid` short-circuits before the Proxy subscribes, `<input type=\"number\">` submitting the string `\"42\"`, two same-named checkboxes submitting `false` where the schema expects `[]`, `register('x', { disabled: true })` dropping the key from the payload entirely, and `handleSubmit` calling `preventDefault()` so a `<form action={serverAction}>` never runs. Use when writing or reviewing a React form, a `useForm` call, or form components in a repo with `react-hook-form` in `package.json`. RHF 7.x with Zod 4 via `@hookform/resolvers`; not Conform, not TanStack Form."
+description: "React Hook Form on React — a submit button that stays disabled on a valid form because `!isDirty || !isValid` short-circuits before the Proxy subscribes, `<input type=\"number\">` submitting the string `\"42\"`, two same-named checkboxes submitting `false` where the schema expects `[]`, `register('x', { disabled: true })` dropping the key from the payload entirely, and `handleSubmit` calling `preventDefault()` so a `<form action={serverAction}>` never runs. Use when writing or reviewing a React form, a `useForm` call, or form components in a repo with `react-hook-form` in `package.json`. RHF 7.x with Zod 4 via `@hookform/resolvers`; not Conform, not TanStack Form."
 user-invocable: false
 ---
 
 **RHF keeps the form outside React, and everything it does for you is an opt-in.** A `formState` property re-renders only if render *read* it — the Proxy tracks what it saw. A field arrives as the string the DOM held unless the registration asked for a conversion. And the values RHF holds are not the values the browser posts, so `FormData`, `getValues()` and the object your handler receives are three different objects. Every failure below is one missed opt-in, and none of them throw.
 
-Reproduced on **`react-hook-form@7.87.0`** + **`@hookform/resolvers@5.9.1`** (npm `latest`, 2026-09-03) with `zod@4.5.4`, `react@19.2.8`. Re-verify after a minor bump.
+Reproduced on **`react-hook-form@7.88.0`** + **`@hookform/resolvers@5.9.1`** (npm `latest`, 2026-09-23) with `zod@4.6.5`, `react@19.3.0`. Re-verify after a minor bump.
 
 ## The Proxy tracks only what render read
 ```jsx
 <button disabled={!formState.isDirty || !formState.isValid} />
 // pristine → isDirty is false → || short-circuits → isValid is never read
-// → never subscribed → the button stays disabled forever, however valid the form becomes
+// → never subscribed → the change that made the form valid never reaches the button
 const { isDirty, isValid } = formState        // both read, both subscribed
 ```
-Reproduced: after typing a valid value into a `mode: 'onChange'` form, the short-circuit button is still `disabled` and the destructured one enables. The rule reaches past `||` — a component that reads **no** `formState` property during render re-renders **zero** times across two keystrokes, so the error markup under the input never appears at all. Read every property you branch on, unconditionally, at the top of render.
+Reproduced: after one change that makes a `mode: 'onChange'` form valid — a paste, an autofill, a one-character field — the short-circuit button is still `disabled` and the destructured one enables. The short-circuit one catches up only on the *next* change, so a user who filled the form in one go faces a dead button. The rule reaches past `||` — a component that reads **no** `formState` property during render re-renders **zero** times across two keystrokes, so the error markup under the input never appears at all. Read every property you branch on, unconditionally, at the top of render.
 
 **Subscribing to `isValid` is also what makes it track under the default `mode: 'onSubmit'`, and it isn't free.** Reading it turns validation on: over mount plus two keystrokes the resolver ran **0** times unread and **3** times read — the whole schema, every keystroke, in a form whose `mode` says otherwise. That's the price of a live-enabling button; a form that reports on submit shouldn't pay it.
 

@@ -44,14 +44,14 @@ Two things about a cloud session worth knowing before the first run:
   through Anthropic's servers rather than the session's network.
 
 ## Requirements
-- **Claude Code 2.1.248 or newer.** An older CLI runs the seats but silently drops the newer settings they carry.
+- **Claude Code 2.1.280 or newer.** An older CLI runs the seats but silently drops the newer settings they carry.
 - **`jq`**, for the hooks. Without it every hook fails open and the team still runs, ungated.
 - **The task tools switched on.** Newer models ship with them off, and the lead tracks its work in them.
   A plugin can't turn them on for you, so add this to `~/.claude/settings.json` and restart:
   ```json
   { "env": { "CLAUDE_CODE_ENABLE_TODO_TOOLS": "1" } }
   ```
-- **Model access to `claude-opus-5` and `claude-sonnet-5`.**
+- **Model access to `claude-opus-5-5` and `claude-sonnet-5`.**
 - **The `chrome-devtools` MCP server**, for the visual and accessibility reviewers only; without it they audit from source.
   ```
   claude mcp add chrome-devtools --scope user -- npx chrome-devtools-mcp@latest --headless=true --screenshotFormat=webp --screenshotMaxWidth=1440

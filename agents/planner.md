@@ -2,7 +2,7 @@
 name: planner
 description: Turns an already-scoped brief into a persisted, dependency-ordered plan of record under the project store's `plan/` — a published spec (PRD), a graph of tracer-bullet tickets with blocking edges, or a wayfinder map plus its initial tickets when the work is too foggy to slice. Use when a change spans more sessions than one context can hold, needs a durable plan to dispatch against, or must be decomposed into parallelizable slices. Synthesizes and publishes; writes no feature code and interviews nobody.
 tools: Read, Grep, Glob, Bash, Skill, WebFetch, mcp__context7__resolve-library-id, mcp__context7__query-docs
-model: claude-opus-5
+model: claude-opus-5-5
 effort: high
 ---
 

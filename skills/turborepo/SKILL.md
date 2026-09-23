@@ -9,11 +9,11 @@ description: |
   monorepo, shares code between apps, runs changed/affected packages, debugs cache,
   or has apps/packages directories.
 metadata:
-  version: 2.10.6-canary.2
+  version: 2.11.3
 user-invocable: false
 ---
 
-<!-- vendored verbatim from `vercel/turborepo` main:skills/turborepo (MIT; LICENSE kept).
+<!-- vendored verbatim from `vercel/turborepo` main:skills/turborepo @ 53629a0, v2.11.3 (MIT; LICENSE kept; `user-invocable: false` added to frontmatter).
      backs the `toolchain-engineer` seat — the monorepo task-graph + caching half (turbo.json, dependsOn,
      remote cache, --filter/--affected, boundaries). the pnpm (package graph) + Biome (lint/format) halves
      are backed by their own official docs (pnpm.io, biomejs.dev llms.txt) + Context7, not vendored.
@@ -137,12 +137,12 @@ Cache problems?
 ```
 Run only what changed?
 ├─ Changed packages + dependents (RECOMMENDED) → turbo run build --affected
-├─ Custom base branch → --affected --affected-base=origin/develop
+├─ Custom base branch → TURBO_SCM_BASE=origin/develop turbo run build --affected
 ├─ Manual git comparison → --filter=...[origin/main]
 └─ See all filter options → references/filtering/RULE.md
 ```
 
-**`--affected` is the primary way to run only changed packages.** It automatically compares against the default branch and includes dependents.
+**`--affected` is the primary way to run only changed packages.** It compares against `main` (falling back to `master`) — not the repo's configured default branch — and includes dependents. Set `TURBO_SCM_BASE` for any other base branch.
 
 ### "I want to filter packages"
 
@@ -436,7 +436,7 @@ A large `env` array (even 50+ variables) is **not** a problem. It usually means 
 
 ### Using `--parallel` Flag
 
-The `--parallel` flag bypasses Turborepo's dependency graph. If tasks need parallel execution, configure `dependsOn` correctly instead.
+The `--parallel` flag bypasses Turborepo's dependency graph. It is deprecated and will be removed in a future major version—use task configuration (`persistent`, `with`) instead.
 
 ```bash
 # WRONG - bypasses dependency graph
@@ -749,7 +749,7 @@ import { Button } from "@repo/ui/button";
 
 ```json
 {
-  "$schema": "https://v2-10-6-canary-2.turborepo.dev/schema.json",
+  "$schema": "https://v2-11-3.turborepo.dev/schema.json",
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

@@ -1,7 +1,7 @@
 ---
 name: stripe-specialist
 description: "Stripe payments + billing — the money layer: the server Stripe client, product/price catalog, Checkout Sessions, Billing/subscriptions, Connect, the signature-verified webhook handler, and the entitlement state the app gates on. Framework-agnostic; hands a typed billing surface to the framework builder. Use when a feature takes payment, sells a subscription, gates access behind a plan, issues refunds, or handles Stripe webhooks. Identity stays `better-auth-specialist`'s — this seat maps an authenticated user to a Stripe customer."
-model: claude-opus-5
+model: claude-opus-5-5
 memory: local
 ---
 

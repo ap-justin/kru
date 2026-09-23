@@ -4,7 +4,7 @@ description: Discover and choose Cloudflare products for apps, APIs, AI agents, 
 user-invocable: false
 ---
 
-<!-- vendored verbatim from `cloudflare/skills` main:skills/cloudflare (Apache-2.0; LICENSE kept).
+<!-- vendored verbatim from `cloudflare/skills` main:skills/cloudflare @ 320fbbc (Apache-2.0; LICENSE kept; `user-invocable: false` added to frontmatter).
      the first-party Cloudflare product-discovery skill: SKILL.md maps a need to a product, `references/*`
      route per product to developers.cloudflare.com rather than restating it. backs the `cloudflare-builder`
      seat alongside the connected Cloudflare MCP + Context7, and names its sibling skills
@@ -37,6 +37,7 @@ Find the row closest to the user's task. Products can appear in multiple rows, a
 | Build or deploy a Next.js app on Cloudflare | vinext + Workers | Use vinext rather than OpenNext for new projects | [nextjs-on-cloudflare skill](../nextjs-on-cloudflare/SKILL.md); [Next.js docs](https://developers.cloudflare.com/workers/framework-guides/web-apps/nextjs/) |
 | Host a new static site, SPA, or full-stack app | Workers + Workers Static Assets | Serve site files and add server-side logic where needed | [Static Assets](references/static-assets/README.md); `workers-best-practices` skill |
 | Build an API or handle webhooks | Workers | Run request handlers with access to Cloudflare services | `workers-best-practices` skill; [Workers docs](https://developers.cloudflare.com/workers/) |
+| Control team, CI, or service-account access to Developer Platform resources | Roles, scopes, and permission policies | Choose the least-privilege role and a scope supported for the member, User Group, or API token | [Roles and permissions](https://developers.cloudflare.com/workers/authorization/); `wrangler` skill for CLI access |
 | Maintain an existing Pages deployment | Pages + Pages Functions | Update an existing site or its server endpoints; use Workers for new projects | [Pages](references/pages/README.md); [Pages Functions](references/pages-functions/README.md) |
 | Move a Pages project to Workers | Workers + Workers Static Assets | The task calls for migrating the hosting platform | [Pages migration guide](https://developers.cloudflare.com/workers/static-assets/migration-guides/migrate-from-pages/) |
 | Let customers deploy code on your platform | Workers for Platforms | Run and manage customer Workers with per-customer controls | [Workers for Platforms](references/workers-for-platforms/README.md) |
@@ -110,7 +111,8 @@ Find the row closest to the user's task. Products can appear in multiple rows, a
 | Run or investigate the underlying Workers runtime | workerd | Work directly with the runtime outside normal managed deployment | [workerd](references/workerd/README.md) |
 | Try a small Worker in the browser | Workers Playground | Explore or share a minimal example without local setup | [Workers Playground](references/workers-playground/README.md) |
 | Build and deploy whenever code is pushed | Workers Builds | Connect a Git repository to automated builds and deployments | [Builds docs](https://developers.cloudflare.com/workers/ci-cd/builds/) |
-| Preview a version, release it gradually, or roll back code | Workers versions and deployments | Manage application releases; rollback does not restore connected resource data | [Deployment docs](https://developers.cloudflare.com/workers/versions-and-deployments/); `wrangler` skill |
+| Test a branch or pull request in an isolated environment | Workers Previews | Create a branch environment under the same Worker with its own settings and URLs; check which bound resources are isolated or shared | [Previews docs](https://developers.cloudflare.com/workers/previews/); `wrangler` skill |
+| Inspect an uploaded version, release it gradually, or roll back code | Workers versions and deployments | Manage application releases that use production resources; rollback does not restore connected resource data | [Deployment docs](https://developers.cloudflare.com/workers/versions-and-deployments/); `wrangler` skill |
 | Release a feature gradually or target user groups | Flagship | Change feature availability with targeting and percentage rollouts | [Flagship](references/flagship/README.md) |
 | Manage infrastructure as code | Terraform or Pulumi | Use Terraform for declarative configuration or Pulumi for infrastructure in programming languages | [Terraform](references/terraform/README.md); [Pulumi](references/pulumi/README.md) |
 | Automate account or product configuration through an API | Cloudflare REST API | Manage resources programmatically; prefer bindings for supported operations inside Workers | [REST API](references/api/README.md) |

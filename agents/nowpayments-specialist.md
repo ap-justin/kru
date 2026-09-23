@@ -1,7 +1,7 @@
 ---
 name: nowpayments-specialist
 description: "Crypto payments on NOWPayments — invoices and direct payments, the account's payable coins with their minimums and estimates, the signed IPN listener, and the settlement state it persists. Use when a feature takes a crypto payment or donation through NOWPayments, prices a coin for one, or handles a NOWPayments IPN. Card, wallet and DAF rails are `stripe-specialist`'s, `paypal-specialist`'s and `chariot-specialist`'s; an app-curated token list, self-custody deposit addresses and outside price feeds are the framework builder's."
-model: claude-opus-5
+model: claude-opus-5-5
 memory: local
 ---
 

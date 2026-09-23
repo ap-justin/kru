@@ -1,7 +1,7 @@
 ---
 name: chariot-specialist
 description: "DAF gifts via Chariot DAFpay — the Connect session (`<chariot-connect>` / `react-chariot-connect`), server grant creation, event subscriptions and the signature-verified webhook, and the grant state the app persists. Use when a feature takes a DAF gift, creates or reads a Chariot grant, or handles a Chariot webhook. Card and wallet rails are `stripe-specialist`'s and `paypal-specialist`'s: a DAF grant is a pledge the fund pays out later, with its own settlement model."
-model: claude-opus-5
+model: claude-opus-5-5
 memory: local
 ---
 

@@ -1,6 +1,7 @@
 # Errors — customization, structure, and getting them to a form
 
-All examples verified on `zod@4.4.3`.
+The precedence ladder, locales and the renderer table verified on `zod@4.6.5` (2026-09-23).
+The rest verified on `zod@4.4.3`.
 
 ## The precedence ladder
 Four places can set a message. Verified, most specific wins:
@@ -13,15 +14,23 @@ z.string().safeParse(42, { error: () => "parse" })                        // →
 
 **per-check → per-schema → per-parse → locale default.** `error` takes a string or a function receiving the issue, so the function form is where dynamic messages and i18n keys go.
 
-Locales are global and swappable — ~40 ship with the package:
+Locales are global and swappable — ~60 ship with the package:
 
 ```js
 z.config(z.locales.fr())
 z.string().safeParse(42).error.issues[0].message
-// → "Entrée invalide : chaîne attendu, nombre reçu"
+// → "Entrée invalide : chaîne de caractères attendu, nombre reçu"
 ```
 
-`z.config()` is process-wide state. Set it once at boot; setting it per-request in a server races across concurrent requests.
+`safeParse` builds its error **lazily**: every error map — locale, global, per-schema, per-parse — runs on the first read of `result.error`, not during the parse. The config in force at *read* time wins:
+
+```js
+const r = z.string().safeParse(42)   // English config
+z.config(z.locales.fr())
+r.error.issues[0].message            // → French
+```
+
+`z.config()` is process-wide state. Set it once at boot; setting it per-request in a server races across concurrent requests, and across any `await` between the parse and the read. `.parse()` isn't lazy — it builds and throws its error at parse time. An error map with a side effect (a log, a counter) never runs if nothing reads `result.error`.
 
 ## Issue shape
 ```js

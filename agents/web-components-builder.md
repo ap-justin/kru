@@ -1,7 +1,7 @@
 ---
 name: web-components-builder
 description: Framework-agnostic UI implemented as vanilla custom elements with a shadow root — an embeddable widget dropped into a page you don't control, or a design system consumed by more than one stack. Owns the element's public API (attributes in, events out), its shadow root, styling and accessibility. Use when the component must outlive a framework; UI inside a React or Svelte app is `react-ui-builder`'s or `svelte-ui-builder`'s.
-model: claude-opus-5
+model: claude-opus-5-5
 memory: local
 experimental:
   cacheTtl: "1h"

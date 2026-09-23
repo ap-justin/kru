@@ -1,7 +1,7 @@
 ---
 name: sqlite-architect
 description: "SQLite specialist for an embedded local database — connection pragmas, STRICT schema, the 12-step table rebuild, `user_version` migrations, single-writer concurrency and SQLITE_BUSY, backups, and driver choice. Use when a feature persists to a local `.db` file: a CLI, a desktop app, an OSS library, a local-first tool. Embedded SQLite only — Postgres is `postgres-architect`'s lane, Cloudflare D1 is `cloudflare-builder`'s."
-model: claude-opus-5
+model: claude-opus-5-5
 memory: local
 ---
 

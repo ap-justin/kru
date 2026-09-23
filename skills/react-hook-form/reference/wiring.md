@@ -40,7 +40,7 @@ A `'use server'` action takes any serializable argument — it does not have to 
 
 **React Router 7** and **TanStack Start** are the same shape with their own callee: `useSubmit()`/`fetcher.submit(data, { method: 'post', encType: 'application/json' })` in a route module, or a `createServerFn` call in Start. In all three the route's own server side re-validates.
 
-**Where the form must work before hydration**, the native `FormData` path is the only one that survives — and it carries only what the DOM holds, so every `Controller` field needs a `<input type="hidden">` shadowing it, and the server must validate `FormData` on its own terms. RHF's exported `<Form>` component wraps that submission, but the values it posts are still the DOM's. Decide which of the two paths the form is on rather than layering them.
+**Where the form must work before hydration**, the native `FormData` path is the only one that survives — and it carries only what the DOM holds, so every `Controller` field needs a `<input type="hidden">` shadowing it, and the server must validate `FormData` on its own terms. RHF's exported `<Form>` doesn't close that gap: once hydrated it posts RHF's values, flattened into a `FormData` with dotted keys and `Controller` fields included (reproduced), but before hydration it is a plain `<form action>` and the browser posts the DOM's. Decide which of the two paths the form is on rather than layering them.
 
 ## Async and late-arriving defaults
 ```js

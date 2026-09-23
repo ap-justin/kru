@@ -1,6 +1,9 @@
 # Boundaries — a parse recipe per entry point
 
-All examples verified on `zod@4.4.3`. The shared rule: parse **once**, at the edge, and pass the parsed value inward. A schema applied twice to the same data is a smell — the second call is either dead work or an admission the first one didn't own the boundary.
+Env vars, every `.prefault()`, unknown-key behavior and the email table verified on `zod@4.6.5` (2026-09-23).
+The rest verified on `zod@4.4.3`.
+
+The shared rule: parse **once**, at the edge, and pass the parsed value inward. A schema applied twice to the same data is a smell — the second call is either dead work or an admission the first one didn't own the boundary.
 
 ## Env vars (parse at boot, crash loudly)
 Everything is a string, and `undefined` for anything unset. Two traps live here — `z.coerce.boolean()` (see `SKILL.md`) and defaults that never validate.

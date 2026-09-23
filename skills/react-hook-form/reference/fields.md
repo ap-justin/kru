@@ -50,9 +50,9 @@ fields.map((field, i) => <input key={field.id} {...register(`rows.${i}.v`)} />)
 Every attribute above is yours: the `id`/`htmlFor` pair, `aria-invalid`, the `aria-describedby` pointing at the message element, and the `role="alert"` that makes a message appearing after submit announce itself.
 
 ## `useFormContext`
-`useFormContext()` returns **`null`** outside a `<FormProvider>` (reproduced), so the failure is `Cannot destructure property 'register' of null` at the child — not a message naming the missing provider. A field component meant to work both inside and outside a provider takes `control` as a prop instead; one that requires the provider should say so where it fails.
+`useFormContext()` returns **`null`** outside a `<FormProvider>` (reproduced), so the failure is `Cannot destructure property 'register' of 'useFormContext(...)' as it is null` at the child — not a message naming the missing provider. A field component meant to work both inside and outside a provider takes `control` as a prop instead; one that requires the provider should say so where it fails.
 
 Pass `control` down explicitly for a handful of fields; reach for `FormProvider` when the tree is deep enough that threading it is the larger cost. `useFormContext` re-renders its consumer on the same Proxy rules as `formState`.
 
 ## File inputs
-`register('doc')` on `<input type="file">` submits the input's **`FileList`** (reproduced), not a `File` — so a schema written against `File` fails on a real upload, and the value wants `files?.[0]` (or `Array.from(files)`) before it reaches one. A `FileList` is also not JSON-serializable: a file that has to survive a failed submit is uploaded on selection and carried as an id.
+`register('doc')` on `<input type="file">` submits the input's **`FileList`** (reproduced), not a `File` — so a schema written against `File` fails on a real upload, and the value wants `files?.[0]` (or `Array.from(files)`) before it reaches one. A `FileList` is also not JSON-serializable: a file that has to survive a failed submit is uploaded on selection and carried as an id. RHF's own `<Form>` posts it as a `File` entry under the field's name (reproduced); before 7.88.0 it flattened the list into `doc.0`, `doc.length`, `doc.item` keys, so a repo posting uploads through `<Form>` pins `^7.88`.

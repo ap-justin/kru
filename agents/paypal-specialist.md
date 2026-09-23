@@ -1,7 +1,7 @@
 ---
 name: paypal-specialist
 description: "PayPal payments + billing — the money layer on PayPal's REST APIs: the server client and its OAuth token cache, Orders v2 checkout and capture, catalog products + billing plans + subscriptions, refunds, the signature-verified webhook listener, and the settlement state the app persists. Owns the browser PayPal/Venmo JS SDK session too, and hands the framework builder a typed payment surface. Use when a feature takes a PayPal or Venmo payment, sells a PayPal subscription, captures an approved order, or handles a PayPal webhook. Stripe is `stripe-specialist`'s — the object graph, the webhook vocabulary and the idempotency mechanism don't transfer, and a repo may run both rails."
-model: claude-opus-5
+model: claude-opus-5-5
 memory: local
 ---
 
