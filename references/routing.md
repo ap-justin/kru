@@ -62,6 +62,7 @@ names the seat and its skills has this question answered — take the answer.
 - **Payment rails, split by provider**: Stripe = `stripe-specialist` · PayPal/Venmo = `paypal-specialist` · Chariot DAF grants = `chariot-specialist` · NOWPayments crypto = `nowpayments-specialist`. A repo can run several, and a change touching each is one dispatch per rail — no provider's object graph, webhook vocabulary or idempotency mechanism transfers. The record they settle into (the order/donation row, the shared settlement math) is the data seat's and the framework builder's.
 - **Accounting sits downstream of every rail**: posting a settled record into QuickBooks is `quickbooks-specialist`'s adapter; the queue, cron and OAuth routes that drive it stay with the platform seat and framework builder.
 - **Zapier splits like accounting**: the app's own integration and the endpoints it calls are `zapier-specialist`'s; the queue firing the fan-out stays with the platform seat and the key a user pastes with the identity owner.
+- **An email template belongs to the seat that sends it**: a React Email `.tsx` is the framework builder's, beside the `render()` and the send, not `react-ui-builder`'s. It renders once on the server into an inbox, never mounts in the app, and the token file's CSS variables never reach it.
 - **`web-components-builder`'s trigger is the consumer, not the markup**: UI inside a React or Svelte app stays with that stack's UI builder.
 - **`graphic-designer` preflight**: generation needs `GOOGLE_API_KEY` + a one-time `npm install` in the plugin dir (video/cutouts also need ffmpeg/rembg). Before routing — or the moment the specialist returns `BLOCKED (setup)` — **surface the exact setup to the user** and let them choose: set it up for real assets, or proceed with the static fallback. Never silently degrade to a placeholder without telling them the real-asset path exists.
 
@@ -90,6 +91,7 @@ TanStack Table). So adding a skill here is a row plus the skill, and the seat fi
 | `react-hook-form` | `react-hook-form` |
 | `xstate` | `xstate` |
 | `@xstate/react` | `xstate-react` |
+| `react-email` or `@react-email/*` | `react-email` |
 | `vitest` | `vitest` — carried by the `testing` skill's discovery step, so every seat that writes a test reaches it |
 | `@testing-library/react` or `@testing-library/svelte` | `testing-library` — carried by the same discovery step |
 | `sveltekit-superforms` | `superforms` |

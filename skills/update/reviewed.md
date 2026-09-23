@@ -90,6 +90,7 @@ Previous: 2.1.250 — 2026-08-28, first sweep, read back to 2.1.200.
 | `zod` | 4.4.3 | 4.6.5 (2026-09-13) | 2 minors (threshold: major) | **Re-verified 2026-09-23 on 4.6.5** (split pin). The lazy `safeParse` error is from **4.6.0**, not 4.5, and the error-map/locale timing is rewritten. The `flatten()` and `prefault` claims hold. |
 | `valibot` | 1.4.2 | 1.5.0 (2026-09-09) | minor (threshold: major) | **Re-verified 2026-09-23 on 1.5.0** (split pin). `email()` now rejects case-folding characters (`ſ`, the Kelvin sign), and the floor is noted in `SKILL.md` + `boundaries.md`. |
 | `conform` | 1.21.1 | 1.21.1 | none | **Current.** The zod and react companions moved a minor; the threshold is on conform itself. |
+| `react-email` | 6.9.5 + render 2.1.0 | 6.9.5 (2026-09-08) | none | **Authored 2026-09-23** on 6.9.5. Threshold: minor. |
 | `superforms` | 2.30.2 | 2.30.2 (`next` 3.0.0-next.0) | none | **Current.** Kit 2.70.3 is a patch; svelte 5.57.1 and zod 4.6.5 are minors. All are below major. |
 | `testing-library` | RTL 16.3.3 | 16.3.3 | none | **Current.** dom 10.4.2 is a patch; react 19.3.0 and jsdom 30.1.1 are minors. All are below major. |
 | `vitest` | 5.0.0 | 5.0.1 (2026-09-15) | patch | **Current.** 5.0.1 hits no skill claim. vite 8.2.2→8.3.0. |
