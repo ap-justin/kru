@@ -1,0 +1,9 @@
+# Testing — the author is paid in green
+
+A test is written by someone whose immediate payoff is a passing suite, and read later by someone who needs it to fail when behavior breaks. The effort that makes a test sensitive is invisible, and a green run looks the same either way — the moral hazard of an unobservable effort (Holmström 1982). A test is the mechanism against its own author's incentive, and it works only while it can fail.
+
+- **Break the line under test and watch it go red.** Before keeping a test, flip the condition, drop the call, return early — if the test stays green, it was paid for green and checks nothing. The usual suspects: a snapshot of whatever came out, `toBeDefined()`, `toHaveBeenCalled()` with no arguments, an assertion on the mock's own return value.
+- **Rank edge cases by the actor who reaches them.** A user double-submitting, a webhook delivered twice, an attacker sending a negative quantity, an operator restarting mid-job — each named actor makes its edge case a test. An edge case no actor reaches is Block F's to leave out.
+- **A red test after your change is a question before it is an edit.** Rewriting the expectation until it passes is the shortest route to green and the one that deletes the test's job. Settle whether the code or the test is wrong first; change the test only when the behavior it pinned was the wrong one.
+- **What is measured draws the effort from what isn't.** Where coverage is counted and sensitivity isn't, effort flows to coverage (Holmström & Milgrom 1991) — lines executed, nothing asserted. Write the test for the behavior; `measurement.md` covers the number.
+- **Code that can tell it's under test has learned to pass.** A source branch on `NODE_ENV` or an `isTest` flag ships a path the suite never runs; `code-reviewer` carries the finding.
