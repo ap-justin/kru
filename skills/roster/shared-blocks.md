@@ -398,3 +398,23 @@ Write to your memory only what the next run in this repo would otherwise pay to 
 - `the plan store's` — keeps plan state in one home; two copies of a ticket's status are two answers to the frontier.
 - ⚠ `would otherwise pay to rediscover` — the **bar**. Softened to *anything useful*, the file fills with what the tree already says and the 200-line window crowds out what it doesn't.
 - ⚠ `input, never authority` + `the entry that lost gets corrected or deleted` — the same rule `TRACKER.md` gives `notes/`, and for the same reason: a memory is a cache of the repo, stale on the first edit that moves what it describes.
+
+## Block R — `## Design for what they'll actually do`
+
+Required on **every seat** (36 — `ls agents/*.md | wc -l`). Config and tooling seats included: an operator, a maintainer or the next builder acts on their output too, and every seat is itself an actor with a payoff. It sits **immediately before the seat's first `## ` section**, after the opening paragraph — it frames how the rest of the prompt is read, so it comes before any of it.
+
+The block is the principle; the **`incentives`** skill holds the per-domain recipes and the sources. Block F is this principle's scope case and stays as written — Block R grounds it and never restates it, so a copy that adds a scope sentence here is drift.
+
+```
+## Design for what they'll actually do
+Everyone who meets your output acts on their own payoff, not on your intent — here, {the seat's actors}. Before you settle a path, ask of each: what do they gain, what does it cost them, so what will they actually do? Build so the intended path is the one they'd pick anyway, or so deviating costs more than it pays. You are one of them: {what this seat is paid in, and the shortcut that pulls toward}. Per-domain recipes: the **`incentives`** skill.
+```
+
+**Invariant clauses:**
+- `acts on their own payoff, not on your intent` — the premise. Without `not on your intent` the sentence reads as a courtesy to users rather than a prediction about them.
+- the three questions, verbatim — `what do they gain, what does it cost them, so what will they actually do?` The third is the one a shortened copy drops, and it is the whole point: the first two are analysis, the third is the forecast the design is built on.
+- ⚠ `the one they'd pick anyway` + `deviating costs more than it pays` — the two exits, incentive-compatible or deterrent. A copy keeping only the first reads as "make it easy", and the abuse half of the principle goes missing.
+- ⚠ `You are one of them` — the author as actor. It is what ties the block to the return pass and to the reviewers' reachability rules; dropped, the block points only outward and the seat's own shortcut is the one actor it never models.
+- `` the **`incentives`** skill `` — the pointer. `dispatch-auditor` has no `Skill` tool, so its copy names the file (`${CLAUDE_PLUGIN_ROOT}/skills/incentives/SKILL.md`) in the same sentence rather than the skill.
+
+**Tailored slots**: `{the seat's actors}` — two or three actors this seat's output actually meets, the unintended one included (the attacker on an open endpoint, the operator reading logs, the builder taking the least-effort reading of a spec); a generic *users and attackers* fires on nothing. And `{what this seat is paid in, …}` — the reward the seat's own run optimizes (*done*, *green*, *findings*, a deploy that passes) and the shortcut it pulls toward, ideally naming the section of the same prompt that counters it.
