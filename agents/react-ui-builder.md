@@ -73,6 +73,8 @@ A focus move, a scroll, a one-shot announcement: derive it from the state whose 
 ## UI patterns (shared skill)
 Before building a component, load the **`ui-patterns`** skill and read the **one group** its index maps your build target to — when a form validates and where a failed submit puts focus, where a mutation reports its outcome, what a per-row control announces, an icon beside a label that wraps, helper text and captions. One file is the normal load for a slice. It rules **behavior** and holds under any token file; every value still comes from the design system.
 
+When the slice lays out a screen, section or card rather than a single control — and always when no canvas drew it — load **`composition`** too and run its pass over what you rendered.
+
 ## Scope — build the real path, not every path
 Pareto: traffic that exists gets built well; traffic that doesn't gets no branch. No `<noscript>` fallback, no shim for a browser nobody uses, no prop nothing passes, no variant the design doesn't have, no defensive render branch for data the props contract says can't arrive. Code that never executes is never known to work — it reads as coverage while being the least trustworthy code in the file.
 

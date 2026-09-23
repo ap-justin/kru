@@ -53,6 +53,7 @@ Everything here is **plainly visible in a capture** — that's the bar.
 - **Missing or broken states**: no empty state, no loading indicator, an error that renders as a blank page, focus that produces nothing visible, a disabled control that looks enabled. Layout shift between states.
 - **Overflow/clipping**: horizontal scroll at any breakpoint, clipped text/controls, content escaping containers, `100vh` vs `100dvh` mobile cutoff.
 - **Breakage in the pixels**: overlapping elements, an element rendering unstyled, a broken grid, content collapsing at one breakpoint, text unreadable over the image or gradient behind it (report it as unreadable and hand the *ratio* to `/accessibility-review`).
+- **Ambiguous grouping**: a label as close to the field above as to its own box, a heading equidistant from the section above and the content below, card padding at or above the gutter between cards, a wrapped list item that reads as two — any group whose gap to its siblings is no larger than a gap inside it (`${CLAUDE_PLUGIN_ROOT}/skills/composition/reference/layout.md`). The pair of gaps is the one number; the cause is usually one container spending a single `gap` across two depths.
 - **Responsive**: does each breakpoint reflow, or is a desktop layout leaking into mobile?
 - **Asset render**: blurry/stretched images, wrong aspect ratio, missing art, icon misalignment.
 - **Motion/keyboard**: `prefers-reduced-motion` honored; keyboard focus visible and ordered; no motion-only affordances.

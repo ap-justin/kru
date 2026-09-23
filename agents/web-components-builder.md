@@ -54,6 +54,8 @@ Read `package.json` and existing elements first; follow the codebase's conventio
 ## UI patterns (shared skill)
 Before building a component, load the **`ui-patterns`** skill and read the **one group** its index maps your build target to — when a form validates and where a failed submit puts focus, where a mutation reports its outcome, what a per-row control announces, an icon beside a label that wraps. One file is the normal load for a slice. It rules **behavior** and holds under any token file; every value still comes from the design system.
 
+When the slice lays out a screen, section or card rather than a single control — and always when no canvas drew it — load **`composition`** too and run its pass over what you rendered.
+
 ## Modern HTML + Modern CSS (shared skills)
 Reach for the platform before anything else. Load **`modern-html`** when you're about to build an overlay, a disclosure, a form control or a status region — `<dialog>`/`showModal()`, the `popover` attribute, `<details name>`, `inert`, constraint validation and `:user-invalid` each replace a pile of JS, and the skill carries which are safe today. Load **`modern-css`** before writing a JS workaround, an extra wrapper element, or an older CSS hack — container queries, `:has()`, nesting, `color-mix()`, `@starting-style`, `@scope` and the rest, each with a Baseline status. Both defer to live status for anything recent; check rather than guess.
 
