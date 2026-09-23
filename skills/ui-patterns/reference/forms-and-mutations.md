@@ -117,6 +117,14 @@ The held state is `aria-disabled` and the handler ignores the press. `disabled` 
 **Why:** the status row is a second representation of one fact, and the day it disagrees with the box the operator has no way to tell which is right. The snap-back is the costlier half: it makes deletion the one intent the form cannot express, so the operator retypes a value they meant to remove.
 **Applies when:** the stored value is a scalar the field can seed. A list, or a value the server declines to echo, carries its own state; this is the single-slot case.
 
+## A value the user can change is the control that changes it
+
+**Trigger:** a displayed value with an edit affordance — a date, a range, a plan, an assignee — outside a full form.
+**Pattern:** render the value as the control itself: the date opens the picker, the assignee opens the menu. The field and any controls it carries stay on one line, and its empty state is the same control reading as a prompt ("Pick a date").
+**Default it corrects:** the value as static text with a *Change date* button beside it, or wrapping the button onto its own line, with the empty state drawn as a different element.
+**Why:** a value and a button that edits it are two things to scan for one fact, and the reader has to work out that they're linked; the button's label restates the value's name. A separate empty-state element means the control moves or changes shape the moment a value lands.
+**Applies when:** one value, edited in place. A value whose edit is a multi-field form, or whose change needs a confirm, keeps a separate trigger.
+
 ## A decoration inside a control is contained by the control, not by its own position
 
 **Trigger:** a control carrying a painted layer behind its text — a fill that tracks progress, a hover wash, a pressed ground.

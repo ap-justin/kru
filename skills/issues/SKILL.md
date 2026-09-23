@@ -34,6 +34,8 @@ A file still carrying `_not investigated_` is a **stub**; a read pass may fill a
 
 **Rank**: `critical` → `high` → `medium` → `low`, then `effort` ascending, then **newest first** (file mtime) — a fresh defect is still reproducible in the code as filed. A `~n` ranks as `n`.
 
+**Weigh before you batch.** Load `incentives` and read each candidate's value as how often the defect bites × what it costs whoever it bites, against the fix's effort *and* its risk. A rare edge case whose fix needs a migration or touches the money path stays out of the batch whatever its severity — it goes to `rest` with the reason in its line.
+
 **Batch** = the top-ranked open files whose `effort` is `1`–`2`, on **different seams** so one review pass covers them, capped at what one session fixes without a brief. `$ARGUMENTS` narrows: an exact slug takes that file, anything else filters slug and heading by case-insensitive substring. A filtered run still reconciles and scores the whole dir; only the batch narrows.
 
 ## 4. Gate — show it, then wait
