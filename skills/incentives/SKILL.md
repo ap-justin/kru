@@ -31,7 +31,6 @@ Every seat carries `## Design for what they'll actually do` — the principle, i
 
 - **The intended path is a hope, not a forecast.** "Users will fill it in", "integrators will read the changelog", "the builder will run the suite" each predict someone else acting against their own payoff. Replace the hope with what the payoff predicts.
 - **Every cost lands on the honest actor too.** A step that stops an attacker is also paid by every legitimate user, on every visit. Price both sides before adding one — users reject advice whose cost to them exceeds the harm it prevents, and they are right to.
-- **Unprofitable is available where impossible isn't.** Most abuse runs through a path that has to stay open. Raise its cost per attempt until the volume stops paying.
 - **Your own gates are this principle applied to you.** The return pass exists because *done* is rewarded; a reviewer's reachability test exists because *findings* are. Read them as mechanisms against your own payoff, and they stop reading as ceremony.
 
 ## Owned elsewhere
