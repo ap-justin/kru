@@ -177,59 +177,63 @@ Two things decide whether those last rules ever fire:
 preferences, plans and the seats' repo memory only survive it through `KRU_STORE_REPO` — a private
 repo the user owns, which `hooks/store-sync.sh` keeps the home synced to. Check
 `~/.claude/settings.json` → `env`. Unset and the user runs cloud sessions: offer it. On a yes, add
-`"KRU_STORE_REPO": "<owner>/<store-repo>"` to that `env`, and hand the user the two blocks below
-for this repo's claude.ai/code cloud environment, to paste themselves — user settings never reach
-the vm, and the environment is theirs to edit.
+`"KRU_STORE_REPO": "<owner>/<store-repo>"` to that `env`. The session reaches a private store only
+when the user attaches it to the session: the setup script runs with no git credentials, so its
+clone of a private store fails, and store-sync clones it at session start instead.
 
-Environment variables:
+**The cloud environment is a record in the repo.** The environment dialog is the only runtime for
+what the user pastes there, so the repo carries the record and the user's part is copying. Write `.claude/cloud-setup.md` as three copy blocks and nothing
+else, each under its dialog field's name:
 
-```
-KRU_STORE_REPO=<owner>/<store-repo>
-```
-
-Setup script — write it for this repo, from this base, and commit the result as
-`.claude/cloud-setup.sh`: the environment dialog is its only runtime, and the file is the only
-record of what the dialog holds.
+1. **Environment variables** — `KRU_STORE_REPO=<owner>/<store-repo>`.
+2. **Network access** — Custom, *include defaults* on, plus one host per line. Check every host the
+   setup script downloads from against the default list (`code.claude.com/docs/en/cloud-environments`),
+   since a blocked one fails silently under `|| true`: `get.pnpm.io`, the Playwright CDNs
+   (`cdn.playwright.dev`, `playwright.download.prss.microsoft.com`) and the image's own PPA
+   (`ppa.launchpadcontent.net` — without it `apt-get update` 403s and every chained install is
+   skipped) sit outside it. Then the hosts step 1 read off the repo's `.env*` files and SDK calls,
+   sandbox hosts only, so a live key pasted by mistake reaches nothing. Context7 reaches the vm
+   under its bare name too (step 1c) — the repo's `.mcp.json`, with `mcp.context7.com` listed here.
+3. **Setup script**, from this base:
 
 ```bash
 #!/bin/bash
-# provisions the vm before claude code launches; the result is cached ~7 days.
-# the clone's path is undocumented, so this touches no repo: dependencies are
-# the SessionStart hook's. kru's store-sync hook pulls the store fresh at every
-# session start.
 set -uo pipefail
+
+# kru store
 git clone -q https://github.com/<owner>/<store-repo> ~/.kru || true
 [ -f ~/.kru/setup.sh ] && bash ~/.kru/setup.sh || true
-# <repo>: vm provisioning below, each line ending `|| true`
+
+# plugins
+claude plugin marketplace add <owner>/kru || true
+claude plugin install kru@kru --scope user || true
+
+# <repo>: vm provisioning, each line ending `|| true`
+
+node --version; pnpm --version
 ```
 
-The store lines are the same in every environment. Below them goes what the vm lacks before this
-repo's first run, read off step 1's findings and the repo's own setup doc (`CONTRIBUTING*`,
-`README*`, `DEPLOY*`): a toolchain binary (`code.claude.com/docs/en/cloud-environments` →
-*Installed tools* lists what it has) pinned to the version the repo pins — pnpm through its native
-installer, since node drops corepack at 25, linked into `/usr/local/bin` because the installer's
-`PATH` edit lands in a profile the session may never source; `apt-get install` for a system
-package; browsers for a browser-mode suite, pinned to the repo's `playwright` version, whose
-browser build is tied to it. The script runs as root, must exit zero and finish in about five
-minutes, and only what it writes to disk survives the snapshot.
+Plugins install here because a cloud session gets no account-synced plugins and ignores the repo's
+`enabledPlugins`; add each plugin the user runs locally. Below them goes what the vm lacks before
+this repo's first run, read off step 1's findings and the repo's own setup doc (`CONTRIBUTING*`,
+`README*`, `DEPLOY*`), each pinned to the version the repo pins: node's `engines` major fetched
+from `nodejs.org` when it isn't one the image ships (*Installed tools* on the same docs page);
+pnpm through its native installer with `SHELL=/bin/bash` in its env — the script has no login
+shell, and without one the installer fails — linked into `/usr/local/bin`, since its `PATH` edit
+lands in a profile the session may never source; `apt-get install` for a system package; browsers
+for a browser-mode suite, pinned to the repo's `playwright` version, whose browser build is tied
+to it. The closing version line is where the user catches a blocked download, in the first session's
+setup log. The script runs as root, must exit zero and finish in about
+five minutes, and only what it writes to disk survives the snapshot.
 
-Dependencies install from a committed SessionStart hook instead, because a hook tracks each
-branch's lockfile and the snapshot doesn't: `.claude/cloud-install.sh`, gated on
-`CLAUDE_CODE_REMOTE=true` and located by `$CLAUDE_PROJECT_DIR`, registered in the repo's
-`.claude/settings.json` on `startup|resume`. Where the repo already has a SessionStart hook, the
-install joins it. A session with several repos runs no repo hooks, so an environment shared across
-repos carries each repo's installs in the script.
-
-The rest of the cloud surface rides in the repo, for the same reason the grants do. The committed
-`.claude/settings.json` carries `extraKnownMarketplaces` for kru, `enabledPlugins`, and
-`CLAUDE_CODE_ENABLE_TODO_TOOLS` in its `env`. Hand the user two more settings for the environment
-dialog: the network allowlist on **Custom** with the defaults kept, plus the hosts step 1 read off
-the repo's `.env*` files and SDK calls — sandbox hosts only, so a live key pasted by mistake reaches
-nothing; and the credentials posture — the env-var field is readable by anyone who shares the
-environment, so a private environment with sandbox values, never a staging or production file.
-Context7 has to reach the vm under its bare name too (step 1c), so it goes in the repo's `.mcp.json`
-and `mcp.context7.com` joins the allowlist — a claude.ai connector lands under a prefix no seat's
-tool list names.
+Dependencies install from a committed SessionStart hook, because a hook tracks each branch's
+lockfile and the snapshot doesn't: `.claude/cloud-install.sh`, gated on `CLAUDE_CODE_REMOTE=true`
+and located by `$CLAUDE_PROJECT_DIR`, registered in the repo's `.claude/settings.json` on
+`startup|resume`. Where the repo already has a SessionStart hook, the install joins it. A session
+with several repos attached — the store counts — runs no repo hooks. `CLAUDE_CODE_ENABLE_TODO_TOOLS` goes in
+that file's `env`. The credentials
+posture is the user's to hold: the env-var field is readable by anyone who shares the environment,
+so a private environment with sandbox values, never a staging or production file.
 
 `KRU_NO_STORE_SYNC=1` turns the sync off for one session. The mechanics and the merge rules:
 `${CLAUDE_PLUGIN_ROOT}/references/store.md` → *The store repo*.

@@ -13,13 +13,12 @@ You talk to the lead the way you'd talk to an engineering lead. It does the rout
 /plugin marketplace add ap-justin/kru
 /plugin install kru@kru
 ```
-**Claude Code on the web, and every other machine: enable kru for your claude.ai account.** It then
-loads as a [synced plugin](https://code.claude.com/docs/en/plugins-reference#synced-plugins) in cloud
-sessions, Cowork and any terminal on CLI 2.1.273 or newer, with nothing committed to the repo. A
-marketplace install outranks a synced one, so a machine that has kru installed keeps running its own
-copy.
+**Every other machine: enable kru for your claude.ai account.** It then loads as a
+[synced plugin](https://code.claude.com/docs/en/plugins-reference#synced-plugins) in Cowork and any
+terminal on CLI 2.1.273 or newer. A marketplace install outranks a synced one, so a machine that has
+kru installed keeps running its own copy.
 
-Per repo instead, committed to `.claude/settings.json`:
+Per repo instead, for everyone who clones it on their own machine, committed to `.claude/settings.json`:
 ```json
 {
   "extraKnownMarketplaces": {
@@ -28,9 +27,17 @@ Per repo instead, committed to `.claude/settings.json`:
   "enabledPlugins": { "kru@kru": true }
 }
 ```
-Either way the **task tools** switch has to reach the session, and user settings don't: put
-`"env": { "CLAUDE_CODE_ENABLE_TODO_TOOLS": "1" }` in that same file, or in the cloud environment's
-variables.
+
+**Claude Code on the web** gets neither synced plugins nor a repo's `enabledPlugins`, so kru installs
+from the cloud environment's setup script:
+```
+claude plugin marketplace add ap-justin/kru
+claude plugin install kru@kru --scope user
+```
+`/kru:setup` writes that script, with the rest of the environment, into the repo's
+`.claude/cloud-setup.md` for you to paste. The **task tools** switch reaches a session only from the
+repo's `.claude/settings.json` (`"env": { "CLAUDE_CODE_ENABLE_TODO_TOOLS": "1" }`) or the cloud
+environment's variables. User settings never reach it.
 
 Two things about a cloud session worth knowing before the first run:
 
