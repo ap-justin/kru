@@ -99,6 +99,16 @@ inbox=$(remote_has inbox.md)
 check "concurrent inbox appends both land" \
   'case "$inbox" in *"line a"*"line b"*|*"line b"*"line a"*) true ;; *) false ;; esac' "[$inbox] [$out]"
 
+# a push that failed leaves a commit ahead of the remote, and the next stop
+# sends it even when nothing new changed
+mv "$remote" "$remote.away"
+printf 'offline\n' > "$h1/.kru/management/acme-web/plan/checkout/offline.md"
+run "$h1" stop
+mv "$remote.away" "$remote"
+run "$h1" stop
+check "a commit left by a failed push goes out on the next stop" \
+  '[ "$(remote_has management/acme-web/plan/checkout/offline.md)" = offline ]' "[$out]"
+
 # --- fail soft --------------------------------------------------------------
 h3="$sandbox/h3"; mkdir -p "$h3"
 run "$h3" start KRU_STORE_REPO="$sandbox/missing.git"

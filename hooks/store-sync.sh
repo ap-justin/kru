@@ -76,10 +76,14 @@ case "$mode" in
   stop)
     [ -d "$home/.git" ] || exit 0
     copy_newer "$memory" "$stored" || say "agent memory save failed"
-    [ -z "$(g status --porcelain 2>/dev/null)" ] && exit 0
-    sid=$(printf '%s' "$input" | sed -n 's/.*"session_id" *: *"\([^"]*\)".*/\1/p' | cut -c1-8)
-    g add -A >/dev/null 2>&1
-    err=$(g commit -q -m "store: $(kru_slug) ${sid:-session}" 2>&1) || say "commit failed: $(first_line "$err")"
+    if [ -n "$(g status --porcelain 2>/dev/null)" ]; then
+      sid=$(printf '%s' "$input" | sed -n 's/.*"session_id" *: *"\([^"]*\)".*/\1/p' | cut -c1-8)
+      g add -A >/dev/null 2>&1
+      err=$(g commit -q -m "store: $(kru_slug) ${sid:-session}" 2>&1) || say "commit failed: $(first_line "$err")"
+    fi
+    # a push that failed on an earlier turn left commits ahead of the remote
+    ahead=$(g rev-list --count '@{u}..HEAD' 2>/dev/null)
+    [ "${ahead:-0}" = 0 ] && exit 0
     if ! g push -q 2>/dev/null; then
       err=$(g pull -q --rebase 2>&1) || { g rebase --abort >/dev/null 2>&1; say "push rejected and rebase failed, changes kept locally: $(first_line "$err")"; }
       err=$(g push -q 2>&1) || say "push failed, changes kept locally: $(first_line "$err")"

@@ -53,7 +53,7 @@ seat knows it exists:
   stay), else `pull --rebase --autostash`; then copy `agent-memory` into the working repo's
   `.claude/agent-memory-local/`, newer file winning.
 - **every turn end** (`Stop`) — copy `.claude/agent-memory-local/` back into `agent-memory`, then,
-  if the checkout is dirty, commit and push, with one `pull --rebase` retry on a reject.
+  if the checkout is dirty, commit; then push whatever is ahead of the remote, an earlier turn's failed push included, with one `pull --rebase` retry on a reject.
   A turn end rather than a session end, because a cloud vm is reclaimed without a reliable end event.
 
 A store that arrives without them gets a `.gitignore` for the session-lived dirs (`audit/`,
