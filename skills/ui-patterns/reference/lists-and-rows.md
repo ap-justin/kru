@@ -83,3 +83,15 @@ The row handler returns early when the event came from the link.
 .ledger { display: grid; grid-template-columns: max-content 1fr; }
 .ledger > .row { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; }
 ```
+
+## Room above a sentence-and-figure row moves the row, never the figure
+
+**Trigger:** a receipt or ledger row — a sentence that can wrap, with a figure beside it — that needs more space from a control above it.
+**Pattern:** the figure sits on the baseline of the sentence's last line; added space goes on the row, so the pair moves down together.
+**Default it corrects:** a `margin-top` or padding on the figure alone, which opens the requested gap and drops the figure off the sentence's baseline.
+**Why:** the figure closes the sentence it sits beside; off the baseline it floats between that line and the next row, and the offset is a magic number correct at one wrap count.
+**Shape:**
+```css
+.row { display: flex; align-items: last baseline; margin-block-start: var(--space); }
+```
+**Applies when:** the figure answers the sentence, as on a receipt. `modern-css` owns whether `last baseline` needs a fallback on this stack.

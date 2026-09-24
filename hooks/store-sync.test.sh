@@ -72,7 +72,7 @@ check "start into a non-git home keeps local files and gets tracked ones" \
 # --- stop -------------------------------------------------------------------
 run "$h1" stop
 check "stop pushes the defaults start seeded into an unseeded store" \
-  'remote_has .gitattributes | grep -q "inbox.md merge=union"' "[$out]"
+  'remote_has .gitattributes | grep -q "inbox.md merge=kru-lines"' "[$out]"
 
 before=$(git -C "$remote" rev-parse main)
 run "$h1" stop
@@ -99,6 +99,20 @@ run "$h1" stop; run "$h2" stop
 inbox=$(remote_has inbox.md)
 check "concurrent inbox appends both land" \
   'case "$inbox" in *"line a"*"line b"*|*"line b"*"line a"*) true ;; *) false ;; esac' "[$inbox] [$out]"
+
+# a sweep drains the last line while a session that hasn't pulled it appends one:
+# the drain holds and the append lands
+run "$h1" start; run "$h2" start
+grep -v '^line b$' "$h1/.kru/inbox.md" > "$sandbox/drained" && mv "$sandbox/drained" "$h1/.kru/inbox.md"
+printf 'line c\n' >> "$h2/.kru/inbox.md"
+run "$h1" stop; run "$h2" stop
+inbox=$(remote_has inbox.md)
+check "a drained line stays drained past a concurrent append" \
+  'case "$inbox" in *"line b"*) false ;; *"line a"*"line c"*) true ;; *) false ;; esac' "[$inbox] [$out]"
+
+run "$h1" start
+check "an existing store's union rule moves to the line merge" \
+  'grep -q "inbox.md merge=kru-lines" "$h1/.kru/.gitattributes" && ! grep -q "merge=union" "$h1/.kru/.gitattributes"' "[$(cat "$h1/.kru/.gitattributes")]"
 
 # a push that failed leaves a commit ahead of the remote, and the next stop
 # sends it even when nothing new changed

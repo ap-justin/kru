@@ -125,6 +125,7 @@ your other machines and your cloud sessions. `references/store.md` is the whole 
 ## Commands
 **Getting started**
 - `/kru:setup`: set the team up in this repo. Once per repo, again when the repo or the plugin moves.
+- `/kru:propagate` `[vX.Y.Z]`: from the plugin repo, carry a release's setup changes to every set-up repo and push them after one confirm.
 - Then ask: "add feature Y", "fix Z", "build a landing page for X". Or `/kru:lead <task>`.
 
 **Coding sessions**

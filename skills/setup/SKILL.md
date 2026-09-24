@@ -198,6 +198,7 @@ else, each under its dialog field's name:
 
 ```bash
 #!/bin/bash
+# kru v<VERSION>
 set -uo pipefail
 exec > >(tee -a /tmp/setup.log) 2>&1
 
@@ -221,15 +222,18 @@ node --version; pnpm --version; claude plugin list
 exit 0
 ```
 
-Plugins install here because a cloud session gets no account-synced plugins and ignores the repo's
-`enabledPlugins`; add each plugin the user runs locally. The vm has no official marketplace either,
+Plugins install here because a cloud session ignores the repo's `enabledPlugins`; add each plugin
+the user runs locally. The environment cache keeps them at the version the script installed until
+the script changes, its network hosts change, or about seven days pass
+(`code.claude.com/docs/en/cloud-environments` → *Environment caching*) — so the `# kru` line carries
+the installed `VERSION`, and `/kru:propagate` moving it is what rebuilds the cache on a new release. The vm has no official marketplace,
 so the base adds it ahead of any `@claude-plugins-official` install. Below them goes what the vm lacks before
 this repo's first run, read off step 1's findings and the repo's own setup doc (`CONTRIBUTING*`,
 `README*`, `DEPLOY*`), each pinned to the version the repo pins: node's `engines` major fetched
 from `nodejs.org` when it isn't one the image ships (*Installed tools* on the same docs page);
 pnpm through its native installer with `SHELL=/bin/bash` in its env — the script has no login
-shell, and without one the installer fails — linked into `/usr/local/bin`, since its `PATH` edit
-lands in a profile the session may never source; `apt-get install` for a system package; browsers
+shell, and without one the installer fails — its `PATH` edit lands in a profile the session may
+never source, so the install hook below puts it on `PATH`; `apt-get install` for a system package; browsers
 for a browser-mode suite, pinned to the repo's `playwright` version, whose browser build is tied
 to it. `try` retries each step and names the one that still failed as a `SETUP FAIL` line, so a
 blocked download reads in `/tmp/setup.log` and the first session's setup log, beside the closing
@@ -241,9 +245,13 @@ Dependencies install from a committed SessionStart hook, because a hook tracks e
 lockfile and the snapshot doesn't: `.claude/cloud-install.sh`, gated on `CLAUDE_CODE_REMOTE=true`
 and located by `$CLAUDE_PROJECT_DIR`, registered in the repo's `.claude/settings.json` on
 `startup|resume`. Where the repo already has a SessionStart hook, the install joins it. The image
-puts its own node and pnpm (`/opt/node22/bin`) ahead of `/usr/local/bin`, where the setup script
-installed the pinned ones, so the hook opens by prepending `/usr/local/bin` to `PATH` and appending
-the same `export` to `$CLAUDE_ENV_FILE`, which carries it into the session's later shells. Without it
+puts its own node and pnpm (`/opt/node22/bin`) on `PATH`, so the hook opens by linking the pinned
+pnpm into a directory holding nothing else, prepending that directory to `PATH` and appending the
+same `export` to `$CLAUDE_ENV_FILE`, which carries it into the session's later shells. The link
+targets the binary, `.tools/pnpm-exe/<ver>/pnpm` under the installer's home — its `pnpm` is a
+wrapper that resolves that binary beside its own path, so a symlink to the wrapper breaks. The
+directory holds nothing else because `/usr/local/bin` carries the image's node 20, which would
+shadow its 22 — wrangler refuses 20 — unless the setup script installed the repo's own node there. Without it
 the image's pnpm self-switches to `packageManager`'s version with lifecycle scripts off, and turbo,
 which spawns that placeholder directly, fails with `Exec format error` while `pnpm` in a shell looks
 fine. A session
@@ -392,9 +400,10 @@ the user's vocabulary.
 Completion: every line that went in is accounted for in what you said, and every line that came out
 is named with the file that answers it.
 
-## Re-run — the only update path
+## Re-run — the full update path
 The file is a function of *(plugin version × repo state)*, so re-deriving from scratch settles both
-directions it goes stale from:
+directions it goes stale from. One release's patch to what setup wrote, carried across every repo at
+once, is `/kru:propagate`'s; a change that needs the file re-derived comes here.
 
 - **The repo moved** — a dependency swap, a new gate, a design system where there was none. The
   citations are the signal: a derived line that no longer matches disk is a line to re-derive.

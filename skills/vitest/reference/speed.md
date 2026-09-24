@@ -17,6 +17,8 @@ Figures in `https://vitest.dev/guide/improving-performance.md` and `https://vite
 | `isolate: false` (with `threads`) | fastest — the module graph and environment load once per worker | every file must leave nothing behind (below) |
 | `maxWorkers` lower | every worker funnels transforms through one main-thread Vite server; past a count, more workers is slower | — |
 
+**A suite whose files each boot a real database or server** — workerd D1 through `getPlatformProxy`, a per-file server — sets `maxWorkers` below the core count. One worker per core saturates the machine and the files time out, which reads as a flaky suite rather than a saturated one.
+
 ## `isolate: false` as an opt-in, not a switch
 Turning it off suite-wide bets every file is clean. The safer shape is a second project that only files proven clean join, by name:
 

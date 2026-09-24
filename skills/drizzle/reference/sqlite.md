@@ -31,6 +31,9 @@ Verified at `better-sqlite3/session.js`: the behavior is `config.behavior ?? "de
 
 The `better-sqlite3` and `bun-sqlite` transaction callback is **synchronous** (`(tx) => T`, not `Promise<T>`). An `async` callback commits before the awaited work runs. Keep transactions sync and free of I/O.
 
+## D1: inside `db.batch`, a column projected twice shifts every field after it
+A projection naming the same **underlying** column twice — two keys, one column — misassigns each row's values by position: the repeat keeps its first slot with its *last* value, one value drops out, every later field lands on its right-hand neighbour's key, and the final field is `undefined`. Nothing throws, and the TS type still claims every key, so a string field can hold an integer. Renaming the drizzle key changes nothing; a SQL alias (`sql\`${t.col}\`.as('x')`) or running the query outside the batch (`Promise.all`) does. The mechanism is `drizzle-orm/d1/session.js` (0.45.2), and `.get()` takes the same path — verified by probe on real D1.
+
 ## No `STRICT` — the one place this skill contradicts the `sqlite` skill
 `sqlite-core` has no strict-table option and `drizzle-kit generate` never emits `STRICT`. Verified generated DDL:
 

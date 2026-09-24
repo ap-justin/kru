@@ -23,13 +23,15 @@ Read `package.json` before writing a line. On 0.45.x, these v1 APIs **do not exi
 Writing v1 code against 0.45 fails at import. Writing 0.45 code and pasting a v1 doc snippet beside it is the likelier accident — it type-checks in isolation and breaks at the seam. If a project wants v1, that is a deliberate upgrade to an **RC**, with the migration-folder format change (v3, no `_journal.json`) attached — not a default.
 
 ## The generated SQL is a draft — read it before it ships
-`drizzle-kit generate` diffs two snapshots and emits SQL. It does not know what data is in the table, so it cannot know which of its statements is destructive. Three failures that survive review only because nobody opened the `.sql` file:
+`drizzle-kit generate` diffs two snapshots and emits SQL. It does not know what data is in the table, so it cannot know which of its statements is destructive. Four failures that survive review only because nobody opened the `.sql` file:
 
 **A constraint change with existing rows aborts the migration.** Adding `.notNull().default(0)` to a populated nullable column generates `INSERT INTO __new_users(...) SELECT ... FROM users` — the `SELECT` copies the existing `NULL` straight into the new `NOT NULL` column and the column default never applies. Verified: the migration throws on that statement and rolls back. Backfill first, in a separate `drizzle-kit generate --custom` migration, *then* add the constraint.
 
 **Renames are guesses.** A dropped column plus an added column looks identical to a rename in a snapshot diff; the CLI asks, and a wrong answer is a `DROP COLUMN` on live data. Answer it deliberately, and never let it run unattended in CI.
 
 **The sqlite rebuild can `SELECT` a column the old table doesn't have.** Adding a column alongside a rebuild-forcing change (`drizzle-kit@0.31.x`) can emit a copy step that selects the *new* column from the old table — better-sqlite3 fails with `no such column`; under SQLite's double-quoted-string misfeature the literal column name is silently written into every row instead. Prefer a hand-written `ADD COLUMN` migration, and keep a guard test that fails when a generated migration contains an unasked-for rebuild.
+
+**A sqlite `ADD … REFERENCES` can ship without its `ON DELETE`.** drizzle-kit can emit the `ALTER TABLE … ADD … REFERENCES` line bare while `meta/*_snapshot.json` records the rule — snapshot and database then disagree silently, `generate` reports no changes forever, and the live foreign key is `NO ACTION`. It surfaces much later as a parent delete failing `FOREIGN KEY constraint failed` instead of nulling the child. After any generated `ADD … REFERENCES`, check the emitted line carries the rule, and confirm on the database with `pragma_foreign_key_list('<table>')`.
 
 **Reviewed means every statement in the file is named** — safe, or destructive and with the rows it touches said out loud. A file skimmed for the statement you expected is a file not read.
 

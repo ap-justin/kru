@@ -48,12 +48,27 @@ copy_newer() {
   else cp -Rp "$from/." "$to/"; fi
 }
 
-# a store repo nobody seeded still keeps hook state local and merges appends
+# a store repo nobody seeded still keeps hook state local and merges appends.
+# a store seeded with `merge=union` moves to the line merge, since union
+# brings back a line one side deleted whenever the other appended beside it
 seed_defaults() {
   [ -f "$home/.gitignore" ] || printf '%s\n' '# session-lived hook state' 'audit/' 'lead-gate/' 'tmp/' '.DS_Store' > "$home/.gitignore"
   [ -f "$home/.gitattributes" ] || printf '%s\n' \
-    '# append-only files: keep both sides of a concurrent append' \
-    'inbox.md merge=union' 'refusals.jsonl merge=union' 'management/*/TODOS.md merge=union' > "$home/.gitattributes"
+    '# line files: both sides of a concurrent append land, and a deletion holds' \
+    'inbox.md merge=kru-lines' 'refusals.jsonl merge=kru-lines' 'management/*/TODOS.md merge=kru-lines' > "$home/.gitattributes"
+  if grep -q 'merge=union' "$home/.gitattributes"; then
+    sed -e 's/merge=union/merge=kru-lines/' \
+      -e 's/^# append-only files: keep both sides of a concurrent append$/# line files: both sides of a concurrent append land, and a deletion holds/' \
+      "$home/.gitattributes" > "$home/.gitattributes.tmp" && mv "$home/.gitattributes.tmp" "$home/.gitattributes"
+  fi
+}
+
+# the driver lives in .git/config, which no clone carries, so every run sets it
+# to this install's copy. a client without it falls back to a text merge, and
+# its rebase fails soft below
+register_driver() {
+  g config merge.kru-lines.name 'kru line files' &&
+    g config merge.kru-lines.driver "bash '$plugin_root/scripts/kru-merge-lines.sh' %O %A %B"
 }
 
 case "$mode" in
@@ -67,13 +82,17 @@ case "$mode" in
       mv "$tmp/store/.git" "$home/.git" && rm -rf "$tmp"
       g checkout -q -- . 2>/dev/null
     else
+      register_driver
       err=$(g pull -q --rebase --autostash 2>&1) || say "pull failed, using the local copy: $(first_line "$err")"
     fi
+    register_driver
     seed_defaults
     copy_newer "$stored" "$memory" || say "agent memory restore failed"
     ;;
   stop)
     [ -d "$home/.git" ] || exit 0
+    register_driver
+    seed_defaults
     copy_newer "$memory" "$stored" || say "agent memory save failed"
     if [ -n "$(g status --porcelain 2>/dev/null)" ]; then
       sid=$(printf '%s' "$input" | sed -n 's/.*"session_id" *: *"\([^"]*\)".*/\1/p' | cut -c1-8)

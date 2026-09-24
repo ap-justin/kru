@@ -63,8 +63,9 @@ seat knows it exists:
 
 A store that arrives without them gets a `.gitignore` for the session-lived dirs (`audit/`,
 `lead-gate/`, `tmp/`) and a `.gitattributes` marking `inbox.md`, `refusals.jsonl` and each
-`TODOS.md` `merge=union`, so two sessions appending lines both land. Every failure prints one
-line and the session continues; `KRU_NO_STORE_SYNC=1` turns it off.
+`TODOS.md` `merge=kru-lines` — a line merge (`scripts/kru-merge-lines.sh`) the hook registers in
+the checkout on every run, so two sessions appending lines both land and a line one side deleted
+(a sweep's drain, a todo's closeout) stays deleted. Every failure prints one line and the session continues; `KRU_NO_STORE_SYNC=1` turns it off.
 
 Keep the repo **private**, for the same reason as the artifact store below: anything that can push
 to it can append inbox lines, and `/roster learn` is the gate between those and a seat prompt.
