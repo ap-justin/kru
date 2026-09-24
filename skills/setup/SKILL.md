@@ -170,6 +170,53 @@ Two things decide whether those last rules ever fire:
 - **A cloud session reads none of this.** User settings stay on the machine, so on that surface the
   same grants go in the repo's own `.claude/settings.json` — and the project half needs none of
   them, because the resolver puts it inside the clone, where the working-dir grant already reaches.
+  With a store repo set (below), the project half lives under the home on the vm too, so the grants
+  cover it there.
+
+**The store repo, when the user works on the web.** A cloud vm's home dies with the session, so
+preferences, plans and the seats' repo memory only survive it through `KRU_STORE_REPO` — a private
+repo the user owns, which `hooks/store-sync.sh` keeps the home synced to. Check
+`~/.claude/settings.json` → `env`. Unset and the user runs cloud sessions: offer it. On a yes, add
+`"KRU_STORE_REPO": "<owner>/<store-repo>"` to that `env`, and hand the user the two blocks below
+for this repo's claude.ai/code cloud environment, to paste themselves — user settings never reach
+the vm, and the environment is theirs to edit.
+
+Environment variables:
+
+```
+KRU_STORE_REPO=<owner>/<store-repo>
+```
+
+Setup script — write it for this repo, from this base:
+
+```bash
+#!/bin/bash
+# provisions the vm before claude code launches; the result is cached ~7 days.
+# kru's store-sync hook pulls the store fresh at every session start.
+set -uo pipefail
+git clone -q https://github.com/<owner>/<store-repo> ~/.kru || true
+[ -f ~/.kru/setup.sh ] && bash ~/.kru/setup.sh || true
+
+# <repo>: the working dir is undocumented, so find the clone by name
+repo=$(find / -maxdepth 4 -type d -path '*/<repo>/.git' 2>/dev/null | head -n 1)
+[ -n "$repo" ] && cd "${repo%/.git}" || exit 0
+# repo-specific provisioning below, each line ending `|| true`
+```
+
+The store lines are the same in every environment. Below them goes what this repo needs before its
+first run, read off step 1's findings and the repo's own setup doc (`CONTRIBUTING*`, `README*`,
+`DEPLOY*`): a toolchain the vm lacks (`code.claude.com/docs/en/cloud-environments` → *Installed tools*
+lists what it has), `apt-get install` for a system package, the dependency
+install that warms the cache. The script runs as root after the clone, must exit zero and finish in
+about five minutes, and only what it writes to disk survives the snapshot.
+
+Where the repo already has a SessionStart hook, the script warms what that hook installs and leaves
+the rest to it: a hook runs on every start, so an exact-lockfile install, a local database's
+migrations and anything started as a process belong there. A session with several repos runs no
+repo hooks, so an environment shared across repos carries each repo's installs in the script.
+
+`KRU_NO_STORE_SYNC=1` turns the sync off for one session. The mechanics and the merge rules:
+`${CLAUDE_PLUGIN_ROOT}/references/store.md` → *The store repo*.
 
 **The repo's gates, per repo, at project-local scope.** Step 1 derived `test` and `verify`, and each
 of those commands prompts on first use in each repo. They go in `.claude/settings.local.json` — the
