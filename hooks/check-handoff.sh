@@ -102,21 +102,23 @@ CKEEP='\b(preserve|keep|retain|never drop|do not drop|don.t drop)\b[^.]{0,60}\bc
 cctx=$(printf '%s' "$prompt" | grep -oiE "[^.]{0,40}(${CRULE})[^.]{0,40}" | head -1)
 [ -z "$cctx" ] && cctx=$(printf '%s' "$prompt" | grep -oE '[^.]+' |
   # "a comment about the email being kept" names what one comment says — the
-  # verb belongs to its subject, not to the standard.
-  grep -viE '\bcomments? (about|explaining|noting|saying|stating|describing|on|why|that|for)\b' |
+  # verb belongs to its subject, not to the standard. markdown emphasis may
+  # sit between the noun and its preposition.
+  grep -viE '\bcomments?[*_]* (about|explaining|noting|saying|stating|describing|on|why|that|for)\b' |
   grep -oiE "[^.]{0,40}(${CKEEP})[^.]{0,40}" | head -1)
 comments=""
 if [ -n "$cctx" ]; then
   comments=$(printf '%s' "$cctx" | grep -oiE "${CRULE}|${CKEEP}" | head -1)
   # a backtick, a position or a possessive beside the noun points at one comment
   # in one file. the class-wide quantifiers are what the standard itself spends,
-  # so they hold the refusal even where a nearby identifier is backticked.
+  # so they hold the refusal even where a nearby identifier is backticked —
+  # "existing" only on the plural, since "its existing comment" names one.
   if printf '%s' "$cctx" | grep -qiE '`|\b(above|below|beside)\b|\b(its|this|that|each|whose) comments?\b' &&
-    ! printf '%s' "$cctx" | grep -qiE '\b(every|all|existing|any) comments?\b'; then
+    ! printf '%s' "$cctx" | grep -qiE '\b(every|all|any) comments?\b|\bexisting comments\b'; then
     comments=""
   fi
 fi
-[ -n "$comments" ] && reasons="${reasons}paraphrases the comment standard: \"${comments}\" — Block I rides in the seat prompt; cut the sentence (scan 2). "
+[ -n "$comments" ] && reasons="${reasons}paraphrases the comment standard: \"${comments}\" — Block I rides in the seat prompt; cut that clause, keep the rest of the sentence (scan 2). "
 
 # a review seat writes its report where the brief says and returns a pointer —
 # no path and the whole report lands in the lead's context (item 7, gates.md).

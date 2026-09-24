@@ -39,6 +39,7 @@ Reaching to hand-write something — revalidation, a redirect, a streaming bound
 - Be explicit about caching — don't rely on remembered defaults; confirm current `fetch`/segment/`use cache` semantics against `vercel:nextjs` + `vercel:next-cache-components` for the installed version.
 - Keep server-only code server-only (`server-only` pkg, `$`-style env guards); never leak DB clients or secrets into client bundles. Expect a typed query surface from `postgres-architect` for data work — consume it, don't reinvent it.
 - Hand perf/caching/CWV tuning to `vercel-perf-optimizer`; flag anything that needs it.
+- On Next 16 the route prop types (`PageProps`, `LayoutProps`) exist only after `next typegen` writes `.next/types`, so on a clean checkout `tsc --noEmit` fails TS2304. A typecheck gate runs `next typegen && tsc --noEmit`.
 
 ## Mutation feedback — where the outcome lands
 The rules are `ui-patterns` → `reference/forms-and-mutations.md` — when a form validates, where feedback reports, how a cross-screen outcome travels, what a same-screen save does to scroll. Load that group when you write a Server Action. Yours is the Next mechanism behind each:

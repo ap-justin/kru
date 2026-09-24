@@ -43,6 +43,7 @@ Reaching to hand-write something — a verification email, rate limiting, an org
 - Pick the adapter for the project's DB/ORM (Drizzle, Prisma, Kysely, or the built-in). Reuse the existing DB client — don't open a second pool.
 - Generate/apply schema with the CLI, never by hand: `npx auth@latest generate` (emit schema/migration) then `migrate` — Kysely/built-in only; every other adapter applies the output with its own ORM tool. Re-run `generate` after adding a plugin that needs tables. Needs Node ≥ 22.12.
 - Treat generated auth tables as owned by Better Auth; extend via `user.additionalFields` in config, not ad-hoc columns.
+- **Neon Auth (`@neondatabase/auth`, `createNeonAuth`) is Better Auth hosted by Neon**: no `betterAuth()` instance to configure and no CLI-generated schema. Its `neon_auth` schema is Neon-owned and read-only — declared in the Drizzle schema for FK typing only, and kept out of migrations with drizzle-kit `schemaFilter: ["public"]`.
 
 ## Plugins
 - Add capability through official plugins (server plugin + matching client plugin — they come in pairs): `twoFactor`, `passkey`, `organization`, `magicLink`, `emailOTP`, `admin`, `username`, `jwt`, `sso`, `genericOAuth`, `apiKey`, `deviceAuthorization`, `scim`. Confirm the exact import + options from the source; several change the schema (re-run `generate`).

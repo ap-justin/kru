@@ -61,6 +61,10 @@ check refuse $ui "Keep existing comments; update the \`SKIP_STATUSES\` comment i
 check allow $ui "Add a comment about the contact email being kept for receipts."
 check allow $ui "Keep the comment on the fee calc."
 check allow $ui "Leave a comment explaining why the draft is retained."
+# ...even under markdown emphasis, and "existing" on one comment points at it
+check allow $ui "\`Coded\` becomes \`Coding\`. **Keep its existing comment** about the two a catalogue would most plausibly grow back."
+# a preservation list names its own slice; only the comments clause is the standard
+check refuse $ui "No hamburger menu; keep h-16, scrolled/unscrolled color logic, and existing comments intact." "cut that clause"
 
 # machine budget
 check refuse $ui "Run vitest one file at a time on this machine." "machine budget"

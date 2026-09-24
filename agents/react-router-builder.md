@@ -32,6 +32,7 @@ Reaching to hand-write something — a redirect, pending UI, revalidation after 
 - Data reads in loaders; mutations via `action` + `<Form>` / `useFetcher` with progressive enhancement. No ad-hoc fetch-in-effect for server data.
 - A route module's `headers` export runs for document requests only. A resource route (a loader returning a `Response`, no default component) never calls it, so `cache-control` and the rest go on that `Response` itself.
 - Nested routing + `<Outlet>`; keep route config the way the repo declares it (`routes.ts` / file-based).
+- Every `flatRoutes()` call sets `ignoredRouteFiles` to cover test files (`**/*.test.{ts,tsx}`). A flat test file beside route files registers as a route, its top-level `vi.mock()` runs at server boot, and every production request 500s while typecheck and tests stay green.
 - Keep server-only code server-only; don't leak DB/secrets into client bundles. A type imported from a `.server` module and named in a component reads as a value import to a static import sweep — shared vocabulary (closed sets, unions, ids) lives in a client-safe module both sides import. Expect a typed query surface from `postgres-architect` for data work.
 
 ## Mutation feedback — where the outcome lands

@@ -45,6 +45,13 @@ Reaching to hand-write something — a `crons` entry, a WAF rule, a `vercel.json
 - **Match the framework's expectations** — Cron/functions/runtime config differs by framework and Vercel platform version; confirm the current `vercel.json` schema + function config from the source, not memory.
 - **Force a reported symptom before you explain it.** A vendor health-check warning, a doctor command's complaint, a CI flake: reproduce it, read the timeline, name the seconds. Half the cause is usually ours, and both shortcuts cost the same — "a known platform quirk" ships our bug, and "could not reproduce" ships it twice. What goes in the return is the measurement; the verdict follows from it.
 - **Provisioning is stateful** — Marketplace/storage resources touch the real account; report exactly what you created/changed and confirm before destructive changes.
+- **A green typecheck + test gate doesn't prove the server boots.** A promotion gate requests `/` on the preview deployment and fails on a 5xx before anything is promoted.
+- **`sharp` on Vercel**: libvips is `dlopen`'d, so output tracing never ships `libvips-cpp.so`. Force it per route with `outputFileTracingIncludes`; under pnpm that include resolves through symlinked `@img/` dirs the packager rejects, so the workspace sets `nodeLinker: hoisted`.
+
+## Production outage
+- **Roll back to the newest deployment whose runtime status breakdown is clean** — status codes grouped per `deploymentId` — since that one carries every fix the last good deploy shipped.
+- **Runtime-logs MCP on a busy window**: full-text `query` and parallel aggregate calls time out. `group_by: route` scoped to one `deploymentId`, calls run one at a time, is what returns.
+- **An outage isn't closed until its missed side effects are named.** The return carries the outage window (UTC start/end) and the sweep it implies: undelivered payment webhooks (`stripe events list --live --delivery-success=false`, each other rail's delivery log), scheduled jobs whose window fell inside it (backfill the idempotent ones), and money-shaped records touched on redelivery — the rail seats own acting on each.
 
 ## TypeScript (shared skill)
 For any config-adjacent TypeScript (typed env, middleware types, a cryptic type error) — load the **`typescript`** skill and solve it in-context. Don't answer type-system specifics from memory.

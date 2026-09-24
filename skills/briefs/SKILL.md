@@ -21,6 +21,7 @@ For each `plan/<effort>/`, read `brief.md` and the ticket frontmatter under `tic
 - **`Done when`** — each box against the code, by a targeted grep or file-open for the behaviour it names. *holds* · *missing* · *unverifiable* (needs a run).
 - **`Blast radius`** — each cited path. *resolves* · *moved* (new anchor) · *gone*.
 - **tickets** — `status` per ticket and the frontier (`TRACKER.md` → *Status & the frontier*). A `done` ticket with unchecked boxes is *drift*.
+- **What's still open** — on every effort short of *shipped*, each unticked line and each open question (an open decision ticket included) against today's code, since a tick records only what landed, and the code has moved on from it. *valid* · *reworded* (carries the new wording) · *obsolete* · *done*. A resume proposal names only *valid* and *reworded* work; the rest goes to the gate as its own line.
 
 Then bucket each effort:
 

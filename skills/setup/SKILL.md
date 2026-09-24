@@ -188,7 +188,7 @@ else, each under its dialog field's name:
 1. **Environment variables** — `KRU_STORE_REPO=<owner>/<store-repo>`.
 2. **Network access** — Custom, *include defaults* on, plus one host per line. Check every host the
    setup script downloads from against the default list (`code.claude.com/docs/en/cloud-environments`),
-   since a blocked one fails silently under `|| true`: `get.pnpm.io`, the Playwright CDNs
+   since a blocked one surfaces only as a `SETUP FAIL` line in the setup log: `get.pnpm.io`, the Playwright CDNs
    (`cdn.playwright.dev`, `playwright.download.prss.microsoft.com`) and the image's own PPA
    (`ppa.launchpadcontent.net` — without it `apt-get update` 403s and every chained install is
    skipped) sit outside it. Then the hosts step 1 read off the repo's `.env*` files and SDK calls,
@@ -199,22 +199,31 @@ else, each under its dialog field's name:
 ```bash
 #!/bin/bash
 set -uo pipefail
+exec > >(tee -a /tmp/setup.log) 2>&1
+
+try() {
+  for _ in 1 2 3; do "$@" && return 0; sleep 2; done
+  echo "SETUP FAIL: $*"
+}
 
 # kru store
-git clone -q https://github.com/<owner>/<store-repo> ~/.kru || true
-[ -f ~/.kru/setup.sh ] && bash ~/.kru/setup.sh || true
+try git clone -q https://github.com/<owner>/<store-repo> ~/.kru
+[ -f ~/.kru/setup.sh ] && try bash ~/.kru/setup.sh
 
 # plugins
-claude plugin marketplace add <owner>/kru || true
-claude plugin install kru@kru --scope user || true
+try claude plugin marketplace add anthropics/claude-plugins-official
+try claude plugin marketplace add <owner>/kru
+try claude plugin install kru@kru --scope user
 
-# <repo>: vm provisioning, each line ending `|| true`
+# <repo>: vm provisioning, each line under `try`
 
-node --version; pnpm --version
+node --version; pnpm --version; claude plugin list
+exit 0
 ```
 
 Plugins install here because a cloud session gets no account-synced plugins and ignores the repo's
-`enabledPlugins`; add each plugin the user runs locally. Below them goes what the vm lacks before
+`enabledPlugins`; add each plugin the user runs locally. The vm has no official marketplace either,
+so the base adds it ahead of any `@claude-plugins-official` install. Below them goes what the vm lacks before
 this repo's first run, read off step 1's findings and the repo's own setup doc (`CONTRIBUTING*`,
 `README*`, `DEPLOY*`), each pinned to the version the repo pins: node's `engines` major fetched
 from `nodejs.org` when it isn't one the image ships (*Installed tools* on the same docs page);
@@ -222,8 +231,10 @@ pnpm through its native installer with `SHELL=/bin/bash` in its env — the scri
 shell, and without one the installer fails — linked into `/usr/local/bin`, since its `PATH` edit
 lands in a profile the session may never source; `apt-get install` for a system package; browsers
 for a browser-mode suite, pinned to the repo's `playwright` version, whose browser build is tied
-to it. The closing version line is where the user catches a blocked download, in the first session's
-setup log. The script runs as root, must exit zero and finish in about
+to it. `try` retries each step and names the one that still failed as a `SETUP FAIL` line, so a
+blocked download reads in `/tmp/setup.log` and the first session's setup log, beside the closing
+version line and plugin list that show what actually landed. The script runs as root, must exit
+zero — the closing `exit 0`, since one failed step shouldn't fail the environment — and finish in about
 five minutes, and only what it writes to disk survives the snapshot.
 
 Dependencies install from a committed SessionStart hook, because a hook tracks each branch's

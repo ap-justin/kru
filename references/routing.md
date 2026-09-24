@@ -25,7 +25,7 @@ names the seat and its skills has this question answered — take the answer.
 | Fly.io platform-ops: `fly deploy` / `fly.toml`, the `Dockerfile`, Machines + scaling, Volumes, `fly secrets`, regions, private networking, MPG/Tigris provisioning | `fly-platform-engineer` |
 | Postgres / Drizzle / Prisma / postgres.js | `postgres-architect` |
 | embedded SQLite — a local `.db` file the app opens directly (`better-sqlite3` / `node:sqlite` / `bun:sqlite`, Drizzle's `sqlite` dialect) | `sqlite-architect` |
-| auth / login / signup / sessions / social-OAuth / SSO / `better-auth` — the **server + session** half | `better-auth-specialist` |
+| auth / login / signup / sessions / social-OAuth / SSO / `better-auth` · `@neondatabase/auth` — the **server + session** half | `better-auth-specialist` |
 | payments / checkout / subscriptions / paywall or plan-gating / refunds / Stripe webhooks / Connect / `stripe` — the **server + money** half | `stripe-specialist` |
 | PayPal or Venmo checkout / PayPal subscriptions + billing plans / order capture / refunds / PayPal webhooks / `@paypal/paypal-js` / `@paypal/paypal-server-sdk` — the **server + money** half | `paypal-specialist` |
 | DAF gifts / Chariot DAFpay / `<chariot-connect>` / `react-chariot-connect` / `@chariot-giving/typescript-sdk` / Chariot grants / Chariot webhooks + event subscriptions — the **server + grant** half | `chariot-specialist` |
