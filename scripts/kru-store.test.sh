@@ -40,7 +40,7 @@ run() {
       *) $seen_env && envs+=("$a") || args+=("$a") ;;
     esac
   done
-  out=$(cd "$dir" && env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_STORE_REPO \
+  out=$(cd "$dir" && env -u KRU_HOME -u KRU_PROJECT -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_STORE_REPO \
     -u CLAUDE_CODE_REMOTE -u CLAUDE_PROJECT_DIR \
     HOME="$home" ${envs[@]+"${envs[@]}"} bash "$store" "${args[@]}" 2>&1)
   code=$?
@@ -97,6 +97,12 @@ fi
 
 run "$sandbox" slug
 is "no repo falls back to the cwd's name" "$(basename "$sandbox")"
+
+run "$repo" slug KRU_PROJECT=acme-oss
+is "KRU_PROJECT outranks the dir name" "acme-oss"
+
+run "$repo" project CLAUDE_CODE_REMOTE=true KRU_STORE_REPO=acme/kru-store KRU_PROJECT=acme-oss
+is "KRU_PROJECT names the plan dir under a store repo" "$home/.kru/management/acme-oss"
 
 # --- backend ----------------------------------------------------------------
 run "$repo" backend

@@ -39,6 +39,11 @@ has already moved.
 
 **`<project-slug>` is the repo's dir name**, and a linked worktree resolves to the **main** repo — a
 slice dispatched into a worktree writes to the same store as the session that dispatched it.
+**`KRU_PROJECT` overrides the slug.** A clone's dir name differs by machine — a cloud vm names it
+after the github repo — so set it in the repo's committed `.claude/settings.json`
+(`"env": {"KRU_PROJECT": "<name>"}`) and every surface lands in the same `management/<name>`.
+`KRU_PROJECT_STORE` pins a whole path instead, but an environment variable set on a cloud
+environment reaches every repo opened in it.
 
 **The cloud row amends `TRACKER.md`'s own argument for keeping the plan out of the working repo,
 and that file records the trade-off.**

@@ -33,8 +33,11 @@ kru_repo_root() {
 }
 
 # one name identifies a project across both stores — the inbox line /remember
-# stamps and the plan dir the planner writes carry the same slug.
-kru_slug() { printf '%s' "$(basename "$(kru_repo_root)")"; }
+# stamps and the plan dir the planner writes carry the same slug. the dir name
+# differs by machine — a cloud vm names the clone after the github repo — so
+# KRU_PROJECT pins it; set in the repo's committed .claude/settings.json `env`,
+# it reaches every surface.
+kru_slug() { printf '%s' "${KRU_PROJECT:-$(basename "$(kru_repo_root)")}"; }
 
 kru_is_cloud() { [ "${CLAUDE_CODE_REMOTE:-}" = "true" ]; }
 

@@ -115,7 +115,9 @@ prints where yours is when it isn't here.
   ledgers self-delete after 7 days.
 - `${TMPDIR}/kru-review/`: review reports, so an audit trail stays out of the conversation.
 
-Three env vars move it: **`KRU_HOME`** relocates everything (default `~/.kru`),
+Four env vars move it: **`KRU_HOME`** relocates everything (default `~/.kru`),
+**`KRU_PROJECT`** names the project's store folder in place of the repo's folder name (set it in
+the repo's `.claude/settings.json` `env` so a laptop clone and a cloud clone agree),
 **`KRU_PROJECT_STORE`** pins one project's plan store, and **`KRU_STORE_URL`** points the
 preference half at a published artifact's database instead of files, so `/kru:remember` reaches
 your other machines and your cloud sessions. `references/store.md` is the whole map.
