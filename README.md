@@ -38,8 +38,8 @@ Two things about a cloud session worth knowing before the first run:
   dir survives the vm. Commit it, or it dies with the machine, and `KRU_HOME` puts it somewhere
   else. To keep it off the branch, set `KRU_STORE_REPO=<owner>/<repo>` (a private repo you own)
   in the cloud environment's variables and in your laptop's `settings.json` `env`: the whole
-  store — preferences, plans, the seats' repo memory — is cloned at session start and pushed at
-  every turn end, on both. `references/store.md` → *The store repo*.
+  store (preferences, plans, the seats' repo memory) is cloned at session start and pushed at
+  every turn end, on web and laptop alike. `references/store.md` → *The store repo*.
 - **The seats' official sources are off the default network allowlist.** Under `Trusted`, a seat
   can't reach `vitest.dev`, `zod.dev`, `orm.drizzle.team` or the rest of `SOURCES.md`, and answers
   from training data instead, which is the one thing this team exists to prevent. Wiring **context7

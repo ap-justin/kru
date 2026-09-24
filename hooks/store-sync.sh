@@ -60,15 +60,15 @@ seed_defaults() {
 case "$mode" in
   start)
     if [ ! -d "$home/.git" ]; then
-      tmp=$(mktemp -d) || say "clone failed — no temp dir"
-      err=$(git clone -q "$url" "$tmp/store" 2>&1) || { rm -rf "$tmp"; say "clone of $KRU_STORE_REPO failed — $(first_line "$err")"; }
+      tmp=$(mktemp -d) || say "clone failed: no temp dir"
+      err=$(git clone -q "$url" "$tmp/store" 2>&1) || { rm -rf "$tmp"; say "clone of $KRU_STORE_REPO failed: $(first_line "$err")"; }
       mkdir -p "$home"
       # a home that already holds files — hook state from this session — keeps
       # them; the checkout only fills in what the remote tracks
       mv "$tmp/store/.git" "$home/.git" && rm -rf "$tmp"
       g checkout -q -- . 2>/dev/null
     else
-      err=$(g pull -q --rebase --autostash 2>&1) || say "pull failed, working from the local copy — $(first_line "$err")"
+      err=$(g pull -q --rebase --autostash 2>&1) || say "pull failed, using the local copy: $(first_line "$err")"
     fi
     seed_defaults
     copy_newer "$stored" "$memory" || say "agent memory restore failed"
@@ -79,10 +79,10 @@ case "$mode" in
     [ -z "$(g status --porcelain 2>/dev/null)" ] && exit 0
     sid=$(printf '%s' "$input" | sed -n 's/.*"session_id" *: *"\([^"]*\)".*/\1/p' | cut -c1-8)
     g add -A >/dev/null 2>&1
-    err=$(g commit -q -m "store: $(kru_slug) ${sid:-session}" 2>&1) || say "commit failed — $(first_line "$err")"
+    err=$(g commit -q -m "store: $(kru_slug) ${sid:-session}" 2>&1) || say "commit failed: $(first_line "$err")"
     if ! g push -q 2>/dev/null; then
-      err=$(g pull -q --rebase 2>&1) || { g rebase --abort >/dev/null 2>&1; say "push rejected and rebase failed, kept locally — $(first_line "$err")"; }
-      err=$(g push -q 2>&1) || say "push failed, kept locally — $(first_line "$err")"
+      err=$(g pull -q --rebase 2>&1) || { g rebase --abort >/dev/null 2>&1; say "push rejected and rebase failed, changes kept locally: $(first_line "$err")"; }
+      err=$(g push -q 2>&1) || say "push failed, changes kept locally: $(first_line "$err")"
     fi
     ;;
 esac
