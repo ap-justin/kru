@@ -21,7 +21,7 @@ One 500 is not the app's: a workspace package's new `exports` entry doesn't reac
 
 ## 2. Work from snapshots, not screenshots
 
-`take_snapshot` returns the a11y tree with a `uid` per element, and every interaction tool takes that `uid`. Screenshots are for the human reading the report: capture with `filePath` and `Read` the file when a defect needs to be *seen*.
+`take_snapshot` returns the a11y tree with a `uid` per element, and every interaction tool takes that `uid`. Screenshots are for the human reading the report: capture with `filePath` and `Read` the file when a defect needs to be *seen*. A full-viewport capture taken just after a sheet, dialog or popover opens can paint a stale compositor frame that disagrees with `getBoundingClientRect` and the computed transform; before reporting geometry read off one, re-take it element-scoped (by `uid`) — where the picture and the numbers disagree, the picture is the one that's wrong.
 
 ## 3. Set a breakpoint with `emulate`, and carry every override on every call
 

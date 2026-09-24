@@ -78,12 +78,12 @@ ok=true
 [ "$code" -eq 0 ] && [ -z "$out" ] && [ ! -e "$audit/.jsonl" ] || ok=false
 report "missing session_id writes nothing" "$ok" "exit $code, out: $out"
 
-# prompt capped at 4000 chars, flagged truncated
-long=$(printf '%*s' 4500 '' | tr ' ' x)
+# prompt capped at 32000 chars, flagged truncated
+long=$(printf '%*s' 32500 '' | tr ' ' x)
 dispatch c1 "$plain" "$long"
 ok=true
-tail -1 "$audit/c1.jsonl" 2>/dev/null | jq -e '(.prompt | length) == 4000 and .truncated == true' >/dev/null 2>&1 || ok=false
-report "long prompt truncated to 4000 and flagged" "$ok" "$(tail -1 "$audit/c1.jsonl" 2>/dev/null | cut -c1-200)"
+tail -1 "$audit/c1.jsonl" 2>/dev/null | jq -e '(.prompt | length) == 32000 and .truncated == true' >/dev/null 2>&1 || ok=false
+report "long prompt truncated to 32000 and flagged" "$ok" "$(tail -1 "$audit/c1.jsonl" 2>/dev/null | cut -c1-200)"
 
 # a block o seat is flagged, and a background launch's ack reads no warning
 input=$(jq -nc --arg seat "$blocko" '{session_id:"d1", tool_input:{subagent_type:$seat, prompt:"p"},

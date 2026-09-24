@@ -44,8 +44,10 @@ mkdir -p "$dir" 2>/dev/null || exit 0
 # beside each one; keep the dir bounded
 find "$dir" \( -name '*.jsonl' -o -name '*.jsonl.nudged' \) -mtime +7 -delete 2>/dev/null
 
-# prompt head capped at 4000 chars — enough for a brief's handoff items;
-# `truncated` tells the auditor an absent clause past the cut is not evidence.
+# the prompt is logged whole up to a 32000-char guard: the seven handoff items
+# sit anywhere in a real brief, and a ledger holds one turn's dispatches before
+# the audit deletes it. `truncated` tells the auditor an absent clause past the
+# guard is not evidence.
 # the response is never read here, so the ledger stays a record of the lead's
 # process, not of seat output
 printf '%s' "$input" | jq -c --arg seat "$seat" --arg slug "$cwd_slug" \
@@ -54,8 +56,8 @@ printf '%s' "$input" | jq -c --arg seat "$seat" --arg slug "$cwd_slug" \
   cwd: $slug,
   seat: $seat,
   desc: (.tool_input.description // ""),
-  prompt: ((.tool_input.prompt // "")[0:4000]),
-  truncated: (((.tool_input.prompt // "") | length) > 4000),
+  prompt: ((.tool_input.prompt // "")[0:32000]),
+  truncated: (((.tool_input.prompt // "") | length) > 32000),
   refused: false,
   block_o: $block_o
 }' >> "$dir/$sid.jsonl" 2>/dev/null

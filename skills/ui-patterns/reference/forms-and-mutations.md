@@ -43,6 +43,14 @@ The held state is `aria-disabled` and the handler ignores the press. `disabled` 
 **Shape:** set the flash server-side on the redirect, read and clear it on the next render — a cookie cleared on read, or the framework's session flash. Render the status region on every screen, empty, and write the flash into it — or move focus to the outcome itself.
 **Applies when:** the outcome genuinely lands elsewhere. Same-screen is the previous entry. Errors that block the operation are neither — they belong at the field or control that produced them, where the user can act on them.
 
+## A live region stays rendered while it is empty
+
+**Trigger:** a `role="status"` / `role="alert"` region kept mounted so a later message is announced — a save result, a flash, a count that updates.
+**Pattern:** mounted **and rendered**: the empty region takes no visual room of its own, but nothing hides it.
+**Default it corrects:** `empty:hidden`, `hidden`, or a conditional `display:none` on the region — mounted, so "keep it mounted" reads as satisfied.
+**Why:** a hidden node is out of the accessibility tree, so the first message arrives as a node appearing rather than a region changing, and a screen reader may announce nothing. The comment above such a region usually says "stays mounted", which is how the half-applied rule spreads to the next component.
+**Shape:** `<p role="status">{message}</p>` — the same element empty and full; no class or attribute that hides it when empty.
+
 ## A save that returns to the same screen doesn't move the scroll position
 
 **Trigger:** a mutation that re-renders the current screen — a settings save, an inline edit, a row action on a long list.

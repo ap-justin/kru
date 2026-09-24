@@ -18,6 +18,12 @@ Relations, except *Choosing type*, which is values craft.
 **Default it corrects:** a centred block of four lines, a centred row of feature blurbs where one runs long, justified text with rivers.
 **Rule:** left-align (start-align) by default. Centre only headlines and short standalone blocks, two or three lines at most — where one of a centred set runs long, shorten the copy rather than switch alignment. Numbers compared down a column are right-aligned (`ui-patterns` → `reference/lists-and-rows.md` carries the digits). Justified text always ships with `hyphens: auto`.
 
+## A metadata line holds two parts at most
+
+**Default it corrects:** a chain of facts on one line — `author · date · 4 min · category`, or the same run joined by commas.
+**Rule:** the shape is the failure, not the separator: swapping `·` for commas reads the same. Two parts share a line only where they read as one phrase; every further fact gets its own element, line or pill.
+**Check:** no line on the artboard strings three or more facts together.
+
 ## Line-height tracks size and measure
 
 **Default it corrects:** one `line-height: 1.5` everywhere — loose on a 48px headline, tight on a wide paragraph.

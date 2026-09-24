@@ -34,6 +34,7 @@ Ark ships one package per framework — `@ark-ui/react`, `@ark-ui/vue`, `@ark-ui
 ## Accessibility (non-negotiable)
 - Ark + Zag already provide the correct ARIA roles/attributes, focus management, keyboard interaction, and typeahead for each primitive. **Don't reinvent or override them** — compose all documented parts so the built-in a11y actually fires. A dialog missing its `Backdrop`/`Positioner`/`CloseTrigger` loses focus-trap and escape handling; the config *looks* fine while silently broken.
 - Preserve labelling: wire `Label`/`Description` parts (or `aria-label`) so every control has an accessible name.
+- **`required` on a `Field.Root` around a Combobox blocks submit silently.** The combobox reads it off field context and Zag sets it on the search input, so native constraint validation swallows the submit before a JS resolver runs. Leave `required` off the `Field.Root`, put `aria-required` on the control, and enforce it in the schema.
 - Respect `prefers-reduced-motion` for any open/close animation you add.
 - Never render a raw `<div onClick>` in place of the `Trigger` part or suppress focus return — that defeats the reason to use Ark. If you catch yourself doing it, stop.
 

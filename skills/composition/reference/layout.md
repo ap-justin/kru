@@ -39,3 +39,9 @@
 **Default it corrects:** a heading-to-body ratio carried unchanged from desktop, so the phone headline is enormous; or padding defined relative to font size, so a small button looks zoomed out rather than small.
 **Rule:** sizes scale independently. Display type steps down further than body type does on a narrow frame; a large control gets disproportionately more padding and a small one disproportionately less.
 **Check:** the narrow artboard's display sizes step down further than its body size does.
+
+## A fixed length inside a height-capped container is checked at its shortest height
+
+**Default it corrects:** a floor or band authored against a tall region and spent in a short one — a `min-height` on a flex child in a sheet capped at `80svh`, an edge fade whose depth is a fixed token.
+**Rule:** state each fixed length against what it must not swallow, and say what happens when the room isn't there. A floor on a flex child beats `flex: 1`, so the column overflows its cap and the child paints outside the clip, under whatever follows it: gate the floor behind a `min-height` query, or let the child shrink. A fade sized as a constant can cover the whole first row past the fold in a short scrollport, so the row reads unreachable while one drag away: size it against the row, narrow it where a media query already admits the cap, and buy room back before dropping the fade — it's the only cue that more lies past the edge.
+**Check:** phone landscape and 200% zoom, where the cap is shortest — 200% zoom makes this a reflow failure, not a landscape edge case.

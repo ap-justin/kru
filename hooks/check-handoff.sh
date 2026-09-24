@@ -207,8 +207,8 @@ if [ -n "$reasons" ]; then
     cwd: $slug,
     seat: $seat,
     desc: (.tool_input.description // ""),
-    prompt: ((.tool_input.prompt // "")[0:4000]),
-    truncated: (((.tool_input.prompt // "") | length) > 4000),
+    prompt: ((.tool_input.prompt // "")[0:32000]),
+    truncated: (((.tool_input.prompt // "") | length) > 32000),
     refused: true,
     reasons: $reasons
   }' 2>/dev/null)
