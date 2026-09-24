@@ -11,7 +11,9 @@
 #
 # precedence, both roots: an explicit env var, then the surface's default.
 # KRU_HOME set means the user has chosen a root and it wins everywhere,
-# cloud included.
+# cloud included. KRU_STORE_REPO set means the home is a git checkout that
+# hooks/store-sync.sh clones, pulls and pushes, so it outlives the vm and the
+# plan of record stays in it rather than in the branch.
 #
 # sourcing defines functions and prints nothing.
 
@@ -42,7 +44,7 @@ kru_project() {
   [ -n "${KRU_PROJECT_STORE:-}" ] && { printf '%s' "$KRU_PROJECT_STORE"; return 0; }
   # no user level survives a cloud vm, so the plan rides in the branch instead.
   # committed, not ignored: a .kru/ nobody commits dies with the machine.
-  if [ -z "${KRU_HOME:-}" ] && kru_is_cloud; then
+  if [ -z "${KRU_HOME:-}" ] && [ -z "${KRU_STORE_REPO:-}" ] && kru_is_cloud; then
     printf '%s/.kru' "$(kru_repo_root)"; return 0
   fi
   printf '%s/management/%s' "$(kru_home)" "$(kru_slug)"
@@ -73,6 +75,7 @@ kru_path() {
     notes/*)     printf '%s/notes/%s.md' "$(kru_project)" "${1#notes/}" ;;
     plan)        printf '%s/plan' "$(kru_project)" ;;
     plan/*)      printf '%s/plan/%s' "$(kru_project)" "${1#plan/}" ;;
+    agent-memory) printf '%s/agent-memory' "$(kru_project)" ;;
     *) return 1 ;;
   esac
 }
@@ -84,6 +87,7 @@ kru_where() {
   h=$(kru_home); p=$(kru_project); b=$(kru_backend)
   [ "$h" != "$HOME/.kru" ] && notes="preferences: $h"
   [ "$b" = artifact ] && notes="${notes:+$notes; }preferences: artifact store $KRU_STORE_URL"
+  [ -n "${KRU_STORE_REPO:-}" ] && notes="${notes:+$notes; }synced to $KRU_STORE_REPO"
   case "$p" in
     "$h/management/"*) ;;
     *) notes="${notes:+$notes; }plan store: $p — in the repo, and it ships in the branch" ;;

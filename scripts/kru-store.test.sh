@@ -40,7 +40,7 @@ run() {
       *) $seen_env && envs+=("$a") || args+=("$a") ;;
     esac
   done
-  out=$(cd "$dir" && env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL \
+  out=$(cd "$dir" && env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_STORE_REPO \
     -u CLAUDE_CODE_REMOTE -u CLAUDE_PROJECT_DIR \
     HOME="$home" ${envs[@]+"${envs[@]}"} bash "$store" "${args[@]}" 2>&1)
   code=$?
@@ -73,6 +73,12 @@ is "an explicit KRU_HOME outranks the cloud default" "$sandbox/elsewhere/managem
 
 run "$repo" project CLAUDE_CODE_REMOTE=true KRU_HOME="$sandbox/elsewhere" KRU_PROJECT_STORE="$sandbox/pinned"
 is "KRU_PROJECT_STORE outranks both" "$sandbox/pinned"
+
+run "$repo" project CLAUDE_CODE_REMOTE=true KRU_STORE_REPO=acme/kru-store
+is "a store repo keeps the project half under home on a cloud vm" "$home/.kru/management/acme-web"
+
+run "$repo" project CLAUDE_CODE_REMOTE=true KRU_STORE_REPO=acme/kru-store KRU_PROJECT_STORE="$sandbox/pinned"
+is "KRU_PROJECT_STORE outranks a store repo" "$sandbox/pinned"
 
 # --- slug: one name across both stores --------------------------------------
 run "$repo" slug
@@ -130,6 +136,12 @@ is "the project half follows the cloud root" "$repo/.kru/TODOS.md"
 run "$repo" path inbox CLAUDE_CODE_REMOTE=true
 is "the cross-project half does not" "$home/.kru/inbox.md"
 
+run "$repo" path agent-memory
+is "agent memory is project-scoped" "$home/.kru/management/acme-web/agent-memory"
+
+run "$repo" path agent-memory CLAUDE_CODE_REMOTE=true KRU_STORE_REPO=acme/kru-store
+is "agent memory follows the store repo on a cloud vm" "$home/.kru/management/acme-web/agent-memory"
+
 run "$repo" path nope
 report "an unknown logical name is a usage error" \
   "$([ "$code" = 64 ] && echo true || echo false)" "exit $code: $out"
@@ -146,6 +158,10 @@ report "where names the in-repo plan store" \
 run "$repo" where KRU_STORE_URL=https://claude.ai/code/artifact/abc
 report "where names the artifact backend" \
   "$(contains 'artifact' "$out" && echo true || echo false)" "got [$out]"
+
+run "$repo" where CLAUDE_CODE_REMOTE=true KRU_STORE_REPO=acme/kru-store
+report "where names the store repo, not the branch" \
+  "$(contains 'acme/kru-store' "$out" && ! contains 'ships in the branch' "$out" && echo true || echo false)" "got [$out]"
 
 printf '%s passed, %s failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]
