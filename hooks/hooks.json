@@ -10,6 +10,15 @@
             "timeout": 10
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/store-sync.sh\" start \"${CLAUDE_PLUGIN_ROOT}\"",
+            "timeout": 60
+          }
+        ]
       }
     ],
     "PreToolUse": [
@@ -64,6 +73,15 @@
             "type": "command",
             "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/nudge-audit.sh\" \"${CLAUDE_PLUGIN_ROOT}\"",
             "timeout": 10
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/store-sync.sh\" stop \"${CLAUDE_PLUGIN_ROOT}\"",
+            "timeout": 30
           }
         ]
       }
