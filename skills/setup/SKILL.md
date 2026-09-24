@@ -229,7 +229,13 @@ five minutes, and only what it writes to disk survives the snapshot.
 Dependencies install from a committed SessionStart hook, because a hook tracks each branch's
 lockfile and the snapshot doesn't: `.claude/cloud-install.sh`, gated on `CLAUDE_CODE_REMOTE=true`
 and located by `$CLAUDE_PROJECT_DIR`, registered in the repo's `.claude/settings.json` on
-`startup|resume`. Where the repo already has a SessionStart hook, the install joins it. A session
+`startup|resume`. Where the repo already has a SessionStart hook, the install joins it. The image
+puts its own node and pnpm (`/opt/node22/bin`) ahead of `/usr/local/bin`, where the setup script
+installed the pinned ones, so the hook opens by prepending `/usr/local/bin` to `PATH` and appending
+the same `export` to `$CLAUDE_ENV_FILE`, which carries it into the session's later shells. Without it
+the image's pnpm self-switches to `packageManager`'s version with lifecycle scripts off, and turbo,
+which spawns that placeholder directly, fails with `Exec format error` while `pnpm` in a shell looks
+fine. A session
 with several repos attached — the store counts — runs no repo hooks. `CLAUDE_CODE_ENABLE_TODO_TOOLS` goes in
 that file's `env`. The credentials
 posture is the user's to hold: the env-var field is readable by anyone who shares the environment,

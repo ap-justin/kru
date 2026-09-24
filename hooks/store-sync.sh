@@ -14,9 +14,8 @@ mode=${1:-}
 command -v git >/dev/null 2>&1 || exit 0
 input=$(cat 2>/dev/null)
 
-# the stop that a blocking stop hook re-entered already synced
-case "$input" in *'"stop_hook_active":true'*|*'"stop_hook_active": true'*) exit 0 ;; esac
-
+# a stop re-entered by a blocking stop hook syncs too: the continuation turn
+# can write to the store, and a clean tree with nothing ahead is a no-op
 plugin_root="${2:-$CLAUDE_PLUGIN_ROOT}"
 . "$plugin_root/scripts/kru-store.sh" 2>/dev/null || exit 0
 

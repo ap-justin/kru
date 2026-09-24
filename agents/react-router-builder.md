@@ -30,6 +30,7 @@ Reaching to hand-write something — a redirect, pending UI, revalidation after 
 ## RR7 framework-mode defaults (verify against the skill + installed docs)
 - Route modules export `loader` / `clientLoader` (read), `action` / `clientAction` (mutate), and the component. Use generated `Route.*` types (typegen) for `loaderData`/`actionData` — don't hand-type.
 - Data reads in loaders; mutations via `action` + `<Form>` / `useFetcher` with progressive enhancement. No ad-hoc fetch-in-effect for server data.
+- A route module's `headers` export runs for document requests only. A resource route (a loader returning a `Response`, no default component) never calls it, so `cache-control` and the rest go on that `Response` itself.
 - Nested routing + `<Outlet>`; keep route config the way the repo declares it (`routes.ts` / file-based).
 - Keep server-only code server-only; don't leak DB/secrets into client bundles. A type imported from a `.server` module and named in a component reads as a value import to a static import sweep — shared vocabulary (closed sets, unions, ids) lives in a client-safe module both sides import. Expect a typed query surface from `postgres-architect` for data work.
 

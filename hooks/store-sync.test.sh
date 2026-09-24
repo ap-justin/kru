@@ -34,10 +34,11 @@ report() {
 }
 check() { report "$1" "$( eval "$2" && echo true || echo false)" "${3:-}"; }
 
-# run <home> <mode> [VAR=value...]; sets $out and $code
+# run <home> <mode> [VAR=value...]; sets $out and $code. $stdin overrides the hook input
 run() {
   local home=$1 mode=$2; shift 2
-  out=$(cd "$repo" && printf '{"session_id":"sess-%s"}' "$RANDOM" | env -u KRU_HOME -u KRU_PROJECT_STORE \
+  local in=${stdin:-$(printf '{"session_id":"sess-%s"}' "$RANDOM")}
+  out=$(cd "$repo" && printf '%s' "$in" | env -u KRU_HOME -u KRU_PROJECT_STORE \
     -u KRU_STORE_URL -u KRU_STORE_REPO -u CLAUDE_CODE_REMOTE -u CLAUDE_PROJECT_DIR -u KRU_NO_STORE_SYNC \
     HOME="$home" KRU_STORE_REPO="$remote" "$@" bash "$hook" "$mode" "$root" 2>&1)
   code=$?
@@ -108,6 +109,12 @@ mv "$remote.away" "$remote"
 run "$h1" stop
 check "a commit left by a failed push goes out on the next stop" \
   '[ "$(remote_has management/acme-web/plan/checkout/offline.md)" = offline ]' "[$out]"
+
+# a stop re-entered by a blocking stop hook still pushes what its turn wrote
+printf 'reentered\n' > "$h1/.kru/management/acme-web/plan/checkout/reentered.md"
+stdin='{"session_id":"sess-re","stop_hook_active":true}' run "$h1" stop
+check "a re-entered stop pushes the store" \
+  '[ "$(remote_has management/acme-web/plan/checkout/reentered.md)" = reentered ]' "[$out]"
 
 # --- fail soft --------------------------------------------------------------
 h3="$sandbox/h3"; mkdir -p "$h3"
