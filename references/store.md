@@ -25,7 +25,7 @@ has already moved.
 | Cross-project | Project |
 |---|---|
 | `inbox` · `patterns/<slug>` · `refusals` | `todos` · `issues/<slug>` · `notes/<slug>` |
-| `audit/<session>` · `lead-gate/<session>` | `plan` · `plan/<effort>/<file>` |
+| `audit/<session>` · `lead-gate/<session>` | `plan` · `plan/<effort>/<file>` · `agent-memory` |
 
 ## Where each root lands
 
@@ -33,6 +33,7 @@ has already moved.
 |---|---|---|
 | default | `~/.kru` | `<cross-project root>/management/<project-slug>` |
 | cloud session (`CLAUDE_CODE_REMOTE=true`) | `~/.kru` — session-lived | **`<repo>/.kru`**, and it ships in the branch |
+| `KRU_STORE_REPO` set, any surface | `~/.kru`, a checkout of that repo | under it, as the default row — cloud included |
 | `KRU_HOME` set | that path, on every surface | under it, as the default row |
 | `KRU_PROJECT_STORE` set | — | that path |
 
@@ -41,6 +42,27 @@ slice dispatched into a worktree writes to the same store as the session that di
 
 **The cloud row amends `TRACKER.md`'s own argument for keeping the plan out of the working repo,
 and that file records the trade-off.**
+
+## The store repo
+
+`KRU_STORE_REPO` — `owner/repo` on github, or any url git can clone — makes the cross-project root
+a git checkout that outlives the machine. `hooks/store-sync.sh` does the whole sync, so no skill or
+seat knows it exists:
+
+- **session start** — clone into the home when it has no `.git` (files hooks already wrote there
+  stay), else `pull --rebase --autostash`; then copy `agent-memory` into the working repo's
+  `.claude/agent-memory-local/`, newer file winning.
+- **every turn end** (`Stop`) — copy `.claude/agent-memory-local/` back into `agent-memory`, then,
+  if the checkout is dirty, commit and push, with one `pull --rebase` retry on a reject.
+  A turn end rather than a session end, because a cloud vm is reclaimed without a reliable end event.
+
+A store that arrives without them gets a `.gitignore` for the session-lived dirs (`audit/`,
+`lead-gate/`, `tmp/`) and a `.gitattributes` marking `inbox.md`, `refusals.jsonl` and each
+`TODOS.md` `merge=union`, so two sessions appending lines both land. Every failure prints one
+line and the session continues; `KRU_NO_STORE_SYNC=1` turns it off.
+
+Keep the repo **private**, for the same reason as the artifact store below: anything that can push
+to it can append inbox lines, and `/roster learn` is the gate between those and a seat prompt.
 
 ## The backends
 

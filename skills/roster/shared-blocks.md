@@ -393,6 +393,8 @@ Write to your memory only what the next run in this repo would otherwise pay to 
 
 **No tailored slot** — on Block O's precedent: what belongs in a repo's memory is seat-independent, and any divergence is drift.
 
+**Where it persists is not the seat's concern.** With a store repo set, `hooks/store-sync.sh` copies `.claude/agent-memory-local/` into the store at every turn end and back at session start, so a cloud vm keeps it; the block text stays surface-blind.
+
 **Invariant clauses:**
 - ⚠ `a preference about how the user wants the team to work` + `the inbox line` — the **routing**, and the reason this block exists. Without it a seat banks a preference where the sweep never reads it, and the gated loop in `PREFERENCES.md` is bypassed by a file that edits nothing but steers every later run.
 - `the plan store's` — keeps plan state in one home; two copies of a ticket's status are two answers to the frontier.
