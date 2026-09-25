@@ -20,7 +20,7 @@ names the seat and its skills has this question answered — take the answer.
 | Svelte **component implementation** — pages/sections/interactive UI as props-in/callbacks-out `.svelte` | `svelte-ui-builder` |
 | **Vanilla custom element / shadow DOM** — an embeddable widget for a page the team doesn't control, a design system consumed by more than one stack, or a repo that already defines custom elements | `web-components-builder` |
 | Sanity, `sanity` / `@sanity/*` / `next-sanity` | `sanity-builder` |
-| Cloudflare Workers / Pages / `wrangler` / bindings / D1 / KV / R2 / Durable Objects / Queues / framework-on-Workers adapter | `cloudflare-builder` |
+| Cloudflare Workers / Pages / `wrangler` / bindings / D1 / KV / R2 / Durable Objects / Queues / framework-on-Workers adapter — the runtime and its config; the app logic running on it (settlement, ledger posting) is the framework builder's and each processor adapter is its rail's | `cloudflare-builder` |
 | slow page / CWV / caching / bundle (post-build) | `vercel-perf-optimizer` |
 | Vercel platform-ops: deploy/CI-CD, env/secrets, `vercel.json`, Functions/edge runtime, Cron, domains, Firewall/WAF, AI Gateway, storage provisioning | `vercel-platform-engineer` |
 | Fly.io platform-ops: `fly deploy` / `fly.toml`, the `Dockerfile`, Machines + scaling, Volumes, `fly secrets`, regions, private networking, MPG/Tigris provisioning | `fly-platform-engineer` |

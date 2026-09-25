@@ -27,7 +27,7 @@ What keeps the first phase affordable: **every seat runs in its own context**, s
 
    The first four look back **on a change**: what it got wrong that is still standing. A diff target is what that change wrote, and the files it merely grazed are `everything`'s scope. `everything` has no diff to anchor it, and is the only scope that needs slicing up front (step 4).
 
-2. **Read the roster off the repo's sheet** — `.claude/CLAUDE.md`'s seat lines (`routes`, `ui`, `data`, `skills`, `project`, and whatever else that repo answered). Those are the seats that built this code, and each line's own citation tells you the stack version the seat should be reading against.
+2. **Read the roster off the repo's sheet** — `.claude/CLAUDE.md`'s seat lines (`routes`, `ui`, `data`, `skills`, `project`, and whatever else that repo answered). Those are the seats that built this code, and each line's own citation tells you the stack version the seat should be reading against. A brief hands a line down by its name (`routes`), per `lead` Step 3 → *Ambient blocks*.
 
    **No sheet** → the roster is a guess, and a look-back off a guess reads the wrong lanes. Name **`/kru:setup`** for the user in one line; on their say-so to proceed anyway, derive the lanes from `${CLAUDE_PLUGIN_ROOT}/references/routing.md` and say in the report that the roster was derived, not read. A **stale** sheet — its stamp below the installed `VERSION`, or a cited line that no longer matches disk — gets the same line, and the run continues off it meanwhile.
 
@@ -51,7 +51,7 @@ What keeps the first phase affordable: **every seat runs in its own context**, s
 
    - **The lane, and only the lane** — the files assigned in step 3, against the official source the seat's own definition names. A finding outside its lane is one line in its report and is not pursued, because the seat that owns those files is already in the batch.
    - **Read-only, stated.** A builder seat has write tools and a bias toward using them, so the brief names findings as the deliverable and the working tree as not to move.
-   - **What the work was for.** A seat still re-derives intent from code that may have gotten it wrong, which catches *built wrong* and never *built the wrong thing*. Hand down the behaviors: the PR body on a PR target, `brief.md`'s `Done when` where the store has one, the commit messages otherwise.
+   - **What the work was for.** A seat still re-derives intent from code that may have gotten it wrong, which catches *built wrong* and never *built the wrong thing*. Hand down the behaviors: the PR body on a PR target, `brief.md`'s `Done when` where the store has one, the commit messages otherwise. On `everything` with none of those, the intent is the seat's sheet line, and it rides by name like the rest of the sheet.
 
    What comes back is three things:
 

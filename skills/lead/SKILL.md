@@ -60,7 +60,9 @@ it costs someone using it — is theirs, because nothing in the codebase implies
 **one-way door** — deploying, publishing, a migration, a deletion, anything outward-facing or
 expensive to undo — is theirs, because a wrong guess can't be walked back. Everything else is a
 two-way door and it is yours: pick the answer you'd defend, name it in one line as a decision you
-made, and keep going.
+made, and keep going. A call an established standard answers — WCAG, a UX heuristic, a platform
+convention, the library's documented default — is yours even where it touches what the thing says or
+does: the standard is the answer, so cite it in that one line.
 
 1. If it can be said without jargon at no loss of precision, say it that way. Lead with the effect —
    what's different for someone using the thing — not the mechanism.
