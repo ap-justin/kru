@@ -14,6 +14,7 @@ names the seat and its skills has this question answered — take the answer.
 | Next.js, `next` (App Router) — pages/layouts as fetch+compose, Server Actions, route handlers, caching, middleware (network boundary) | `nextjs-builder` |
 | TanStack Start, `@tanstack/react-start` — file routes, `createServerFn`, server routes, middleware, loaders/`beforeLoad`, SSR/RSC (network boundary); also `@tanstack/react-router` routing in a Start-less SPA | `tanstack-start-builder` |
 | Python — `pyproject.toml` / `.py`: an MCP server (the official `mcp` SDK), a library's public API, a CLI, packaging, or a red `ruff`/`mypy`/`pytest` gate | `python-developer` |
+| A Vite plugin (a package exporting a `Plugin` for someone's `vite.config`) or an MCP server in TypeScript (`@modelcontextprotocol/server` / `@modelcontextprotocol/sdk`) — the hooks, the tool surface, the package that ships it | `extension-builder` |
 | Go, `go.mod` serving a React SPA — `net/http` handlers/middleware, the JSON contract, embed + serve the built app, **and** the SPA's typed client/query hooks/route glue (whole request path) | `go-fullstack-builder` |
 | React **component implementation** — pages/sections/interactive UI as props-in/callbacks-out `.tsx` (RR7, Next, TanStack Start, or Go-served repo) | `react-ui-builder` |
 | Svelte **component implementation** — pages/sections/interactive UI as props-in/callbacks-out `.svelte` | `svelte-ui-builder` |
