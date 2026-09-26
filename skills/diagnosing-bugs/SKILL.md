@@ -4,7 +4,7 @@ description: Diagnosis loop for hard bugs and performance regressions. Use when 
 user-invocable: false
 ---
 
-<!-- vendored from `mattpocock/skills` (v1.2.3, sha 6acc160) → `skills/diagnosing-bugs`. Hard-bug + perf-regression diagnosis loop backing the `vercel-perf-optimizer` seat. Kept verbatim minus the Codex `agents/openai.yaml` metadata (unused here), plus `user-invocable: false` in frontmatter; re-sync: re-download from https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/diagnosing-bugs/. -->
+<!-- vendored from `mattpocock/skills` (v1.2.3, sha 6acc160) → `skills/diagnosing-bugs`. Hard-bug + perf-regression diagnosis loop backing the `vercel-perf-optimizer` seat. Kept verbatim minus the Codex `agents/openai.yaml` metadata (unused here), plus `user-invocable: false` in frontmatter and the *Two fixes failed — attack the premise* subsection closing Phase 5 (adapted from `cursor/plugins` `pstack/skills/principle-attack-the-premise`), both re-applied after any re-sync; re-sync: re-download from https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/diagnosing-bugs/. -->
 
 # Diagnosing Bugs
 
@@ -129,6 +129,10 @@ If a correct seam exists:
 3. Apply the fix.
 4. Watch it pass.
 5. Re-run the Phase 1 feedback loop against the original (un-minimised) scenario.
+
+### Two fixes failed — attack the premise
+
+When two fixes that share one premise have both left the loop red, suspect the premise, not the fixes. Before a third fix: write down the one sentence every failed fix assumed, then test that sentence directly with a rerunnable script — for a skew (one worker, tenant or row taking the load), count it per actor across runs. If the same few actors hold it every run, find what assigns them that role and remove the assignment rather than compensating for it. If the script shows the premise holds, return to Phase 3 with the script kept as evidence.
 
 ## Phase 6 — Cleanup + post-mortem
 
