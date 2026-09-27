@@ -132,6 +132,7 @@ your other machines and your cloud sessions. `references/store.md` is the whole 
 **Coding sessions**
 - `/kru:brainstorm <idea>`: grill an idea like `/kru:brief`, nothing saved; say go and it becomes the brief.
 - `/kru:brief <subject>`: grill a change and keep the record before building.
+- `/kru:copy-deck` `[<page>]`: write a marketing page's argument and copy before it's designed or built.
 - `/kru:todo <the thing>`, `/kru:issue <what's wrong>`: park a want or a defect without breaking the session.
 - `/kru:remember <what you liked>`: bank a preference for the team to absorb later.
 - `/kru:landed`: after the PR merges, sync back onto the base branch.
@@ -150,10 +151,12 @@ your other machines and your cloud sessions. `references/store.md` is the whole 
 - **Framework**: React Router 7, Next.js App Router, TanStack Start, SvelteKit, Go-served React, Python.
 - **Data**: Postgres, SQLite, Sanity.
 - **Auth, payments and accounting**: Better Auth, Stripe, PayPal, Chariot (DAF grants), NOWPayments (crypto), QuickBooks Online.
+- **Integrations**: Zapier.
 - **Platform**: Vercel, Cloudflare, Fly.io.
 - **Tooling**: pnpm, Turborepo, Biome.
+- **Packages**: Vite plugins, MCP servers, small Node libraries.
 
-Design runs upstream of every build (flows, the canvas, assets) and review after it (correctness, structure, rendered UI, accessibility, UX). The seats behind each layer, and how to spawn one directly: `ROSTER.md`.
+Design runs upstream of every build (flows, the canvas, brand identity, marketing copy, assets) and review after it (correctness, structure, rendered UI, accessibility, UX). The seats behind each layer, and how to spawn one directly: `ROSTER.md`.
 
 A stack with no seat is a question the lead brings to you before it guesses.
 
