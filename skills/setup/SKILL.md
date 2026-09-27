@@ -27,7 +27,7 @@ it is a bigger hammer than the pruning needs.
 | *(none)* | this repo, both jobs — every step below |
 | a repo path | both jobs, there |
 | `prose` | the pass alone — every step below not marked *full run*. Read the surface, run the bars over every line already in it, propose the cuts. |
-| *(a blank repo)* | no manifest, lockfile or source to derive from — step 1b, then 1c–1d and steps 4–6 |
+| *(a blank repo)* | no manifest, lockfile or source to derive from — step 1b, then 1c–1e and steps 4–6 |
 
 ## Do
 
@@ -90,7 +90,7 @@ Nothing on disk answers step 1, so the user does, and the sheet is written from 
 3. **Finalize the stack** — the user accepts, swaps or strikes per lane. Completion: every lane the
    subject needs has a named library, or is struck.
 
-Then **deploy the team**: 1c–1d and steps 4–6 as on a full run, each line citing the decision it came from
+Then **deploy the team**: 1c–1e and steps 4–6 as on a full run, each line citing the decision it came from
 (shape in `sheet.md`). The scaffold that follows is `lead`'s (its Step 2); the first re-run after it
 lands swaps each decision citation for the manifest that now carries it.
 
@@ -279,6 +279,16 @@ per-machine and kept out of version control, and the repo's `.gitignore` is what
 Completion: every grant traces to evidence the derivation already produced, the memory path is
 ignored, and the user has seen each one (step 5).
 
+### 1e. Encode what the seats would otherwise be told — *full run*
+**`${CLAUDE_PLUGIN_ROOT}/references/lint-rules.md`** is the catalog of seat rules a check can hold. Take the rows whose stack
+step 1 found, diff each against the repo's own config (`biome.json` rules and `plugins`, the
+`tsconfig`, `pyproject.toml`'s `[tool.ruff]`/`[tool.mypy]`, `.golangci.yml`, `svelte.config.js`),
+and carry the unwired rows into step 5 as their own group. What the user accepts is a slice for each
+row's owner, named there, and setup's part ends at the proposal.
+
+Completion: every catalog row for this stack is wired, accepted as a slice for its owner, or declined
+by the user.
+
 ### 2. Read what the repo already says
 Open the repo's `CLAUDE.md`, `.claude/CLAUDE.md`, `.claude/rules/*`, `AGENTS.md`, and any nested
 member `CLAUDE.md`. That is the whole always-loaded surface, and reading it in one pass is the vantage
@@ -387,7 +397,7 @@ installed `VERSION`.
 `.claude/CLAUDE.md` is checked in and read by everyone who clones the repo — teammates without this
 plugin included, and the hand that wrote whatever you are proposing to cut. Show one reviewable diff:
 the pass's edits grouped by what each one is (step 3's table), and on a full run the section going
-in. Write on the user's OK, per item — they accept, keep, or reword each.
+in and the unwired lint rows (step 1e). Write on the user's OK, per item — they accept, keep, or reword each.
 
 Completion: the user has seen every line going in and every line coming out, and the file holds what
 they approved.
