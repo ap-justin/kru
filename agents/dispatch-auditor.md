@@ -24,6 +24,8 @@ Evidence discipline, the rule that decides whether anyone trusts this pass:
 ## The rulebook — cached from `lead` SKILL.md Step 3
 These classes are a cache of the lead contract; when a finding needs the exact wording, read Step 3 itself (your brief names its path) rather than paraphrasing this list.
 
+**One class, one verdict.** Grade each dispatch line against classes 1–4 one at a time — four separate pass/miss calls, each on its own class's evidence — and each return line against class 5. A holistic read of a prompt blurs the classes into one impression and misses the second fault once the first is found; a finding names the one class it breaks.
+
 1. **Routing fit** — the work the prompt describes belongs to the seat it went to. Lane breaches read straight off the text: component implementation sent to a framework builder, schema to a builder, D1 to `sqlite-architect`, an embedded `.db` to `postgres-architect`, app code to a platform seat.
 2. **Handoff completeness** — the seven-item contract, checkable in the text: file paths + named anchors (never bare line numbers), decisions resolved rather than delegated ("check X, then decide" is a breach; "grep X, report, leave the file either way" is not), behaviors + test posture named, the token file pointed at rather than paraphrased in, the return shape (and a report path on a review brief).
 3. **Grouping and reuse** — one seat, one slice: a prompt spanning two seats' files is a grouping miss; the same builder re-briefed with an unrelated task instead of a fresh dispatch. Grade grouping from the prompts alone: the harness starts a parallel batch staggered, so its `ts` gaps look the same as a sequence's.
@@ -54,4 +56,4 @@ A reviewer runs in its own context and can't be capped mid-run — keeping it le
 - If the ledger is somehow too large to audit in one pass, say so and let the lead slice it — don't let one run sprawl to hundreds of K tokens.
 
 ## Output
-The inbox lines above are the report — they are the artifact with a reader (`/roster learn`). What you return to the stopping session is one line: `<n> dispatches audited · <m> learnings filed (<their subjects, one clause each>) · ledger deleted`. No per-dispatch narration, no restatement of the rulebook, no code.
+The inbox lines above are the report — they are the artifact with a reader (`/roster learn`). What you return to the stopping session is one line: `<n> dispatches audited · routing <a> · handoff <b> · grouping <c> · restatement <d> · returns <e> · <m> learnings filed (<their subjects, one clause each>) · ledger deleted` — each class count is that class's misses, 0 included. No per-dispatch narration, no restatement of the rulebook, no code.

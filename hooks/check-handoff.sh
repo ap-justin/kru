@@ -9,6 +9,9 @@
 # on the way out (see the refusal branch). the learnings channel
 # is the one item it supplies rather than refuses over (see the tail). fail open on anything that isn't a clear hit — a gate that misfires
 # costs more than one it lets through.
+# a new scan lands in shadow: its hits go to the refusal log marked shadow and
+# the dispatch goes through, until /roster learn reads them clean across repos
+# and moves the scan into reasons.
 command -v jq >/dev/null 2>&1 || exit 0
 [ -n "$KRU_NO_GATE" ] && exit 0
 plugin_root="${1:-$CLAUDE_PLUGIN_ROOT}"
@@ -196,14 +199,41 @@ if [ "$seat" = "planner" ] && ! printf '%s' "$prompt" | grep -q 'brief\.md'; the
   reasons="${reasons}planner brief names no brief.md: run /kru:brief first and point the seat at the written file (step 2.6). "
 fi
 
-if [ -n "$reasons" ]; then
-  # a refused dispatch never reaches the posttooluse ledger writer, so this
-  # branch writes the catch twice: to the session ledger, where dispatch-auditor
-  # sees a scan the lead keeps walking past, and to a cross-session log
-  # /roster learn sweeps for misfires. log-dispatch.sh's record plus session and
-  # reasons; a logging miss still refuses.
-  sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
-  record=$(printf '%s' "$input" | jq -c --arg seat "$seat" --arg reasons "$reasons" --arg sid "$sid" --arg slug "$cwd_slug" '{
+# shadow scans — logged, never refused.
+shadow=""
+# scan 3's imperative half: a choice handed to the builder names its object
+# (decide whether, pick which). "decide" also sits in briefs that settled the
+# call, so this one proves its hit rate in shadow first. one bounded span.
+decide=$(printf '%s' "$prompt" | grep -oiE '(decide|determine|establish|pick) (whether|which|what|how|if|between)[^.]{0,40}' | head -1)
+[ -n "$decide" ] && shadow="${shadow}open decision: \"${decide}\" — resolve it, or name what each answer resolves to (item 3, scan 3). "
+
+# the cross-session log /roster learn sweeps for misfires, reading each quoted
+# span against the sentence around it — so the log stores those windows, and
+# the prompt head, most of its bytes, stays in the session ledger where
+# dispatch-auditor grades the brief's own text.
+log_refusal() { # record, reasons text
+  local spans rrecord rlog
+  spans=$(printf '%s' "$2" | grep -oE '"[^"]{4,120}"' | sed 's/^"//;s/"$//' |
+    while IFS= read -r q; do
+      [ -z "$q" ] && continue
+      printf '%s' "$prompt" | awk -v q="$q" '{ i = index($0, q); if (i) { s = i - 160; if (s < 1) s = 1
+        print substr($0, s, length(q) + 280) } }'
+    done | awk '!seen[$0]++' | head -5)
+  rrecord=$(printf '%s' "$1" |
+    jq -c --arg spans "$spans" 'del(.prompt, .truncated) + { spans: ($spans | split("\n") | map(select(length > 0))) }' 2>/dev/null)
+  # the sweep drains what it reads; the cap bounds a log nobody sweeps
+  rlog="$(kru_path refusals)"
+  mkdir -p "$(dirname "$rlog")" 2>/dev/null
+  printf '%s\n' "${rrecord:-$1}" >> "$rlog" 2>/dev/null
+  if [ "$(wc -l < "$rlog" 2>/dev/null | tr -d ' ')" -gt 500 ] 2>/dev/null; then
+    tail -n 500 "$rlog" > "$rlog.tmp" 2>/dev/null && mv "$rlog.tmp" "$rlog" 2>/dev/null
+  fi
+}
+
+sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
+# refused: true | false, reasons text
+make_record() {
+  printf '%s' "$input" | jq -c --arg seat "$seat" --arg reasons "$2" --arg sid "$sid" --arg slug "$cwd_slug" --argjson refused "$1" '{
     ts: (now | todate),
     session: $sid,
     cwd: $slug,
@@ -211,33 +241,30 @@ if [ -n "$reasons" ]; then
     desc: (.tool_input.description // ""),
     prompt: ((.tool_input.prompt // "")[0:32000]),
     truncated: (((.tool_input.prompt // "") | length) > 32000),
-    refused: true,
+    refused: $refused,
     reasons: $reasons
-  }' 2>/dev/null)
+  } + (if $refused then {} else { shadow: true } end)' 2>/dev/null
+}
+
+if [ -n "$reasons" ]; then
+  # a refused dispatch never reaches the posttooluse ledger writer, so this
+  # branch writes the catch twice: to the session ledger, where dispatch-auditor
+  # sees a scan the lead keeps walking past, and to a cross-session log
+  # /roster learn sweeps for misfires. log-dispatch.sh's record plus session and
+  # reasons; a logging miss still refuses.
+  record=$(make_record true "$reasons")
   adir=$(kru_path audit)
   if [ -n "$record" ] && mkdir -p "$adir" 2>/dev/null; then
     [ -n "$sid" ] && printf '%s\n' "$record" >> "$adir/$sid.jsonl" 2>/dev/null
-    # /roster learn reads each quoted span against the sentence around it, so
-    # the cross-session log stores those windows and the prompt head — most of
-    # its bytes — stays in the session ledger above, where dispatch-auditor
-    # grades the brief's own text.
-    spans=$(printf '%s' "$reasons" | grep -oE '"[^"]{4,120}"' | sed 's/^"//;s/"$//' |
-      while IFS= read -r q; do
-        [ -z "$q" ] && continue
-        printf '%s' "$prompt" | awk -v q="$q" '{ i = index($0, q); if (i) { s = i - 160; if (s < 1) s = 1
-          print substr($0, s, length(q) + 280) } }'
-      done | awk '!seen[$0]++' | head -5)
-    rrecord=$(printf '%s' "$record" |
-      jq -c --arg spans "$spans" 'del(.prompt, .truncated) + { spans: ($spans | split("\n") | map(select(length > 0))) }' 2>/dev/null)
-    # the sweep drains what it reads; the cap bounds a log nobody sweeps
-    rlog="$(kru_path refusals)"
-    printf '%s\n' "${rrecord:-$record}" >> "$rlog" 2>/dev/null
-    if [ "$(wc -l < "$rlog" 2>/dev/null | tr -d ' ')" -gt 500 ] 2>/dev/null; then
-      tail -n 500 "$rlog" > "$rlog.tmp" 2>/dev/null && mv "$rlog.tmp" "$rlog" 2>/dev/null
-    fi
+    log_refusal "$record" "$reasons"
   fi
   printf 'kru handoff gate refused the dispatch to %s — %sFix the brief and dispatch again.\n' "$seat" "$reasons" >&2
   exit 2
+fi
+
+if [ -n "$shadow" ]; then
+  record=$(make_record false "$shadow")
+  [ -n "$record" ] && log_refusal "$record" "$shadow"
 fi
 
 # nothing to refuse. updatedInput replaces the whole tool_input, so it is built

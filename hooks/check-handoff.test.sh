@@ -82,6 +82,22 @@ check allow $ui "Edit the SignupForm component in src/Form.tsx."
 check supply kru:code-reviewer "Review the signup diff." "kru-review"
 check allow kru:code-reviewer "Review the signup diff. report: /tmp/kru-review/p/code-reviewer-signup.md"
 
+# shadow scans log to the refusal log and let the dispatch through
+shadow_lines() { find "$sandbox/home" -name refusals.jsonl -exec grep -c '"shadow":true' {} + 2>/dev/null | awk -F: '{ n += $NF } END { print n + 0 }'; }
+before=$(shadow_lines)
+check allow $ui "Build the form. Decide whether the field is required."
+after=$(shadow_lines)
+if [ "$after" -eq $((before + 1)) ]; then pass=$((pass + 1)); else
+  fail=$((fail + 1)); printf 'FAIL (shadow): expected one shadow line, got %s -> %s\n' "$before" "$after"; fi
+# a real refusal carries its own reasons, not the shadow text, and logs no shadow line
+check refuse $ui "Edit src/Form.tsx:42. Decide whether the field is required." "coordinates"
+out=$(find "$sandbox/home" -name refusals.jsonl -exec tail -n 1 {} \; 2>/dev/null)
+if printf '%s' "$out" | grep -q '"refused":true' && ! printf '%s' "$out" | grep -q 'open decision' && [ "$(shadow_lines)" -eq "$after" ]; then
+  pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (shadow+refuse): %s\n' "$out"; fi
+# a clean brief writes nothing
+check allow $ui "Build the form. The field is required."
+[ "$(shadow_lines)" -eq "$after" ] && pass=$((pass + 1)) || { fail=$((fail + 1)); printf 'FAIL (clean): shadow line written\n'; }
+
 # the gate stays out of unknown seats
 check allow general-purpose "Preserve existing comments in the file."
 
