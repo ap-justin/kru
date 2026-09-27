@@ -7,7 +7,7 @@ argument-hint: "[n | substring]"
 
 Take the parking lot to the user as a decision, not a listing. The artifact is `TODOS.md` at the plan store root; `${CLAUDE_PLUGIN_ROOT}/TRACKER.md` → *`TODOS.md`* holds its lifecycle. This is the one verb where a filed want meets the codebase: `TODOS.md` only ever grows otherwise — `issues/` is emptied by the fix that closes a file, and a want has no other exit.
 
-**The gate is the verb.** Steps 1–3 compute a proposal — nothing touches the file until the user has answered §4. The order is arithmetic, the batch is a proposal, *what gets built* is the user's call. Building off the ranking alone is the autonomous triage the parking lot exists to prevent, which is why this skill is user-invoked.
+**The gate is the verb.** Steps 1–3 compute a proposal; the only writes before §4 are bookkeeping, and bookkeeping is the team's — a line §1 verified done is deleted, and `effort` is sized and revised on the team's own read. The order is arithmetic, the batch is a proposal, *what gets built* and *what a want is worth* are the user's call. Building off the ranking alone is the autonomous triage the parking lot exists to prevent, which is why this skill is user-invoked.
 
 **Not a smaller `brief`.** `brief` takes one subject and grills it to exhaustion. `todos` takes several unrelated lines, none of which earns a brief, and lands them. A line that needs the grill leaves here for there (§5).
 
@@ -35,7 +35,7 @@ Mark age on every line captured 90+ days ago (`· 119d`). Age is a fact off the 
 - **`~n`** — a past session's proposal. Re-read it against what §1 just looked at; keep or revise, still `~`.
 - **legacy** (`effort:` holding a slug, a `?`, or no numbers) — size it now from the §1 read, filed `~n`.
 
-Every `~` is confirmed or corrected by the user at §4 and drops its tilde then. The digits are the user's the moment they answer; they never become bare on your own read.
+`effort` is the team's estimate: sized and revised here, written `~n`, and never put to the user — a bare one is a number they volunteered, and stays. A `~` **value** in the batch is put to the user at §4 and drops its tilde when they confirm or correct it; it never becomes bare on your own read.
 
 ## 3. Rank and propose the batch
 
@@ -45,40 +45,33 @@ Every `~` is confirmed or corrected by the user at §4 and drops its tilde then.
 
 ## 4. Gate — show it, then wait
 
-One message, then stop:
+First the bookkeeping, without asking: delete every line §1 verified done, and write every `effort` §2 sized or revised. Then one message, and stop:
 
 ```
-reconcile
-  done      3. <headline> — src/x.ts:42 already does this           → delete?
-  archived  7. <headline> — plan: checkout gone                      (stays)
-scores
-  5. <headline> — value: ~4 · effort: ~1   (was legacy)
-  9. <headline> — value: ~3 → ~2 · effort: ~2                          (rescored)
-batch
-  5. <headline> — value: ~4 · effort: ~1 — <one sentence: what you'd do>
-  2. <headline> — value: 5 · effort: 2  — <one sentence>
-rest: 6 open, ranked: 1 (5/3) · 8 (4/3 · 119d) · …
-not read: 84 legacy lines, oldest first — next run works the next 15, or name one
+Ready to build — pick by number, strike any, or correct how much one matters:
+  5. <the want, in plain words: what someone using it gets> — matters: 4 of 5?
+  2. <the want, in plain words> — matters: 5 of 5
+Plus 3 already done and cleared, 6 more parked, 84 not looked at yet.
 ```
 
-Every done line, every `~` score, and the batch go back **numbered by capture position**. The user strikes, adds, confirms and corrects digits. **Nothing is written before they answer.** No answer → the file is exactly as you found it; say so and return to whatever was in flight.
+Only the batch gets a line — **numbered by capture position**, each written as what someone using the product would get, with its `value` in words to confirm when it wears a `~` (a bare one is the user's already). Everything else — cleared done lines, the rest of the ranking, archived-plan and aged lines, the unread count — is one counted clause. No `file:line`, no effort, no scoring notation. **Nothing past the bookkeeping is written before they answer.** No answer → say so in one line and return to whatever was in flight.
 
 ## 5. Land what they picked
 
 On the user's answer, in this order:
 
-1. **Apply the file edits they confirmed**: delete confirmed-done lines; write confirmed digits bare, corrected digits bare, still-unconfirmed ones `~`.
+1. **Apply what they answered**: write a confirmed or corrected `value` bare; an unconfirmed one stays `~`.
 2. **Each accepted batch line** → one of three outcomes, named individually:
    - **built** — `lead` Step 3 routing, Step 4 review, **one commit per line** so a bad one reverts alone; the line is **deleted** at Step 4.5, in the same reconciliation as the commit.
    - **already done** — turned out moot on contact. Delete the line, build nothing.
-   - **bigger than its `effort`** — leaves the batch. Rescore in place, then leave it parked or hand it to `/kru:brief`. Say which; never half-build it to justify the pull.
-3. **Report**: what landed against which commits, what was deleted as done, what was rescored and to what, and the file's entry count before and after. Lines the batch never reached are exactly as filed, plus whatever digit the user confirmed.
+   - **bigger than its `effort`** — leaves the batch. Rescore in place, then leave it parked or hand it to `/kru:brief`. Say which, in plain words ("bigger than it looked — parked" / "needs a plan first"); never half-build it to justify the pull.
+3. **Report**: what's now different for someone using the product, one line per built want, in plain words — then one counted clause for the rest ("plus 1 already done, 1 parked as bigger than it looked"). Commits, rescores and entry counts stay in the file and the log, and surface when asked. Lines the batch never reached are exactly as filed, plus the bookkeeping and whatever value the user confirmed.
 
-**Completion criterion: every accepted line has a named outcome, and every file edit the user confirmed is in the file.** A line that quietly stays without an outcome is a want the user now believes was handled.
+**Completion criterion: every accepted line has a named outcome, and every edit the user answered is in the file.** A line that quietly stays without an outcome is a want the user now believes was handled.
 
 ## Guardrails
 
-- **No write before §4.** Reconcile and score are proposals until the user answers; the file survives an interrupted run untouched.
-- **Delete only what the user confirmed or what a landed commit satisfies.** Stale is old, not done; a duplicate is two lines until the user says which one goes.
+- **No write before §4 but the bookkeeping.** Verified-done deletes and `effort` sizes are the team's; everything the user decides waits for their answer, so an interrupted run leaves only verified edits behind.
+- **Delete only what §1 verified done or what a landed commit satisfies.** Stale is old, not done; a duplicate is two lines until the user says which one goes.
 - **A `discovered` line enters the batch only when the user names it** (`$ARGUMENTS`) — a want is the user's to pull; the team's own captures wait at the gate for that.
 - **Defects live in `issues/`** — `/kru:issues` works those the same way.

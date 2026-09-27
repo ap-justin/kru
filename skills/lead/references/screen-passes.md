@@ -22,6 +22,7 @@ Three things bound the batch:
 
 - **Cost** — `visual-reviewer` drives a browser for minutes; run it on a slice that renders, not on every commit, and hand it the target pages **and the states you want reached** rather than "the app."
 - **A report path, named per seat** — the brief hands each one the `report:` destination from `SKILL.md` Step 4; the transcripts, path maps and screenshots land there, and the return stays a capped fix list plus a pointer. A "Report" heading only earns its keep once the path under it is written.
+- **The return is the record, not the message** — `accessibility-review`'s issue, keyboard and screen-reader tables stay in the report; the user hears who is blocked from what ("keyboard users can't reach Save"), the rest counted in one clause. The same goes for the file:line tables the animation passes below produce.
 - **Run the suite first on a token-shaped defect** — a literal hex or an off-scale value is already a failing test, and finding it in a browser costs a hundred times more.
 
 ## The user's passes

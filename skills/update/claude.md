@@ -42,5 +42,5 @@ Claude Code ships most weekdays, and a release can change the ground under a plu
    - a **built-in's behavior** — check what the team's own text claims about it, and correct the claim.
 6. **Give every kept entry one verdict** (`SKILL.md` → *The verdicts*). The action verdict here is **Adopt** — the change is small, reversible, and the team's existing doctrine already argues for it. Say which line moves.
 7. **Check the floor.** An adopted feature that needs a newer CLI moves README → *Requirements* → the **≥ version** line. Name the version and the feature that forced it.
-8. **Record and report.** Rewrite `reviewed.md` → *Claude Code*: the mark to the newest version read, and one line per verdict under its bucket. Then report the buckets to the user and stop — they choose what gets wired, and `/roster hire|author|learn` wires it.
+8. **Record and report.** Rewrite `reviewed.md` → *Claude Code*: the mark to the newest version read, and one line per verdict under its bucket. Then wire every **Adopt** through `/roster hire|author|learn` in the same turn, one at a time, without asking. The user hears only the **Consider** items, each in outcome terms, plus one counted clause for the rest ("plus 3 adopted, 12 declined").
 

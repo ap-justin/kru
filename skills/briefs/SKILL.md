@@ -9,7 +9,7 @@ Take the efforts to the user as a decision. The artifact is `plan/` at the plan 
 
 Two halves of a brief, two owners. The **bookkeeping** — `Landing plan` ticks, `Done when` ticks, `Blast radius` paths, ticket `status` — is this skill's to reconcile. The **account** — `Change`, `Why now`, `Decisions resolved`, `Non-goals` — is read here and re-decided through `/kru:brief <effort>`.
 
-**The gate is the verb.** §1 computes a proposal; §2 shows it; §3 writes only what the user answered.
+**The gate is the verb.** §1 computes a proposal; §2 applies the bookkeeping without asking and shows the rest; §3 writes only what the user answered — resume, archive, re-grill.
 
 ## 1. Reconcile — every effort against git
 
@@ -41,36 +41,30 @@ Then bucket each effort:
 
 Print by bucket — in flight → drifted → stale → brief only → shipped — most recently edited first within each. That order is the whole ordering: efforts are never ranked against each other (`TRACKER.md` → *Four lifetimes*), so each line proposes what its bookkeeping says, and the choice among them stays the user's.
 
-One message, then stop:
+First the bookkeeping, without asking — it's the team's: flip every box whose §1 result backs it (*landed* or *holds* to checked, *absent* or *missing* to unchecked; *unverifiable* stays as filed), set ticket `status` to match, re-anchor *moved* paths. Only those lines change, and a *drifted* effort then reads as whichever bucket its corrected ticks put it in. Then one message, and stop:
 
 ```
-in flight
-  onboarding — next: `seed demo workspace` (PR 1, commit 3 of 5)        → resume?
-  search     — frontier: Index sync, Facet UI                            → resume?
-drifted
-  checkout   · PR 1 ticked, gh shows it unmerged                         → untick?
-             · `add refund route` landed (a1b2c3d), unticked              → tick?
-stale
-  legacy-auth · 112d — src/auth/session.ts gone; rebuilt on better-auth  → re-grill or archive?
-brief only
-  dark-mode  · 41d — nothing landed                                      (stays)
-shipped
-  pricing    — 4/4 commits, 3/3 done-when, PR #88 merged                 → archive?
-not read: 3 efforts — next run works them, or name one
+In progress
+  1. Onboarding — next: a new workspace opens with demo content          → pick it up?
+  2. Search — next: results stay current as the catalog changes          → pick it up?
+Needs a decision
+  3. Sign-in (112 days old) — since built another way                    → re-plan or drop?
+Done
+  4. Pricing — everything planned is live                                → close it out?
+Plus 1 planned but not started, 3 not looked at yet.
 ```
 
-The user confirms or strikes each proposal and names at most one effort to resume — execution is sequential. The store stays exactly as found until they answer; no answer → say so and return to whatever was in flight.
+Each line names the effort and what's next or what happened, in what someone using the product would notice — no PR or commit numbers, SHAs, paths, tick counts or bucket names. Only resume, archive and re-grill are asked; *brief only* efforts and the unread count are one counted clause. The user picks by number and names at most one effort to resume — execution is sequential. No answer → say so in one line and return to whatever was in flight.
 
 ## 3. Apply what they picked
 
 In this order:
 
-1. **Bookkeeping** — flip each confirmed box whose §1 result backs it (*landed* or *holds* to checked, *absent* or *missing* to unchecked; *unverifiable* stays as filed), set confirmed ticket `status`, re-anchor confirmed *moved* paths. Only those lines change.
-2. **Archives** — move each confirmed `plan/<effort>/` to `archive/<effort>-<date>/` with the `README.md` `TRACKER.md` → *Naming* requires.
-3. **Outcomes** — each effort the user touched gets one:
+1. **Archives** — move each confirmed `plan/<effort>/` to `archive/<effort>-<date>/` with the `README.md` `TRACKER.md` → *Naming* requires.
+2. **Outcomes** — each effort the user touched gets one:
    - **resumed** — its next landing-plan step or frontier ticket goes to `lead` as the task.
    - **re-grill** — name `/kru:brief <effort>` for the user to type.
    - **left** — as filed.
-4. **Report** — boxes flipped per effort, dirs archived and where, the effort resumed and its step, efforts named for re-grill, `plan/` dir count before and after.
+3. **Report** — which efforts are done and closed out, which one is resumed and what it's building next, and which need a decision from the user (with the command to type for a re-grill), in product terms. Flipped boxes, archive paths and dir counts stay in the store and surface when asked.
 
-**Done when every confirmed edit is on disk and every effort the user touched has a named outcome.**
+**Done when the bookkeeping and every confirmed edit are on disk and every effort the user touched has a named outcome.**

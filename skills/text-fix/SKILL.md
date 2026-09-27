@@ -35,7 +35,7 @@ Four classes of text, four standards, and a real target almost always carries mo
 
    One conflict has a winner: `doc-fix` and `prose-fix` ban `—` binary because a human reads that text, and an agent doc is not that text. **The file's class decides**, so a `—` in `README.md` goes and the same character in `CLAUDE.md` stays.
 
-6. **Report, one section per pass that ran**, each grouped as its own standard specifies, every line with `file:line`. Then the passes that were skipped, and the sprawl calls from step 4. Then the union diff check from the top of this file, in a line: what moved, and that it was text only.
+6. **Report, one section per pass that ran**, each a counted summary with its notable changes, as its own standard specifies; the per-edit lists with `file:line` on request. Then the passes that were skipped, and the sprawl calls from step 4. Then the union diff check from the top of this file, in a line: what moved, and that it was text only.
 
 ## Don't
 

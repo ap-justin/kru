@@ -38,7 +38,7 @@ Comments are the deliverable and the only thing that moves. The house standard, 
 5. **Restore what the change dropped.** The other half of the standard: moving or refactoring code preserves its comments. Read the target's deletions — a comment that vanished while its code moved goes back at the code's new home. A comment left heading code inserted between it and its line is orphaned the same way — move it back down to its line. A comment deleted *with* the code it described is correctly gone.
 6. **Lowercase the prose that's left** — inline explanatory comments only, with step 4's keeps exempt. Edit only what the language's own comment syntax opens: a `//` inside a string, a template literal, or JSX text is not a comment.
 7. **Delete the whole construct, not the text inside it.** A JSX comment is `{/* … */}` — dropping the inner half leaves a stray `{}` in the tree. Same for Svelte/HTML `<!-- … -->` and a block comment's closing line.
-8. **Report.** One line per edit, grouped *cut* · *restored* · *reworded*, each with `file:line`; then the **reshape** candidates from step 4, one line each naming the symbol and the change. Then the diff check from the top of this file, in a line: what moved, and that it was comments only.
+8. **Report.** A count per group — *cut* · *restored* · *reworded* — and a line for each edit that changes what a reader learns; the per-edit list with `file:line` on request; then the **reshape** candidates from step 4, one line each naming the symbol and the change. Then the diff check from the top of this file, in a line: what moved, and that it was comments only.
 
 ## Don't
 

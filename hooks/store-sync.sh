@@ -24,10 +24,20 @@ home=$(kru_home)
 memory="$(kru_repo_root)/.claude/agent-memory-local"
 stored=$(kru_path agent-memory)
 
+# $1 is the user's line: what still holds, then one plain action. $2, the raw
+# git error, is for the model — sessionstart carries it as additionalContext;
+# stop has no model-only field short of blocking, so there it goes to stderr
 say() {
-  local msg="kru store: $1"
-  if command -v jq >/dev/null 2>&1; then jq -nc --arg m "$msg" '{systemMessage: $m}'
+  local msg="kru store: $1" raw=${2:-}
+  if command -v jq >/dev/null 2>&1; then
+    if [ "$mode" = start ] && [ -n "$raw" ]; then
+      jq -nc --arg m "$msg" --arg r "kru store sync error: $raw" \
+        '{systemMessage: $m, hookSpecificOutput: {hookEventName: "SessionStart", additionalContext: $r}}'
+      exit 0
+    fi
+    jq -nc --arg m "$msg" '{systemMessage: $m}'
   else printf '%s\n' "$msg"; fi
+  [ -n "$raw" ] && printf 'kru store: %s\n' "$raw" >&2
   exit 0
 }
 
@@ -74,8 +84,8 @@ register_driver() {
 case "$mode" in
   start)
     if [ ! -d "$home/.git" ]; then
-      tmp=$(mktemp -d) || say "clone failed: no temp dir"
-      err=$(git clone -q "$url" "$tmp/store" 2>&1) || { rm -rf "$tmp"; say "clone of $KRU_STORE_REPO failed: $(first_line "$err")"; }
+      tmp=$(mktemp -d) || say "not loaded; sync failed. Free some disk space and restart the session"
+      err=$(git clone -q "$url" "$tmp/store" 2>&1) || { rm -rf "$tmp"; say "not loaded; sync failed. Check that $KRU_STORE_REPO exists and you're signed in to GitHub (gh auth status)" "$(first_line "$err")"; }
       mkdir -p "$home"
       # a home that already holds files — hook state from this session — keeps
       # them; the checkout only fills in what the remote tracks
@@ -83,28 +93,28 @@ case "$mode" in
       g checkout -q -- . 2>/dev/null
     else
       register_driver
-      err=$(g pull -q --rebase --autostash 2>&1) || say "pull failed, using the local copy: $(first_line "$err")"
+      err=$(g pull -q --rebase --autostash 2>&1) || say "using the local copy; sync failed. Check your network or GitHub sign-in (gh auth status)" "$(first_line "$err")"
     fi
     register_driver
     seed_defaults
-    copy_newer "$stored" "$memory" || say "agent memory restore failed"
+    copy_newer "$stored" "$memory" || say "the team's notes for this repo weren't restored. Check free disk space"
     ;;
   stop)
     [ -d "$home/.git" ] || exit 0
     register_driver
     seed_defaults
-    copy_newer "$memory" "$stored" || say "agent memory save failed"
+    copy_newer "$memory" "$stored" || say "the team's notes for this repo weren't saved. Check free disk space"
     if [ -n "$(g status --porcelain 2>/dev/null)" ]; then
       sid=$(printf '%s' "$input" | sed -n 's/.*"session_id" *: *"\([^"]*\)".*/\1/p' | cut -c1-8)
       g add -A >/dev/null 2>&1
-      err=$(g commit -q -m "store: $(kru_slug) ${sid:-session}" 2>&1) || say "commit failed: $(first_line "$err")"
+      err=$(g commit -q -m "store: $(kru_slug) ${sid:-session}" 2>&1) || say "saved locally; sync failed. Run git -C $home status to see what's blocking it" "$(first_line "$err")"
     fi
     # a push that failed on an earlier turn left commits ahead of the remote
     ahead=$(g rev-list --count '@{u}..HEAD' 2>/dev/null)
     [ "${ahead:-0}" = 0 ] && exit 0
     if ! g push -q 2>/dev/null; then
-      err=$(g pull -q --rebase 2>&1) || { g rebase --abort >/dev/null 2>&1; say "push rejected and rebase failed, changes kept locally: $(first_line "$err")"; }
-      err=$(g push -q 2>&1) || say "push failed, changes kept locally: $(first_line "$err")"
+      err=$(g pull -q --rebase 2>&1) || { g rebase --abort >/dev/null 2>&1; say "saved locally; sync failed. Another machine's changes conflict: run git -C $home pull --rebase to merge them" "$(first_line "$err")"; }
+      err=$(g push -q 2>&1) || say "saved locally; sync failed. Check your network or GitHub sign-in (gh auth status)" "$(first_line "$err")"
     fi
     ;;
 esac

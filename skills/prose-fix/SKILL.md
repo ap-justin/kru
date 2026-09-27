@@ -41,7 +41,7 @@ The rendered string is the deliverable and the only thing that moves. The house 
 
 5. **Carry the edit to its shadow.** A test that pins the old string by literal (`getByText`, `toHaveTextContent`, a snapshot) gets the same edit — it's the same string, and the diff shows both halves.
 
-6. **Report.** One line per edit, grouped *cut* · *reworded* · *carried*, each with `file:line`; then the controls step 3 surfaced, each with its `file:line`. Then the diff check from the top of this file, in a line: what moved, and that it was rendered strings only.
+6. **Report.** A count per group — *cut* · *reworded* · *carried* — and a line for each string a user would notice changed; the per-edit list with `file:line` on request; then the controls step 3 surfaced, each with its `file:line`. Then the diff check from the top of this file, in a line: what moved, and that it was rendered strings only.
 
 ## Don't
 

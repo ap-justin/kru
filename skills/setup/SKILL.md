@@ -86,9 +86,13 @@ Nothing on disk answers step 1, so the user does, and the sheet is written from 
    (`${CLAUDE_PLUGIN_ROOT}/references/routing.md`) and the from-scratch defaults
    (`${CLAUDE_PLUGIN_ROOT}/references/ui-practice.md`: `pnpm`, React where a design system will be
    built), with the reason each fits *this* subject. A lane the subject needs and no seat covers is
-   named as exactly that — the gate line's case, put to the user now.
-3. **Finalize the stack** — the user accepts, swaps or strikes per lane. Completion: every lane the
-   subject needs has a named library, or is struck.
+   named as exactly that — the gate line's case, put to the user now. Put each lane to the user in
+   outcome terms — what the choice means for cost, where it can be hosted, what the product can do —
+   with the library in parentheses. A pick with no effect they could feel (a form library, a test
+   runner, a formatter) is the team's: state it as a decision, not a question.
+3. **Finalize the stack** — the user accepts, swaps or strikes each lane put to them; the stack is
+   costly to undo, so it stays their call. Completion: every lane the subject needs has a named
+   library, or is struck.
 
 Then **deploy the team**: 1c–1e and steps 4–6 as on a full run, each line citing the decision it came from
 (shape in `sheet.md`). The scaffold that follows is `lead`'s (its Step 2); the first re-run after it
@@ -277,17 +281,16 @@ per-machine and kept out of version control, and the repo's `.gitignore` is what
 .claude/agent-memory-local/x` answers that), so the first `git add -A` after a build leaves it behind.
 
 Completion: every grant traces to evidence the derivation already produced, the memory path is
-ignored, and the user has seen each one (step 5).
+ignored, and the report names what the team may now do unasked (step 6).
 
 ### 1e. Encode what the seats would otherwise be told — *full run*
 **`${CLAUDE_PLUGIN_ROOT}/references/lint-rules.md`** is the catalog of seat rules a check can hold. Take the rows whose stack
 step 1 found, diff each against the repo's own config (`biome.json` rules and `plugins`, the
 `tsconfig`, `pyproject.toml`'s `[tool.ruff]`/`[tool.mypy]`, `.golangci.yml`, `svelte.config.js`),
-and carry the unwired rows into step 5 as their own group. What the user accepts is a slice for each
-row's owner, named there, and setup's part ends at the proposal.
+and file each unwired row as a slice for its owner — a lint rule is the team's call, not the
+user's, and setup's part ends at the filing. The report counts them in one clause.
 
-Completion: every catalog row for this stack is wired, accepted as a slice for its owner, or declined
-by the user.
+Completion: every catalog row for this stack is wired or filed as a slice for its owner.
 
 ### 2. Read what the repo already says
 Open the repo's `CLAUDE.md`, `.claude/CLAUDE.md`, `.claude/rules/*`, `AGENTS.md`, and any nested
@@ -393,22 +396,25 @@ rather than a fork.
 Completion: the section reads as though the file's own author wrote it, and the stamp carries the
 installed `VERSION`.
 
-### 5. Confirm, then write
+### 5. Write, asking only before a cut of theirs
 `.claude/CLAUDE.md` is checked in and read by everyone who clones the repo — teammates without this
-plugin included, and the hand that wrote whatever you are proposing to cut. Show one reviewable diff:
-the pass's edits grouped by what each one is (step 3's table), and on a full run the section going
-in and the unwired lint rows (step 1e). Write on the user's OK, per item — they accept, keep, or reword each.
+plugin included, and the hand that wrote whatever you are proposing to cut. The sheet's lines and the
+pass's edits that cut a copy another file answers are the team's: write them. Ask first only before
+cutting a rule the user (or a teammate) authored whose only copy is here — one question, in their
+words, with what dropping it would cost. Everything the answer can't touch is written already.
 
-Completion: the user has seen every line going in and every line coming out, and the file holds what
-they approved.
+Completion: the file holds the pass and the sheet, and no rule the user authored left it without
+their yes.
 
 ### 6. Report
-What the pass reclaimed — and on a full run, the seats this repo runs, anything the derivation
-turned up that the repo had never written down, and each inbox line filed upstream. One paragraph, in
-the user's vocabulary.
+A short paragraph, in the user's vocabulary: what the team now knows about this project and what it
+will do differently for it — the seats this repo runs, anything the derivation turned up that the
+repo had never written down, what the team may now do without asking (step 1d) in one line. The pass's edits, filed lint slices and inbox lines ride as one counted
+clause ("plus 6 cleanups to the project notes"); the diff is there if asked.
 
-Completion: every line that went in is accounted for in what you said, and every line that came out
-is named with the file that answers it.
+Completion: before you send it, check yourself — every line that went in traces to a derivation, and
+every line that came out to the file that answers it. That accounting is your check, not the report's
+content.
 
 ## Re-run — the full update path
 The file is a function of *(plugin version × repo state)*, so re-deriving from scratch settles both

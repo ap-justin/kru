@@ -32,6 +32,6 @@ Load the **`sanity:seo-aeo-best-practices`** skill for the current checklist (ge
 - Net-new OG art → `graphic-designer`.
 
 ## Output
-- Gaps by layer with affected routes + the specific fix (not "improve this").
+- Lead with the visibility impact in a few lines — what searchers and AI answers see or miss today, and what the fixes would change. The gaps by layer with affected routes + the specific fix (not "improve this") follow on request.
 - When fixes are applied (user OK'd): files touched, and show the check — validated JSON-LD, the rendered `<head>`, or the generated sitemap/robots. Don't claim a fix you didn't verify renders.
 - End with what's outstanding and whose lane it's in (content / perf / builder).

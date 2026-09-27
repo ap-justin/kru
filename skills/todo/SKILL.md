@@ -21,13 +21,13 @@ This is the one judgment the skill makes, and the line is **cost, not usefulness
 
 ## Score it in two numbers — yours wear a `~`
 
-Every line carries **`value:`** and **`effort:`**, `1`–`5`. They exist for one reason: `/kru:todos` ranks the file by them — high value, low effort first — so a parking lot that only grows stays readable. They are **estimates the user overwrites**, and they bind nobody. **A number you supplied is written `~n`; a number the user gave is a bare digit.** The tilde is what keeps your read from being mistaken for theirs — it ranks, it prints, and it drops the moment the user confirms or corrects it.
+Every line carries **`value:`** and **`effort:`**, `1`–`5`. They exist for one reason: `/kru:todos` ranks the file by them — high value, low effort first — so a parking lot that only grows stays readable. They are **estimates the user overwrites**, and they bind nobody. **A number you supplied is written `~n`; a number the user gave is a bare digit.** The tilde is what keeps your read from being mistaken for theirs — it ranks, and on `value` it drops the moment the user confirms or corrects it. `effort` is the team's estimate: never put to the user, and bare only when they volunteered it.
 
 Same cost rule as expansion — score from what you already hold, never from a fetch:
 
 - **The user named it** — "quick one", "big job", "this matters", an explicit `value 4 effort 1` → theirs wins over your read, always.
 - **The session already knows** — you just read the file and it's a one-line change in `src/x.ts`; you just hit the thing this would fix for the third time → estimate, written `~n`.
-- **Neither** → estimate from the line's own words and the anchors below, written `~n`. A cold `value: ~3 · effort: ~2` is a proposal the confirmation hands back for correction; opening a file to sharpen it *is* the task the user just declined.
+- **Neither** → estimate from the line's own words and the anchors below, written `~n`. A cold `value: ~3 · effort: ~2` is a proposal — the confirmation hands back the value for correction; opening a file to sharpen it *is* the task the user just declined.
 
 | n | `value` — payoff if it lands | `effort` — work to land it |
 | --- | --- | --- |
@@ -57,7 +57,7 @@ Same cost rule as expansion — score from what you already hold, never from a f
 
    `pitched` always — this is the user's channel (`discovered` is for what the team turns up mid-task, the lead's Step 4.5 sweep). `plan` is the effort slug it surfaced in, and takes a slug only when the user names one or the store has exactly one `plan/<effort>/`; otherwise `—`. Never guess an effort to make the line look complete. Cite `file:line` for anything you name — the store sits outside the repo, so an unanchored reference is unfollowable.
 3. **Stay short.** The headline stays one line no matter how much you know; the sub-bullets cap at two. If it's genuinely paragraphs of half-formed thinking the user wants kept whole, write `notes/<slug>.md` instead and say which you did — a note is input, never authority.
-4. **Confirm in one line** — echo the headline **with both numbers**, and its path, and say whether you expanded it or logged it as-is. The numbers ride the confirmation so a wrong one is cheap to fix: a `~` number is a proposal awaiting their read — if the user confirms or corrects either, rewrite that line in place with the bare digit and stop. Then return to whatever was in flight. The next `/kru:brief` run reads it back; until then it's a reminder, explicitly **not** a commitment. Pass through whatever `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" where` prints, which is usually nothing.
+4. **Confirm in one line** — echo the headline and how much it matters, in words ("logged: <headline> — matters 3 of 5"). No path, no effort, no notation. The value rides the confirmation so a wrong one is cheap to fix: a `~` value is a proposal awaiting their read — if the user confirms or corrects it, rewrite that line in place with the bare digit and stop. Then return to whatever was in flight. The next `/kru:brief` run reads it back; until then it's a reminder, explicitly **not** a commitment. Pass through whatever `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" where` prints, which is usually nothing.
 
 ## Don't
 
