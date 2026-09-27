@@ -1,4 +1,8 @@
-# kru
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="brand/kru-header-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="brand/kru-header-light.svg">
+  <img alt="kru" src="brand/kru-header-light.svg">
+</picture>
 
 *(said “crew”)*
 
