@@ -3,7 +3,7 @@
 Read-only. Assert every point of the wiring map (`SKILL.md`) agrees across files, then report a table: **check → OK / DRIFT → fix**. Report only; hand fixes to `hire`/`retire`, or apply on the user's say-so.
 
 ## Assertions
-1. **Count** — `ls agents/*.md | wc -l` equals the "N specialist subagents" number in **both** `plugin.json` and `marketplace.json` descriptions.
+1. **Count** — `ls agents/*.md | wc -l` equals the "from N specialists" number in `plugin.json`, both `marketplace.json` descriptions and the `README.md` intro.
 2. **Version** — `VERSION` equals `plugin.json` `version` equals the `ROSTER.md` `# Roster — vX.Y.Z` header.
 3. **Full registration** — every `agents/*.md` has (a) a `ROSTER.md` *Current specialists* row, (b) a *Model tiers* entry, (c) a `${CLAUDE_PLUGIN_ROOT}/references/routing.md` routing row **or** *Step 4* review wiring **or** a `ROSTER.md` row marked **user-invoked** (user-triggered — via a thin invoker skill or direct spawn; absent from `lead` by design) **or** a `ROSTER.md` row marked **hook-invoked** (fired by the plugin's `hooks/hooks.json`; absent from `lead` by design — assert its named hook scripts exist under `hooks/`), and (d) a `SOURCES.md` row **or** an explicit stack-agnostic note.
 4. **No orphans** — every `ROSTER.md` specialists row and every `lead` routing row names a real `agents/*.md` file.

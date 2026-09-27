@@ -18,6 +18,7 @@ const mark = inner('kru-mark.svg');
 const tile = inner('kru-tile.svg');
 const word = inner('kru-wordmark.svg');
 const tagline = inner('kru-tagline.svg');
+const subline = inner('kru-subline.svg');
 
 // mark in fixed colours: -light sits on light ground, -dark on dark ground
 write('kru-mark-light.svg', `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">${paint(mark, INK)}</svg>`);
@@ -36,7 +37,7 @@ const header = (c) =>
 write('kru-header-light.svg', header(INK));
 write('kru-header-dark.svg', header(LIGHT));
 
-// social preview 1280x640: tile lockup + tagline on a flat ink field
+// social preview 1280x640: tile lockup + tagline + dimmed subline on a flat ink field
 const S = 7; // lockup units -> px
 const LEFT = 112;
 const TOP = 184; // tile top edge
@@ -48,6 +49,7 @@ const social = `<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640
 <rect width="1280" height="640" fill="${INK}"/>
 <g transform="translate(${LEFT} ${lockupY}) scale(${S})">${tileInLockup}${paint(wordInLockup, LIGHT)}</g>
 <g transform="translate(${LEFT} ${tagBaseline}) scale(${tagSize / 100})">${paint(tagline, LIGHT)}</g>
+<g transform="translate(${LEFT} ${tagBaseline + 56}) scale(${tagSize / 100})" opacity="0.6">${paint(subline, LIGHT)}</g>
 </svg>`;
 await sharp(Buffer.from(social)).png({ compressionLevel: 9 }).toFile(join(dir, 'kru-social-preview.png'));
 

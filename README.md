@@ -6,11 +6,7 @@
 
 *(said “crew”)*
 
-An engineering team for Claude Code, as a plugin. One **lead** skill scopes the work, detects the
-stack, and routes it to 34 specialist seats (builders, reviewers, design, platform), each pinned to
-its framework's official source rather than to training data.
-
-You talk to the lead the way you'd talk to an engineering lead. It does the routing.
+Your engineering department. Draft your team from 38 specialists.
 
 ## Install
 ```
@@ -75,7 +71,7 @@ Two things about a cloud session worth knowing before the first run:
   and offers a fallback instead of shipping a placeholder. The same `npm install` gives `brand-designer`
   the `sharp` it rasterizes icons with; no key needed.
 
-## First run
+## First run: `/kru:setup`
 In the repo you want the team to work on:
 
 ```

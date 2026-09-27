@@ -2,7 +2,7 @@
   "name": "kru",
   "displayName": "kru",
   "version": "0.125.0",
-  "description": "A versioned engineering team for Claude Code \u2014 a lead skill that scopes work, detects the stack, and routes to 38 specialist subagents (builders, reviewers, design, platform).",
+  "description": "Your engineering department. Draft your team from 38 specialists.",
   "author": {
     "name": "ap-justin"
   },

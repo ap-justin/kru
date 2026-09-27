@@ -22,8 +22,8 @@ Every place a **seat (agent)** is registered. `hire` writes all of them, `retire
 | 3 | `ROSTER.md` → *Model tiers* | a **pinned** row (explicit full ID) + one-line why — `inherit` is retired |
 | 4 | `SOURCES.md` | backing-source row (skip only for a genuinely stack-agnostic seat, e.g. a pure reviewer — and say so) |
 | 5 | `${CLAUDE_PLUGIN_ROOT}/references/routing.md` | the `detected/needed → specialist` row — read by `lead` and by `/kru:setup`, which is what puts the seat into a repo's sheet (a review-only seat wires into *Step 4* instead; a **user-invoked** seat — triggered by the user, via a thin invoker skill (`/<name>`) or by spawning the agent — wires via its `ROSTER.md` row marked user-invoked, plus that invoker skill if it has one, and stays out of `lead` entirely; a **hook-invoked** seat — fired by the plugin's own `hooks/hooks.json`, e.g. the Stop nudge — wires via its `ROSTER.md` row marked hook-invoked plus its hook scripts, and likewise stays out of `lead` routing) |
-| 6 | `.claude-plugin/plugin.json` | `version` bump **and** the "routes to N specialist subagents" **count** in `description` |
-| 7 | `.claude-plugin/marketplace.json` | the "N specialist subagents" **count** in `description` |
+| 6 | `.claude-plugin/plugin.json` | `version` bump **and** the "from N specialists" **count** in `description` |
+| 7 | `.claude-plugin/marketplace.json` · `README.md` intro | the "from N specialists" **count** in both marketplace `description`s and the README's opening line |
 | 8 | `VERSION` · `ROSTER.md` header | version — minor for a new seat: `VERSION` and the `# Roster — vX.Y.Z` header, equal |
 | 9 | git | `commit` + `tag vX.Y.Z` — **only when the user asks** (team git rule) |
 
