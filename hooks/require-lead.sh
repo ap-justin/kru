@@ -37,37 +37,7 @@ tool=$(printf '%s' "$input" | jq -r '.tool_name // empty' 2>/dev/null)
 # a read-only bash command is an inspection, not a build
 if [ "$tool" = "Bash" ]; then
   cmd=$(printf '%s' "$input" | jq -r '.tool_input.command // empty' 2>/dev/null)
-  case "$cmd" in
-    # a redirect, a substitution or an in-place edit writes whatever the verb is
-    *'>'*|*'$('*|*'`'*|*'sed -i'*|*'perl -i'*|*'--in-place'*|*'-exec'*|*'-delete'*|*'-fprint'*|*'-fls'*|*'xargs'*) ;;
-    *)
-      readonly_cmd=true
-      # every segment of a chain or pipe answers for itself — a read-only head
-      # says nothing about what follows it
-      while IFS= read -r seg; do
-        seg=$(printf '%s' "$seg" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
-        [ -z "$seg" ] && continue
-        verb=${seg%% *}
-        case "${verb##*/}" in
-          ls|cat|head|tail|wc|grep|egrep|fgrep|rg|find|file|stat|pwd|realpath|basename|dirname) continue ;;
-          which|command|type|echo|printf|jq|yq|sort|uniq|cut|tr|column|date|test|true|diff) continue ;;
-          # safe only because the write-tell case above already took sed -i and any redirect
-          sed|awk|nl|tac|comm|xxd|base64) continue ;;
-        esac
-        # the read-only subcommands of the tools a triage turn actually reaches for.
-        # env runs whatever follows it, so only the bare listing is a read.
-        case "$seg" in
-          env) continue ;;
-          'git status'|'git status '*|'git log'|'git log '*|'git diff'|'git diff '*|'git show'|'git show '*|'git remote -v') continue ;;
-          # listing flags only — -d/-D/-m/-c and a bare name all write
-          'git branch'|'git branch '-[arv]|'git branch -vv'|'git branch -av'|'git branch --all'|'git branch --remotes'|'git branch --show-current'|'git branch --list'*) continue ;;
-          'claude mcp list'*|'claude plugin list'*|'claude plugin details'*) continue ;;
-        esac
-        readonly_cmd=false
-        break
-      done < <(printf '%s\n' "$cmd" | tr '|;&' '\n')
-      [ "$readonly_cmd" = true ] && exit 0 ;;
-  esac
+  . "$plugin_root/hooks/readonly-bash.sh" 2>/dev/null && kru_readonly_bash "$cmd" && exit 0
 fi
 
 sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)

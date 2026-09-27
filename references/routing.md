@@ -47,6 +47,7 @@ names the seat and its skills has this question answered — take the answer.
 | coverage sweep or fan-out across many files; repair a red/flaky suite; an exempt seat's logic-dense output; a repo with no testing conventions captured yet | `test-writer` |
 | repo tooling: pnpm workspaces/catalogs/lockfile · `turbo.json` monorepo task graph + caching · Biome/ESLint/Prettier lint+format · wiring a new package into the graph | `toolchain-engineer` |
 | repo-wide TypeScript infrastructure: strict migration, monorepo project references, type-perf profiling | a general agent with the `typescript` skill loaded |
+| a half-formed idea the user wants grilled without committing to a record | **`/kru:brainstorm`** — user-invoked; `brief`'s grill with nothing written, persisted as a `/kru:brief` on their go |
 | ambiguous or high-blast-radius change the user wants stress-tested and written down before building | **`/kru:brief`** — name it for the user to type; it is not a seat you spawn |
 | something the user wants but doesn't want done now — "not yet," "remember this for later" | **`/kru:todo`** — user-invoked, so name it in one line; mid-task it's your Step 4.5 `TODOS.md` capture |
 | something *wrong* the user wants recorded before it evaporates — a bug they just hit, not being fixed now | **`/kru:issue`** — user-invoked, same deal; mid-task it's your Step 4.5 `issues/` capture |

@@ -134,6 +134,7 @@ your other machines and your cloud sessions. `references/store.md` is the whole 
 - Then ask: "add feature Y", "fix Z", "build a landing page for X". Or `/kru:lead <task>`.
 
 **Coding sessions**
+- `/kru:brainstorm <idea>`: grill an idea like `/kru:brief`, nothing saved; say go and it becomes the brief.
 - `/kru:brief <subject>`: grill a change and keep the record before building.
 - `/kru:todo <the thing>`, `/kru:issue <what's wrong>`: park a want or a defect without breaking the session.
 - `/kru:remember <what you liked>`: bank a preference for the team to absorb later.
