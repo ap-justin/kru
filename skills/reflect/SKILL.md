@@ -33,17 +33,18 @@ What keeps the first phase affordable: **every seat runs in its own context**, s
 
 3. **Assign every file in the target to a seat**, by the grouping rule at `${CLAUDE_PLUGIN_ROOT}/skills/lead/SKILL.md` → Step 3, *Group the change's files by seat* — a file's seat owns its stack, not the feature it was named after. Then add the review-only seats the target earns, by `${CLAUDE_PLUGIN_ROOT}/skills/lead/references/gates.md`.
 
-   **That file prices a batch for a slice about to merge, and this code already shipped. Three of its rules are overridden here:**
+   **That file prices a batch for a slice about to merge, and this code already shipped. Four of its rules are overridden here:**
 
    - **`architecture-reviewer` runs on every look-back**, whatever the change shape. Structural debt accumulates in landed code precisely because nothing gated it on the way in, so the run that looks back is the first thing that ever reads for it.
    - **`code-reviewer` reads for what shipping leaves unproven** — the error branch nothing reached, the race no load has hit, the webhook that has never seen a duplicate. Working code is evidence about the paths that ran.
+   - **`test-writer` reads the tests on every look-back** — the target's test files, against the behavior the rest of the target ships. It reads for behavior nothing covers, assertions that can't go red, and tests that pass by order or clock; it runs nothing. Before merge, coverage is the test-first builder's; landed code had no one watching for the test never written.
    - ***live-versus-latent* applies to genuinely dead paths only.** It trims a pre-merge batch down to code something reaches; here, shipping is that evidence, so it trims little.
 
    The stack seats need no override — their read is the premise of the run.
 
    Every file assigned is checkable: list the target's files, list the assignments, and the two match.
 
-4. **Dispatch in waves, parallel inside a wave.** Every seat in a wave goes out in a single message; the next wave waits. Cheap read-only lanes go first, and the seats that drive a browser or run a suite (`visual-reviewer`, `accessibility-reviewer`, `test-writer`) take a wave of their own, because each is a browser or a test runner and a wave of them is that many at once. The session's own always-loaded instructions set what a wave may cost on this machine — read them and size the wave to it.
+4. **Dispatch in waves, parallel inside a wave.** Every seat in a wave goes out in a single message; the next wave waits. Cheap read-only lanes go first, and the seats that drive a browser (`visual-reviewer`, `accessibility-reviewer`) take a wave of their own, because each is a browser and a wave of them is that many at once. `test-writer` rides the cheap wave. The session's own always-loaded instructions set what a wave may cost on this machine — read them and size the wave to it.
 
    On `everything`, a lane is a wave's worth of work by itself: one lane per seat per wave, sliced by subsystem (`apps/api`, `packages/ui`). A seat handed a whole repo returns a survey; a seat handed a subsystem returns findings.
 
@@ -63,13 +64,13 @@ What keeps the first phase affordable: **every seat runs in its own context**, s
 
 6. **Merge and rank.** **A return carrying no `Look-back:` line is unverified** — ask that seat for it before its findings enter the list, as `gates.md` does for a build return missing its `Return pass:`.
 
-   Then one list, deduplicated — two seats finding the same thing in the same file is one finding, credited to both — ranked by severity **across** seats rather than within them. Then split by `${CLAUDE_PLUGIN_ROOT}/TRACKER.md` → **wrong → `issues/`, wanted → `TODOS.md`, unformed → `notes/`**. A look-back produces all three, and the split is what keeps this phase honest: **only the wrongs are candidates to fix now.** A want dressed as a fix is how a reflection becomes a refactor nobody scoped.
+   Then one list, deduplicated — two seats finding the same thing in the same file is one finding, credited to both — ranked by severity **across** seats rather than within them. Then split by `${CLAUDE_PLUGIN_ROOT}/TRACKER.md` → **wrong → `issues/`, wanted → `TODOS.md`, unformed → `notes/`**. Behavior nothing tests is a wrong. A look-back produces all three, and the split is what keeps this phase honest: **only the wrongs are candidates to fix now.** A want dressed as a fix is how a reflection becomes a refactor nobody scoped.
 
 7. **Scope, slice, partition** — the three cuts, in that order, over the wrongs:
 
    - **Scope** — what this remediation includes. Severity ranks the list; scope draws the line across it, and everything below the line is filed, not dropped. A finding whose fix is a redesign, or whose blast radius exceeds the defect, is filed with that reason.
    - **Slice** — coherent units, each one a tracer bullet that lands on its own: a slice is something you could commit and ship by itself, not "all the auth findings." Order them by dependency, because one finding's fix is often another's precondition.
-   - **Partition** — each slice to **one seat**, by the same grouping rule as step 3. A slice spanning two seats is two slices; the seat a finding was *reported* by is not always the seat that fixes it, because the file decides.
+   - **Partition** — each slice to **one seat**, by the same grouping rule as step 3. A slice spanning two seats is two slices; the seat a finding was *reported* by is not always the seat that fixes it, because the file decides. A coverage slice — tests for behavior that already works — goes to `test-writer`.
 
    **When the sliced work won't fit one context** — many slices, many sessions, or a dependency graph worth surviving a reset — that is `planner`'s job, not yours to improvise: `lead` Step 2.6. Point it at the filed `issues/` and let it write the plan of record; then dispatch the frontier. Below that bar, the slices live on your worklist and this step is the whole plan.
 
