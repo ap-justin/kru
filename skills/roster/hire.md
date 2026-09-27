@@ -24,8 +24,8 @@ Completion: file exists, meets the standard, description carries a boundary clau
 - `SOURCES.md` backing-source row (skip only if genuinely stack-agnostic — then say so in the ROSTER row).
 - `${CLAUDE_PLUGIN_ROOT}/references/routing.md` row — the `detected/needed → specialist`. That table has two callers (`lead` and `/kru:setup`), so one row serves both; a repo already deployed picks the new seat up on its next `/kru:setup`. A **review-only** seat wires into *Step 4* (review & verify) instead, next to its sibling reviewer.
 
-## 4. Version + count (map #6–#8)
-Recompute the count — `ls agents/*.md | wc -l` — and set it in **both** `plugin.json` and `marketplace.json` descriptions (don't hand-increment). Minor bump: `VERSION`, `plugin.json` `version`, and the `ROSTER.md` header, all equal.
+## 4. Version (map #6–#8)
+Minor bump: `VERSION`, `plugin.json` `version`, the `marketplace.json` plugin entry's `version`, and the `ROSTER.md` header, all equal.
 
 Completion: **run `audit` (see `audit.md`) — it must pass.**
 

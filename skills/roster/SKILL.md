@@ -22,16 +22,14 @@ Every place a **seat (agent)** is registered. `hire` writes all of them, `retire
 | 3 | `ROSTER.md` → *Model tiers* | a **pinned** row (explicit full ID) + one-line why — `inherit` is retired |
 | 4 | `SOURCES.md` | backing-source row (skip only for a genuinely stack-agnostic seat, e.g. a pure reviewer — and say so) |
 | 5 | `${CLAUDE_PLUGIN_ROOT}/references/routing.md` | the `detected/needed → specialist` row — read by `lead` and by `/kru:setup`, which is what puts the seat into a repo's sheet (a review-only seat wires into *Step 4* instead; a **user-invoked** seat — triggered by the user, via a thin invoker skill (`/<name>`) or by spawning the agent — wires via its `ROSTER.md` row marked user-invoked, plus that invoker skill if it has one, and stays out of `lead` entirely; a **hook-invoked** seat — fired by the plugin's own `hooks/hooks.json`, e.g. the Stop nudge — wires via its `ROSTER.md` row marked hook-invoked plus its hook scripts, and likewise stays out of `lead` routing) |
-| 6 | `.claude-plugin/plugin.json` | `version` bump **and** the "from N specialists" **count** in `description` |
-| 7 | `.claude-plugin/marketplace.json` · `README.md` intro | the "from N specialists" **count** in both marketplace `description`s and the README's opening line |
+| 6 | `.claude-plugin/plugin.json` | `version` bump |
+| 7 | `.claude-plugin/marketplace.json` | the plugin entry's `version`, equal to `VERSION` |
 | 8 | `VERSION` · `ROSTER.md` header | version — minor for a new seat: `VERSION` and the `# Roster — vX.Y.Z` header, equal |
 | 9 | git | `commit` + `tag vX.Y.Z` — **only when the user asks** (team git rule) |
 
 A **skill** touches a smaller map: `skills/<name>/SKILL.md` (+ any disclosed sibling files), a note in `ROSTER.md` → *Reused, not owned* (and `SOURCES.md` if it backs a seat), `VERSION`/header, git. A skill gated on a **library the repo may or may not have** takes one more row — `references/routing.md` → *Conditional skills*, which is what puts it into a repo's sheet and is the whole of its wiring — the brief and the sheet both carry the answer down, so the seat files hold still; a skill its seats load unconditionally stays out of that table. **No agent-count bump** (#6–#7 count is agents only). A *vendored* skill also needs the provenance HTML comment + a `SOURCES.md` → *Vendored resources* note — copy the shape at the top of `skills/writing-for-agents/SKILL.md`.
 
-**`learn`** touches a map of its own: it promotes preferences from the inbox (`PREFERENCES.md`) into targeted `agents/<name>.md` prompt edits and/or the owning skill (`lead` SKILL.md for orchestration-wide rules), then bumps `VERSION`/header. No agent added → **no count bump**. It's the only verb that reads the cross-project store (`${CLAUDE_PLUGIN_ROOT}/references/store.md`) and the one verb that decides on its own what to land — the user reviews the uncommitted diff.
-
-The **count N** (#6–#7) is drift-prone — never hand-increment it; recompute from `ls agents/*.md | wc -l`.
+**`learn`** touches a map of its own: it promotes preferences from the inbox (`PREFERENCES.md`) into targeted `agents/<name>.md` prompt edits and/or the owning skill (`lead` SKILL.md for orchestration-wide rules), then bumps `VERSION`/header. It's the only verb that reads the cross-project store (`${CLAUDE_PLUGIN_ROOT}/references/store.md`) and the one verb that decides on its own what to land — the user reviews the uncommitted diff.
 
 ## Dispatch
 Read the one file for the requested verb, then execute it against the wiring map above.

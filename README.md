@@ -6,7 +6,7 @@
 
 *(said “crew”)*
 
-Your engineering department. Draft your team from 38 specialists.
+Your engineering department. Draft your team from a pool of skills and agents.
 
 ## Install
 ```
