@@ -68,7 +68,8 @@ Two things about a cloud session worth knowing before the first run:
   ```
 - **Optional, for generated image/video assets:** `GOOGLE_API_KEY` (Google AI Studio) and a one-time
   `npm --prefix <plugin dir> install`. Without them the `graphic-designer` seat reports what's missing
-  and offers a fallback instead of shipping a placeholder.
+  and offers a fallback instead of shipping a placeholder. The same `npm install` gives `brand-designer`
+  the `sharp` it rasterizes icons with; no key needed.
 
 ## First run
 In the repo you want the team to work on:

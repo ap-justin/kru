@@ -39,7 +39,8 @@ names the seat and its skills has this question answered — take the answer.
 | a look that is genuinely unsettled — bootstrap directions, a system change the user wants to see, a marketing or print one-off — or a **coverage read** of the ledger before feature work | `ui-designer` (drafts + publishes the canvas; you put it to the user) |
 | UI feature or screen — **system exists** | `ux-designer` (flow pass) → UI builder against the existing tokens (*UI on an existing system*, Step 2) |
 | a builder returned a **named gap** | the **user**, with the token name it would need. No seat fills it, and no seat extends the system |
-| needs generated/enhanced image assets (hero art, textures, OG, restyle a photo) | `graphic-designer` → builder (**preflight** below) |
+| a logo, mark or wordmark; a favicon, app icon or manifest icon set; a README or social header in the project's own identity | `brand-designer` (concepts → the user picks → the kit) → builder or you for the `<link>`/manifest/README lines it hands back |
+| needs generated/enhanced image assets (hero art, textures, image-led OG, restyle a photo — carrying the kit's mark, never drawing one) | `graphic-designer` → builder (**preflight** below) |
 | correctness/quality review of a diff | `code-reviewer` (or `/code-review` skill inline) |
 | module/interface design, refactor with fuzzy boundaries, "where's the seam", coupling/testability | `architecture-reviewer` (design mode, before builder) |
 | structural-integrity gate on a change (boundary erosion, coupling drift) | `architecture-reviewer` (review mode, after builder) |

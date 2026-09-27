@@ -8,7 +8,7 @@ Each block below has **invariant clauses** (copy verbatim — `audit` checks the
 
 ## Block A — `## Context hygiene (stay lean)`
 
-Required on every seat that **reads or edits repo files**. The four text-producing seats (`ux-designer`, `graphic-designer`, `planner`, `conversion-copywriter`) are exempt by decision: their input is a brief handed to them, and they already carry an `## Output`/`## Handoff` contract. `ui-designer` carries it despite being an artifact seat: matching the existing app means hunting tokens, stylesheets and the closest screens across the tree, which is exactly the read this block bounds.
+Required on every seat that **reads or edits repo files**. The four text-producing seats (`ux-designer`, `graphic-designer`, `planner`, `conversion-copywriter`) are exempt by decision: their input is a brief handed to them, and they already carry an `## Output`/`## Handoff` contract. `ui-designer` and `brand-designer` carry it despite being artifact seats: matching the existing app means hunting tokens, stylesheets, the closest screens or the brand files already in the tree, which is exactly the read this block bounds.
 
 ```
 ## Context hygiene (stay lean)
@@ -136,6 +136,7 @@ Required on every seat that implements **executable behavior with a specifiable 
 - `web-components-builder` is the **partial**, and it's in rather than out: its element's public API (attribute→property reflection and the pre-upgrade path, emitted events and their `detail`, `ElementInternals` form value/validity, idempotent connect/disconnect) is a specifiable contract other people's pages depend on, and every one of its failures is invisible on screen — so Block D applies to it in full. What it *renders* is covered by the block's existing screen exemption, which the lead names in the brief; it needs no fourth case.
 - `sanity-builder` — its primary artifact is declarative schema; TypeGen is the correctness gate on GROQ.
 - `ui-designer` — its artifact is a mockup, not a running behavior: the `.dc.html` it drafts is transcribed by a builder and never ships, and the gate on it is the user's eye on the render.
+- `brand-designer` — its artifact is a drawing: an SVG mark and the rasters derived from it have no behavior to go red on, and the gate is the render at size (its `## Prove it at size`) plus the user's pick.
 - `vercel-perf-optimizer` — already carries the same discipline in a different currency: `## Prove the win` demands a measured before/after.
 - `toolchain-engineer`, `vercel-platform-engineer`, `fly-platform-engineer` — config, not behavior. The Fly seat's artifact is an image plus `fly.toml`; what verifies it is a health check against a real deploy, not a red test.
 - reviewers and the five text-producing seats — they don't write the code.
@@ -333,6 +334,7 @@ Required on the same 25 seats as Block N — every seat that **writes code or co
 
 **Exempt by decision** — record the reason, don't just omit:
 - `test-writer` — its completion criterion is already hard and external (*the suite is green*), and a green suite is the one bound that resists premature completion without being asked to. It writes tests, not app code, which is also why it sits outside Blocks F and N.
+- `brand-designer` — outside Blocks F and N as an artifact seat; its own `## Prove it at size` is the return pass in its currency, fired by the same belief-of-done trigger and aimed at the rendered files rather than a diff.
 - `ui-designer` — outside Blocks F and N as an artifact seat, so it inherits their boundary here. **Weakest of the exemptions**: its output is judged only by the user's eye, so it has no green to reach and the most room to stop early. Revisit if the artboard passes start coming back thin.
 
 It sits **immediately before `## Context hygiene (stay lean)`** — the last action before the return it gates.
@@ -359,7 +361,7 @@ Fix what it finds. What this slice can't absorb, name in your return rather than
 
 ## Block P — the unreachable-source clause
 
-Required on every seat whose source chain **leads with an MCP server or a plugin**: `better-auth-specialist`, `cloudflare-builder`, `fly-platform-engineer`, `nextjs-builder`, `sanity-builder`, `svelte-ui-builder`, `sveltekit-builder`, `vercel-perf-optimizer`, `vercel-platform-engineer` — plus the seats naming an MCP tool in their own frontmatter, where an absent server leaves a dead entry rather than a slower path: `architecture-reviewer`, `code-reviewer`, `graphic-designer` (`mcp__context7__*`), `accessibility-reviewer`, `visual-reviewer` (`mcp__chrome-devtools__*`). It rides inside the seat's official-source section, after the chain it qualifies.
+Required on every seat whose source chain **leads with an MCP server or a plugin**: `better-auth-specialist`, `cloudflare-builder`, `fly-platform-engineer`, `nextjs-builder`, `sanity-builder`, `svelte-ui-builder`, `sveltekit-builder`, `vercel-perf-optimizer`, `vercel-platform-engineer` — plus the seats naming an MCP tool in their own frontmatter, where an absent server leaves a dead entry rather than a slower path: `architecture-reviewer`, `brand-designer`, `code-reviewer`, `graphic-designer` (`mcp__context7__*`), `accessibility-reviewer`, `visual-reviewer` (`mcp__chrome-devtools__*`). It rides inside the seat's official-source section, after the chain it qualifies.
 
 **Exempt by decision** — `planner` holds `mcp__context7__*` in its tool list and names no source chain in its body, so the clause would have nothing to qualify and would be writing that seat a chain it doesn't have. Its dead tool entry is real and it is a `planner` gap, not this block's: fix it by giving the seat a source chain, and the block follows.
 
@@ -381,7 +383,7 @@ Required on the 26 seats that **write code or config into the working repo** —
 
 **Exempt by decision** — record the reason, don't just omit:
 - reviewers and auditors — `memory` grants `Write`/`Edit`, and *reports; does not edit* is their contract. A recurring finding still reaches the team as an inbox line.
-- the text-producing seats and `ui-designer` — their input is a brief, not a tree they re-learn each run.
+- the text-producing seats, `ui-designer` and `brand-designer` — their input is a brief, not a tree they re-learn each run.
 - **`user` and `project` scopes, on every seat.** `user` is cross-project memory the seat writes and reads back with no gate, which is exactly what the inbox → `/roster learn` sweep exists to gate. `project` is committed into someone else's repo. `local` is the one scope that stays per repo and off the repo's history — the single exception to `TRACKER.md`'s *no management files in it, ever*, taken because the harness offers no out-of-tree path.
 
 It sits **immediately before `## The return pass`** (before `## Context hygiene (stay lean)` on `test-writer`, which carries no return pass) — the pass is where a run learns what it would have wanted to know at the start.
@@ -403,7 +405,7 @@ Write to your memory only what the next run in this repo would otherwise pay to 
 
 ## Block R — `## Design for what they'll actually do`
 
-Required on **every seat** (37 — `ls agents/*.md | wc -l`). Config and tooling seats included: an operator, a maintainer or the next builder acts on their output too, and every seat is itself an actor with a payoff. It sits **immediately before the seat's first `## ` section**, after the opening paragraph — it frames how the rest of the prompt is read, so it comes before any of it.
+Required on **every seat** (38 — `ls agents/*.md | wc -l`). Config and tooling seats included: an operator, a maintainer or the next builder acts on their output too, and every seat is itself an actor with a payoff. It sits **immediately before the seat's first `## ` section**, after the opening paragraph — it frames how the rest of the prompt is read, so it comes before any of it.
 
 The block is the principle; the **`incentives`** skill holds the per-domain recipes and the sources. Block F is this principle's scope case and stays as written — Block R grounds it and never restates it, so a copy that adds a scope sentence here is drift.
 
