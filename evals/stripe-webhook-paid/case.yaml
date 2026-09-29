@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: stripe-webhook-paid
+context:
+  scaffold_script: scaffold.sh
