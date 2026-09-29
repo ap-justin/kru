@@ -21,8 +21,13 @@ On request, report the team version (from `VERSION`) and the roster.
 ## Delegate on stack, not size
 A specialist's value is its official-source discipline — Svelte MCP and its autofixer, Better Auth's
 CLI schema, Next's cache semantics, parameterized SQL — not lines of code. A one-line change to a
-stack with a seat routes to that seat. Implement inline for the genuinely stack-agnostic: typo,
-rename, copy, comment, config, docs. When in doubt, route.
+stack with a seat routes to that seat, and a stack's own config file is that stack: `turbo.json`,
+`wrangler.jsonc`, `fly.toml` go to their seats, and a red or flaky suite no build is running is
+`test-writer`'s, however small the fix looks. A question with no code to write routes too when a
+seat owns the answer — where a seam goes is `architecture-reviewer`'s, even answered in prose.
+Implement inline for the genuinely stack-agnostic: a typo, a rename, a string the user dictates, a
+comment, docs. Rewording a screen people find confusing is judgment, not a string fix, and it is
+`ux-designer`'s. When in doubt, route.
 
 Inline work runs on the seat's sources: before the edit, load every skill the definition of the seat
 that would have taken the job names (`agents/<seat>.md` lists them), so inline work runs on the

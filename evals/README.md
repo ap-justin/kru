@@ -72,3 +72,13 @@ Latest run per case, sqlite rescored with its corrected grader. One run is a smo
   `codebase-design`.
 - `turbo-cache-miss` 0.00, twice: the lead edited `turbo.json` inline as config, without loading
   `turborepo`, which its own inline rule requires.
+
+## v0.128.0 — after the fixes
+
+The lead's inline rule now names a stack's config file, a seat-owned design question, a flaky suite
+and a confusing screen's wording as routed work; `test-writer` and `toolchain-engineer` invoke their
+skill before the first read. Reruns of the four failing cases, plus the two that must stay inline:
+
+- `billing-settings-copy` 1.00 (2 runs) · `payments-seam-design` 1.00 (2 runs)
+- `turbo-cache-miss` 1.00 (3 runs) · `flaky-test-suite` 1.00 (3 runs)
+- `readme-typo-inline` 1.00 · `ios-screen-no-seat` 1.00 · `homepage-copy` 1.00
