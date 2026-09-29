@@ -60,7 +60,9 @@ hedge=$(printf '%s' "$prompt" | grep -oiE '\b(may|might|could) mean\b|\bunclear 
 # a brief asking which way the builder went is a brief admitting it delegated
 # the call. one bounded span, no \b — the hook runs under whatever grep is on
 # PATH, and two spans exceed ugrep's complexity limit.
-opencall=$(printf '%s' "$prompt" | grep -oiE '(say|tell|report|note)[^.]{0,30}(which (way|one)|what) you (went|chose|took|picked|decided|used)' | head -1)
+# a sentence that names its fallback's trigger ("if X can't, do Y instead")
+# resolved the call, and the report-back only says which branch fired.
+opencall=$(printf '%s' "$prompt" | tr '\n' ' ' | tr '.' '\n' | grep -viE '(^| )if .* instead' | grep -oiE '(say|tell|report|note)[^.]{0,30}(which (way|one)|what) you (went|chose|took|picked|decided|used)' | head -1)
 [ -n "$opencall" ] && reasons="${reasons}open design call: \"${opencall}\" — resolve the decision, or make it an investigation naming what each answer resolves to (item 3, scan 3). "
 
 # the two texts briefs re-type as paraphrase, which no shingle sees — lead scan 2
@@ -113,10 +115,11 @@ comments=""
 if [ -n "$cctx" ]; then
   comments=$(printf '%s' "$cctx" | grep -oiE "${CRULE}|${CKEEP}" | head -1)
   # a backtick, a position or a possessive beside the noun points at one comment
-  # in one file. the class-wide quantifiers are what the standard itself spends,
-  # so they hold the refusal even where a nearby identifier is backticked —
+  # in one file, and "a comment" is one the brief asks for. the class-wide
+  # quantifiers are what the standard itself spends, so they hold the refusal
+  # even where a nearby identifier is backticked —
   # "existing" only on the plural, since "its existing comment" names one.
-  if printf '%s' "$cctx" | grep -qiE '`|\b(above|below|beside)\b|\b(its|this|that|each|whose) comments?\b' &&
+  if printf '%s' "$cctx" | grep -qiE '`|\b(above|below|beside)\b|\b(its|this|that|each|whose|a) comments?\b' &&
     ! printf '%s' "$cctx" | grep -qiE '\b(every|all|any) comments?\b|\bexisting comments\b'; then
     comments=""
   fi
@@ -206,6 +209,29 @@ shadow=""
 # call, so this one proves its hit rate in shadow first. one bounded span.
 decide=$(printf '%s' "$prompt" | grep -oiE '(decide|determine|establish|pick) (whether|which|what|how|if|between)[^.]{0,40}' | head -1)
 [ -n "$decide" ] && shadow="${shadow}open decision: \"${decide}\" — resolve it, or name what each answer resolves to (item 3, scan 3). "
+# grouping: a sheet line names the directories its seat owns in backticks, so a
+# file under another seat's directory rides in the wrong brief. only a seat the
+# sheet gives directories to is checked — a reviewer's brief names every lane.
+lanes=""
+for f in "$cwd/.claude/CLAUDE.md" "$cwd/CLAUDE.md"; do
+  [ -f "$f" ] && lanes="$lanes$(grep -E 'kru:[a-z-]+' "$f" | awk '{
+    if (!match($0, /kru:[a-z-]+/)) next
+    owner = substr($0, RSTART + 4, RLENGTH - 4); rest = $0
+    while (match(rest, /`[^` ]+\/[^` ]*`/)) {
+      d = substr(rest, RSTART + 1, RLENGTH - 2); sub(/\/+$/, "", d)
+      print d, owner; rest = substr(rest, RSTART + RLENGTH)
+    }
+  }')
+"
+done
+if [ -n "$lanes" ] && printf '%s' "$lanes" | awk -v s="$seat" '$2 == s { f = 1 } END { exit !f }'; then
+  misroute=$(printf '%s' "$prompt" | grep -oE '[A-Za-z0-9_.@-]+(/[][A-Za-z0-9_.@()-]+)+' | sort -u | head -40 |
+    awk -v s="$seat" 'NR == FNR { if (NF == 2) { dir[++n] = $1; own[n] = $2 }; next }
+      { best = ""; bl = 0
+        for (i = 1; i <= n; i++) if (($0 == dir[i] || index($0, dir[i] "/") == 1) && length(dir[i]) > bl) { best = own[i]; bl = length(dir[i]) }
+        if (best != "" && best != s) { print $0 " is " best "'"'"'s"; exit } }' <(printf '%s' "$lanes") -)
+  [ -n "$misroute" ] && shadow="${shadow}grouping: ${misroute} per the sheet — split it into that seat's brief (step 3). "
+fi
 
 # the cross-session log /roster learn sweeps for misfires, reading each quoted
 # span against the sentence around it — so the log stores those windows, and

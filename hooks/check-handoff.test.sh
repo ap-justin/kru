@@ -61,10 +61,15 @@ check refuse $ui "Keep existing comments; update the \`SKIP_STATUSES\` comment i
 check allow $ui "Add a comment about the contact email being kept for receipts."
 check allow $ui "Keep the comment on the fee calc."
 check allow $ui "Leave a comment explaining why the draft is retained."
+check allow $ui "Keep it as one named constant in the module, with a comment naming the docs URL."
 # ...even under markdown emphasis, and "existing" on one comment points at it
 check allow $ui "\`Coded\` becomes \`Coding\`. **Keep its existing comment** about the two a catalogue would most plausibly grow back."
 # a preservation list names its own slice; only the comments clause is the standard
 check refuse $ui "No hamburger menu; keep h-16, scrolled/unscrolled color logic, and existing comments intact." "cut that clause"
+
+# scan 3 report-back — a fallback whose trigger is named resolves the call
+check refuse $ui "Use a spinner or a skeleton for the press, and say which one you chose." "open design call"
+check allow $ui "Show a loading state on the press. If the wiring can't do that without a route change, give the Chat entry in \`EditorEntries\` a busy state instead, and say which one you chose."
 
 # machine budget
 check refuse $ui "Run vitest one file at a time on this machine." "machine budget"
@@ -97,6 +102,24 @@ if printf '%s' "$out" | grep -q '"refused":true' && ! printf '%s' "$out" | grep 
 # a clean brief writes nothing
 check allow $ui "Build the form. The field is required."
 [ "$(shadow_lines)" -eq "$after" ] && pass=$((pass + 1)) || { fail=$((fail + 1)); printf 'FAIL (clean): shadow line written\n'; }
+
+# grouping: a file under another seat's sheet directory logs a shadow line
+mkdir -p "$sandbox/sheet/.claude"
+printf 'ui         kru:react-ui-builder     ← `packages/ui` components\nroutes     kru:react-router-builder ← `apps/console/src/routes`, `apps/console/src/api`\n' > "$sandbox/sheet/.claude/CLAUDE.md"
+sheet_check() {
+  local seat=$1 prompt=$2 want=$3 b a input
+  b=$(shadow_lines)
+  input=$(jq -nc --arg s "$seat" --arg p "$prompt inbox.md" --arg c "$sandbox/sheet" \
+    '{session_id:"test", cwd:$c, tool_input:{subagent_type:$s, prompt:$p, description:"t"}}')
+  (cd "$sandbox/cwd" && printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_GATE -u CLAUDE_PLUGIN_ROOT HOME="$sandbox/home" bash "$hook" "$root" >/dev/null 2>&1)
+  a=$(shadow_lines)
+  if [ "$a" -eq $((b + want)) ]; then pass=$((pass + 1)); else
+    fail=$((fail + 1)); printf 'FAIL (grouping %s): %s -> %s on: %s\n' "$want" "$b" "$a" "$prompt"; fi
+}
+sheet_check kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\` and wire \`apps/console/src/api/client.ts\`." 1
+sheet_check kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\`." 0
+sheet_check kru:react-router-builder "Mount it in \`apps/console/src/routes/home.tsx\`, importing \`packages/ui/card.tsx\`." 1
+sheet_check kru:code-reviewer "Review \`packages/ui/card.tsx\` and \`apps/console/src/api/client.ts\`. report: /tmp/kru-review/p/code-reviewer-x.md" 0
 
 # the gate stays out of unknown seats
 check allow general-purpose "Preserve existing comments in the file."

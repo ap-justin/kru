@@ -21,6 +21,8 @@ need — never a nearby seat pressed into the gap.
 
 Everything between them is this repo's answers, one line per field, each citing what it was derived
 from — a manifest entry, or on a blank repo the decision standing in for one (`← decided 2026-09-04 · /setup`).
+A seat line names the directories its seat owns, each in backticks: the handoff gate checks every file
+a brief names against them, so a file under another seat's directory shows up as a grouping miss.
 
 ## Renderings
 
@@ -28,9 +30,9 @@ Match the host file. The same sheet, in the two idioms most files are already wr
 block for a file that reaches for code fences and tables:
 
 ```
-routes     kru:react-router-builder     ← react-router 7.16.0 framework mode, fs-routes
-ui         kru:react-ui-builder         ← packages/ui components, tailwind 4
-data       kru:postgres-architect       ← drizzle-orm, apps/api/.server/pg/migrations
+routes     kru:react-router-builder     ← react-router 7.16.0 framework mode, `app/routes`
+ui         kru:react-ui-builder         ← `packages/ui` components, tailwind 4
+data       kru:postgres-architect       ← drizzle-orm, `apps/api/.server/pg/migrations`
 skills     kru:drizzle · zod · conform  ← drizzle-orm 0.44 · zod 4.1 · @conform-to/react 1.9
 project    .claude/skills/db-admin · e2e        ← prefer these over a plugin seat
 ```
@@ -38,7 +40,7 @@ project    .claude/skills/db-admin · e2e        ← prefer these over a plugin 
 and bold-led bullets for a file written in prose:
 
 ```markdown
-- **routes** → `kru:react-router-builder` — react-router 7.16.0 framework mode, fs-routes
+- **routes** → `kru:react-router-builder` — react-router 7.16.0 framework mode, `app/routes`
 - **ui** → `kru:react-ui-builder` — `packages/ui` components, tailwind 4
 - **data** → `kru:postgres-architect` — drizzle-orm, `apps/api/.server/pg/migrations`
 - **skills** → `kru:drizzle`, `zod`, `conform` — drizzle-orm 0.44, zod 4.1, `@conform-to/react` 1.9
