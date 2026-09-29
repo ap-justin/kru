@@ -9,7 +9,7 @@ A plugin eval is trustworthy when every grader can go **red** on the failure it 
 
 The format is `code.claude.com/docs/en/plugin-evals.md` (fetch it; grader types, `target` values and the two-arm exclusions change with the CLI). The model-agnostic checklist, the one for any eval, is `shared/evals/eval-audit.md` inside the `/claude-api` skill. Run both; this file carries only what those two don't: the traps specific to grading an agent plugin from its trace. Every trap below was reproduced on Claude Code 2.1.284, 2026-09-29.
 
-**Completion criterion:** every grader in the target has been shown red on a synthetic failing line and green on a synthetic passing one, and every finding is fixed or reported. Checkable: the step 3 script's output covers every grader file.
+**Completion criterion:** every grader in the target has been shown red on a synthetic failing line and green on a synthetic passing one, and every finding is fixed or reported. Checkable: step 3's output names every grader that carries a pattern.
 
 ## Do
 
@@ -39,4 +39,3 @@ The format is `code.claude.com/docs/en/plugin-evals.md` (fetch it; grader types,
 ## Don't
 
 - Don't start a paid run without the user's go. Steps 1 to 4 cost nothing; a full pass of an agent-plugin suite is dozens of real builds, counted against their plan's usage.
-- Don't edit the plugin to make a case pass. The eval measures it.
