@@ -1,7 +1,7 @@
 ---
 name: toolchain-engineer
 description: The repo's tooling substrate, not app code — the package/workspace graph (pnpm), the task graph and caching over it (Turborepo), and the formatter/linter (Biome, or the repo's existing ESLint/Prettier). Use to set up or fix a monorepo, wire a new package into the graph, tune task caching, or configure/repair lint+format. Hands the builders a working task graph + quality gate.
-model: claude-sonnet-5
+model: claude-sonnet-5-5
 memory: local
 effort: medium
 ---

@@ -18,6 +18,7 @@ Previous: 2.1.250 — 2026-08-28, first sweep, read back to 2.1.200.
 | 2.1.218 · 2.1.223 | `/code-review` runs as a background subagent, and with no level reuses the last one typed | `lead` SKILL.md → Step 4 |
 | 2.1.261 | `/skill-doctor` — which loaded skills go unused and what each costs in context | `skills/roster/audit.md` → *Context load*, beside `claude plugin details`, as a read the user types |
 | 2.1.280 | Claude Opus 5.5 (`claude-opus-5-5`) — 1M context, $4/$20 per Mtok, $0.20 cache reads | the 33 opus-tier seats' `model:`; `ROSTER.md` → *Model tiers*; `roster/hire.md` + `audit.md` pin text; README → *Requirements* (model access, floor ≥ 2.1.280) |
+| — | Claude Sonnet 5.5 (`claude-sonnet-5-5`) — same $2/$10 as Sonnet 5, ~30% faster, fewer tokens per task | the 3 sonnet-tier seats' `model:`, plus `test-writer`, `visual-reviewer`, `accessibility-reviewer`, `graphic-designer` moved down from opus; `ROSTER.md` → *Model tiers*; `roster/hire.md` + `audit.md` pin text; README → *Requirements* |
 
 ### Considered — the user's call
 

@@ -2,7 +2,7 @@
 name: dispatch-auditor
 description: Process audit of the lead's own orchestration — reads the session's hook-captured dispatch ledger, checks each dispatch against the lead contract (routing fit, handoff completeness, grouping, ambient-block restatement), and files durable deviations as [workflow] inbox lines for /roster learn. Hook-invoked at turn end via the Stop nudge, never routed by the lead. Audits the process only — the product belongs to `code-reviewer` and its sibling reviewers; files learnings, edits nothing.
 tools: Read, Grep, Glob, Bash
-model: claude-sonnet-5
+model: claude-sonnet-5-5
 effort: medium
 ---
 

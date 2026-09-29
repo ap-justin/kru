@@ -61,7 +61,7 @@ Two things about a cloud session worth knowing before the first run:
   ```json
   { "env": { "CLAUDE_CODE_ENABLE_TODO_TOOLS": "1" } }
   ```
-- **Model access to `claude-opus-5-5` and `claude-sonnet-5`.**
+- **Model access to `claude-opus-5-5` and `claude-sonnet-5-5`.**
 - **The `chrome-devtools` MCP server**, for the visual and accessibility reviewers only; without it they audit from source.
   ```
   claude mcp add chrome-devtools --scope user -- npx chrome-devtools-mcp@latest --headless=true --screenshotFormat=webp --screenshotMaxWidth=1440
