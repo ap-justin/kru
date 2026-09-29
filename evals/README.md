@@ -1,14 +1,14 @@
-# Evals — does the right seat get the job, and does it work from its skills?
+# Evals: does the right seat get the job, and does it work from its skills?
 
 Run with `claude plugin eval` (Claude Code 2.1.269+). Each case seeds a small repo, sends the lead a
 request a user would type, and grades three things from the run's trace:
 
-1. **Routed** — the lead dispatched the expected seat (`Agent` call with that `subagent_type`), and not
+1. **Routed:** the lead dispatched the expected seat (`Agent` call with that `subagent_type`), and not
    the seat a contested lane would wrongly pick.
-2. **Loaded** — that seat, inside its own run, invoked the skills its definition names.
-3. **Followed** — what the seat wrote obeys a rule from one of those skills, checked on the content of
-   its `Write`/`Edit` calls, never on the trace at large (the skill text itself is in the trace, so a
-   trace-wide regex passes on reading the rule rather than following it).
+2. **Loaded:** that seat, inside its own run, invoked the skills its definition names.
+3. **Followed:** what the seat wrote obeys a rule from one of those skills, checked on the content of
+   its `Write`/`Edit` calls only. The skill text itself is in the trace, so a trace-wide regex passes
+   on reading the rule rather than following it.
 
 A graded check reads a `Write`/`Edit` input or a `Skill` call carrying the seat's `subagent_type`, so a
 lead that does the work inline, or loads the skill itself, fails the case.
@@ -19,22 +19,22 @@ lead that does the work inline, or loads the skill itself, fails the case.
 claude plugin eval . --scaffold --allow-tools Write Edit --ablation none -j 4
 ```
 
-- `--scaffold` — each case's `scaffold.sh` seeds the workspace; the suite is ours, so this is safe.
-- `--allow-tools Write Edit` — seats build for real. No `Bash`: a run grants it only under the OS
-  sandbox, and the graders don't need a build to pass.
-- `--ablation none` — the no-plugin baseline has no seats to dispatch, so its score is zero by
+- `--scaffold`: each case's `scaffold.sh` seeds the workspace. The suite is ours, so this is safe.
+- `--allow-tools Write Edit`: seats build for real. `Bash` stays ungranted because a run grants it
+  only under the OS sandbox, and the graders don't need a build to pass.
+- `--ablation none`: the no-plugin baseline has no seats to dispatch, so its score is zero by
   construction and `Δ` says nothing.
 - Iterate on one case with `--case <name> --runs 1`.
 
-Only kru loads in a run: no `vercel:*`, `svelte:*` or `sanity:*` skills and no MCP servers. Seats whose
-source chain starts there are covered on routing only.
+Only kru loads in a run: `vercel:*`, `svelte:*` and `sanity:*` skills and every MCP server are absent.
+Seats whose source chain starts there are covered on routing only.
 
 ## Cases
 
 | Case | Request (short) | Seat | Loads | Follows |
 |---|---|---|---|---|
 | `postgres-index-live-table` | index a 40M-row table, no downtime | `postgres-architect` | `postgres` | `CREATE INDEX CONCURRENTLY`, never a plain one |
-| `sqlite-change-column-type` | TEXT amount → INTEGER cents in a shipped `.db` | `sqlite-architect`, not `postgres-architect` | `sqlite` | the rebuild runs `PRAGMA foreign_key_check` |
+| `sqlite-change-column-type` | TEXT amount → INTEGER cents in a shipped `.db` | `sqlite-architect`, not `postgres-architect` | `sqlite` | the rebuild runs `foreign_key_check` |
 | `d1-bulk-import` | all-or-nothing insert of 500 rows | `cloudflare-builder`, not `sqlite-architect` | `sqlite` | one `batch()` in place of a transaction |
 | `go-list-endpoint` | `GET /api/campaigns` | `go-fullstack-builder` | `go` | an empty result is `[]Campaign{}`, never a nil slice |
 | `stripe-webhook-paid` | mark a donation paid on checkout | `stripe-specialist` | `tdd` | the webhook route takes `express.raw()` |
@@ -42,13 +42,13 @@ source chain starts there are covered on routing only.
 | `rr7-signup-validation` | server-side signup validation | `react-router-builder` | `react-router`, `zod` | Zod 4's top-level `z.email()` |
 | `python-mcp-tool` | an MCP tool that looks up a donor | `python-developer` | `python` | a typed result, not a bare `dict` |
 | `turbo-cache-miss` | CI never hits the turbo cache | `toolchain-engineer` | `turborepo` | the build task declares `outputs` |
-| `homepage-copy` | write the homepage copy | `conversion-copywriter`, not `ux-designer` | `landing-page` | — |
-| `billing-settings-copy` | billing settings wording confuses people | `ux-designer`, not `conversion-copywriter` | `ux-copy` | — |
-| `payments-seam-design` | where the boundary goes before PayPal | `architecture-reviewer` | `codebase-design` | — |
+| `homepage-copy` | write the homepage copy | `conversion-copywriter`, not `ux-designer` | `landing-page` | |
+| `billing-settings-copy` | billing settings wording confuses people | `ux-designer`, not `conversion-copywriter` | `ux-copy` | |
+| `payments-seam-design` | where the boundary goes before PayPal | `architecture-reviewer` | `codebase-design` | |
 | `flaky-test-suite` | suite fails one run in five | `test-writer` | `testing` | the clock is faked, not read |
-| `fly-worker-disk` | deploy a worker whose outbox is on disk | `fly-platform-engineer`, not `vercel-platform-engineer` | — | `fly.toml` mounts a volume |
-| `readme-typo-inline` | fix a README typo | none — the lead edits it inline | — | the fix is an `Edit`, not a rewrite |
-| `ios-screen-no-seat` | a SwiftUI settings screen | none — the lead asks the user about hiring | — | no `.swift` written; judged reply |
+| `fly-worker-disk` | deploy a worker whose outbox is on disk | `fly-platform-engineer`, not `vercel-platform-engineer` | | `fly.toml` mounts a volume |
+| `readme-typo-inline` | fix a README typo | none: the lead edits it inline | | the fix is an `Edit`, not a rewrite |
+| `ios-screen-no-seat` | a SwiftUI settings screen | none: the lead asks the user about hiring | | no `.swift` written; judged reply |
 
 ## Adding a case
 
@@ -57,28 +57,27 @@ Copy the closest case. Graders reuse four shapes: `routed.md` (the seat was disp
 line carries the seat's `subagent_type`) and `follows-<rule>.md` (a `Write`/`Edit` by that seat whose
 content matches the rule). Trace lines are JSON, so a quote inside written content matches as `\\"`.
 
-## Baseline — v0.127.0, 2026-09-29, one run per case
+## Baseline: v0.127.0, 2026-09-29, one run per case
 
-Latest run per case, sqlite rescored with its corrected grader. One run is a smoke read, not a verdict.
+Latest run per case. One run is a smoke read, not a verdict.
 
 - Clean (1.00): postgres, sqlite, d1, go, stripe, widget, rr7 + zod, python, homepage copy, fly,
   README typo, iOS gap.
 - `flaky-test-suite` 0.75: routed to `test-writer` in one of two runs; the seat faked the clock but
   never loaded `testing`.
 - `billing-settings-copy` 0.25, twice: the lead rewrote the wording inline with `ux-copy` instead of
-  dispatching `ux-designer`. The lead contract lists copy as inline work, so the case and the contract
-  disagree; one of them changes.
+  dispatching `ux-designer`, because its inline list named copy.
 - `payments-seam-design` 0.00, twice: the lead answered the design question itself, without
   `codebase-design`.
 - `turbo-cache-miss` 0.00, twice: the lead edited `turbo.json` inline as config, without loading
   `turborepo`, which its own inline rule requires.
 
-## v0.128.0 — after the fixes
+## v0.128.0: after the fixes
 
 The lead's inline rule now names a stack's config file, a seat-owned design question, a flaky suite
-and a confusing screen's wording as routed work; `test-writer` and `toolchain-engineer` invoke their
-skill before the first read. Reruns of the four failing cases, plus the two that must stay inline:
+and a confusing screen's wording as routed work; `test-writer` and `toolchain-engineer` load their
+skill before the first read. Reruns of the four failing cases, plus three that must not move:
 
-- `billing-settings-copy` 1.00 (2 runs) · `payments-seam-design` 1.00 (2 runs)
-- `turbo-cache-miss` 1.00 (3 runs) · `flaky-test-suite` 1.00 (3 runs)
-- `readme-typo-inline` 1.00 · `ios-screen-no-seat` 1.00 · `homepage-copy` 1.00
+- `billing-settings-copy` 1.00 (2 runs), `payments-seam-design` 1.00 (2 runs)
+- `turbo-cache-miss` 1.00 (3 runs), `flaky-test-suite` 1.00 (3 runs)
+- `readme-typo-inline`, `ios-screen-no-seat` and `homepage-copy` 1.00 (1 run each)
