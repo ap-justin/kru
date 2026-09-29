@@ -137,6 +137,7 @@ your other machines and your cloud sessions. `references/store.md` is the whole 
 - `/kru:remember <what you liked>`: bank a preference for the team to absorb later.
 - `/kru:landed`: after the PR merges, sync back onto the base branch.
 - `/kru:text-fix` `[<path> | <branch> | <pr>]`: every text pass the target earns — comments, rendered copy, doc prose, agent docs — in one go. The three verbs under it run alone too: `/kru:comment-fix`, `/kru:prose-fix`, `/kru:doc-fix`.
+- `/kru:eval-review` `[<eval dir>]`: audit a plugin eval suite for checks that pass or fail for the wrong reason, and fix them.
 
 **Backlog and tech debt**
 - `/kru:reflect` `[<pr> | <branch> | <commit> | everything]`: every seat looks back over its own lane, then the fixes get scoped, sliced and landed.

@@ -52,7 +52,7 @@ Seats whose source chain starts there are covered on routing only.
 
 ## Adding a case
 
-Copy the closest case. Graders reuse four shapes: `routed.md` (the seat was dispatched),
+Copy the closest case, then run `/kru:eval-review` over it. Graders reuse four shapes: `routed.md` (the seat was dispatched),
 `not-<seat>.md` (the contested lane's other seat wasn't), `loads-<skill>.md` (a `Skill` call whose trace
 line carries the seat's `subagent_type`) and `follows-<rule>.md` (a `Write`/`Edit` by that seat whose
 content matches the rule). Trace lines are JSON, so a quote inside written content matches as `\\"`.
