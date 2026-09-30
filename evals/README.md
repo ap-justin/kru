@@ -38,7 +38,7 @@ Seats whose source chain starts there are covered on routing only.
 
 | Case | Request (short) | Seat | Loads | Follows |
 |---|---|---|---|---|
-| `postgres-index-live-table` | index a 40M-row table, no downtime | `postgres-architect` | `postgres` | `CREATE INDEX CONCURRENTLY`, never a plain one |
+| `postgres-index-live-table` | index a 40M-row table, no downtime | `postgres-architect` | `postgres` | the migration writes `CREATE INDEX CONCURRENTLY` |
 | `sqlite-change-column-type` | TEXT amount → INTEGER cents in a shipped `.db` | `sqlite-architect`, not `postgres-architect` | `sqlite` | the rebuild runs `foreign_key_check` |
 | `d1-bulk-import` | all-or-nothing insert of 500 rows | `cloudflare-builder`, not `sqlite-architect` | `sqlite` | one `batch()` in place of a transaction |
 | `go-list-endpoint` | `GET /api/campaigns` | `go-fullstack-builder` | `go` | an empty result is `[]Campaign{}`, never a nil slice |
@@ -86,3 +86,13 @@ skill before the first read. Reruns of the four failing cases, plus three that m
 - `billing-settings-copy` 1.00 (2 runs), `payments-seam-design` 1.00 (2 runs)
 - `turbo-cache-miss` 1.00 (3 runs), `flaky-test-suite` 1.00 (3 runs)
 - `readme-typo-inline`, `ios-screen-no-seat` and `homepage-copy` 1.00 (1 run each)
+
+## v0.129.0: full pass, 2026-09-30, 3 runs per case
+
+All 16 cases 1.00, 48 of 48 runs. The pass ran in two sittings: 28 runs of the first hit the plan's
+session limit and were rerun after it reset; the limit error scores 0 and reads like a regression, so
+check `error` before trusting a low case. List-price estimate across both sittings: $47.
+
+`postgres-index-live-table` scored 0.80 in two runs on a grader that failed any `Write` holding a plain
+`CREATE INDEX`: the seat drafted the migration drizzle-kit would generate, then overwrote the same file
+with the concurrent build. The grader is gone; a trace regex sees every draft, not the final file.
