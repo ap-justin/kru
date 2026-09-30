@@ -16,7 +16,8 @@ lead that does the work inline, or loads the skill itself, fails the case.
 ## Running it
 
 ```sh
-claude plugin eval . --scaffold --allow-tools Write Edit --ablation none -j 4
+claude plugin eval . --scaffold --allow-tools Write Edit --ablation none -j 4 --keep-temp \
+  --model claude-opus-5-5
 ```
 
 - `--scaffold`: each case's `scaffold.sh` seeds the workspace. The suite is ours, so this is safe.
@@ -24,6 +25,10 @@ claude plugin eval . --scaffold --allow-tools Write Edit --ablation none -j 4
   only under the OS sandbox, and the graders don't need a build to pass.
 - `--ablation none`: the no-plugin baseline has no seats to dispatch, so its score is zero by
   construction and `Δ` says nothing.
+- `--keep-temp`: keeps each run's trace. Without it a zero can't be read, because the result JSON's
+  `tracePath` points at a directory the run already removed.
+- `--model`: pins the lead's model, so a model rollout doesn't read as a routing regression. Seats
+  pin their own.
 - Iterate on one case with `--case <name> --runs 1`.
 
 Only kru loads in a run: `vercel:*`, `svelte:*` and `sanity:*` skills and every MCP server are absent.
@@ -37,18 +42,18 @@ Seats whose source chain starts there are covered on routing only.
 | `sqlite-change-column-type` | TEXT amount → INTEGER cents in a shipped `.db` | `sqlite-architect`, not `postgres-architect` | `sqlite` | the rebuild runs `foreign_key_check` |
 | `d1-bulk-import` | all-or-nothing insert of 500 rows | `cloudflare-builder`, not `sqlite-architect` | `sqlite` | one `batch()` in place of a transaction |
 | `go-list-endpoint` | `GET /api/campaigns` | `go-fullstack-builder` | `go` | an empty result is `[]Campaign{}`, never a nil slice |
-| `stripe-webhook-paid` | mark a donation paid on checkout | `stripe-specialist` | `tdd` | the webhook route takes `express.raw()` |
+| `stripe-webhook-paid` | mark a donation paid on checkout | `stripe-specialist` | `tdd` | the webhook route takes a raw body (`express.raw()` or `bodyParser.raw()`) |
 | `web-component-widget` | a donate button partners paste in | `web-components-builder` | `web-components` | shadow styles via `adoptedStyleSheets` |
 | `rr7-signup-validation` | server-side signup validation | `react-router-builder` | `react-router`, `zod` | Zod 4's top-level `z.email()` |
-| `python-mcp-tool` | an MCP tool that looks up a donor | `python-developer` | `python` | a typed result, not a bare `dict` |
+| `python-mcp-tool` | an MCP tool that looks up a donor | `python-developer` | `python` | a typed result (a model, `TypedDict`, dataclass or `dict[...]`), not a bare `dict` |
 | `turbo-cache-miss` | CI never hits the turbo cache | `toolchain-engineer` | `turborepo` | the build task declares `outputs` |
 | `homepage-copy` | write the homepage copy | `conversion-copywriter`, not `ux-designer` | `landing-page` | |
 | `billing-settings-copy` | billing settings wording confuses people | `ux-designer`, not `conversion-copywriter` | `ux-copy` | |
 | `payments-seam-design` | where the boundary goes before PayPal | `architecture-reviewer` | `codebase-design` | |
-| `flaky-test-suite` | suite fails one run in five | `test-writer` | `testing` | the clock is faked, not read |
+| `flaky-test-suite` | suite fails one run in five | `test-writer` | `testing` | the clock is faked or passed in, not read |
 | `fly-worker-disk` | deploy a worker whose outbox is on disk | `fly-platform-engineer`, not `vercel-platform-engineer` | | `fly.toml` mounts a volume |
 | `readme-typo-inline` | fix a README typo | none: the lead edits it inline | | the fix is an `Edit`, not a rewrite |
-| `ios-screen-no-seat` | a SwiftUI settings screen | none: the lead asks the user about hiring | | no `.swift` written; judged reply |
+| `ios-screen-no-seat` | a SwiftUI settings screen | none: the lead asks the user about hiring | | no `.swift` written or edited; judged reply |
 
 ## Adding a case
 
