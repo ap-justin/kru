@@ -79,6 +79,7 @@ check allow $ui "The R2 object cap is 5 GB."
 
 # coordinates and hedges
 check refuse $ui "Edit src/Form.tsx:42 to add the field." "coordinates"
+check refuse $ui "The cursor math in \`donor.ts ~:54-59\` drops the last page." "coordinates"
 check refuse $ui "Status may mean archived here." "hedged term"
 check allow $ui "Edit the SignupForm component in src/Form.tsx."
 
@@ -99,13 +100,18 @@ check refuse $ui "Edit src/Form.tsx:42. Decide whether the field is required." "
 out=$(find "$sandbox/home" -name refusals.jsonl -exec tail -n 1 {} \; 2>/dev/null)
 if printf '%s' "$out" | grep -q '"refused":true' && ! printf '%s' "$out" | grep -q 'open decision' && [ "$(shadow_lines)" -eq "$after" ]; then
   pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (shadow+refuse): %s\n' "$out"; fi
+# a brief asking for the return-pass line logs a shadow line
+before=$(shadow_lines)
+check allow $ui "Build the form. Return with a \`Return pass: <typecheck> · <tests>\` line."
+[ "$(shadow_lines)" -eq $((before + 1)) ] && pass=$((pass + 1)) || { fail=$((fail + 1)); printf 'FAIL (return pass): no shadow line\n'; }
+after=$(shadow_lines)
 # a clean brief writes nothing
 check allow $ui "Build the form. The field is required."
 [ "$(shadow_lines)" -eq "$after" ] && pass=$((pass + 1)) || { fail=$((fail + 1)); printf 'FAIL (clean): shadow line written\n'; }
 
 # grouping: a file under another seat's sheet directory logs a shadow line
 mkdir -p "$sandbox/sheet/.claude"
-printf 'ui         kru:react-ui-builder     ← `packages/ui` components\nroutes     kru:react-router-builder ← `apps/console/src/routes`, `apps/console/src/api`\n' > "$sandbox/sheet/.claude/CLAUDE.md"
+printf 'ui         kru:react-ui-builder     ← `packages/ui` components\nroutes     kru:react-router-builder ← `apps/console/src/routes`, `apps/console/src/api`\nemails     `packages/emails` templates; schema via kru:drizzle\n' > "$sandbox/sheet/.claude/CLAUDE.md"
 sheet_check() {
   local seat=$1 prompt=$2 want=$3 b a input
   b=$(shadow_lines)
@@ -119,6 +125,8 @@ sheet_check() {
 sheet_check kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\` and wire \`apps/console/src/api/client.ts\`." 1
 sheet_check kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\`." 0
 sheet_check kru:react-router-builder "Mount it in \`apps/console/src/routes/home.tsx\`, importing \`packages/ui/card.tsx\`." 1
+# a skill named on a sheet line owns no directory
+sheet_check kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\` and the note in \`packages/emails/CLAUDE.md\`." 0
 sheet_check kru:code-reviewer "Review \`packages/ui/card.tsx\` and \`apps/console/src/api/client.ts\`. report: /tmp/kru-review/p/code-reviewer-x.md" 0
 
 # the gate stays out of unknown seats

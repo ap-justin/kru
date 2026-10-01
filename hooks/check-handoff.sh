@@ -43,8 +43,9 @@ done
 [ -z "$cwd_slug" ] && [ -n "$cwd" ] && cwd_slug=$(basename "$cwd")
 
 reasons=""
-# a coordinate is a stale cache: file.ext:NN, or a bare "line 91" / "lines 20-21"
-coords=$(printf '%s' "$prompt" | grep -oE '\.(tsx?|jsx?|mjs|cjs|svelte|vue|astro|md|go|py|rs|css|scss|json|sql|html|ya?ml|toml|sh)\b:[0-9]+|\blines? [0-9]+' | head -5 | tr '\n' ' ')
+# a coordinate is a stale cache: file.ext:NN, its approximate "file.ext ~:NN",
+# or a bare "line 91" / "lines 20-21"
+coords=$(printf '%s' "$prompt" | grep -oE '\.(tsx?|jsx?|mjs|cjs|svelte|vue|astro|md|go|py|rs|css|scss|json|sql|html|ya?ml|toml|sh)\b ?~?:[0-9]+|\blines? [0-9]+' | head -5 | tr '\n' ' ')
 [ -n "$coords" ] && reasons="coordinates instead of named anchors: ${coords}(re-anchor each to its function/const/section — item 2, scan 1). "
 # the learnings channel is the same literal path on every brief, so the hook
 # supplies it rather than refusing over its absence — a refusal costs a whole
@@ -209,9 +210,15 @@ shadow=""
 # call, so this one proves its hit rate in shadow first. one bounded span.
 decide=$(printf '%s' "$prompt" | grep -oiE '(decide|determine|establish|pick) (whether|which|what|how|if|between)[^.]{0,40}' | head -1)
 [ -n "$decide" ] && shadow="${shadow}open decision: \"${decide}\" — resolve it, or name what each answer resolves to (item 3, scan 3). "
+# the return-pass line is Block O's, already in every code-writing seat's prompt — a
+# brief asking for it is a second source of that block (scan 2).
+retpass=$(printf '%s' "$prompt" | grep -oiE 'return pass:?[^.]{0,40}' | head -1)
+[ -n "$retpass" ] && shadow="${shadow}restates Block O: \"${retpass}\" — the seat prompt carries the return pass; cut the clause (scan 2). "
 # grouping: a sheet line names the directories its seat owns in backticks, so a
 # file under another seat's directory rides in the wrong brief. only a seat the
 # sheet gives directories to is checked — a reviewer's brief names every lane.
+# a sheet line names skills as kru:<skill> too, and a skill owns no directory,
+# so an owner counts only when it is a seat.
 lanes=""
 for f in "$cwd/.claude/CLAUDE.md" "$cwd/CLAUDE.md"; do
   [ -f "$f" ] && lanes="$lanes$(grep -E 'kru:[a-z-]+' "$f" | awk '{
@@ -221,7 +228,7 @@ for f in "$cwd/.claude/CLAUDE.md" "$cwd/CLAUDE.md"; do
       d = substr(rest, RSTART + 1, RLENGTH - 2); sub(/\/+$/, "", d)
       print d, owner; rest = substr(rest, RSTART + RLENGTH)
     }
-  }')
+  }' | while read -r d o; do [ -f "$plugin_root/agents/$o.md" ] && printf '%s %s\n' "$d" "$o"; done)
 "
 done
 if [ -n "$lanes" ] && printf '%s' "$lanes" | awk -v s="$seat" '$2 == s { f = 1 } END { exit !f }'; then
