@@ -142,7 +142,7 @@ your other machines and your cloud sessions. `references/store.md` is the whole 
 **Backlog and tech debt**
 - `/kru:reflect` `[<pr> | <branch> | <commit> | everything]`: every seat looks back over its own lane, then the fixes get scoped, sliced and landed.
 - `/kru:todos`, `/kru:issues`: work the backlog; each entry landed is deleted.
-- `/kru:issues-loop` `[<max files>]`: fix defects one commit at a time, without stopping to ask, until the branch reaches the changed-file cap (default 80); product calls wait for the end.
+- `/kru:issues-loop`, `/kru:todos-loop` `[<max files>]`: fix defects or build wants one commit at a time, without stopping to ask, until the branch reaches the changed-file cap (default 80); product calls wait for the end.
 - `/kru:briefs`: check every brief against what shipped; tick, archive, or resume one.
 - `/kru:design-system audit`: audit the design system.
 - `/kru:seo-review`, `/kru:review-animations`, `/kru:improve-animations`, `/kru:design-gallery`: audits on shipped pages.
