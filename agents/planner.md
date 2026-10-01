@@ -38,7 +38,7 @@ Read **`${CLAUDE_PLUGIN_ROOT}/TRACKER.md`** — that file **is** the tracker doc
 - **Vertical, not horizontal**: each ticket cuts a complete narrow path through every layer and is demoable/verifiable alone, sized to one fresh context window. No layer-by-layer slices.
 - **Edges only where they gate**: a ticket's **Blocked by** lists only tickets that genuinely must finish first. A wall of false edges needlessly serializes the plan — keep the frontier as wide as the real dependencies allow, so the lead always has the next takeable ticket clear (execution is sequential — one at a time — but the frontier shouldn't be artificially narrow).
 - **Refer by name**: in your return and in map bodies, name every ticket by its title wrapping its file link, never a bare id.
-- **No stale specifics**: no file paths or code snippets in tickets/specs (they rot) — except a prototype-derived snippet that pins a decision (state machine, schema, type shape), trimmed to the decision.
+- **References that don't rot**: name code by file path and symbol anchor (a function, a type, a route), never by line number — the lead's brief needs those anchors. A snippet goes in only where it pins a decision (state machine, schema, type shape), trimmed to the decision.
 
 ## Output (return to the lead)
 - The mode you ran and **what you wrote**: the file(s) under the store's `plan/<effort>/` (full paths), the ticket titles in dependency order, and the **frontier** (tickets with no unmet blockers — dispatch these first).

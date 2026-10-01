@@ -35,7 +35,7 @@ What keeps the first phase affordable: **every seat runs in its own context**, s
 
    **That file prices a batch for a slice about to merge, and this code already shipped. Four of its rules are overridden here:**
 
-   - **`architecture-reviewer` runs on every look-back**, whatever the change shape. Structural debt accumulates in landed code precisely because nothing gated it on the way in, so the run that looks back is the first thing that ever reads for it.
+   - **`architecture-reviewer` runs on every look-back whose target crosses a module boundary, and always on `everything`.** Structural debt accumulates in landed code precisely because nothing gated it on the way in, so the run that looks back is the first thing that ever reads for it.
    - **`code-reviewer` reads for what shipping leaves unproven** — the error branch nothing reached, the race no load has hit, the webhook that has never seen a duplicate. Working code is evidence about the paths that ran.
    - **`test-writer` reads the tests on every look-back** — the target's test files, against the behavior the rest of the target ships. It reads for behavior nothing covers, assertions that can't go red, and tests that pass by order or clock; it runs nothing. Before merge, coverage is the test-first builder's; landed code had no one watching for the test never written.
    - ***live-versus-latent* applies to genuinely dead paths only.** It trims a pre-merge batch down to code something reaches; here, shipping is that evidence, so it trims little.

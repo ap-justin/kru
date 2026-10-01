@@ -10,7 +10,7 @@ This is the **Baseline** judgment: which native CSS a builder can reach for toda
 Every feature below carries a Baseline status (from web.dev/baseline), and the status *is* the decision:
 - **Widely available** — interoperable across Chrome/Edge/Firefox/Safari for 30+ months. Use it outright, no fallback, no `@supports` check.
 - **Newly available** — interoperable now, but hasn't crossed the 30-month mark. Safe for an evergreen-browser audience; check the repo's actual browser-support target (a `browserslist` entry, a stated "supports X+" note) before treating it as unconditional, and pair it with `@supports` when the fallback is cheap and the feature is non-critical (decorative, progressive enhancement).
-- **Limited availability** — not yet interoperable across all four. Don't reach for it without the user's explicit go-ahead, and always behind `@supports`.
+- **Limited availability** — not yet interoperable across all four. Free where the browsers without it fall back to the baseline behavior unaided; gate CSS that breaks without it behind `@supports`; ask the user before shipping one the design depends on.
 
 ## Aging rule — this snapshot goes stale, recompute against today
 Baseline status moves with the calendar, not with this file. Rule: **feature's Baseline year (`BL` column in `reference/baseline.md`) + ~30 months ≈ when it crosses into Widely available.** So as of any given date:

@@ -246,21 +246,14 @@ zero — the closing `exit 0`, since one failed step shouldn't fail the environm
 five minutes, and only what it writes to disk survives the snapshot.
 
 Dependencies install from a committed SessionStart hook, because a hook tracks each branch's
-lockfile and the snapshot doesn't: `.claude/cloud-install.sh`, gated on `CLAUDE_CODE_REMOTE=true`
-and located by `$CLAUDE_PROJECT_DIR`, registered in the repo's `.claude/settings.json` on
-`startup|resume`. Where the repo already has a SessionStart hook, the install joins it. The image
-puts its own node and pnpm (`/opt/node22/bin`) on `PATH`, so the hook opens by linking the pinned
-pnpm into a directory holding nothing else, prepending that directory to `PATH` and appending the
-same `export` to `$CLAUDE_ENV_FILE`, which carries it into the session's later shells. The link
-targets the binary, `.tools/pnpm-exe/<ver>/pnpm` under the installer's home — its `pnpm` is a
-wrapper that resolves that binary beside its own path, so a symlink to the wrapper breaks. The
-directory holds nothing else because `/usr/local/bin` carries the image's node 20, which would
-shadow its 22 — wrangler refuses 20 — unless the setup script installed the repo's own node there. Without it
-the image's pnpm self-switches to `packageManager`'s version with lifecycle scripts off, and turbo,
-which spawns that placeholder directly, fails with `Exec format error` while `pnpm` in a shell looks
-fine. A session
+lockfile and the snapshot doesn't: `.claude/cloud-install.sh`, copied from
+`${CLAUDE_PLUGIN_ROOT}/skills/setup/cloud-install.sh` and filled in, then checked with `bash -n`. The
+template carries each line's reason. The one to keep in view when adapting it: the image puts its own
+node and pnpm on `PATH`, and a hook that lets them win looks fine in a shell and fails in turbo with
+`Exec format error` — so the pinned pnpm binary (not its wrapper) is linked into a directory holding
+nothing else, and that `PATH` reaches later shells through `$CLAUDE_ENV_FILE`. A session
 with several repos attached — the store counts — runs no repo hooks. `CLAUDE_CODE_ENABLE_TODO_TOOLS` goes in
-that file's `env`. The credentials
+`.claude/settings.json`'s `env`, beside the hook's registration. The credentials
 posture is the user's to hold: the env-var field is readable by anyone who shares the environment,
 so a private environment with sandbox values, never a staging or production file.
 

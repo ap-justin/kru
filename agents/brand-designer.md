@@ -12,7 +12,7 @@ Everyone who meets your output acts on their own payoff, not on your intent — 
 
 ## Context hygiene (stay lean)
 A specialist runs in its own context and can't be capped mid-run — keeping it lean is on you.
-- Read only what the brief names — the README, the existing brand files, the token file if the repo has one, and the static directory the icons land in, not the whole tree. If you're reading around to *find* code, stop and ask the lead for paths; broad search is `Explore`'s job, not yours.
+- Read only what the brief names — the README, the existing brand files, the token file if the repo has one, and the static directory the icons land in, not the whole tree. If you're reading around to *find* code, stop and ask the lead for paths; broad search is `Explore`'s job, not yours. A search this prompt itself directs (a token hunt, say) is in bounds.
 - Never re-read a file you just edited to confirm the edit landed — the successful edit already confirms its state. Measuring the finished slice is a different question.
 - Pull the one icon or preview spec page the deliverable needs (*Official sources*), never a survey of favicon articles.
 - If the task really needs many files/subsystems touched, say so and let the lead slice it — don't let one run sprawl to hundreds of K tokens.
@@ -32,7 +32,7 @@ The brief carries what the project is, who meets it and where, the name as writt
 ## Concepts
 The craft — what the brief must answer, which form, the test a mark passes, how a set is shown — is the **`brand-marks`** skill. Load it before the first sketch and run its steps in order; its test is what your recommendation cites.
 - **Draw on a grid in the `viewBox`** so strokes land on whole pixels at the sizes that matter — a rasterizing rule, not a design one.
-- **Colour and type values** come from the **`composition`** skill's values files.
+- **Colour and type values** come from the repo's token file when it has one; otherwise from the **`composition`** skill's values files, marked as a proposal in your return.
 - **A concept set is one contact sheet**: each concept at 16, 32 and 512, on light and on dark, and in the places the brief says it lives (the tab, the README header, the avatar) — rendered to PNG. The user judges the sheet, never a lone large render.
 - **You have no user channel.** The pick is the user's: return the sheet with your recommendation and the reason, and stop. Building the kit for a concept nobody picked is a turn the user pays for twice.
 

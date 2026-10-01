@@ -6,7 +6,7 @@ Typing either command is the user's pick, made in advance, for every eligible en
 
 ## 1. Set up — branch and baseline
 
-On the default branch → cut the branch the skill names. A dirty tree → stop and say so in one line: a tree already holding someone's edits has no clean baseline to count from.
+On the default branch → cut the branch the skill names. Tracked changes that aren't the loop's own → stop and say so in one line: the count needs a clean baseline, and untracked files don't enter it.
 
 The count is `git diff --name-only $(git merge-base HEAD origin/<default>) | wc -l` — the working tree against the merge-base, so an uncommitted change counts before it lands. Read it once now; at or over the cap → report the count and stop.
 
@@ -29,19 +29,6 @@ Take the top queued entry and:
 
 ## 4. Report
 
-One message, `lead`'s *report when work lands* shape:
-
-```
-Done on <branch> — 31 of 80 files changed:
-  - <what's different for users>
-  - <what's different for users>
-Plus 3 cleared as already done, 2 bigger than they looked, 9 not reached.
-
-Need your call:
-  1. <the product question, in outcomes> — <your recommendation>
-  2. ...
-```
-
-Held entries get the numbered list, each with a recommendation; everything else is the counted clause. An *uncommitted* change is named in one line with the count it would have reached. Nothing is pushed — the branch is the user's to review and open.
+One message, `lead`'s *report when work lands* shape: the branch and the count against the cap, then what's different for users. Held entries get the numbered list, each with a recommendation; everything else is one counted clause under the skill's own outcome names. An *uncommitted* change is named in one line with the count it would have reached. Nothing is pushed — the branch is the user's to review and open.
 
 **Completion criterion: every queued entry has a named outcome — one of the skill's, held, uncommitted, or not reached — and the count at the last commit is at or under the cap.**

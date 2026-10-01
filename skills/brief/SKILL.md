@@ -41,7 +41,7 @@ Completion: the frontier is empty, and every question you asked was a product ca
 
 ## 3. Write `plan/<effort>/brief.md`
 
-Per `${CLAUDE_PLUGIN_ROOT}/TRACKER.md` — `Change` (one line, what's different for users) · `Why now` · `Blast radius` (files/subsystems touched + risk) · **`Landing plan`** (the cadence — see below) · `Decisions resolved` (the grill record, Q → A) · `Non-goals` · `Done when` (checkboxes).
+Per `${CLAUDE_PLUGIN_ROOT}/TRACKER.md` — `Change` (one line, what's different for users) · `Why now` · `Blast radius` (files/subsystems touched + risk) · **`Landing plan`** (the cadence — see below) · `Decisions resolved` (the grill record, Q → A) · `Non-goals` · `Done when` (checkboxes) · `Open questions` — only when the user cut the round short with the frontier not empty: each still-open question, numbered, with your recommended answer.
 
 **Rewrite in place, don't append**: a re-grill reads the old brief as input and replaces it, so the file is always the *current* account of the change, never an archaeology of every discussion. Strip the brief's self-archaeology in the same pass — `(Correction, …)`, `(Amendment, …)`, `(Rewritten <date> — this read…)` — and grepping for those markers is the done-check. The brief states the current shape; the story of how it got there is exactly what `decisions.md` is for.
 
@@ -49,7 +49,7 @@ Once `Decisions resolved` stops being re-readable, split its long-form records (
 
 ## 4. Report
 
-One line in the shape "Plan saved: <what's different for users>. Next I build it." — or, when it won't fit one session, "…Next I break it into steps, then build it." No path, no seat or step references. Which it is follows `lead` Step 2.6 (**`/kru:lead`** builds it, or **`planner`** slices it first).
+One line in the shape "Plan saved: <what's different for users>. Next I build it." — or, when it won't fit one session, "…Next I break it into steps, then build it." When `Open questions` was written, the line names the count ("3 questions still open"). No path, no seat or step references. Which it is follows `lead` Step 2.6 (**`/kru:lead`** builds it, or **`planner`** slices it first).
 
 ## Cadence is yours, and it persists in the brief
 

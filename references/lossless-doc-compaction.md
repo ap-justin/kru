@@ -18,10 +18,10 @@ wc -c TODOS.md plan/<effort>/brief.md          # the every-run cost
 
 ## 2. Checkpoint first
 
-These stores are usually local-only git with no remote. Commit the dirty tree before touching anything, so every move is one `git checkout` from reversible.
+Commit the store's own paths before touching anything, so every move is one `git checkout` from reversible. On a cloud vm the store is `<repo>/.kru` and ships in the branch (`store.md`), so the checkpoint stages that root alone — never the working repo's other edits.
 
 ```bash
-git add -A && git commit -q -m "checkpoint before archiving pass"
+git add -- <store root> && git commit -q -m "checkpoint before archiving pass" -- <store root>
 ```
 
 ## 3. The governing rule — the split is a verification, not a formatting move

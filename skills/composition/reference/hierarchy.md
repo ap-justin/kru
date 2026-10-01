@@ -6,17 +6,17 @@
 **Rule:** rank with space, size, weight and contrast first; colour then reinforces an order that already exists.
 **Check:** desaturate the artboard. The reading order from the pass's step 3 is still the order the eye takes.
 
-## One primary action per view; the rest step down
+## At most one primary action per view; the rest step down
 
 **Default it corrects:** every button drawn at the same solid emphasis, or a destructive action given the loudest style on a page where it is not the main task.
-**Rule:** primary — the solid, highest-emphasis treatment, once. Secondary — clear but quieter (the system's outline or low-emphasis variant). Tertiary — link-weight, discoverable, unobtrusive. A destructive action off the main path takes a secondary or tertiary treatment; it becomes primary inside the confirm that asks about it.
-**Check:** count primary-styled controls per view; the answer is one (zero on a read-only view).
+**Rule:** primary — the solid, highest-emphasis treatment, on the one action the eye should find first; with no dominant action, nothing is primary. The count and its zero case are `ux-principles` → *One action wears the primary style per screen*. Secondary — clear but quieter (the system's outline or low-emphasis variant). Tertiary — link-weight, discoverable, unobtrusive. A destructive action off the main path takes a secondary or tertiary treatment; it becomes primary inside the confirm that asks about it.
+**Check:** count distinct actions styled primary per view; the answer is at most one. One action repeated per item — *Add to cart* on every card, *Choose* per pricing tier — counts once.
 
 ## Text emphasis spends ink and weight before size
 
 **Default it corrects:** hierarchy carried by font size alone — the heading huge, the metadata too small to read.
 **Rule:** text takes one of two or three inks (primary · secondary · tertiary) and one of two weights (regular · emphasis). A bolder primary line can sit at a sensible size; a secondary line is quieter by ink, not shrunk. On a coloured surface the quieter ink comes from that surface's own ramp — the page's grey reads muddy there. Below-regular weights are for large display type only; to quiet small text, lower its ink.
-**Check:** the artboard's body text uses at most three inks and two weights, and no line is smaller than the scale's small step to look secondary.
+**Check:** the artboard's emphasis comes from a small fixed set of inks and weights — the system's set where one exists, else at most three inks and two weights — and no line is smaller than the scale's small step to look secondary.
 
 ## Emphasis comes from quieting the competitors
 

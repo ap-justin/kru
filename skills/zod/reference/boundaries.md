@@ -80,7 +80,7 @@ Pick the unknown-key behavior deliberately — the default is silent removal:
 `strictObject` for a request body you control end-to-end (a client sending an unknown field is a version skew you want to hear about); plain `z.object` for third-party payloads that will grow fields without telling you. `z.json()` validates arbitrary JSON-shaped data when you genuinely don't know the shape yet — better than `z.any()`, which asserts nothing.
 
 ## Search params
-`URLSearchParams` has the same all-strings problem as env, plus repeated keys collapsing under `Object.fromEntries` (last one wins). Coerce explicitly and give every optional param a `.prefault()` so downstream code never branches on `undefined`:
+`URLSearchParams` has the same all-strings problem as env, plus repeated keys collapsing under `Object.fromEntries` (last one wins). Coerce explicitly and give every param whose absence has a default meaning a `.prefault()` so downstream code never branches on `undefined` — a filter whose absence means "no filter" stays `.optional()`:
 
 ```js
 const Query = z.object({

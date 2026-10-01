@@ -56,6 +56,7 @@ Where am I, where can I go, can I get back? These entries catch the step a user 
   - an empty-state or no-results branch rendering explanatory text with no call-to-action distinct from that text
   - a redirect target that is itself a dead end — its component tree contains no outgoing link or button
 **Fix:** render at least one primary action on every terminal branch — continue, view result, return to list.
+**Applies when:** a terminal state that ends the session or the account — sign-out, account deletion, the last step that asks to close the tab — has nowhere forward by design and passes.
 **Detect:** STATIC
 **Source:** *10 Usability Heuristics* (visibility of system status) · https://www.nngroup.com/articles/search-no-results-serp/ (2014)
 

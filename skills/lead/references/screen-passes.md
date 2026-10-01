@@ -4,7 +4,7 @@ Detail behind `SKILL.md` → Step 4, *Screen passes*. Reached on UI work; a non-
 
 ## The two passes have seats, and you dispatch them
 
-`visual-reviewer` and `accessibility-reviewer` are review-only agents whose entire body is the corresponding skill file — same rules, same output, same boundaries, read from the one copy. **Two callers, one body:** the user still types `/visual-review` · `/accessibility-review` and gets the pass inline; you spawn the seat and get it in an isolated context, in parallel with your other Step 4 gates.
+`visual-reviewer` and `accessibility-reviewer` are review-only agents whose entire body is the corresponding skill file — same rules, same output, same boundaries, read from the one copy. **Two callers, one body:** the user still types `/visual-review` · `/accessibility-review` and gets the pass inline; you spawn the seat and get it in an isolated context, after the source-reading gates and one browser at a time (`gates.md` → the batch).
 
 **Conformance is the repo's own gate**, written in Phase 0 and run at every commit (`${CLAUDE_PLUGIN_ROOT}/references/ui-handoff.md` → *Conformance is prevented, not detected*) — so an off-token value is already a failing test by the time a pass could look, and neither seat here is briefed for one.
 

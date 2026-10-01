@@ -21,7 +21,7 @@ One file is the normal load for a slice, two where it spans a form and the list 
 
 ## Applying one
 - **Every entry here decides what a component does; the design system decides how it looks.** Sequence, semantics, grouping, where focus lands, where feedback reports — that's this corpus, and all of it holds whatever the project's system says. Appearance is the token file's alone (below). A pattern here that reads like a look is a pattern to raise in your return.
-- **A pattern is a default, not a law.** A stated override answers it — a comment above the code, `CLAUDE.md`, the plan the lead handed down. Where you disagree and have no override, follow the pattern and raise it in your return.
+- **A pattern decides what the repo hasn't settled.** Where the repo has settled it — a written note (a comment above the code, `CLAUDE.md`, the plan the lead handed down) or consistent practice across its neighbours — match the repo and name the divergence in your return, so one component never reads unlike the rest. Where you disagree with a pattern the repo hasn't settled, follow it and raise it in your return.
 
 ## Owned elsewhere
 - **Appearance** — color, spacing, type, radius, elevation, duration, the rank a control takes, what a focus indicator or a selected row looks like: the project's token file, via the `## Design system` pointer.

@@ -19,7 +19,7 @@ The first question is whether it needs a symbol at all, or only a memorable trea
 
 ## 3. Draw it
 - **Rough by hand first, in solid mass at thumbnail size**, and judge the mass before any detail or colour; the computer "often just gets in the way" of the idea (Identify, Introduction; Bank of Taipei; Univision; MIAD).
-- **Cut the idea out of a solid shape** rather than drawing it in outline strokes. The finals are solid forms with white gaps; the rejected variants beside them are outlines or carry more parts (Identify, Scripps Howard; Karsan; Amesco; PBS; NBC).
+- **Judge solid mass first** — cut the idea out of a solid shape before reaching for outline strokes; a line-built mark holds one stroke weight (below). The finals are solid forms with white gaps; the rejected variants beside them are outlines or carry more parts (Identify, Scripps Howard; Karsan; Amesco; PBS; NBC).
 - **Let the gap between two parts draw the missing element** — a head, a letter, a divider — so the mark reads twice (Identify, NBC; RFK; GF; Armani Exchange).
 - **Count the parts and cut.** Every redesign in the book ends with fewer: the scene, the ring of type, the secondary figure go, one element stays (Identify, NBC; NYU; SEW; Xerox). Reduce the concept too — a basic element carries more than a specific one (Identify, HarperCollins).
 - **Build from one shape repeated or rotated.** The repeat holds the mark together and becomes the pattern the rest of the identity is made from (Identify, Chase Manhattan; PBS; Merck; New School; MOCA; Hirshhorn).

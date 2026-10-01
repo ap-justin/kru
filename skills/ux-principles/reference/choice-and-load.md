@@ -81,11 +81,11 @@ How much is being asked of working memory at this step? These entries catch the 
 
 ## One action wears the primary style per screen
 
-**Principle:** at most one control per screen or section carries the high-emphasis (primary/filled/accent) treatment; every other action is visually secondary.
+**Principle:** the eye finds the dominant action first — at most one action per screen or section carries the high-emphasis (primary/filled/accent) treatment; every other action is visually secondary.
 **Mechanism:** the Von Restorff effect — a single visually distinct element is what draws the eye and gets acted on. Style every button "primary," and the effect cancels itself: nothing stands out because everything does, and the user is back to reading labels one by one.
 **Code signal:**
   - 2+ sibling `<button>`/`<Button>` elements in one view sharing the same `variant="primary"` (or equivalent accent-filled class) prop
-  - a design-system `Button` component invoked 3+ times with the primary variant inside one route/section
+  - a design-system `Button` component invoked 3+ times with the primary variant inside one route/section for different actions — one action repeated per item (*Add to cart* on every card, *Choose* per pricing tier) counts once
   - a modal or form where "Cancel" and multiple confirm-style actions all carry equal visual weight
 **Fix:** demote all but one action per screen to secondary/outline/ghost; keep exactly one primary, or none if the screen has no dominant action.
 **Applies when:** a screen of genuinely independent widgets (e.g. a dashboard) may correctly have zero primary actions — absence isn't the defect there, multiplicity is.

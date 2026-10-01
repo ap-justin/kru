@@ -19,7 +19,10 @@ A slice reaching a stack no seat above covers is a question for the user, naming
 need — never a nearby seat pressed into the gap.
 ```
 
-Everything between them is this repo's answers, one line per field, each citing what it was derived
+Everything between them is this repo's answers, one line per key: the key, its value, then `←` and its derivation. The
+fixed keys are setup step 1's fields, spelled as there: `project seats` · `skills` · `tokens` · `screens`
+· `test` · `verify` · `mcp`. A seat line's key is the one-word lane it owns in this repo (`routes`, `ui`,
+`data`, `api`), and the line itself names the seat. Each line cites what it was derived
 from — a manifest entry, or on a blank repo the decision standing in for one (`← decided 2026-09-04 · /setup`).
 A seat line names the directories its seat owns, each in backticks: the handoff gate checks every file
 a brief names against them, so a file under another seat's directory shows up as a grouping miss.
@@ -30,11 +33,11 @@ Match the host file. The same sheet, in the two idioms most files are already wr
 block for a file that reaches for code fences and tables:
 
 ```
-routes     kru:react-router-builder     ← react-router 7.16.0 framework mode, `app/routes`
-ui         kru:react-ui-builder         ← `packages/ui` components, tailwind 4
-data       kru:postgres-architect       ← drizzle-orm, `apps/api/.server/pg/migrations`
-skills     kru:drizzle · zod · conform  ← drizzle-orm 0.44 · zod 4.1 · @conform-to/react 1.9
-project    .claude/skills/db-admin · e2e        ← prefer these over a plugin seat
+routes         kru:react-router-builder       ← react-router 7.16.0 framework mode, `app/routes`
+ui             kru:react-ui-builder           ← `packages/ui` components, tailwind 4
+data           kru:postgres-architect         ← drizzle-orm, `apps/api/.server/pg/migrations`
+skills         kru:drizzle · zod · conform    ← drizzle-orm 0.44 · zod 4.1 · @conform-to/react 1.9
+project seats  .claude/skills/db-admin · e2e  ← prefer these over a plugin seat
 ```
 
 and bold-led bullets for a file written in prose:
@@ -61,7 +64,7 @@ whichever section of the host file already owns that subject:
 
 ```
 tokens     packages/brand/src/colors.css      ← gate: lefthook test-brand (colors.ts ↔ colors.css)
-⚠ suite    ~9 min cold, no watch mode         ← measured; no config states it
+⚠ test     ~9 min cold, no watch mode         ← measured; no config states it
 mcp        sentry · stripe (project scope)    ← claude mcp list; context7 + chrome-devtools at user scope
 ```
 

@@ -27,7 +27,7 @@ Both live in **`modern-css`** — same states, same *year + ~30 months* math, on
 | An `IntersectionObserver` purely to defer offscreen images/iframes | `loading="lazy"` | Widely (2023-12) |
 | A `<link rel=preload>` to promote the LCP image | `fetchpriority="high"` | Newly (2024-10) |
 
-**Limited availability — not interoperable yet.** Don't reach for these without the user's go-ahead, and always behind `@supports`: CSS anchor positioning, customizable `<select>` (`<selectedcontent>`), `<dialog closedby>`, `popover="hint"`, interest invokers, `<input type="checkbox" switch>`, `hidden="until-found"`.
+**Limited availability — not interoperable yet.** Free where the browsers without it fall back to the baseline element unaided (`switch`, `closedby`, `hidden="until-found"` each degrade to the plain checkbox, dialog or hidden content); gate the CSS ones behind `@supports`; ask the user before shipping one the design depends on: CSS anchor positioning, customizable `<select>` (`<selectedcontent>`), `<dialog closedby>`, `popover="hint"`, interest invokers, `<input type="checkbox" switch>`, `hidden="until-found"`.
 
 The full grouped table, with every feature's status and Baseline date: **`reference/baseline.md`**.
 

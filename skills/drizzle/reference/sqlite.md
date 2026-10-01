@@ -34,7 +34,7 @@ The `better-sqlite3` and `bun-sqlite` transaction callback is **synchronous** (`
 ## D1: inside `db.batch`, a column projected twice shifts every field after it
 A projection naming the same **underlying** column twice — two keys, one column — misassigns each row's values by position: the repeat keeps its first slot with its *last* value, one value drops out, every later field lands on its right-hand neighbour's key, and the final field is `undefined`. Nothing throws, and the TS type still claims every key, so a string field can hold an integer. Renaming the drizzle key changes nothing; a SQL alias (`sql\`${t.col}\`.as('x')`) or running the query outside the batch (`Promise.all`) does. The mechanism is `drizzle-orm/d1/session.js` (0.45.2), and `.get()` takes the same path — verified by probe on real D1.
 
-## No `STRICT` — the one place this skill contradicts the `sqlite` skill
+## No `STRICT` — the ORM branch of the `sqlite` skill's type rule
 `sqlite-core` has no strict-table option and `drizzle-kit generate` never emits `STRICT`. Verified generated DDL:
 
 ```sql
@@ -44,7 +44,7 @@ CREATE TABLE `users` (
 );
 ```
 
-The `sqlite` skill's rule is `STRICT` on every table, and Drizzle cannot express it. Resolve it explicitly rather than silently dropping the rule:
+The `sqlite` skill's goal is column types the engine enforces, by `STRICT` where the DDL is yours; Drizzle cannot express it. Resolve it explicitly rather than silently dropping the goal:
 
 - **Add it in a `--custom` migration** doing the rebuild by hand, and accept that the next `generate` diffs against a snapshot that doesn't know the table is strict — a change to that table regenerates it without `STRICT`. Only worth it on tables that rarely change shape.
 - **Or accept type affinity** and compensate with `CHECK` constraints in the table config, which Drizzle *can* express. This is the pragmatic default; say which one was chosen and why.

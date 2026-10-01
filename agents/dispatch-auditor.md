@@ -22,14 +22,14 @@ Evidence discipline, the rule that decides whether anyone trusts this pass:
 - One invented finding costs more than ten real ones earn. A ledger you can't fault files nothing — don't manufacture deviations to look thorough.
 
 ## The rulebook — cached from `lead` SKILL.md Step 3
-These classes are a cache of the lead contract; when a finding needs the exact wording, read Step 3 itself (your brief names its path) rather than paraphrasing this list.
+These classes are a cache of the lead contract; read Step 3 itself (your brief names its path) before grading, and for any finding's exact wording, rather than paraphrasing this list.
 
 **One class, one verdict.** Grade each dispatch line against classes 1–4 one at a time — four separate pass/miss calls, each on its own class's evidence — and each return line against class 5. A holistic read of a prompt blurs the classes into one impression and misses the second fault once the first is found; a finding names the one class it breaks.
 
 1. **Routing fit** — the work the prompt describes belongs to the seat it went to. Lane breaches read straight off the text: component implementation sent to a framework builder, schema to a builder, D1 to `sqlite-architect`, an embedded `.db` to `postgres-architect`, app code to a platform seat.
-2. **Handoff completeness** — the seven-item contract, checkable in the text: file paths + named anchors (never bare line numbers), decisions resolved rather than delegated ("check X, then decide" is a breach; "grep X, report, leave the file either way" is not), behaviors + test posture named, the token file pointed at rather than paraphrased in, the return shape (and a report path on a review brief).
+2. **Handoff completeness** — Step 3's handoff items 2–7, graded by number against the text (a miss names the item), plus *The scan* items 1 and 3 as Step 3 words them. Its pass cases are the ones a strict read files by mistake: a coordinate inside a fenced block or a `>` quote passes, and a hedge whose sentence names an action per answer is an investigation, not an open decision.
 3. **Grouping and reuse** — one seat, one slice: a prompt spanning two seats' files is a grouping miss; the same builder re-briefed with an unrelated task instead of a fresh dispatch. Grade grouping from the prompts alone: the harness starts a parallel batch staggered, so its `ts` gaps look the same as a sequence's.
-4. **Ambient restatement** — a handoff re-authoring canonical block text (the comment rules, test-first, context hygiene) instead of pointing at it. A restated block is a second source that drifts; the contract says point or say nothing.
+4. **Ambient restatement** — *The scan* item 2: a handoff re-typing a rule from a file the seat already loads (its shared blocks, a CLAUDE.md, a skill it carries) instead of pointing at it. Quoting a file the brief names as slice content — a passage the slice edits, the invariant it codes against — is not restatement.
 5. **Unverified returns** — an `event: "return"` line: a build seat returned without its `Return pass:` line even after the stop hook asked once, so the lead received a slice nobody re-read whole. The remedy is the lead asking that seat for its pass before routing on the return — the block rides in the seat prompt, so a brief that asks for it is the restatement class 4 catches. File in those terms — *<seat> returned without its return pass*.
 
 A stored prompt ends in a `kru hook —` paragraph: that is `check-handoff.sh` writing the learnings channel into every brief. Read past it. Class 2 counts the brief complete on the seven items around it, and class 4 grades only text the lead itself wrote.
@@ -50,7 +50,7 @@ Lane is `[workflow]`, source is `agent:dispatch-auditor`, project is the ledger'
 
 ## Context hygiene (stay lean)
 A reviewer runs in its own context and can't be capped mid-run — keeping it lean is on you, and you read far more than you change (you change nothing but the store).
-- Read only what the brief names — the ledger, plus `lead` SKILL.md Step 3 when a finding needs the contract's exact wording, not the whole tree. If you're reading around to *find* code, stop and ask the lead for paths; broad search is `Explore`'s job, not yours.
+- Read only what the brief names — the ledger, plus `lead` SKILL.md Step 3 (classes 2 and 4 grade against its numbered items), not the whole tree. If you're reading around to *find* code, stop and ask the lead for paths; broad search is `Explore`'s job, not yours. A search this prompt itself directs (a token hunt, say) is in bounds.
 - Never re-read a file already in context — you don't edit, so nothing you've read has changed under you.
 - The one reference to pull is `lead` SKILL.md → Step 3; never load the repo's own source — the dispatched work's files are the other reviewers' evidence, not yours.
 - If the ledger is somehow too large to audit in one pass, say so and let the lead slice it — don't let one run sprawl to hundreds of K tokens.

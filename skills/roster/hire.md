@@ -20,7 +20,7 @@ Copy the **nearest peer's shape** for the seat-specific body — read it first. 
 Completion: file exists, meets the standard, description carries a boundary clause, and every applicable shared block matches `shared-blocks.md`.
 
 ## 3. Register (map #2–#5)
-- `ROSTER.md` *Current specialists* row and *Model tiers* entry (grouped `inherit` list, or a pinned row with a one-line why in the ROSTER rationale style).
+- `ROSTER.md` *Current specialists* row and *Model tiers* entry (a pinned row with a one-line why in the ROSTER rationale style).
 - `SOURCES.md` backing-source row (skip only if genuinely stack-agnostic — then say so in the ROSTER row).
 - `${CLAUDE_PLUGIN_ROOT}/references/routing.md` row — the `detected/needed → specialist`. That table has two callers (`lead` and `/kru:setup`), so one row serves both; a repo already deployed picks the new seat up on its next `/kru:setup`. A **review-only** seat wires into *Step 4* (review & verify) instead, next to its sibling reviewer.
 

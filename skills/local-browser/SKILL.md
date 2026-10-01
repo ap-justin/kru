@@ -15,7 +15,7 @@ The server runs **headless** on a persistent profile at `~/.cache/chrome-devtool
 
 ## 1. The dev server is the user's
 
-Ask the user to start it, and wait for their confirmation before opening anything. If nothing responds at the target URL, stop and ask — a failed load is theirs to fix, not yours to route around.
+Starting it is the user's, never yours. Probe the target URL first; if nothing responds, stop and report that, naming the URL — to the user inline, in your return as a seat. A failed load is theirs to fix, not yours to route around.
 
 One 500 is not the app's: a workspace package's new `exports` entry doesn't reach a running Vite dev server — Node caches the `package.json` it already resolved, so every import of the new subpath fails with *is not exported under the conditions […]* while `tsc` and vitest both pass. Read it as a restart, never as a bad `exports` entry, and ask for the restart in the same slice.
 
@@ -34,7 +34,7 @@ The viewport override **survives navigation** — set it once per breakpoint and
 
 ## 4. On an auth redirect, hand back
 
-Headless means there is no window for the user to log into. The profile is the seam: it persists, so one interactive login serves every later run. Give them the command, wait for confirmation, then re-navigate.
+Headless means there is no window for the user to log into. The profile is the seam: it persists, so one interactive login serves every later run. Give them the command and stop — inline, wait for their confirmation, then re-navigate; as a seat with no user channel, return the command and the routes it blocked.
 
 ```bash
 # user runs this, logs in, quits Chrome — the headless server picks up the cookies
@@ -73,4 +73,4 @@ CDP scrolls the target into view before the press, so a scroll-position read acr
 
 ## Done when
 
-Every claim about the app is backed by an observed snapshot, screenshot, or `evaluate_script` result — never inferred from source — and `close_page` has run on the pages you opened.
+Every claim about what rendered is backed by an observed snapshot, screenshot, or `evaluate_script` result; a cause may come from source, cited `file:line`; and `close_page` has run on the pages you opened.

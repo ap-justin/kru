@@ -126,4 +126,4 @@ What runs, and when:
 Applied when scaffolding a new project; brownfield always matches the existing repo instead.
 
 - **Package manager (JS/Node): `pnpm`** — install, scripts, lockfile (`pnpm-lock.yaml`). Don't emit `package-lock.json`/`yarn.lock`. N/A for non-JS stacks.
-- **UI stack: React**, on the framework the brief names — the stack the sync lane is available in if the project ever earns it.
+- **UI stack: React when the user states no preference**, on the framework the brief names — the stack the sync lane is available in if the project ever earns it. A stated stack wins; it gets the canvas, the token file and its gate (`design-sync.md` → *The entry bar*).

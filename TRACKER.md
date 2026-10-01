@@ -169,6 +169,9 @@ Default is **one PR, commits are the steps**. Split only on an environment bound
 ## Non-goals
 - explicitly out of scope, so a builder doesn't drift into it
 
+## Open questions
+- only when the user cut the grill short: the product calls still unanswered
+
 ## Done when
 - [ ] the end-to-end behaviour that must work
 ```

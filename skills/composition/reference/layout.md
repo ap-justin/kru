@@ -23,10 +23,10 @@
 **Rule:** give a component a `max-width` and let it shrink only once the viewport is narrower than that; fixed-width sidebars sized to their contents, a fluid main area with its own inner layout. A narrow thing that looks lost in a wide layout is split into columns (the supporting text beside the form), never stretched. Each section sizes to its own content, whatever width the nav spans; where a section genuinely needs the room, it takes it.
 **Check:** at the widest artboard, no form, card or text block is wider than its content needs, and no element sized in percentages gets *narrower* as the viewport widens past a breakpoint.
 
-## The narrow artboard is drawn first
+## The primary audience's frame is drawn first
 
 **Default it corrects:** a wide layout drawn on a 1440 canvas and squeezed afterwards, so every narrow compromise is a patch.
-**Rule:** draw the ~400px frame first, then widen it and change only what felt compromised. The wide frame usually needs less change than expected.
+**Rule:** draw the frame the primary audience uses first — the ~400px frame for a public or consumer surface, the wide one for a desktop-first internal tool or a dense ops dashboard — then move to the other end and change only what felt compromised, before the canvas publishes.
 
 ## Density is a decision, and roomy is the default
 

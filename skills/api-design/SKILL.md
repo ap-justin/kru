@@ -9,6 +9,7 @@ user-invocable: false
 Claims were checked against the sources they cite on 2026-09-21. The Standard Webhooks signing claims were also run through `standardwebhooks` 1.1.1, its reference JS verifier. A rule with no citation is a recipe: the reason stands beside it.
 
 ## The wire contract
+The shapes below — the list envelope, string ids, problem-details errors — are for a new surface. On an existing one its shape wins, since the shape is permanent: a new endpoint matches its siblings, and moving to these shapes is a new version.
 - **Every response is built by a serializer, never by passing a DB row through.** The row type belongs to the app and changes with each migration; the wire shape doesn't. Give each resource one function with an explicit return type, and a spec that pins its exact key set, so a schema change that would reach the wire fails a test before it ships.
 - **A list is an object, never a bare array.** `[...]` can never grow `next_cursor`, `has_more` or a count without a new version. Return `{ "data": [...], "next_cursor": null }` from the first release, even when there is one page.
 - **Ids are strings on the wire.** RFC 8259 promises interoperability only for integers within ±(2^53 − 1) ([§6](https://www.rfc-editor.org/rfc/rfc8259#section-6)). Beyond that, `JSON.parse` turns the integer into a different number without an error. An integer primary key goes out as a string, or better, as a prefixed public id (`ord_…`) that lets someone tell the resource from the id alone.

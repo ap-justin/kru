@@ -25,15 +25,15 @@ Two kinds of file, and the kind decides who loads it:
 
 ## The pass
 
-Run it on every artboard before a canvas publishes, and on every screen or section before a build returns.
+Run it on every artboard before a canvas publishes, and on any screen or section whose layout the change touches before a build returns — a string fix, a token swap or a handler change skips it.
 
 1. **Outline the groups before placing anything.** Write the screen as a tree: page → section → group → item → part (a label and its box, a title and its meta, an avatar and its name). Every node is something the reader should perceive as one unit.
 2. **Give each depth of the tree its own space tier, strictly larger going outward.** Part-internal < item-internal < between items < between groups < between sections. A tier is a step on the repo's space ladder; two adjacent depths never share a step.
-3. **Rank before styling.** Name the one primary action per view and the reading order of the text; `hierarchy.md` spends that rank.
+3. **Rank before styling.** Name the primary action per view (or none) and the reading order of the text; `hierarchy.md` spends that rank.
 4. **Pick each step by its neighbours.** Guess a step, then try the one either side; two of the three usually look wrong at once. When an outer one wins, re-centre on it and compare again.
 5. **Check the draft against every entry in the files the index mapped.**
 
-**Done when** every node in the tree has a gap to its siblings larger than any gap inside it, every view has exactly one primary action, and every entry in the loaded files has been checked against the draft.
+**Done when** every node in the tree has a gap to its siblings larger than any gap inside it, no view has more than one distinct primary action, and every entry in the loaded files has been checked against the draft.
 
 ## Owned elsewhere
 

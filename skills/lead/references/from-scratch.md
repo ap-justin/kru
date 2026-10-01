@@ -2,7 +2,7 @@
 
 Loaded by `lead` when the branch is live.
 
-1. The subject, audience, the one job and the stack are the sheet's — `/kru:setup` grilled them on the blank repo (its step 1b). Read them there; **a UI that needs a design system built for it is React** (*UI from scratch*, below).
+1. The subject, audience, the one job and the stack are the sheet's — `/kru:setup` grilled them on the blank repo (its step 1b). Read them there. A UI that needs a design system built for it defaults to React when the user states no preference, because the sync lane is React-only; a stated stack wins, and gets the canvas, the token file and its gate (*UI from scratch*, below).
 2. Consider grilling (Step 2.5) before architecting.
 3. Then spawn **`Plan`** (built-in) for the architecture, scaffold, and route implementation (Step 3).
 
@@ -11,7 +11,7 @@ A UI with no system yet is **not built and then designed**. `ux-designer`'s flow
 
 **The design is authoritative.** What comes back ships as authored — contrast included. The team's job is to transcribe it once, into the token file, and hold every build inside it. Holding it there includes using a pair the way the system authored it: a fill token spent as a text colour is a conformance finding, not a design decision anyone took (`${CLAUDE_PLUGIN_ROOT}/references/ui-practice.md` → *Contrast*).
 
-**Bootstrap, steady state, system change, ownership, and what a build is held to: `${CLAUDE_PLUGIN_ROOT}/references/ui-practice.md`.** Read it when any UI build starts — and before running `/design`, whose limits are *The canvas* there — from scratch at *Bootstrap*, an existing system at *Steady state*, a change that moves the token file at *System change*. It also carries the from-scratch team defaults (`pnpm`, React). A repo with a `.design-sync/` runs the **sync lane** on top of that loop — its entry bar, its two extra steps and the bundle's maintenance are `${CLAUDE_PLUGIN_ROOT}/references/design-sync.md`.
+**Bootstrap, steady state, system change, ownership, and what a build is held to: `${CLAUDE_PLUGIN_ROOT}/references/ui-practice.md`.** Read it when any UI build starts — and before running `/design`, whose limits are *The canvas* there — from scratch at *Bootstrap*, an existing system at *Steady state*, a change that moves the token file at *System change*. It also carries the from-scratch team defaults (`pnpm`, React when no stack is stated). A repo with a `.design-sync/` runs the **sync lane** on top of that loop — its entry bar, its two extra steps and the bundle's maintenance are `${CLAUDE_PLUGIN_ROOT}/references/design-sync.md`.
 
 ### UI on an existing system — there is no design hop
 An existing repo already has a system, so the build follows it and the design work already happened. Two shapes:

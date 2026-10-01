@@ -1,8 +1,8 @@
 #!/bin/bash
 # pretooluse on the subagent-dispatch tool: the mechanized half of the lead
 # contract's handoff scan (lead SKILL.md step 3). refuses a team-seat dispatch
-# whose brief carries a file:line coordinate, a verbatim run of an always-loaded
-# rule or of a file the brief itself names, a paraphrase of the user CLAUDE.md
+# whose brief asserts a file:line coordinate, a verbatim run of an always-loaded
+# rule, a paraphrase of the user CLAUDE.md
 # machine budget or the comment standard, or a hedged term — or a planner brief
 # naming no brief.md, or a review brief naming no report path — and hands the
 # reason back so the lead re-anchors and dispatches again, logging the refusal
@@ -44,8 +44,11 @@ done
 
 reasons=""
 # a coordinate is a stale cache: file.ext:NN, its approximate "file.ext ~:NN",
-# or a bare "line 91" / "lines 20-21"
-coords=$(printf '%s' "$prompt" | grep -oE '\.(tsx?|jsx?|mjs|cjs|svelte|vue|astro|md|go|py|rs|css|scss|json|sql|html|ya?ml|toml|sh)\b ?~?:[0-9]+|\blines? [0-9]+' | head -5 | tr '\n' ' ')
+# or a bare "line 91" / "lines 20-21". one inside quoted tool output — a fenced
+# block or a "> " quote line, where a stack trace or a failing test's output
+# lands — is evidence the brief observed rather than a location it asserts.
+asserted=$(printf '%s\n' "$prompt" | awk '/^[[:space:]]*```/ { fence = !fence; next } !fence && !/^[[:space:]]*>/')
+coords=$(printf '%s' "$asserted" | grep -oE '\.(tsx?|jsx?|mjs|cjs|svelte|vue|astro|md|go|py|rs|css|scss|json|sql|html|ya?ml|toml|sh)\b ?~?:[0-9]+|\blines? [0-9]+' | head -5 | tr '\n' ' ')
 [ -n "$coords" ] && reasons="coordinates instead of named anchors: ${coords}(re-anchor each to its function/const/section — item 2, scan 1). "
 # the learnings channel is the same literal path on every brief, so the hook
 # supplies it rather than refusing over its absence — a refusal costs a whole
@@ -53,9 +56,13 @@ coords=$(printf '%s' "$prompt" | grep -oE '\.(tsx?|jsx?|mjs|cjs|svelte|vue|astro
 inject_channel=false
 printf '%s' "$prompt" | grep -q 'inbox.md' || inject_channel=true
 # a hedge on a term the builder codes against is a decision delegated by
-# accident — scan 3's hedge half. the imperative half stays a reading check.
-hedge=$(printf '%s' "$prompt" | grep -oiE '\b(may|might|could) mean\b|\bunclear (whether|if)\b|\bnot sure (whether|if)\b' | head -1)
-[ -n "$hedge" ] && reasons="${reasons}hedged term: \"${hedge}\" — settle what it means, or take the question to the user before dispatch (item 3, scan 3). "
+# accident — scan 3's hedge half. a sentence that names what each answer does
+# ("report which, fix that one", "handle both") is the investigation item 3
+# asks for, not an open meaning. the imperative half stays a reading check.
+hedge=$(printf '%s' "$prompt" | tr '\n' ' ' | tr '.' '\n' |
+  grep -viE '\b(report|say|note) which\b|\bhandle (both|each|either)\b|\b(either way|whichever)\b|\bin (both|each|either) cases?\b' |
+  grep -oiE '\b(may|might|could) mean\b|\bunclear (whether|if)\b|\bnot sure (whether|if)\b' | head -1)
+[ -n "$hedge" ] && reasons="${reasons}hedged term: \"${hedge}\" — settle what it means, name what each answer does, or take the question to the user before dispatch (item 3, scan 3). "
 # scan 3's imperative half stays a reading check — "decide" appears in briefs
 # that resolve a decision too. its one mechanizable tell is the report-back:
 # a brief asking which way the builder went is a brief admitting it delegated
@@ -72,7 +79,9 @@ USER_CANON="$HOME/.claude/CLAUDE.md"
 if [ -f "$USER_CANON" ]; then
   # a brief naming some other limit — an R2 object cap, a container's memory
   # request, a machine that isn't this one — states a fact about the slice, so
-  # the figure has to be one this file spends before it reads as re-typed.
+  # the figure has to be one this file spends before it reads as re-typed, and
+  # its sentence can't be about a deployed resource ("resize the Machine to 8 GB").
+  DEPLOYED='\b(resize|scale|deploy(ed|s)?|provision(ed)?|instances?|vms?|containers?|pods?|fly|vercel|tier|region)\b'
   nfig() { tr '[:upper:]' '[:lower:]' | tr -d ' ' | sed 's/cores$/core/'; }
   figs=$(grep -oiE '\b[0-9]+ ?(gb|cores?)\b' "$USER_CANON" | nfig | sort -u)
   budget=""
@@ -83,7 +92,7 @@ if [ -f "$USER_CANON" ]; then
       [ -z "$raw" ] && continue
       printf '%s\n' "$figs" | grep -Fxq "$(printf '%s' "$raw" | nfig)" || continue
       budget="$raw"; break
-    done < <(printf '%s' "$prompt" | grep -oiE '\b[0-9]+ ?(gb|cores?)\b')
+    done < <(printf '%s' "$prompt" | tr '\n' ' ' | tr '.' '\n' | grep -viE "$DEPLOYED" | grep -oiE '\b[0-9]+ ?(gb|cores?)\b')
   fi
   # "one X at a time" is ordinary English — pacing tickets, rows, migrations,
   # a single writer. it's the machine budget only where a machine word sits in
@@ -99,8 +108,11 @@ fi
 # lowercase doc comment on `ticker`", "the `SKIP_STATUSES` comment", "keep what
 # its comment says true" — describes its own slice. both halves below match with
 # context either side so that difference is visible; the reason quotes the
-# narrow span.
-CRULE='\bcomments?\b[^.]{0,80}\blowercase\b|\blowercase\b[^.]{0,80}\bcomments?\b'
+# narrow span. the rule's words are Block I's *Terse, in the file's own voice*:
+# case and grammar follow the comments around the new one. a bare "case" is
+# left out — "a comment on the empty case" is slice content, not the rule.
+CVOICE='(lower ?case|upper ?case|capitali[sz]ed|sentence[- ]case|case and grammar|grammar and case|(own|file.s) voice|full sentences)'
+CRULE="\\bcomments?\\b[^.]{0,80}\\b${CVOICE}|\\b${CVOICE}[^.]{0,80}\\bcomments?\\b"
 # the standard's other half — comments already in the file survive your edit.
 # reworded it escapes the shingle check, and it is the clause whose loss prunes
 # the comment that carried the reason.
@@ -129,14 +141,18 @@ fi
 
 # a review seat writes its report where the brief says and returns a pointer —
 # no path and the whole report lands in the lead's context (item 7, gates.md).
-# supplied, not refused, on the learnings channel's precedent: the path is the
-# same literal on every review brief, and a refusal spends a whole re-dispatch
+# the file is <seat>-<slice-slug>, the slug from the dispatch description, so two
+# reviews by one seat in a session don't share a file.
+# supplied, not refused, on the learnings channel's precedent: the path is
+# derived from the seat and the description, and a refusal spends a whole re-dispatch
 # to re-type text this file already holds.
 inject_report=""
+dslug=$(printf '%s' "$input" | jq -r '.tool_input.description // empty' 2>/dev/null |
+  tr '[:upper:]' '[:lower:]' | tr -cs '[:alnum:]' '-' | sed 's/^-*//;s/-*$//' | cut -c1-40 | sed 's/-*$//')
 case "$seat" in
   code-reviewer|architecture-reviewer|accessibility-reviewer|visual-reviewer|ux-auditor)
     printf '%s' "$prompt" | grep -q 'kru-review' ||
-      inject_report="\n\nkru hook — report: \${TMPDIR:-/tmp}/kru-review/${cwd_slug:-repo}/${seat}.md. Write the long half of your return there; hand back the capped fix list plus that path (item 7, gates.md)." ;;
+      inject_report="\n\nkru hook — report: \${TMPDIR:-/tmp}/kru-review/${cwd_slug:-repo}/${seat}${dslug:+-$dslug}.md. Write the long half of your return there; hand back the capped fix list plus that path (item 7, gates.md)." ;;
 esac
 
 # an always-loaded rule restated in the brief is a second source that drifts —
@@ -160,28 +176,31 @@ for f in "$USER_CANON" "$plugin_root/skills/roster/shared-blocks.md"; do
 done
 # the plan store's contract is the file a planner brief re-types (lead step 2.6)
 [ "$seat" = "planner" ] && [ -f "$plugin_root/TRACKER.md" ] && canon="$canon $plugin_root/TRACKER.md"
-# a file the brief names is canon too: naming it and pasting its text is the
-# co-occurrence scan 2 refuses. resolved under cwd, capped so a brief listing
-# a tree doesn't turn the check into a full-corpus read.
+# a file the brief names is only shadow canon: the seat doesn't load it on its
+# own, and a passage the slice edits or the invariant it codes against is quoted
+# from exactly that file — slice content, not a second source. resolved under
+# cwd, capped so a brief listing a tree doesn't turn the check into a
+# full-corpus read.
+named=""
 if [ -n "$cwd" ]; then
   for rel in $(printf '%s' "$prompt" | grep -oE '[A-Za-z0-9_./-]+\.md\b' | sed 's#^\./##' | sort -u | head -10); do
     f="$cwd/$rel"
-    case " $canon " in *" $f "*) continue ;; esac
-    [ -f "$f" ] && canon="$canon $f"
+    case " $canon $named " in *" $f "*) continue ;; esac
+    [ -f "$f" ] && named="$named $f"
   done
 fi
-if [ -n "$canon" ]; then
-  # a path and a backticked identifier are the pointer scan 2 asks for in place
-  # of the text, and stripping punctuation turns one of them into a six-word run
-  # any repo's own path map already spends — the gate refusing its own remedy.
-  # barrier each with a word no canon holds, so a pointer neither matches on its
-  # own nor joins the prose on either side of it.
-  BARRIER=' zzpointerzz '
-  point() { sed -E -e "s/\`[^\`]*\`/${BARRIER}/g" \
-    -e "s#[A-Za-z0-9_@~.-]*/[A-Za-z0-9_@~./-]*#${BARRIER}#g" \
-    -e "s/[A-Za-z0-9_-]+\.(tsx?|jsx?|mjs|cjs|svelte|vue|astro|md|go|py|rs|css|scss|json|sql|html|ya?ml|toml|sh)/${BARRIER}/g"; }
-  norm() { tr '[:upper:]' '[:lower:]' | tr -c '[:alnum:]\n' ' ' | tr -s ' \n' ' '; }
-  hit=$(printf '%s' "$prompt" | point | norm | awk -v n="$SHINGLE" -v nr="$SHINGLE_REPO" -v ns="$SHINGLE_USER" -v short="$USER_CANON" -v repo=" $repo_canon " -v files="$canon" '
+# a path and a backticked identifier are the pointer scan 2 asks for in place
+# of the text, and stripping punctuation turns one of them into a six-word run
+# any repo's own path map already spends — the gate refusing its own remedy.
+# barrier each with a word no canon holds, so a pointer neither matches on its
+# own nor joins the prose on either side of it.
+BARRIER=' zzpointerzz '
+point() { sed -E -e "s/\`[^\`]*\`/${BARRIER}/g" \
+  -e "s#[A-Za-z0-9_@~.-]*/[A-Za-z0-9_@~./-]*#${BARRIER}#g" \
+  -e "s/[A-Za-z0-9_-]+\.(tsx?|jsx?|mjs|cjs|svelte|vue|astro|md|go|py|rs|css|scss|json|sql|html|ya?ml|toml|sh)/${BARRIER}/g"; }
+norm() { tr '[:upper:]' '[:lower:]' | tr -c '[:alnum:]\n' ' ' | tr -s ' \n' ' '; }
+shingle() { # files → "file<TAB>run" of the first verbatim hit
+  printf '%s' "$prompt" | point | norm | awk -v n="$SHINGLE" -v nr="$SHINGLE_REPO" -v ns="$SHINGLE_USER" -v short="$USER_CANON" -v repo=" $repo_canon " -v files="$1" '
     BEGIN {
       split(files, fs, " ")
       for (i in fs) { f = fs[i]; if (f == "") continue
@@ -194,7 +213,10 @@ if [ -n "$canon" ]; then
     { for (f in corpus) { m = (f == short) ? ns : (index(repo, " " f " ") ? nr : n)
         for (i = 1; i + m - 1 <= NF; i++) {
           s = $i; for (j = 1; j < m; j++) s = s " " $(i + j)
-          if (index(corpus[f], " " s " ")) { print f "\t" s; exit } } } }')
+          if (index(corpus[f], " " s " ")) { print f "\t" s; exit } } } }'
+}
+if [ -n "$canon" ]; then
+  hit=$(shingle "$canon")
   [ -n "$hit" ] && reasons="${reasons}restates a file verbatim: \"${hit#*	}\" is in ${hit%%	*} — point at the file instead (scan 2). "
 fi
 
@@ -205,6 +227,12 @@ fi
 
 # shadow scans — logged, never refused.
 shadow=""
+# the named-file shingle: a brief quoting a file it names is usually the passage
+# under edit, so a hit is shadow only until its rate against real paraphrase is proven.
+if [ -n "$named" ]; then
+  nhit=$(shingle "$named")
+  [ -n "$nhit" ] && shadow="${shadow}quotes a named file: \"${nhit#*	}\" is in ${nhit%%	*} — fine for a passage the slice edits or its invariant; a rule the seat already loads is a pointer (scan 2). "
+fi
 # scan 3's imperative half: a choice handed to the builder names its object
 # (decide whether, pick which). "decide" also sits in briefs that settled the
 # call, so this one proves its hit rate in shadow first. one bounded span.

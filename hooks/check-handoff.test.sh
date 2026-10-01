@@ -48,10 +48,14 @@ check refuse $ui "Build the form. Preserve existing comments in the file." "comm
 check refuse $ui "Build the form. Comments already in the file survive your edit." "comment standard"
 check refuse $ui "Build the form. Keep all comments." "comment standard"
 check refuse $ui "Build the form. Write comments in lowercase." "comment standard"
+check refuse $ui "Build the form. Write comments in the file's own voice." "comment standard"
+check refuse $ui "Build the form. Match the case and grammar of the surrounding comments." "comment standard"
+check refuse $ui "Build the form. Comments should be full sentences, capitalized." "comment standard"
 
 # ...and slice content naming one comment is not the standard — each of these
 # was a real refusal the gate had no business making
 check allow $ui "Add \`readonly ticker: string;\` with a lowercase doc comment naming the base asset."
+check allow $ui "Add a comment on the empty-input case: the API returns 204, not an empty list."
 check allow $ui "Must keep: same 50px field height (\`--field-size\` comment in that css file)."
 check allow $ui "Keep the narrowing on the path that confirms, and keep what its comment says true."
 check allow $ui "Update the comments above the effect to match the new mechanism."
@@ -76,16 +80,36 @@ check refuse $ui "Run vitest one file at a time on this machine." "machine budge
 check refuse $ui "The box has 8 GB so be careful." "machine budget"
 check allow $ui "Migrate one table at a time."
 check allow $ui "The R2 object cap is 5 GB."
+# a figure about the deployed resource is slice content, not the dev machine
+check allow kru:fly-platform-engineer "Resize the Machine to 8 GB in fly.toml."
 
 # coordinates and hedges
 check refuse $ui "Edit src/Form.tsx:42 to add the field." "coordinates"
 check refuse $ui "The cursor math in \`donor.ts ~:54-59\` drops the last page." "coordinates"
 check refuse $ui "Status may mean archived here." "hedged term"
 check allow $ui "Edit the SignupForm component in src/Form.tsx."
+# a coordinate inside quoted tool output is evidence, not an asserted location
+check allow $ui "Fix the crash in \`addToCart\` (src/cart.ts). The failing run:
+\`\`\`
+TypeError: cannot read 'qty' of undefined
+    at addToCart (src/cart.ts:42:7)
+\`\`\`"
+check allow $ui "Fix the crash in \`addToCart\`. Observed:
+> at addToCart (src/cart.ts:42:7)"
+# ...but one outside the quote is still refused
+check refuse $ui "Fix src/cart.ts:42. Observed:
+\`\`\`
+at addToCart (src/cart.ts:42:7)
+\`\`\`" "coordinates"
+# a hedge over named causes, each answer's action named, is the investigation
+check allow $ui "Unclear whether the stale total comes from the cache or the query: reproduce, report which, fix that one."
+check allow $ui "An empty \`status\` may mean the IPN beat the order row; handle both."
 
 # a review seat's report path is supplied, not refused over — the same literal
 # on every review brief, where a refusal costs a whole re-dispatch
 check supply kru:code-reviewer "Review the signup diff." "kru-review"
+# the supplied path carries the slice slug from the description, so two reviews don't share a file
+check supply kru:code-reviewer "Review the signup diff." "code-reviewer-t.md"
 check allow kru:code-reviewer "Review the signup diff. report: /tmp/kru-review/p/code-reviewer-signup.md"
 
 # shadow scans log to the refusal log and let the dispatch through
@@ -128,6 +152,11 @@ sheet_check kru:react-router-builder "Mount it in \`apps/console/src/routes/home
 # a skill named on a sheet line owns no directory
 sheet_check kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\` and the note in \`packages/emails/CLAUDE.md\`." 0
 sheet_check kru:code-reviewer "Review \`packages/ui/card.tsx\` and \`apps/console/src/api/client.ts\`. report: /tmp/kru-review/p/code-reviewer-x.md" 0
+
+# a passage quoted from a file the brief names is the passage under edit: shadow, never refused
+mkdir -p "$sandbox/sheet/design"
+printf '# conventions\nPrimary actions sit at the bottom right of every dialog footer on desktop.\n' > "$sandbox/sheet/design/conventions.md"
+sheet_check kru:ux-designer "In design/conventions.md, replace \"Primary actions sit at the bottom right of every dialog footer on desktop\" with the mobile rule." 1
 
 # the gate stays out of unknown seats
 check allow general-purpose "Preserve existing comments in the file."

@@ -41,7 +41,7 @@ Then bucket each effort:
 
 Print by bucket — in flight → drifted → stale → brief only → shipped — most recently edited first within each. That order is the whole ordering: efforts are never ranked against each other (`TRACKER.md` → *Four lifetimes*), so each line proposes what its bookkeeping says, and the choice among them stays the user's.
 
-First the bookkeeping, without asking — it's the team's: flip every box whose §1 result backs it (*landed* or *holds* to checked, *absent* or *missing* to unchecked; *unverifiable* stays as filed), set ticket `status` to match, re-anchor *moved* paths. Only those lines change, and a *drifted* effort then reads as whichever bucket its corrected ticks put it in. Then one message, and stop:
+First the bookkeeping, without asking — it's the team's: flip every box whose §1 result backs it (*landed* or *holds* to checked, *absent* or *missing* to unchecked; *unverifiable* stays as filed), set ticket `status` to match, re-anchor *moved* paths. Only those lines change, and a *drifted* effort then reads as whichever bucket its corrected ticks put it in. Then one message, and stop. Headings: in flight → *In progress* (pick it up?), stale → *Needs a decision* (re-plan or drop?), shipped → *Done* (close it out?); brief only and the unread count → the closing count line:
 
 ```
 In progress

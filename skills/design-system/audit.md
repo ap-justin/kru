@@ -4,13 +4,14 @@ Reads whatever the repo has — a generator, a hand-written stylesheet, a Tailwi
 
 Where no step rule is stated anywhere, infer one from the names far enough to locate the ladder, then **report the missing rule as a finding**. Writing an inferred rule into the file promotes one reader's guess to the authority every future value resolves against, which is the drift this pass exists to catch.
 
-## Four findings, and no fifth
+## Five findings, and no sixth
 
 | finding | what it is | what it blocks |
 |---|---|---|
 | **no set** | a foundation with no closed ladder | everything downstream — the gate has nothing to resolve against |
 | **no rule** | a ladder whose steps have no stated purpose | every future step choice — this is *what to build next* |
 | **off-ladder** | a consumer spending a value that is no step, or a step from the wrong ladder — a fill token on a text line | nothing yet; it rots |
+| **missing state** | a primitive or shell lacking a state its own rule names — a select with no disabled, a shell with no loading or empty slot | every screen that mounts it in that state; the builder invents one per screen |
 | **orphan** | a step nothing spends | nothing. Report it as a **question**: either a hole in the parts, or a ladder longer than the product needs |
 
 An **off-ladder** finding that the repo's conformance gate would already catch belongs to the gate — report the gate's absence instead, once (`${CLAUDE_PLUGIN_ROOT}/references/ui-practice.md` → *The conformance gate*).

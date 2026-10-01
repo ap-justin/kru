@@ -64,13 +64,13 @@ Loading, empty, error, success, system status — does the interface say what's 
 
 ## How much feedback an operation needs scales with how long it takes
 
-**Principle:** sub-second results need no special feedback, roughly one to ten seconds needs a lightweight indicator, and anything past about ten seconds needs a determinate, percent-style indicator — one spinner for all three under-serves the slow end and over-serves the fast end.
-**Mechanism:** below ~0.1s an action reads as direct manipulation and needs nothing; up to ~1s the user's train of thought survives a visible pause; past ~10s attention drifts unless the system commits to a number the user can watch move.
+**Principle:** sub-second results need no special feedback, roughly one to ten seconds needs a lightweight indicator, and anything past about ten seconds needs progress the user can watch move — a count or step the engine reports, or elapsed time where it reports none — one spinner for all three under-serves the slow end and over-serves the fast end.
+**Mechanism:** below ~0.1s an action reads as direct manipulation and needs nothing; up to ~1s the user's train of thought survives a visible pause; past ~10s attention drifts unless something on screen visibly moves. A percentage the engine never reported is invented, so `ui-patterns` → *A long-running job reports the step* sets which figure to show.
 **Code signal:**
   - one `isLoading` boolean driving the same indeterminate spinner for every async call in a file, used identically for a cache-hit lookup and a report/export/upload endpoint
-  - a long-running operation (bulk import, file/video upload, report generation) with no percent- or count-based progress prop, only a spinner
+  - a long-running operation (bulk import, file/video upload, report generation) with no count, step or elapsed-time readout, only a spinner
   - a request with no staged messaging — nothing in the UI distinguishes a 2s wait from a 20s one
-**Fix:** replace the single spinner with tiered feedback — nothing under ~1s, a lightweight indicator up to ~10s, a percent/count-based indicator beyond it.
+**Fix:** replace the single spinner with tiered feedback — nothing under ~1s, a lightweight indicator up to ~10s, beyond it a count or step the engine reports, or elapsed time where it reports none.
 **Applies when:** the operation's actual duration isn't stated in source — weigh this against the endpoint's known cost (payload size, batch size, an external API call), and report it as a question, not an assertion, when that's not conclusive from the code.
 **Detect:** HEURISTIC — the code shows what feedback exists, not how long the operation actually runs.
 **Source:** Jakob Nielsen, "Response Times: The 3 Important Limits" · https://www.nngroup.com/articles/response-times-3-important-limits/ (1993)
@@ -99,7 +99,7 @@ Loading, empty, error, success, system status — does the interface say what's 
   - a `window.confirm()` or modal gating an action whose handler sets a soft-delete flag, moves a row to a trash/archive table, or otherwise keeps the data recoverable (`deletedAt`, `archived`, `status: 'trashed'`)
   - a toast/snackbar component already used elsewhere in the codebase, absent from this action's success path where an "Undo" action would fit
   - an archive/dismiss/unsubscribe action gated behind a confirm step identical in weight to the app's genuinely irreversible deletes
-**Fix:** drop the confirm dialog, execute immediately, and surface a toast with an "Undo" action for a short window instead.
+**Fix:** drop the confirm dialog, execute immediately, and put an "Undo" for a short window at the outcome — in the row's place or on the control that fired it; a toast only where the outcome lands out of view (`ui-patterns` → *The control that caused the mutation reports its outcome*).
 **Applies when:** reversibility is a judgment the code hints at (soft-delete columns, a trash view) but rarely states outright — report as a question, not an assertion, when the data model isn't conclusive.
 **Detect:** HEURISTIC — recoverability has to be inferred from the data model, not read directly off the handler.
 **Source:** *About Face*, ch. "Eliminating Errors, Alerts, and Confirmations" · https://www.nngroup.com/articles/user-control-and-freedom/ (2020)
@@ -111,11 +111,11 @@ Loading, empty, error, success, system status — does the interface say what's 
 **Principle:** once an action has earned a confirm, render it as a dialog that traps focus and disables the page behind it.
 **Mechanism:** the confirm exists to break a motor sequence already in flight, and a prompt drawn into the region the user is clicking through gets answered by the reflex that fired the first click. Modality is priced by the decision's cost, not the message's importance — the same reason everything short of irreversible gets undo instead (entry above).
 **Code signal:**
-  - a `confirmingId === row.id` / `pendingDelete` branch swapping a row's button for "Are you sure?" in place, the rest of the list still live
+  - a `confirmingId === row.id` / `pendingDelete` branch swapping a row's button for "Are you sure?" in place with focus left behind on the list — an in-place confirm held in URL state that moves focus to the panel as a named group is the house pattern (`ui-patterns` → *A confirmation step held in the URL*), not this signal
   - a toast/snackbar carrying the affirmative action for an operation the data model can't reverse
   - a hand-rolled overlay `<div>` with no `<dialog>`, `role="alertdialog"`, focus trap, or focus restored on close — an overlay that doesn't hold focus isn't modal
 **Fix:** render a real dialog: focus trapped, defaulted to the safe choice, returned to the trigger on dismiss.
-**Applies when:** only for actions that earned a confirm under the two entries above — a modal on a reversible action is the more common defect, and its fix is deletion, not relocation. The focus-trap signals overlap `accessibility-review`; cite it rather than re-auditing.
+**Applies when:** only for actions that earned a confirm under the two entries above — a modal on a reversible action is the more common defect, and its fix is deletion, not relocation. An in-place confirm built to `ui-patterns`' URL-held pattern also breaks the motor sequence — focus leaves the trigger for a named panel — and passes. The focus-trap signals overlap `accessibility-review`; cite it rather than re-auditing.
 **Detect:** STATIC
 **Source:** NN/g, "Modal & Nonmodal Dialogs: When (& When Not) to Use Them" · https://www.nngroup.com/articles/modal-nonmodal-dialog/ (2017)
 
