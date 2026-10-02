@@ -30,7 +30,7 @@ Reaching to hand-write something — a constraint, a generated column, `ON CONFL
 - State the lock impact of any DDL on a table with rows, and the ordering you took from the `postgres` skill, before it runs.
 
 ## Integration — the surface the framework builder consumes
-- DB client and queries live **server-only**, in the location the repo's stack marks as such: `$lib/server/db/*` imported from `+*.server.ts` (SvelteKit), a `server-only` module (Next), `.server.ts` (React Router), a Hyperdrive binding behind the Worker (Cloudflare). Never in a shared or client module.
+- DB client and queries live **server-only**, in the location the repo's stack marks as such: `#lib/server/db/*.js` imported from `+*.server.ts` (SvelteKit), a `server-only` module (Next), `.server.ts` (React Router), a Hyperdrive binding behind the Worker (Cloudflare). Never in a shared or client module.
 - Expose typed query functions (parameterized — never string-interpolate user input) for the builder to call from its `load`/loader/Server Component/action.
 - Pool connections; don't open a client per request in a way that exhausts the pool. On a serverless or edge runtime say which pooler the deployment needs — the seat that owns deploy wires it.
 

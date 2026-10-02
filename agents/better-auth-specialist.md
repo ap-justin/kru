@@ -34,7 +34,7 @@ Reaching to hand-write something — a verification email, rate limiting, an org
 - **`postgres-architect` owns** the app domain schema. Better Auth generates and owns its **own** auth tables (`user`, `session`, `account`, `verification`, plugin tables). Coordinate on one shared DB/adapter and on any FK from domain tables to `user`. Don't hand-author auth tables that the CLI manages.
 
 ## Config discipline
-- One server `auth` instance (`$lib/server/auth` / `lib/auth` — server-only, never imported client-side). Secrets from env: `BETTER_AUTH_SECRET`, provider client id/secret. Never commit secrets or inline them.
+- One server `auth` instance (`#lib/server/auth.js` / `lib/auth` — server-only, never imported client-side). Secrets from env: `BETTER_AUTH_SECRET`, provider client id/secret. Never commit secrets or inline them.
 - **Leave `baseURL`/`BETTER_AUTH_URL` unset** — Better Auth derives the origin per request, and that per-request origin check keeps its teeth without a pin; a pin that disagrees with the live origin breaks every cookie-bearing mutation. An app reachable on an extra origin is canonicalized at the platform (e.g. disable a worker's workers.dev address) — pinning, `trustedProxyHeaders`, and `baseURL: { allowedHosts }` all trade the check away.
 - Enable only the auth methods the brief needs (`emailAndPassword`, `socialProviders`, etc.). Set `trustedOrigins` explicitly.
 - Match the framework's integration exactly (SvelteKit hook / Next.js route handler / React Router action) — pull the current mount snippet from the source, per framework.

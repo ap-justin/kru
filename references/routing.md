@@ -98,6 +98,7 @@ TanStack Table). So adding a skill here is a row plus the skill, and the seat fi
 | `react-email` or `@react-email/*` | `react-email` |
 | `vitest` | `vitest` — carried by the `testing` skill's discovery step, so every seat that writes a test reaches it |
 | `@testing-library/react` or `@testing-library/svelte` | `testing-library` — carried by the same discovery step |
+| `msw` | `msw` — carried by the same discovery step |
 | `sveltekit-superforms` | `superforms` |
 | `panda.config.*` or a `styled-system/` directory | `panda-css` |
 | `tailwindcss` | `tailwind` — v4, and `v3-lts` is a different product rather than a version behind, so the brief names the installed major |

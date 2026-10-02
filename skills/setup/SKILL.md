@@ -288,7 +288,7 @@ ignored, and the report names what the team may now do unasked (step 6).
 ### 1e. Encode what the seats would otherwise be told — *full run*
 **`${CLAUDE_PLUGIN_ROOT}/references/lint-rules.md`** is the catalog of seat rules a check can hold. Take the rows whose stack
 step 1 found, diff each against the repo's own config (`biome.json` rules and `plugins`, the
-`tsconfig`, `pyproject.toml`'s `[tool.ruff]`/`[tool.mypy]`, `.golangci.yml`, `svelte.config.js`),
+`tsconfig`, `pyproject.toml`'s `[tool.ruff]`/`[tool.mypy]`, `.golangci.yml`, `vite.config.ts`'s `sveltekit({...})`),
 and file each unwired row as a slice for its owner — a lint rule is the team's call, not the
 user's, and setup's part ends at the filing. The report counts them in one clause.
 

@@ -49,4 +49,4 @@ The pg migrator (`pg-core/dialect.js`, `migrate()`) does two things worth knowin
 `pgEnum` creates a real Postgres type, and altering one is not a plain diff — Postgres only allows adding values (and not inside a transaction, pre-12). Read the generated SQL for any enum change, and reach for a `--custom` migration or a lookup table when the diff looks wrong. The same caution applies to anything drizzle-kit models thinly: RLS policies, generated columns, extensions, partitions, and views. The rule from `SKILL.md` holds hardest here — the SQL is a draft.
 
 ## Where the query surface lives
-Server-only: `$lib/server/db/*` (SvelteKit) or equivalent, imported only from server modules. Export typed, parameterized query functions; never hand a builder the `db` handle or a raw-SQL escape hatch. See `reference/queries.md` for `sql.raw` and where interpolation becomes injection.
+Server-only: `#lib/server/db/*.js` (SvelteKit) or equivalent, imported only from server modules. Export typed, parameterized query functions; never hand a builder the `db` handle or a raw-SQL escape hatch. See `reference/queries.md` for `sql.raw` and where interpolation becomes injection.

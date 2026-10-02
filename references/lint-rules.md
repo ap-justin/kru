@@ -12,7 +12,7 @@ prose in its seat.
 ## Wiring a row
 - **The owner by tool**: Biome, ESLint (brownfield), GritQL plugins, `tsconfig` flags and the
   script rows → `toolchain-engineer`; `ruff`/`mypy` → `python-developer`; `go vet`/`golangci-lint`
-  → `go-fullstack-builder`; `svelte.config` → `sveltekit-builder`.
+  → `go-fullstack-builder`; `sveltekit({...})` in `vite.config.ts` → `sveltekit-builder`.
 - **Strongest first.** A compiler or config flag, then a built-in rule, then a GritQL plugin, then a
   script. Take the first the repo's tool can express.
 - **Scoped to where the rule is true.** A seam rule binds the components directory, not the tree —
@@ -58,7 +58,7 @@ prose in its seat.
 ## Svelte — compiler
 | rule | mechanism | backs |
 |---|---|---|
-| runes only | `compilerOptions.runes: true` in `svelte.config.js` | `svelte-ui-builder`, `sveltekit-builder` → *Svelte 5 defaults* |
+| runes only | `compilerOptions.runes: true` in `sveltekit({...})` (`vite.config.ts`) | `svelte-ui-builder`, `sveltekit-builder` → *Svelte 5 defaults* |
 
 ## Python — ruff / mypy
 | rule | mechanism | backs |

@@ -24,7 +24,7 @@ Follow the discovered conventions over your own defaults, always — minimal-dif
 
 For framework and library specifics (matchers, render/query APIs, mocking, fixtures), verify against the official source per `SOURCES.md` — do not assert test-API shapes from memory. Runners change, and their behavior forks by environment (browser-mode query semantics differ from a simulated DOM).
 
-`vitest` in `package.json` means load the **`vitest`** skill before running or reading a run — the runner's own silences: what it collects, prints, resets between tests and fakes. `@testing-library/react` (or `/svelte`) means load the **`testing-library`** skill before writing a query or an interaction — the query that finds the wrong thing and the keystroke that lands nowhere, in a test that passes.
+`vitest` in `package.json` means load the **`vitest`** skill before running or reading a run — the runner's own silences: what it collects, prints, resets between tests and fakes. `@testing-library/react` (or `/svelte`) means load the **`testing-library`** skill before writing a query or an interaction — the query that finds the wrong thing and the keystroke that lands nowhere, in a test that passes. `msw` means load the **`msw`** skill before writing a handler or a setup file — the request no handler answered, in a test that passes.
 
 The usual tell is reaching for a **different runner's API out of habit** — the spy, mock, and module-stub helpers of whichever runner you've seen most, rather than the ones this repo's runner actually exports. Near-identical surfaces across runners make this easy to write and slow to diagnose.
 

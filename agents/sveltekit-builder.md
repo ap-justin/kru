@@ -36,19 +36,18 @@ Reaching to hand-write something — a redirect, progressive enhancement on a fo
 
 ## SvelteKit (server side)
 - Data: `load` in `+page.ts` / `+page.server.ts`; mutations via form actions (`+page.server.ts`) with progressive enhancement (`use:enhance`), not ad-hoc fetch handlers unless a real API is needed.
-- Keep secrets server-only (`$env/static/private`, `$lib/server/*`). Never leak DB clients into shared/client code.
+- Keep secrets server-only: `$app/env/private` (declared in `src/env.ts`), and modules in any `server/` directory or with a `server` filename segment. `src/lib` is imported as `#lib/…` with the file's extension (`#lib/server/db.js`) — the `package.json` `imports` alias. Never leak DB clients into shared/client code.
 - For data/DB work, expect a schema + query layer from `postgres-architect`; consume it, don't reinvent it. Flag if it's missing.
 
 ## Mutation feedback — where the outcome lands
 The rules are `ui-patterns` → `reference/forms-and-mutations.md` — when a form validates, where feedback reports, how a cross-screen outcome travels, what a same-screen save does to scroll. Load that group when you write an action. Yours is the SvelteKit mechanism behind each:
 - **Flash** — `cookies.set` before the `redirect`, then read and `cookies.delete` in the root layout's server `load`, so it's consumed exactly once.
 - **Same-screen save** — return from the action and let `use:enhance` apply the result. A `redirect` to the same URL is a navigation, and a navigation resets scroll.
-- **Validation failure** — `fail(400, { form })` (Superforms: `message`/`setError`) returns the field error map alongside the submitted values and `use:enhance` applies it in place, so the form keeps its input and the component can put focus where the map says.
+- **Validation failure** — `fail(400, { form })` (Superforms: `message`/`setError`) returns the field error map alongside the submitted values. For an action on the current page, `use:enhance` applies it in place, so the form keeps its input and the component can put focus where the map says; an `action` on another route navigates there on success and on failure.
 
 ## Scaffolding (`sv create`)
 - `sv create <dir>` in a **non-empty** dir OVERWRITES `README.md` — restore it from git after scaffolding into an existing repo.
-- The `sveltekit-adapter` add-on crashes (`Cannot read properties of undefined (reading 'package')`) when combined with `--no-install`. Scaffold with the other add-ons, then wire the adapter by hand.
-- Recent `sv` puts the adapter in `vite.config.ts` (`sveltekit({ adapter })`) and emits **no `svelte.config.js`** — don't go looking for one or recreate it.
+- Project config — adapter, `compilerOptions`, `csrf`, `paths`, `version` — is the `sveltekit({...})` call in `vite.config.ts`, every option at the top level beside `compilerOptions`. SvelteKit reads no `svelte.config.js`; never create one.
 
 ## Match the repo
 Read `package.json` and existing routes first; follow the codebase's conventions (folder layout, data-loading style, route patterns) over your defaults. Minimal diff. Check `package.json` before importing anything — a dep the slice needs and the manifest lacks gets installed with the repo's own package manager and named in your return; where you can't install it, say verification is blocked on it. Never assume a dep exists.
