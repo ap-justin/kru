@@ -72,9 +72,18 @@ convention its docs are silent on — append it to the file `bash "${CLAUDE_PLUG
 file it came from. The sheet still cites the fact for this repo (*The line between the plugin and the
 repo*, below).
 
+**A repo a major behind a skill gets a todo.** Each skill the `skills` field names carries its pin on
+the *Reproduced on* line beneath its frontmatter — the packages before its `with` are the claims, the
+ones after are context. Where the lockfile resolves one of those packages a major below the pin, the
+skill is coaching code the repo can't run, so the upgrade is a want: append it to the file
+`bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" path todos` names, `discovered`, `plan: —`, value
+`~3`, effort `~3` per major behind (cap `~5`), one sub-bullet citing the skill's pin line, the
+lockfile entry, and the skill's `reference/migration.md` when it has one. A line already there naming
+the package is the want, filed — leave it.
+
 Completion: every field carries a value with its derivation, or is absent — because this repo has no
 answer for it, or because the repo's own docs already are the answer (step 2); every repo-held recipe a
-plugin skill lacks has an inbox line.
+plugin skill lacks has an inbox line; every package a major behind its skill's pin has a todo line.
 
 ### 1b. Blank repo — grill, then deploy — *full run*
 Nothing on disk answers step 1, so the user does, and the sheet is written from the **decision**. Load
