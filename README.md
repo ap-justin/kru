@@ -44,7 +44,8 @@ Two things about a cloud session worth knowing before the first run:
 - **The plan store moves into the clone** (`<repo>/.kru`) and ships in the branch, because no home
   dir survives the vm. Commit it, or it dies with the machine, and `KRU_HOME` puts it somewhere
   else. To keep it off the branch, set `KRU_STORE_REPO=<owner>/<repo>` (a private repo you own)
-  in the cloud environment's variables and in your laptop's `settings.json` `env`: the whole
+  in the cloud environment's variables, and on your laptop in the plugin's *Store repo* option
+  (`/plugin` → kru → Configure, or `claude plugin configure kru`) or `settings.json` `env`: the whole
   store (preferences, plans, the seats' repo memory) is cloned at session start and pushed at
   every turn end, on web and laptop alike. `references/store.md` → *The store repo*.
 - **The seats' official sources are off the default network allowlist.** Under `Trusted`, a seat
@@ -55,6 +56,7 @@ Two things about a cloud session worth knowing before the first run:
 
 ## Requirements
 - **Claude Code 2.1.280 or newer.** An older CLI runs the seats but silently drops the newer settings they carry.
+- **Recommended: the built-in *You should know* mod** (`/plugin enable cc-plugin-you-should-know@builtin`, Claude Code 2.1.287+). A side agent flags what you or the lead missed while seats are still running; it needs telemetry on. `/kru:setup` enables it on cloud vms too.
 - **`jq`**, for the hooks. Without it every hook fails open and the team still runs, ungated.
 - **The task tools switched on.** Newer models ship with them off, and the lead tracks its work in them.
   A plugin can't turn them on for you, so add this to `~/.claude/settings.json` and restart:
@@ -87,7 +89,8 @@ Then just ask: *"add feature Y"*, *"fix Z"*, *"build a landing page for X"*. The
 
 ## What it does to your machine
 The team is opinionated about process, and it enforces that with five hooks. Each one fails open
-without `jq`, and each interruption below is one you can turn off.
+without `jq`, and each interruption below is one you can turn off: by the export shown, or, for the
+lead gate, the handoff check and the audit, by the matching option in `/plugin` → kru → Configure.
 
 | When | What happens | Turn it off |
 |---|---|---|

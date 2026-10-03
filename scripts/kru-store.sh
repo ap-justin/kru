@@ -17,6 +17,19 @@
 #
 # sourcing defines functions and prints nothing.
 
+# the plugin's /plugin options (plugin.json `userConfig`) reach a hook as
+# CLAUDE_PLUGIN_OPTION_<KEY>. each fills the env var of the same name only
+# when that var is unset, so an export or a settings `env` entry still wins —
+# a cloud vm sets KRU_STORE_REPO that way. a boolean option arrives as the
+# string "true" or "false", and only "true" turns a switch on.
+[ -z "${KRU_STORE_REPO:-}" ] && [ -n "${CLAUDE_PLUGIN_OPTION_KRU_STORE_REPO:-}" ] &&
+  export KRU_STORE_REPO="$CLAUDE_PLUGIN_OPTION_KRU_STORE_REPO"
+for _kru_switch in KRU_NO_LEAD_GATE KRU_NO_GATE KRU_NO_AUDIT KRU_NO_STORE_SYNC; do
+  _kru_option="CLAUDE_PLUGIN_OPTION_$_kru_switch"
+  [ -z "${!_kru_switch:-}" ] && [ "${!_kru_option:-}" = "true" ] && export "$_kru_switch=1"
+done
+unset _kru_switch _kru_option
+
 # the repo the session is working in. a linked worktree resolves to the MAIN
 # repo (--git-common-dir), so a slice dispatched into a worktree keeps the same
 # slug — and the same store — as the session that spawned it.

@@ -18,9 +18,12 @@ user() { jq -nc --arg t "$1" '{type:"user", message:{role:"user", content:$t}}';
 user_parts() { jq -nc --arg t "$1" '{type:"user", message:{role:"user", content:[{type:"text", text:$t}]}}'; }
 tool_result() { jq -nc --arg t "$1" '{type:"user", message:{role:"user", content:[{type:"tool_result", tool_use_id:"t1", content:$t}]}}'; }
 assistant_text() { jq -nc --arg t "$1" '{type:"assistant", message:{content:[{type:"text", text:$t}]}}'; }
-bs='<command-message>kru:brainstorm</command-message>
-<command-name>/kru:brainstorm</command-name>
-<command-args>dark mode</command-args>'
+# the skill name is spliced in so this file's own text never reads as an
+# invocation when a tool prints it
+n=brainstorm
+bs="<command-message>kru:$n</command-message>
+<command-name>/kru:$n</command-name>
+<command-args>dark mode</command-args>"
 
 { user "build the form"; assistant_text "on it"; } > "$tx/plain.jsonl"
 { user "$bs"; assistant_text "Q1 …"; } > "$tx/open.jsonl"
@@ -32,6 +35,8 @@ bs='<command-message>kru:brainstorm</command-message>
 { user "$bs"; tool_result "go"; } > "$tx/result-go.jsonl"
 { user "$bs"; assistant_text "go ahead, answer by number"; } > "$tx/assistant-go.jsonl"
 { user "$bs"; user "gone too far, rethink 2"; } > "$tx/gone.jsonl"
+{ user "build the form"; tool_result "$bs"; } > "$tx/quoted-result.jsonl"
+{ user "build the form"; assistant_text "$bs"; } > "$tx/quoted-assistant.jsonl"
 { user "the docs mention kru:brainstorm"; assistant_text "/kru:brainstorm is a skill"; } > "$tx/prose.jsonl"
 
 pass=0 fail=0
@@ -62,6 +67,10 @@ check() {
 # no brainstorm in the session, or only prose naming it: nothing to guard
 check allow Edit "" "$tx/plain.jsonl"
 check allow Write "" "$tx/prose.jsonl"
+
+# an invocation quoted back by a tool or by the model is not one the user typed
+check allow Write "" "$tx/quoted-result.jsonl"
+check allow Edit "" "$tx/quoted-assistant.jsonl"
 
 # an open brainstorm refuses every write, however many rounds in
 check refuse Edit "" "$tx/open.jsonl"

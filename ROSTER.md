@@ -1,6 +1,6 @@
-# Roster — v0.137.0
+# Roster — v0.138.0
 
-The lead is the `lead` skill (`/kru:lead`, runs in the main thread). It delegates to the specialists below and to built-in agents (`Explore`, `Plan`) and skills (`/code-review`, `/tdd`, `/diagnosing-bugs`, `/verify`, `/run`). Every specialist follows **official sources first** (`SOURCES.md`).
+The lead is the `lead` skill (`/kru:lead`, runs in the main thread). It delegates to the specialists below and to built-in agents (`Explore`, `Plan`) and skills (`/code-review`, `/run`), plus its own vendored `/tdd` and `/diagnosing-bugs`. Every specialist follows **official sources first** (`SOURCES.md`).
 
 ## Scope — where this team stops
 Engineering-led, cross-functional at the top. The team spans **product-development**: engineering (core) + design + the thin upstream layer that feeds the build. **The user is the PM** — there is no product-management function, no roadmap, and no prioritization framework in the team; what-to-build-next is the user's call, and the team formalizes and executes it. The upstream layer is two things: the lead's **`brief` verb** (grill → a change-shaped `brief.md` incl. the commit/PR cadence, inline) and `planner`, an **upstream adapter** that turns that brief into a spec/ticket graph handing *into* engineering. Neither runs a separate org. `ux-designer`/`graphic-designer`/`conversion-copywriter` feed the build — the last of those writing a marketing page's argument and strings *before* it is designed or built; growth on shipped pages is user-invoked — `/seo-review` for technical SEO/AEO, `/copywriting`/`/copy-editing`/`/cro` for conversion copy on what already ships.

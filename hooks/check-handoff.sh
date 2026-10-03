@@ -13,11 +13,11 @@
 # the dispatch goes through, until /roster learn reads them clean across repos
 # and moves the scan into reasons.
 command -v jq >/dev/null 2>&1 || exit 0
-[ -n "$KRU_NO_GATE" ] && exit 0
 plugin_root="${1:-$CLAUDE_PLUGIN_ROOT}"
 [ -d "$plugin_root/agents" ] || exit 0
 # unreadable only on a broken install, and every guard here fails open on those
 . "$plugin_root/scripts/kru-store.sh" 2>/dev/null || exit 0
+[ -n "$KRU_NO_GATE" ] && exit 0
 input=$(cat) || exit 0
 
 seat=$(printf '%s' "$input" | jq -r '.tool_input.subagent_type // empty' 2>/dev/null)

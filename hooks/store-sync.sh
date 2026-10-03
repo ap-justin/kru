@@ -9,8 +9,6 @@
 # unset, this hook does nothing. fail soft: a sync failure prints one line and
 # the session continues. kill switch: export KRU_NO_STORE_SYNC=1.
 mode=${1:-}
-[ -z "${KRU_STORE_REPO:-}" ] && exit 0
-[ -n "${KRU_NO_STORE_SYNC:-}" ] && exit 0
 command -v git >/dev/null 2>&1 || exit 0
 input=$(cat 2>/dev/null)
 
@@ -18,6 +16,9 @@ input=$(cat 2>/dev/null)
 # can write to the store, and a clean tree with nothing ahead is a no-op
 plugin_root="${2:-$CLAUDE_PLUGIN_ROOT}"
 . "$plugin_root/scripts/kru-store.sh" 2>/dev/null || exit 0
+# both read after the resolver, which maps the /plugin options onto them
+[ -z "${KRU_STORE_REPO:-}" ] && exit 0
+[ -n "${KRU_NO_STORE_SYNC:-}" ] && exit 0
 
 export GIT_TERMINAL_PROMPT=0
 home=$(kru_home)

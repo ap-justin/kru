@@ -228,6 +228,7 @@ try git clone -q https://github.com/<owner>/<store-repo> ~/.kru
 try claude plugin marketplace add anthropics/claude-plugins-official
 try claude plugin marketplace add <owner>/kru
 try claude plugin install kru@kru --scope user
+try claude plugin enable cc-plugin-you-should-know@builtin --scope user
 
 # <repo>: vm provisioning, each line under `try`
 
@@ -239,7 +240,9 @@ Plugins install here because a cloud session ignores the repo's `enabledPlugins`
 the user runs locally. The environment cache keeps them at the version the script installed until
 the script changes, its network hosts change, or about seven days pass
 (`code.claude.com/docs/en/cloud-environments` → *Environment caching*) — so the `# kru` line carries
-the installed `VERSION`, and `/kru:propagate` moving it is what rebuilds the cache on a new release. The vm has no official marketplace,
+the installed `VERSION`, and `/kru:propagate` moving it is what rebuilds the cache on a new release. The
+built-in *You should know* mod is enabled the same way: the laptop's `/plugin enable` never reaches
+the vm, and where telemetry is off the line is a no-op. The vm has no official marketplace,
 so the base adds it ahead of any `@claude-plugins-official` install. Below them goes what the vm lacks before
 this repo's first run, read off step 1's findings and the repo's own setup doc (`CONTRIBUTING*`,
 `README*`, `DEPLOY*`), each pinned to the version the repo pins: node's `engines` major fetched
@@ -276,14 +279,34 @@ gates run on this machine, not a teammate's. **Narrow to the commands the sheet 
 settings file is the record, so no sheet field states it — a `CLAUDE.md` line would be the cache bar
 3 rejects.
 
+**The gate before every commit, as the repo's `verify` skill.** Claude Code runs a project skill
+named `verify` right before a commit (2.1.286; docs-only and tests-only commits skip it), so the
+sheet's `verify` line becomes `.claude/skills/verify/SKILL.md` — the gate then runs in every session,
+lead or not. Write it when the sheet has a `verify` line and no `.claude/skills/verify/` exists; one
+the repo already has is a project seat, left as it is. The body is the line's commands and nothing
+else — the `test` line stays out, since a suite per commit is the cost the sheet's `test` bound exists
+to price:
+
+```markdown
+---
+name: verify
+description: Typecheck and lint this repo before a commit. Written by /kru:setup from the sheet's `verify` line.
+---
+
+Run from the repo root: `<the sheet's verify commands>`. Red → fix it before the commit; the commit waits.
+```
+
+A re-run rewrites the body when the sheet's `verify` line changed and the file still carries that
+description; an edited description means the repo owns it now.
+
 **The seats' repo memory, ignored.** The seats carrying `memory: local` write what they learn
 about this repo to `.claude/agent-memory-local/<seat>/` — the scope the harness defines as
 per-machine and kept out of version control, and the repo's `.gitignore` is what keeps it out. Add
 `.claude/agent-memory-local/` to it when no line already covers the path (`git check-ignore -q
 .claude/agent-memory-local/x` answers that), so the first `git add -A` after a build leaves it behind.
 
-Completion: every grant traces to evidence the derivation already produced, the memory path is
-ignored, and the report names what the team may now do unasked (step 6).
+Completion: every grant traces to evidence the derivation already produced, the `verify` skill
+matches the sheet's line or is the repo's own, the memory path is ignored, and the report names what the team may now do unasked (step 6).
 
 ### 1e. Encode what the seats would otherwise be told — *full run*
 **`${CLAUDE_PLUGIN_ROOT}/references/lint-rules.md`** is the catalog of seat rules a check can hold. Take the rows whose stack

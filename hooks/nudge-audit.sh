@@ -5,9 +5,6 @@
 command -v jq >/dev/null 2>&1 || exit 0
 input=$(cat) || exit 0
 
-# kill switch: export KRU_NO_AUDIT=1 to silence the loop
-[ -n "$KRU_NO_AUDIT" ] && exit 0
-
 # already continuing because of a stop hook — never block twice in one cycle
 active=$(printf '%s' "$input" | jq -r '.stop_hook_active // false' 2>/dev/null)
 [ "$active" = "true" ] && exit 0
@@ -15,6 +12,9 @@ active=$(printf '%s' "$input" | jq -r '.stop_hook_active // false' 2>/dev/null)
 plugin_root="${1:-$CLAUDE_PLUGIN_ROOT}"
 # unreadable only on a broken install, and every guard here fails open on those
 . "$plugin_root/scripts/kru-store.sh" 2>/dev/null || exit 0
+
+# kill switch: export KRU_NO_AUDIT=1, or the /plugin option, to silence the loop
+[ -n "$KRU_NO_AUDIT" ] && exit 0
 
 sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
 [ -z "$sid" ] && exit 0

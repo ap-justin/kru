@@ -4,9 +4,9 @@
 
 ### Swept through
 
-**2.1.280** — 2026-09-23, read back to 2.1.251. Installed: 2.1.280.
+**2.1.288** — 2026-10-03, read back to 2.1.281. Installed: 2.1.288.
 
-Previous: 2.1.250 — 2026-08-28, first sweep, read back to 2.1.200.
+Previous: 2.1.280 — 2026-09-23, read back to 2.1.251. Before that: 2.1.250 — 2026-08-28, first sweep, read back to 2.1.200.
 
 ### Adopted
 
@@ -19,6 +19,13 @@ Previous: 2.1.250 — 2026-08-28, first sweep, read back to 2.1.200.
 | 2.1.261 | `/skill-doctor` — which loaded skills go unused and what each costs in context | `skills/roster/audit.md` → *Context load*, beside `claude plugin details`, as a read the user types |
 | 2.1.280 | Claude Opus 5.5 (`claude-opus-5-5`) — 1M context, $4/$20 per Mtok, $0.20 cache reads | the 33 opus-tier seats' `model:`; `ROSTER.md` → *Model tiers*; `roster/hire.md` + `audit.md` pin text; README → *Requirements* (model access, floor ≥ 2.1.280) |
 | — | Claude Sonnet 5.5 (`claude-sonnet-5-5`) — same $2/$10 as Sonnet 5, ~30% faster, fewer tokens per task | the 3 sonnet-tier seats' `model:`, plus `test-writer`, `visual-reviewer`, `accessibility-reviewer`, `graphic-designer` moved down from opus; `ROSTER.md` → *Model tiers*; `roster/hire.md` + `audit.md` pin text; README → *Requirements* |
+| 2.1.283 | `/doctor prompt-audit` — audits CLAUDE.md, skills and agents for prompting written for older models; an installed plugin's files are reported, never edited | `skills/roster/audit.md` → *Context load*, as a read the user types beside `/skill-doctor` |
+| 2.1.286 | Correction, not a feature: no built-in `/verify` ships; the CLI runs a *project or user* skill named `verify` before a commit. `/tdd` and `/diagnosing-bugs` are this plugin's vendored skills, not built-ins | `ROSTER.md` intro, `lead` → `references/gates.md` → *Behavior*, `claude.md` surface table |
+| 2.1.286 | Claude Code runs a project skill named `verify` before a non-docs commit | `skills/setup/SKILL.md` → 1d writes `.claude/skills/verify/SKILL.md` from the sheet's `verify` line |
+| 2.1.287 | *You should know* built-in mod — a side agent flagging mid-task what the turn missed | README → *Requirements* (recommended); `setup` cloud script enables it; `lead` → *Returns are input* triages its cards |
+| 2.1.287 | Claude Mods — plugin function hooks with UI | `kru-board`, a row above the prompt naming the running seats; on trial as a session dev mod outside this repo, not yet shipped in the plugin |
+| — | `userConfig` (values reach hooks as `CLAUDE_PLUGIN_OPTION_<KEY>`; `claude plugin configure` 2.1.286) | `plugin.json` → `KRU_STORE_REPO` + four `KRU_NO_*` switches; `scripts/kru-store.sh` maps each onto its unset env var |
+| — | Correction: `brainstorm-guard.sh` read any transcript line carrying an invocation, tool output included, and locked a session that never brainstormed | the anchor now matches only a string-content user turn; fixtures splice the name |
 
 ### Considered — the user's call
 
@@ -40,6 +47,8 @@ Previous: 2.1.250 — 2026-08-28, first sweep, read back to 2.1.200.
 - **`PreModelSwitch` / `PostModelSwitch` hooks, the `PermissionRequest` agent-hook removal** — the plugin ships no model-switch or `PermissionRequest` hook.
 - **Current, no line moves:** subagent returns now arrive under a subagent-output header (2.1.277; `lead` → *Returns are input* still holds). `TaskOutput` was removed (2.1.277), and no team file names it. `/code-review` uses leaner inline prompts on untuned models (2.1.274); the background-run claim in `gates.md` still holds.
 - **`SendFeedback`, `/usage-credits`, self-hosted runner, GitLab marketplaces + MR support, `archive` plugin source, IDE and terminal rendering, managed/enterprise settings, provider plumbing** — no surface in this repo.
+- **`/code-review --max-findings`** (2.1.288), **agent-teams plugin-agent fix**, **`claude plugin validate` MCP checks**, foreground-subagent task-tools fix — no line moves: `lead` passes no finding cap, the team runs no agent teams, the plugin ships no MCP server, and `check-task-tools.sh` still covers a session with the tools off.
+- **Plan mode under `/kru:brainstorm`** — the user rejects it: every piece of feedback re-raises the plan-approval prompt. `brainstorm-guard.sh` stays, its anchor fixed.
 
 ## Vendored skills
 

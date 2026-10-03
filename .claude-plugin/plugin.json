@@ -1,7 +1,7 @@
 {
   "name": "kru",
   "displayName": "kru",
-  "version": "0.137.0",
+  "version": "0.138.0",
   "description": "Your engineering department. Draft your team from a pool of skills and agents.",
   "author": {
     "name": "ap-justin"
@@ -13,5 +13,42 @@
     "orchestration",
     "frontend",
     "engineering-team"
-  ]
+  ],
+  "userConfig": {
+    "KRU_STORE_REPO": {
+      "type": "string",
+      "title": "Store repo",
+      "description": "A private git repo (owner/repo or any clone URL) that keeps the team's preferences, plans and repo notes across machines. Empty keeps them on this machine only. An exported KRU_STORE_REPO wins.",
+      "required": false,
+      "default": ""
+    },
+    "KRU_NO_LEAD_GATE": {
+      "type": "boolean",
+      "title": "Skip the lead gate",
+      "description": "Stop requiring the lead skill before a session's first tool call.",
+      "required": false,
+      "default": false
+    },
+    "KRU_NO_GATE": {
+      "type": "boolean",
+      "title": "Skip the handoff check",
+      "description": "Stop checking subagent briefs before dispatch.",
+      "required": false,
+      "default": false
+    },
+    "KRU_NO_AUDIT": {
+      "type": "boolean",
+      "title": "Skip the dispatch audit",
+      "description": "Stop the end-of-turn nudge to audit the session's dispatches.",
+      "required": false,
+      "default": false
+    },
+    "KRU_NO_STORE_SYNC": {
+      "type": "boolean",
+      "title": "Skip store sync",
+      "description": "Keep the store repo configured but stop pulling and pushing it.",
+      "required": false,
+      "default": false
+    }
+  }
 }

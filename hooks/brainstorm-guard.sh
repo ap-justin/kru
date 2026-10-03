@@ -14,8 +14,14 @@ input=$(cat) || exit 0
 transcript=$(printf '%s' "$input" | jq -r '.transcript_path // empty' 2>/dev/null)
 [ -r "$transcript" ] || exit 0
 
-# anchored to how an invocation is recorded, never to the bare name
-start=$(grep -nE '<command-name>/?kru:brainstorm</command-name>' "$transcript" | tail -1 | cut -d: -f1)
+# anchored to how an invocation is recorded, never to the bare name, and only
+# in a turn the user typed: a slash command lands as string content, while
+# tool output quoting one (this hook's own test fixtures, a diff) does not
+start=$(jq -rn --arg re '<command-name>/?kru:brainstorm</command-name>' '
+  [inputs] | to_entries
+  | map(select(.value.type == "user" and (.value.message.content | type) == "string"
+      and (.value.message.content | test($re))))
+  | last | if . == null then empty else .key + 1 end' "$transcript" 2>/dev/null)
 [ -n "$start" ] || exit 0
 
 # the user's own turns since, tool results excluded

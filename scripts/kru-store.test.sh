@@ -41,6 +41,7 @@ run() {
     esac
   done
   out=$(cd "$dir" && env -u KRU_HOME -u KRU_PROJECT -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_STORE_REPO \
+    -u CLAUDE_PLUGIN_OPTION_KRU_STORE_REPO -u KRU_NO_AUDIT -u CLAUDE_PLUGIN_OPTION_KRU_NO_AUDIT \
     -u CLAUDE_CODE_REMOTE -u CLAUDE_PROJECT_DIR \
     HOME="$home" ${envs[@]+"${envs[@]}"} bash "$store" "${args[@]}" 2>&1)
   code=$?
@@ -168,6 +169,25 @@ report "where names the artifact backend" \
 run "$repo" where CLAUDE_CODE_REMOTE=true KRU_STORE_REPO=acme/kru-store
 report "where names the store repo, not the branch" \
   "$(contains 'acme/kru-store' "$out" && ! contains 'ships in the branch' "$out" && echo true || echo false)" "got [$out]"
+
+# --- options: /plugin values fill an unset env var --------------------------
+run "$repo" where CLAUDE_PLUGIN_OPTION_KRU_STORE_REPO=acme/from-option
+report "the store-repo option stands in for an unset KRU_STORE_REPO" \
+  "$(contains 'synced to acme/from-option' "$out" && echo true || echo false)" "got [$out]"
+
+run "$repo" where KRU_STORE_REPO=acme/from-env CLAUDE_PLUGIN_OPTION_KRU_STORE_REPO=acme/from-option
+report "an exported KRU_STORE_REPO outranks the option" \
+  "$(contains 'synced to acme/from-env' "$out" && ! contains 'from-option' "$out" && echo true || echo false)" "got [$out]"
+
+# a switch reads only after sourcing, so these source the resolver directly
+switch() {
+  out=$(env -u KRU_NO_AUDIT -u CLAUDE_PLUGIN_OPTION_KRU_NO_AUDIT HOME="$home" "$@" \
+    bash -c '. "$1"; printf %s "${KRU_NO_AUDIT:-unset}"' _ "$store" 2>&1)
+}
+switch CLAUDE_PLUGIN_OPTION_KRU_NO_AUDIT=true
+is "a switch option set true turns the switch on" "1"
+switch CLAUDE_PLUGIN_OPTION_KRU_NO_AUDIT=false
+is "a switch option set false leaves it off" "unset"
 
 printf '%s passed, %s failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]
