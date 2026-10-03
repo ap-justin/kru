@@ -4,8 +4,7 @@ description: Discover and choose Cloudflare products for apps, APIs, AI agents, 
 user-invocable: false
 ---
 
-<!-- vendored verbatim from `cloudflare/skills` main:skills/cloudflare @ 320fbbc (Apache-2.0; LICENSE kept; `user-invocable: false` added to frontmatter;
-     upstream's 5929c29 `cf` section rewritten for this team — `cf` is the default, not an opt-in — and the rows that named the `wrangler` skill name `cf`).
+<!-- vendored verbatim from `cloudflare/skills` main:skills/cloudflare @ 320fbbc (Apache-2.0; LICENSE kept; `user-invocable: false` added to frontmatter).
      the first-party Cloudflare product-discovery skill: SKILL.md maps a need to a product, `references/*`
      route per product to developers.cloudflare.com rather than restating it. backs the `cloudflare-builder`
      seat alongside the connected Cloudflare MCP + Context7, and names its sibling skills
@@ -15,10 +14,6 @@ user-invocable: false
 # Discover and build with Cloudflare
 
 Help agents discover what they can build with Cloudflare and choose the products that fit. Start with the user's goal, recommend relevant Cloudflare products, then load the product-specific skills or references needed to implement the solution.
-
-## Use the Cloudflare CLI (`cf`)
-
-This team runs every Cloudflare command through `cf`: load the `cf` skill before any command or config edit. Where this skill or its references say Wrangler, `wrangler.jsonc` or a `wrangler` command, the product guidance still applies and the `cf` skill maps the tool.
 
 ## Help the user find the right product
 
@@ -38,11 +33,11 @@ Find the row closest to the user's task. Products can appear in multiple rows, a
 | Choose the building blocks for an AI application | AI overview | Compare Cloudflare's AI services before choosing inference, retrieval, or agent tooling | [AI docs](https://developers.cloudflare.com/ai/) |
 | Choose infrastructure for a customer-facing platform | Cloudflare for Platforms | Compare running customer code with serving an app on customer domains | [Platform overview](https://developers.cloudflare.com/cloudflare-for-platforms/) |
 | Choose an approach to live audio and video | Realtime | Compare application SDKs, media infrastructure, and connectivity relays | [Realtime overview](https://developers.cloudflare.com/realtime/) |
-| Start a Worker or framework project | C3 | Scaffold a project using the appropriate framework template | `cf` skill (`cf init`); [C3](references/c3/README.md) |
+| Start a Worker or framework project | C3 | Scaffold a project using the appropriate framework template | [C3](references/c3/README.md); `wrangler` skill |
 | Build or deploy a Next.js app on Cloudflare | vinext + Workers | Use vinext rather than OpenNext for new projects | [nextjs-on-cloudflare skill](../nextjs-on-cloudflare/SKILL.md); [Next.js docs](https://developers.cloudflare.com/workers/framework-guides/web-apps/nextjs/) |
 | Host a new static site, SPA, or full-stack app | Workers + Workers Static Assets | Serve site files and add server-side logic where needed | [Static Assets](references/static-assets/README.md); `workers-best-practices` skill |
 | Build an API or handle webhooks | Workers | Run request handlers with access to Cloudflare services | `workers-best-practices` skill; [Workers docs](https://developers.cloudflare.com/workers/) |
-| Control team, CI, or service-account access to Developer Platform resources | Roles, scopes, and permission policies | Choose the least-privilege role and a scope supported for the member, User Group, or API token | [Roles and permissions](https://developers.cloudflare.com/workers/authorization/); `cf` skill for CLI access |
+| Control team, CI, or service-account access to Developer Platform resources | Roles, scopes, and permission policies | Choose the least-privilege role and a scope supported for the member, User Group, or API token | [Roles and permissions](https://developers.cloudflare.com/workers/authorization/); `wrangler` skill for CLI access |
 | Maintain an existing Pages deployment | Pages + Pages Functions | Update an existing site or its server endpoints; use Workers for new projects | [Pages](references/pages/README.md); [Pages Functions](references/pages-functions/README.md) |
 | Move a Pages project to Workers | Workers + Workers Static Assets | The task calls for migrating the hosting platform | [Pages migration guide](https://developers.cloudflare.com/workers/static-assets/migration-guides/migrate-from-pages/) |
 | Let customers deploy code on your platform | Workers for Platforms | Run and manage customer Workers with per-customer controls | [Workers for Platforms](references/workers-for-platforms/README.md) |
@@ -96,7 +91,7 @@ Find the row closest to the user's task. Products can appear in multiple rows, a
 | Detect and control automated traffic | Bot Management | Make request decisions based on bot detection | [Bot Management](references/bot-management/README.md) |
 | Discover and protect API endpoints | API Shield | Apply API-specific protections and validation | [API Shield](references/api-shield/README.md) |
 | Queue visitors during traffic spikes | Waiting Room | Control admission when application capacity is limited | [Waiting Room docs](https://developers.cloudflare.com/waiting-room/) |
-| Store a Worker's API keys and credentials | Workers secrets | Bind secrets to a Worker without committing values to source | `cf` skill; [secrets docs](https://developers.cloudflare.com/workers/configuration/secrets/) |
+| Store a Worker's API keys and credentials | Workers secrets | Bind secrets to a Worker without committing values to source | `wrangler` skill; [secrets docs](https://developers.cloudflare.com/workers/configuration/secrets/) |
 | Share managed secrets across services | Secrets Store | Manage reusable account-level secrets | [Secrets Store](references/secrets-store/README.md) |
 | Control where data is processed and stored | Data Localization Suite | Evaluate regional processing and storage controls against the actual requirements | [Data Localization docs](https://developers.cloudflare.com/data-localization/) |
 | Prove a claim without identifying or tracking the user | Privacy Pass | Use privacy-preserving tokens in a supported integration | [Privacy Pass docs](https://developers.cloudflare.com/privacy-pass/) |
@@ -110,7 +105,7 @@ Find the row closest to the user's task. Products can appear in multiple rows, a
 | Forward incoming email | Email Routing | Route addresses on a domain to destination mailboxes | [Email Routing](references/email-routing/README.md) |
 | Process incoming email in code | Email Workers | Apply custom logic to inbound messages | [Email Workers](references/email-workers/README.md) |
 | Manage third-party tags and scripts | Zaraz | Load and manage third-party tools through Cloudflare | [Zaraz](references/zaraz/README.md) |
-| Run locally and manage resources from the CLI | `cf` | Develop, configure, deploy, and inspect the intended account and environment | `cf` skill; [Cloudflare CLI docs](https://developers.cloudflare.com/cf/); superseded [Wrangler docs](https://developers.cloudflare.com/workers/wrangler/) |
+| Run locally and manage resources from the CLI | Wrangler | Develop, configure, deploy, and inspect the intended account and environment | `wrangler` skill; [Wrangler docs](https://developers.cloudflare.com/workers/wrangler/) |
 | Test Worker behavior before deployment | Workers testing tools | Choose runtime tests or integration tests for the affected behavior | [Testing docs](https://developers.cloudflare.com/workers/testing/); `durable-objects` skill for DO tests |
 | Embed local Worker simulation in tooling | Miniflare | A programmatic emulator is needed for a custom development or test harness | [Miniflare](references/miniflare/README.md) |
 | Run or investigate the underlying Workers runtime | workerd | Work directly with the runtime outside normal managed deployment | [workerd](references/workerd/README.md) |
@@ -143,7 +138,7 @@ Prefer [Workers Cache](https://developers.cloudflare.com/workers/cache/) for cac
 ## Working principles
 
 - Inspect the existing project and its pinned package versions before choosing an API or configuration shape.
-- Retrieve current Cloudflare documentation when details may have changed. Use installed types and the project's `cloudflare.config.ts` types when they represent the project's pinned version.
+- Retrieve current Cloudflare documentation when details may have changed. Use installed types and `node_modules/wrangler/config-schema.json` when they represent the project's pinned version.
 - Preserve the project's architecture and make the smallest change that satisfies the request.
 - Check current Cloudflare docs before relying on limits, prices, compatibility flags, or security requirements; these can change.
 - Validate in proportion to the change: use the project's checks, then exercise the affected behavior when practical.

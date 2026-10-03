@@ -4,15 +4,12 @@ description: Run or troubleshoot Wrangler CLI commands and configure Worker proj
 user-invocable: false
 ---
 
-<!-- vendored verbatim from `cloudflare/skills` main:skills/wrangler @ 320fbbc (Apache-2.0; LICENSE kept; `user-invocable: false` added to frontmatter;
-     upstream's b90d284 `cf` gate rewritten for this team — `cf` is the default, not an opt-in).
+<!-- vendored verbatim from `cloudflare/skills` main:skills/wrangler @ 320fbbc (Apache-2.0; LICENSE kept; `user-invocable: false` added to frontmatter).
      the Wrangler CLI skill — inspect the project's own wrangler version and config, then retrieve the command
      or config page the task needs. backs the `cloudflare-builder` seat's deploy/config surface.
      re-sync: re-download skills/wrangler/SKILL.md from the cloudflare/skills repo. -->
 
 # Wrangler CLI
-
-This team runs Cloudflare through the `cf` CLI: load the `cf` skill instead. Read on only for the commands `cf` does not cover yet — the gap list in the `cf` skill — which the `cf` skill sends here.
 
 Use the project's Wrangler version and retrieve the relevant documentation before writing commands or configuration. CLI flags and configuration fields change; do not rely on memorized examples.
 
