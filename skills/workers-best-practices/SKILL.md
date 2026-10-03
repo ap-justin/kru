@@ -4,13 +4,13 @@ description: Cloudflare Workers best practices for production applications. Use 
 user-invocable: false
 ---
 
-<!-- vendored verbatim from `cloudflare/skills` main:skills/workers-best-practices (Apache-2.0; LICENSE kept).
+<!-- vendored verbatim from `cloudflare/skills` main:skills/workers-best-practices (Apache-2.0; LICENSE kept; three Wrangler pointers — secrets, binding types, CLI commands — point at the `cf` skill instead).
      production Workers practice — handler shape, config, runtime limits; the `cloudflare` skill routes here.
      re-sync: re-download skills/workers-best-practices/ from the cloudflare/skills repo. -->
 
 Your knowledge of Cloudflare Workers APIs, types, and configuration may be outdated. **Prefer retrieval over pre-training** when writing or reviewing Workers code.
 
-Use the project's installed versions, generated types, and Wrangler compatibility settings as the baseline for existing code. Retrieve relevant Cloudflare documentation to verify API, configuration, runtime behavior, and limit claims.
+Use the project's installed versions, generated types, and compatibility settings as the baseline for existing code. Retrieve relevant Cloudflare documentation to verify API, configuration, runtime behavior, and limit claims.
 
 ## References
 
@@ -37,13 +37,13 @@ Enable [Workers Logs](https://developers.cloudflare.com/workers/observability/lo
 | Anti-pattern | Consequence and preferred pattern |
 |-------------|-----------------------------------|
 | `await response.text()` or similar buffering on unbounded data | Can exhaust Worker memory; [stream large or unbounded bodies](references/runtime-patterns.md#stream-request-and-response-bodies). |
-| Hardcoded secrets in source or config | Leaks credentials through version control; use Wrangler secrets. |
+| Hardcoded secrets in source or config | Leaks credentials through version control; use Worker secrets (`cf` skill). |
 | `Math.random()` for security-sensitive tokens or IDs | Predictable values; use `crypto.randomUUID()` or `crypto.getRandomValues()`. |
 | Async work started without awaiting, returning, or attaching it to `ctx.waitUntil()` | Work can be dropped and errors missed; tie it to the request or background-work lifetime. |
 | Module-level mutable request state | Leaks data across requests and can cause I/O ownership errors; pass request state explicitly. |
 | Cloudflare REST API calls for operations available through Worker bindings | Adds network and authentication overhead; use the available binding. |
 | `ctx.passThroughOnException()` used as general error handling | Can conceal Worker failures by forwarding to the origin; use explicit error handling and structured error responses. |
-| Hand-written `Env` that duplicates Wrangler bindings | Can drift from configuration; generate binding types with `wrangler types`. |
+| Hand-written `Env` that duplicates Wrangler bindings | Can drift from configuration; infer binding types from `cloudflare.config.ts` (`cf` skill). |
 | Direct string comparison of secret values | Can expose timing differences; use the [Web Crypto comparison pattern](references/runtime-patterns.md#use-web-crypto-for-secure-token-generation). |
 | Destructuring `ctx` methods, such as `const { waitUntil } = ctx` | Loses the receiver; call `ctx.waitUntil(...)`. |
 | `any` on `Env` or handler parameters | Hides binding and handler contract errors; use the project's generated and platform types. |
@@ -62,4 +62,4 @@ This skill covers Workers-specific best practices and code review. For related t
 
 - **Durable Objects**: load the `durable-objects` skill
 - **Workflows**: see [Rules of Workflows](https://developers.cloudflare.com/workflows/build/rules-of-workflows/)
-- **Wrangler CLI commands**: load the `wrangler` skill
+- **Cloudflare CLI commands**: load the `cf` skill

@@ -24,7 +24,7 @@ CLI schema, Next's cache semantics, parameterized SQL — not lines of code. A c
 stack's seat whenever getting it right needs that seat's source chain — its MCP, autofixer, CLI —
 however small it is; a change fully specified and checkable inline (a reviewer's exact replacement
 after the loop closed, a version pin) runs inline, on the seat's skills (below). A stack's own config file is that stack (`turbo.json`,
-`wrangler.jsonc`, `fly.toml` go to their seats), and a red or flaky suite no build is running is
+`cloudflare.config.ts`, `fly.toml` go to their seats), and a red or flaky suite no build is running is
 `test-writer`'s, however small the fix looks. A question with no code to write routes too when a
 seat owns the answer: where a seam goes is `architecture-reviewer`'s, even answered in prose.
 Implement inline for the genuinely stack-agnostic: a typo, a rename, a string the user dictates, a
