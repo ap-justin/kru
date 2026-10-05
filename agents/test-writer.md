@@ -1,6 +1,6 @@
 ---
 name: test-writer
-description: Testing work that needs its own context, past the first coverage a builder writes as it builds — coverage sweeps and fan-out across many files, repairing a red or flaky suite, the exempt seats' logic-dense output, and discovering an unfamiliar repo's conventions and writing them down. Owns the write→run→fix loop to green.
+description: Testing work that needs its own context, past a builder's first coverage. Use for a coverage sweep across many files, a red or flaky suite, an exempt seat's logic-dense output, or a repo whose test conventions aren't captured yet. Owns write→run→fix to green; a builder's own tests stay its own.
 model: claude-sonnet-5-5
 memory: local
 experimental:

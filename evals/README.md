@@ -96,3 +96,9 @@ check `error` before trusting a low case. List-price estimate across both sittin
 `postgres-index-live-table` scored 0.80 in two runs on a grader that failed any `Write` holding a plain
 `CREATE INDEX`: the seat drafted the migration drizzle-kit would generate, then overwrote the same file
 with the concurrent build. The grader is gone; a trace regex sees every draft, not the final file.
+
+## Description trim + setup reminder, 2026-10-05, one run per case
+
+Every skill and seat description cut to 300 characters or fewer (58k → 34k always-loaded), and a
+startup reminder to run `/kru:setup` in every case, since no scaffold writes a sheet. All 16 cases
+1.00, 16 of 16 runs, $15.50.

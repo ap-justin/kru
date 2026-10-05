@@ -1,6 +1,6 @@
 ---
 name: composition
-description: "Composition — how a screen's parts relate (grouping by space, hierarchy, alignment, width) and, when values are being chosen, the craft of choosing them (color, type, depth, finish). Load when drafting an artboard or canvas direction, laying out a screen, section or card, or checking one that reads flat or cluttered."
+description: "Composition — how a screen's parts relate (grouping, hierarchy, alignment, width) and the craft of choosing values (color, type, depth, finish). Load when drafting an artboard or canvas direction, laying out a screen, section or card, or checking one that reads flat or cluttered."
 user-invocable: false
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: tanstack-start-builder
-description: TanStack Start (React) network-boundary implementer — file routes (`createFileRoute`), `createServerFn` RPCs, server routes, middleware, loaders/`beforeLoad`, search-param validation, SSR/streaming, RSC. Maps server data to serializable props and mounts components built by react-ui-builder. Use to build or edit routes and server code in a `@tanstack/react-start` app, or routing in a Start-less `@tanstack/react-router` SPA. A Next.js repo is `nextjs-builder`'s and a React Router one is `react-router-builder`'s.
+description: TanStack Start (React) network boundary — file routes, `createServerFn` RPCs, server routes, middleware, loaders/`beforeLoad`, search params, SSR/streaming, RSC. Use in a `@tanstack/react-start` app, or for routing in a Start-less `@tanstack/react-router` SPA. Components are `react-ui-builder`'s.
 model: claude-opus-5-5
 memory: local
 experimental:

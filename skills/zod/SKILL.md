@@ -1,6 +1,6 @@
 ---
 name: zod
-description: Zod 4 recipes — a `.default()` that never validates its own default, `z.coerce.boolean('false') === true`, `safeParse` throwing on async schemas, `.catch()` that isn't try/catch, transform output nothing checks, and `flatten()` losing which nested field failed. Use when writing or reviewing a Zod schema, a parse boundary, or validation-error plumbing in a repo with `zod` in `package.json`. Zod 4 classic + mini; not Valibot, Yup, or ArkType.
+description: Zod 4 recipes, classic + mini. Use when writing or reviewing a Zod schema, a parse boundary, or validation-error plumbing in a repo with `zod` in `package.json`. Not Valibot, Yup, or ArkType.
 user-invocable: false
 ---
 

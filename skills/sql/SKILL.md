@@ -1,6 +1,6 @@
 ---
 name: sql
-description: "Engine-agnostic relational recipes under the `postgres` and `sqlite` skills — the NULL traps that return a plausible wrong answer, then one branch per task. Modeling: the sample-row test, hidden multipart and multivalued fields, subtypes, the candidate-key test, delete rules. Queries: the optional filter that drops rows, the function that hides an index, OFFSET pages that repeat, the guarded write. Live schema change: expand/contract order, sync triggers, backfills and pre-checks. Use when designing a schema, writing or reviewing a query, or changing a schema that has data, on any SQL engine."
+description: "Engine-agnostic SQL under `postgres`/`sqlite` — NULL traps, then modeling (keys, subtypes, delete rules), queries (filters, indexes, pagination, guarded writes), live schema change (expand/contract, backfills). Use when designing a schema, writing a query, or changing a live schema."
 user-invocable: false
 ---
 

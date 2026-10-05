@@ -1,6 +1,6 @@
 ---
 name: web-components
-description: Vanilla custom elements and shadow DOM — customElements.define, the lifecycle callbacks, observedAttributes, attachShadow, slots and ::part, CustomEvent across the boundary, and form participation via ElementInternals. Load when writing or reviewing a custom element; reference/embedding.md carries the third-party-embed branch, a widget shipped into a page you don't control.
+description: Vanilla custom elements and shadow DOM — define, lifecycle callbacks, observedAttributes, slots and ::part, CustomEvent, form participation via ElementInternals. Load when writing or reviewing a custom element, including a widget embedded in a page you don't control.
 user-invocable: false
 ---
 

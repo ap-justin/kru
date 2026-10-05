@@ -1,6 +1,6 @@
 ---
 name: fly-platform-engineer
-description: "Fly.io platform-ops — the image and infra around the app: the `Dockerfile` and build, `fly.toml`, Machines and scaling, Volumes, secrets, deploy strategy and `release_command`, regions, private networking, certs, and resource provisioning (MPG, Tigris, Upstash). Use to deploy to Fly, wire secrets, scale or resize Machines, attach a volume, add a region, or provision a Fly resource. The runtime is a long-lived VM with a disk — a container that has to be a container, a background worker, scale-to-zero with state. App code is the framework builder's; schema, Fly Managed Postgres included, is `postgres-architect`'s; Vercel is `vercel-platform-engineer`'s and the Workers runtime `cloudflare-builder`'s."
+description: "Fly.io platform-ops — `Dockerfile`, `fly.toml`, Machines, scaling, Volumes, secrets, `release_command`, regions, networking, certs, MPG/Tigris/Upstash provisioning. Use for a long-lived VM with a disk: a real container, a worker, stateful scale-to-zero. Vercel is `vercel-platform-engineer`'s."
 model: claude-opus-5-5
 memory: local
 ---

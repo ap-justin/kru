@@ -1,6 +1,6 @@
 ---
 name: ux-designer
-description: The experience layer UPSTREAM of the look — user research (plan/conduct/synthesize), user flows + information architecture, flow critique, UX copy/microcopy, the conventions file the design agent works from (the pre-look corpus, and the shipped-system header once a system exists), and design→engineering handoff specs. Use at the START of a new experience, before the look is settled on a design canvas, or to research, critique, spec or word an existing one. Produces research plans, flow/IA maps, the conventions file, critiques, copy decks and handoff specs — never app code, never the look.
+description: The experience layer upstream of the look — user research, flows and IA, flow critique, UX copy and microcopy, the design conventions file, handoff specs. Use at the start of an experience, or to research, critique, spec or word an existing one. The look is `ui-designer`'s; writes no app code.
 tools: Read, Grep, Glob, WebFetch, Skill
 model: claude-opus-5-5
 ---

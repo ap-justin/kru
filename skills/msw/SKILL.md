@@ -1,6 +1,6 @@
 ---
 name: msw
-description: "MSW 3 recipes — the green test whose request never met a handler: `onUnhandledRequest` silently ignored so the request reaches the real network, `onUnhandledFrame: 'error'` rejecting the fetch while the app's `catch` keeps the test green, a callback's `defaults.error()` that only prints, a resolver that returns nothing passing through with no warning, a hoisted `HttpResponse` hanging the second request to `testTimeout`, a `?page=1` handler answering `?page=2`, axios under jsdom failing a mock on CORS, `delay()` frozen by fake timers, and a second `setupServer` whose `close()` turns the first one off. Use when writing or reviewing a test, setup file or handler in a repo with `msw` in `package.json`. Node `setupServer` under Vitest; not the browser worker, not the Vite plugin."
+description: "MSW 3 recipes — the green test whose request never met a handler. Use when writing or reviewing a test, setup file or handler in a repo with `msw` in `package.json`. Node `setupServer` under Vitest; not the browser worker, not the Vite plugin."
 user-invocable: false
 ---
 

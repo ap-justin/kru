@@ -1,6 +1,6 @@
 ---
 name: svelte-ui-builder
-description: Framework-agnostic Svelte 5 UI implementer — pages, sections, and interactive components as props-in/callbacks-out .svelte, mounted by SvelteKit route files. Use to build or edit Svelte components from a design plan + props contract. Does not write load functions, form actions, hooks, or server code.
+description: Framework-agnostic Svelte 5 UI — pages, sections and interactive components as props-in/callbacks-out .svelte, mounted by SvelteKit route files. Use to build Svelte components from a design plan + props contract. Load functions, form actions, hooks and server code are `sveltekit-builder`'s.
 model: claude-opus-5-5
 memory: local
 experimental:

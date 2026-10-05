@@ -11,32 +11,33 @@
 // trust memory. see SOURCES.md.
 //
 // usage:
-//   npm --prefix "${CLAUDE_PLUGIN_ROOT}" run gen-asset -- \
+//   bash "${CLAUDE_PLUGIN_ROOT}/scripts/asset/run.sh" gen-asset \
 //     --prompt "abstract brushed-brass texture, warm charcoal ground, no text" \
 //     --out ~/projects/jeweler-demo/static/hero.avif \
 //     --sizes 1600,800 --formats avif,webp
 //
 //   # edit / enhance an existing image (Gemini image model, chat mode):
-//   npm --prefix "${CLAUDE_PLUGIN_ROOT}" run gen-asset -- \
+//   bash "${CLAUDE_PLUGIN_ROOT}/scripts/asset/run.sh" gen-asset \
 //     --input ./client-photo.jpg --prompt "remove background, warm studio light" \
 //     --out ~/projects/fastlane/static/product.avif
 //
 //   # ambient hero VIDEO background (Veo). emits mp4 + webm + poster (avif/webp).
 //   # loops are boomeranged by default (veo clips aren't seamless); --boomerang false
 //   # keeps the raw one-way clip. --resolution 1080p for crisp full-bleed 16:9 heroes:
-//   npm --prefix "${CLAUDE_PLUGIN_ROOT}" run gen-asset -- \
+//   bash "${CLAUDE_PLUGIN_ROOT}/scripts/asset/run.sh" gen-asset \
 //     --video --prompt "slow drifting aurora haze over deep charcoal, no people, no text" \
 //     --out ~/projects/studio/static/hero.mp4 --vwidth 1600 --aspect 16:9 --resolution 1080p
 //
 //   # true-alpha CUTOUT (background removal) of an existing photo — via rembg,
 //   # NOT gemini (gemini edit models recomposite to an opaque raster, no alpha):
-//   npm --prefix "${CLAUDE_PLUGIN_ROOT}" run gen-asset -- \
+//   bash "${CLAUDE_PLUGIN_ROOT}/scripts/asset/run.sh" gen-asset \
 //     --cutout --input ./headshot.jpg --out ~/proj/public/broker.webp \
 //     --sizes 880 --formats webp     # --rembg-model u2net for objects/products
 //
 // env: GOOGLE_API_KEY (or GEMINI_API_KEY) — a Google AI Studio key. NOT needed
 // for --cutout (rembg runs fully local). video path also needs `ffmpeg`/`ffprobe`
-// on PATH. --cutout self-bootstraps a python venv (scripts/.venv-rembg) on first use.
+// on PATH. --cutout self-bootstraps a python venv (.venv-rembg, beside this file in
+// the plugin data dir run.sh copies it to) on first use.
 //
 import { GoogleGenAI, type Part } from "@google/genai";
 import sharp from "sharp";
@@ -134,7 +135,7 @@ const posterFormats = (args["poster-formats"] ?? "avif,webp")
 if (!outPath || (!prompt && !isCutout)) {
   console.error(
     "error: --out is required (and --prompt too, unless --cutout).\n" +
-      "see the header of scripts/gen-asset.ts for usage.",
+      "see the header of scripts/asset/gen-asset.ts for usage.",
   );
   process.exit(1);
 }

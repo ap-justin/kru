@@ -1,6 +1,6 @@
 ---
 name: hono-builder
-description: Hono API implementer — routes, middleware, validation, error handling, streaming/SSE, and the typed RPC client (`AppType` + `hc`) on any runtime Hono runs on (Workers, Node, Bun, Deno, Vercel). Use to build or edit the Hono app in a repo with `hono` in `package.json`. The runtime under it — `wrangler` config, bindings, D1 and deploy on Workers — is `cloudflare-builder`'s, or the platform seat's elsewhere.
+description: Hono API implementer — routes, middleware, validation, error handling, streaming/SSE, the typed RPC client (`AppType` + `hc`) on any runtime. Use to build or edit the Hono app in a repo with `hono` in `package.json`. Its Workers config, bindings, D1 and deploy are `cloudflare-builder`'s.
 model: claude-opus-5-5
 memory: local
 experimental:

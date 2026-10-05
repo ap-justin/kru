@@ -156,7 +156,7 @@ A repo that has run **`/kru:setup`** carries its **answers** in `.claude/CLAUDE.
 **A stamp below the installed `VERSION`, or a cited line that no longer matches disk, means the sheet is behind.** Say so in one line and name `/kru:setup` for the user to re-run — it is theirs to type, and the current sheet still carries the work meanwhile.
 
 ## Step 1 — the repo answers, or there is no repo
-**A repo owns what it is.** No stamp (Step 0), and the work is more than a one-off → name **`/kru:setup`** once: it maps the repo and writes the answers — the `Explore` pass over stack, framework versions, architecture, conventions and test setup. Either way you reach Step 3 with the stack settled and the conventions named, and you match those over your own defaults — minimal diff, in-style.
+**A repo owns what it is.** No stamp (Step 0) → name **`/kru:setup`** once this session, whatever the size of the work — a SessionStart hook says the same when the sheet is missing, and one mention covers both. It maps the repo and writes the answers — the `Explore` pass over stack, framework versions, architecture, conventions and test setup. Naming it never parks the work: until the user runs it, you carry on and settle what the sheet would have answered with your own `Explore` pass. Either way you reach Step 3 with the stack settled and the conventions named, and you match those over your own defaults — minimal diff, in-style.
 
 **From scratch there is no repo to answer**, so the user does: name **`/kru:setup`** — on a blank repo it grills the subject and the stack with them and deploys the sheet from the decision. You pick up at Step 2 with the stack settled.
 

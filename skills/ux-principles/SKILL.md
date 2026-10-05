@@ -1,6 +1,6 @@
 ---
 name: ux-principles
-description: UX principles from the canon (Krug, Norman, Nielsen, Yablonski, Cooper), each carrying the code signal that betrays it in source and the fix that resolves it. Use when auditing a user flow for usability defects, when specifying the states a flow must handle, or when another skill needs the mechanism behind an interaction decision.
+description: UX principles from the canon (Krug, Norman, Nielsen, Yablonski, Cooper), each with the code signal that betrays it and the fix. Use when auditing a user flow for usability defects, specifying the states a flow must handle, or when another skill needs the mechanism behind an interaction decision.
 user-invocable: false
 ---
 

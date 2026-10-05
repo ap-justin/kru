@@ -1,6 +1,6 @@
 ---
 name: xstate-react
-description: "@xstate/react 6 (useMachine/useActor/useSelector/useActorRef/createActorContext): `useMachine(machine, { input })` applies `input` only from the render that first mounted it — reproduced, a prop that changes later leaves context stuck on its first value with no error; a machine defined inline in the component body gets a new identity every render, so it mounts fine and the **first re-render** throws React's `Too many re-renders` — the hook swaps actors during render and never settles; `useSelector`'s default compare is `===`, so a selector returning a new array/object re-renders on **every** snapshot even when the value is unchanged; a crashed actor's error surfaces by **throwing during render** on the next read, which only an Error Boundary — not `try`/`catch` — stops from blanking the tree. Use when writing or reviewing a React component calling those hooks, or a repo with `@xstate/react` in `package.json`. 6.x on React 16–19 with `xstate` 5.x — the machine core is the sibling `xstate` skill."
+description: "@xstate/react 6 (useMachine/useActor/useSelector/useActorRef/createActorContext) on React 16–19 with `xstate` 5.x. Use when writing or reviewing a React component calling those hooks, or a repo with `@xstate/react` in `package.json`. The machine core is the sibling `xstate` skill."
 user-invocable: false
 ---
 

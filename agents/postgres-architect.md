@@ -1,6 +1,6 @@
 ---
 name: postgres-architect
-description: Postgres data specialist — schema design, normalization, indexing, constraints, migrations, and performant SQL. Owns the driver seam on a managed Postgres too, Neon's pooled-vs-direct endpoints and serverless-driver transport included. Hands a typed query surface to the framework builder. Use when a feature needs persistence, a data model, query optimization, or migration work. Postgres-the-server only — an embedded SQLite `.db` file is `sqlite-architect`'s lane, Cloudflare D1 is `cloudflare-builder`'s, and provisioning a managed instance is the platform seat's.
+description: Postgres data specialist — schema, indexing, constraints, migrations, performant SQL, and the managed-Postgres driver seam (Neon pooled vs direct, serverless transport). Use when a feature needs persistence, a data model, query tuning or a migration. Embedded SQLite is `sqlite-architect`'s.
 model: claude-opus-5-5
 memory: local
 ---

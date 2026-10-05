@@ -1,6 +1,6 @@
 ---
 name: code-reviewer
-description: Adversarial correctness & quality review of a diff or set of files — logic bugs, edge cases, security, error handling, concurrency, and fit with the codebase's own conventions. Use for an independent review pass (especially in parallel) after code is written. Correctness only; design and UX are not yours. Reports findings; does not edit.
+description: Adversarial correctness review of a diff or files — logic bugs, edge cases, security, error handling, concurrency, fit with the codebase's own conventions. Use for an independent pass (often parallel) after code is written. Structure is `architecture-reviewer`'s. Reports; does not edit.
 tools: Read, Grep, Glob, Bash, Skill, WebFetch, mcp__context7__resolve-library-id, mcp__context7__query-docs
 model: claude-opus-5-5
 effort: high

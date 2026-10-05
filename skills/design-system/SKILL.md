@@ -1,6 +1,6 @@
 ---
 name: design-system
-description: The shape of a design system before its values exist — the seven foundations (color · typography · size · elevation · motion · primitives · shells) and whether each is whole. `create` writes that shape at bootstrap as source emitting a token file with every value `UNSET`; `audit` runs the rubric over an existing system and returns what has no set, what has no rule, and what spends a value off its ladder. Reach for it on a coverage read, or when the question is what a design system is missing rather than what it has.
+description: The shape of a design system before its values exist — seven foundations (color · typography · size · elevation · motion · primitives · shells). `create` writes it at bootstrap with every value `UNSET`; `audit` returns what an existing system is missing. Reach for it on a coverage read.
 argument-hint: "<create|audit> [influence…]"
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: python-developer
-description: "The Python layer of a repo, end to end — the package, its entry point, the `pyproject.toml` that ships it, and the `ruff`/`mypy`/`pytest` gate that guards it. Use to build or edit anything in `.py` files: expose a tool to an LLM client over the official `mcp` SDK, design a library's public API, wrap a CLI, fix a red Python gate, or publish a wheel. A Go service is `go-fullstack-builder`'s and a Node/TS app is its framework builder's; SQL schema and migrations stay the data architects' (the Python that runs those queries is yours), and the JS-side task graph, formatter and linter are `toolchain-engineer`'s."
+description: "The Python layer of a repo — package, entry point, `pyproject.toml`, and the `ruff`/`mypy`/`pytest` gate. Use for anything in `.py` files: an MCP server on the official `mcp` SDK, a library's public API, a CLI, a red Python gate, a wheel to publish. A Node CLI or script is `node-developer`'s."
 model: claude-opus-5-5
 memory: local
 experimental:

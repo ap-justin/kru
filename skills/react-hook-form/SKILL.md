@@ -1,6 +1,6 @@
 ---
 name: react-hook-form
-description: "React Hook Form on React — a submit button that stays disabled on a valid form because `!isDirty || !isValid` short-circuits before the Proxy subscribes, `<input type=\"number\">` submitting the string `\"42\"`, two same-named checkboxes submitting `false` where the schema expects `[]`, `register('x', { disabled: true })` dropping the key from the payload entirely, and `handleSubmit` calling `preventDefault()` so a `<form action={serverAction}>` never runs. Use when writing or reviewing a React form, a `useForm` call, or form components in a repo with `react-hook-form` in `package.json`. RHF 7.x with Zod 4 via `@hookform/resolvers`; not Conform, not TanStack Form."
+description: "React Hook Form 7.x on React, with Zod 4 via `@hookform/resolvers`. Use when writing or reviewing a React form, a `useForm` call, or form components in a repo with `react-hook-form` in `package.json`. Not Conform, not TanStack Form."
 user-invocable: false
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: node-developer
-description: "Node.js programs a person, a shell or a scheduler runs — a CLI and its published `bin`, a script, a queue worker, a cron job, a long-running daemon — in TypeScript or JavaScript: argument parsing, the stdout/stderr/exit-code contract, `--json` output, stdin, env and config precedence, signals and clean shutdown, streams, and the gate that guards them. Use to build or edit a Node CLI or script, wrap one around existing code, make a worker shut down cleanly, fix a process that hangs, exits early or swallows a failure, or publish a CLI to npm. Code another program loads or calls (a Vite plugin, an MCP server, a library) is `extension-builder`'s; an HTTP API is `hono-builder`'s or its framework builder's; the image and deploy around a worker are the platform seat's; a CLI in Python is `python-developer`'s; the workspace graph and lint setup are `toolchain-engineer`'s."
+description: "Node.js programs a person, shell or scheduler runs — a CLI and its `bin`, a script, a worker, a cron job, a daemon: flags, stdout/stderr/exit codes, `--json`, stdin, env/config precedence, signals, shutdown. Use to build, fix or publish one. Code another program loads is `extension-builder`'s."
 model: claude-opus-5-5
 memory: local
 experimental:

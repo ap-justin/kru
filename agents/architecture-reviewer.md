@@ -1,6 +1,6 @@
 ---
 name: architecture-reviewer
-description: Structural-integrity review of a change or a proposed interface — module boundaries, seams, interface depth, coupling/dependency direction, and testability/AI-navigability. Runs at DESIGN time (shape the seams before a builder writes code) and at REVIEW time (gate boundary integrity after). Structure only; correctness is `code-reviewer`'s. Reports and specs; does not edit.
+description: Structural review of a change or proposed interface — module boundaries, seams, interface depth, coupling, dependency direction, testability. Use at design time to shape seams before code, or at review time to gate boundary integrity. Correctness is `code-reviewer`'s. Reports and specs; no edits.
 tools: Read, Grep, Glob, Bash, Skill, WebFetch, mcp__context7__resolve-library-id, mcp__context7__query-docs
 model: claude-opus-5-5
 effort: high

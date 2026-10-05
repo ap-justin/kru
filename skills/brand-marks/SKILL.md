@@ -1,6 +1,6 @@
 ---
 name: brand-marks
-description: Logo and identity craft from *Identify*, Wheeler and Airey — the brief before a mark, symbol vs. wordmark vs. letterform, building it (solid mass, negative space, one stroke weight), the appropriate/simple/memorable test, lockups, and presenting concepts for a pick. Use when drawing, judging or presenting a logo, mark, wordmark or app icon.
+description: Logo and identity craft from *Identify* (Wheeler, Airey) — the brief, symbol vs. wordmark vs. letterform, building the mark, the appropriate/simple/memorable test, lockups, presenting concepts. Use when drawing, judging or presenting a logo, mark, wordmark or app icon.
 user-invocable: false
 ---
 

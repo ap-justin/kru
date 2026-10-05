@@ -1,6 +1,6 @@
 ---
 name: algorithmic-art
-description: Creating algorithmic art using p5.js with seeded randomness and interactive parameter exploration. Use this when users request creating art using code, generative art, algorithmic art, flow fields, or particle systems. Create original algorithmic art rather than copying existing artists' work to avoid copyright violations.
+description: Creating algorithmic art using p5.js with seeded randomness and interactive parameter exploration. Use when users request art made with code, generative art, algorithmic art, flow fields, or particle systems.
 license: Complete terms in LICENSE.txt
 user-invocable: false
 ---
@@ -9,7 +9,8 @@ user-invocable: false
      the graphic-designer seat's code-generated-art path — complements the gen-asset script (AI images/Veo video/rembg cutouts)
      with deterministic p5.js generative art (flow fields, particles, parametric). not installed via a plugin, so vendored like
      react-router. re-sync: re-download SKILL.md + LICENSE.txt + templates/ from
-     raw.githubusercontent.com/anthropics/skills/main/skills/algorithmic-art/. symlinked at ~/.claude/skills/algorithmic-art. -->
+     raw.githubusercontent.com/anthropics/skills/main/skills/algorithmic-art/. symlinked at ~/.claude/skills/algorithmic-art.
+     description trimmed locally — keep on re-sync. -->
 
 Algorithmic philosophies are computational aesthetic movements that are then expressed through code. Output .md files (philosophy), .html files (interactive viewer), and .js files (generative algorithms).
 

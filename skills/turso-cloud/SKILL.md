@@ -1,17 +1,13 @@
 ---
 name: turso-cloud
-description: >
-  Turso Cloud — fully managed SQLite-compatible database platform, accessed over the network.
-  Use when connecting an application to a Turso Cloud database, creating or scoping auth tokens
-  (JWT, fine-grained permissions, JWKS/external auth providers), or provisioning and managing
-  cloud databases. Covers per-language SDKs (JavaScript/TypeScript, Python, Go, Rust),
-  authentication & authorization, and marketplace integrations (Vercel).
+description: Turso Cloud — managed SQLite-compatible database over the network. Use when connecting an app to a Turso Cloud database, creating or scoping auth tokens (JWT, fine-grained permissions, JWKS/external providers), or provisioning and managing cloud databases. Per-language SDKs, Vercel integration.
 user-invocable: false
 ---
 
 <!-- vendored verbatim from `tursodatabase/agent-skills` main:skills/turso-cloud @ 34ced52 (MIT; LICENSE kept; `user-invocable: false` added to frontmatter).
      Turso's own Cloud skill — remote SDKs per language, auth tokens and scoping, the Vercel Marketplace integration. backs the `turso-specialist` seat.
-     re-sync: re-download skills/turso-cloud/ from the tursodatabase/agent-skills repo. -->
+     re-sync: re-download skills/turso-cloud/ from the tursodatabase/agent-skills repo.
+     description trimmed locally — keep on re-sync. -->
 
 # Turso Cloud Skills
 

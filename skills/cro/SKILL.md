@@ -1,6 +1,6 @@
 ---
 name: cro
-description: "When the user wants to optimize, improve, or increase conversions on any marketing page or form — including homepage, landing pages, pricing pages, feature pages, lead capture forms, or contact forms. Also use when the user says 'CRO,' 'conversion rate optimization,' 'this page isn't converting,' 'improve conversions,' 'why isn't this page working,' 'my landing page sucks,' 'form abandonment,' 'nobody's converting,' 'low conversion rate,' or 'this page needs work.' Use this even if the user just shares a URL and asks for feedback. For signup/registration flows, see signup. For post-signup activation, see onboarding. For popups/modals, see popups."
+description: "When the user wants to increase conversions on a marketing page or form (homepage, landing, pricing, feature, lead capture, contact), says a page isn't converting, or shares a URL asking for feedback on it."
 metadata:
   version: 2.0.0
 ---
@@ -11,7 +11,8 @@ metadata:
      the mattpocock pack). User-invoked conversion audit (`/cro`, runs inline) — optimizing the
      pages/forms that ship in the build, NOT paid-channel/campaign optimization. Kept verbatim; cross-skill
      mentions (signup/popups/ab-testing) point at unvendored marketing skills and degrade gracefully.
-     re-sync: re-download SKILL.md + references/* from the raw source. -->
+     re-sync: re-download SKILL.md + references/* from the raw source.
+     description trimmed locally — keep on re-sync. -->
 
 # Conversion Rate Optimization (CRO)
 

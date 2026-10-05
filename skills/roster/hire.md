@@ -9,7 +9,7 @@ Completion: role + boundary-vs-nearest-peer + named source, all one line, no ove
 
 ## 2. Draft `agents/<name>.md` (map #1)
 Copy the **nearest peer's shape** for the seat-specific body — read it first. Optionally spawn a drafting agent with that peer file and `writing-for-agents` in context to write the body, then review it yourself. Frontmatter:
-- `description` — trigger-rich, ending in a **boundary clause** that names its complementary seat (see how `architecture-reviewer` names `code-reviewer`).
+- `description` — trigger-rich, ending in one **boundary clause** that names its complementary seat (see how `architecture-reviewer` names `code-reviewer`); 300 characters at most, because every seat's description loads into every session. The other lane boundaries belong in `references/routing.md`.
 - `tools` — omit for a full-access builder; scope it for a read-only reviewer (copy a reviewer's list).
 - `model` — **pin an explicit full ID**, never omit and never an alias: `claude-opus-5-5` for code/judgment seats (the floor for anything writing code, reviewing it, or making security calls), `claude-sonnet-5-5` for mechanical pattern-matching/checklist work and bounded, repeated review or investigation. `inherit` is retired — it scaled every subagent's cost to the *lead's* tier; the floating `opus`/`sonnet` aliases silently change behavior under an install (`ROSTER.md` → *Model tiers*).
 

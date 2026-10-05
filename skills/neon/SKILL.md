@@ -1,6 +1,6 @@
 ---
 name: neon
-description: Neon's serverless driver seam — the `poolQueryViaFetch` flag that decides whether a query travels over WebSocket or HTTP and the pool listener that turns it off, the error class and the Postgres `code` the HTTP path erases, pooled vs direct endpoints and which consumer takes which, `webSocketConstructor` by Node version, and Drizzle's Neon transaction leaking a pool slot. Use when wiring or debugging `@neondatabase/serverless` — an intermittent `Connection terminated unexpectedly`, a `23505` branch that stopped matching, a migration that ran against the wrong endpoint. Schema and SQL are `postgres`'s; provisioning and branching are the platform seat's.
+description: Neon's serverless driver — WebSocket vs HTTP transport, pooled vs direct endpoints, Drizzle on Neon. Use when wiring or debugging `@neondatabase/serverless` — an intermittent `Connection terminated unexpectedly`, a lost `23505`, a migration on the wrong endpoint. Schema and SQL are `postgres`'s.
 user-invocable: false
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: node
-description: "Use when writing or reviewing code the `node` runtime runs — a CLI, a script, or a long-running service, as `.js`/`.mjs` or `node file.ts`. The failures Node doesn't report: `process.exit()` cutting piped stdout at 64 KB, a `SIGINT` listener that swallows every later Ctrl-C, a `fetch` whose unread body pins its socket and whose timeout throws `TimeoutError` rather than `AbortError`, `--env-file` losing to a stale shell export, `stdout.write` crashing under `| head`, an `unhandledRejection` logger that turns every crash into exit 0. Shutdown and native-TypeScript halves in `reference/`. Node 24 LTS, runtime side only — tsconfig and the ESM/CJS config axis are `typescript`'s."
+description: "Node runtime recipes. Use when writing or reviewing code `node` runs — a CLI, a script, or a long-running service, as `.js`/`.mjs` or `node file.ts`: exit, signals, `fetch`, `--env-file`, streams, rejections, shutdown. Node 24 LTS; tsconfig and ESM/CJS config are `typescript`'s."
 user-invocable: false
 ---
 

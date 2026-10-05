@@ -1,6 +1,6 @@
 ---
 name: quickbooks-specialist
-description: "QuickBooks Online sync — the adapter that posts an app's settled records into a company's books: Intuit OAuth and its rotating refresh token, Accounting API entity mapping, throttling and failure classification, webhooks + CDC. Use when a feature connects a QuickBooks company, sends gifts, payments or corrections to QuickBooks, or reads its accounts. The payment rails (`stripe-specialist`, `paypal-specialist`, `chariot-specialist`) settle what this seat records; the queue, cron and routes driving it are the platform seat's."
+description: "QuickBooks Online sync — posts settled records into a company's books: Intuit OAuth with a rotating refresh token, entity mapping, throttling, webhooks + CDC. Use to connect QuickBooks, sync records or read accounts. Payments are `stripe-specialist`'s and the other rails'."
 model: claude-opus-5-5
 memory: local
 ---

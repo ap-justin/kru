@@ -1,6 +1,6 @@
 ---
 name: api-design
-description: Use when building or reviewing an API that code you don't own calls — a versioned public or API-key surface, the key minting and auth in front of it, the webhooks your app sends, list pagination and incremental sync, or an idempotent write. The traps no test of yours catches because they break in the integrator's code months later — a bare array that can never grow a field, a DB row serialized straight to the wire, a new enum value that throws in someone's exhaustive switch, a key format half of whose keys misparse, an HMAC keyed with the `whsec_` string instead of its bytes, a `since` filter that never shows a refund — with keys, webhooks, pagination and writes in `reference/`. Sending webhooks only; receiving a provider's is that provider's seat.
+description: API design for a surface code you don't own calls — a versioned public or API-key surface, key minting and auth, the webhooks your app sends, pagination and incremental sync, idempotent writes. Use when building or reviewing one. Sending webhooks only; receiving a provider's is that provider's seat.
 user-invocable: false
 ---
 

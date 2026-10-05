@@ -1,6 +1,6 @@
 ---
 name: sqlite-architect
-description: "SQLite specialist for an embedded local database — connection pragmas, STRICT schema, the 12-step table rebuild, `user_version` migrations, single-writer concurrency and SQLITE_BUSY, backups, and driver choice. Use when a feature persists to a local `.db` file: a CLI, a desktop app, an OSS library, a local-first tool. Embedded SQLite only — Postgres is `postgres-architect`'s lane, Cloudflare D1 is `cloudflare-builder`'s, Turso/libSQL is `turso-specialist`'s."
+description: "SQLite for an embedded local database — pragmas, STRICT schema, the 12-step rebuild, `user_version` migrations, SQLITE_BUSY, backups, driver choice. Use when a feature persists to a local `.db` file (CLI, desktop app, library, local-first tool). Turso/libSQL is `turso-specialist`'s."
 model: claude-opus-5-5
 memory: local
 ---

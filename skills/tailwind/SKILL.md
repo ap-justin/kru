@@ -1,6 +1,6 @@
 ---
 name: tailwind
-description: Tailwind CSS v4 recipes — the text scan that drops an interpolated class name and a whole `.gitignore`d directory in silence, conflicting utilities resolved by sheet order instead of class-attribute order, `@theme` vs `@theme inline` deciding whether a runtime theme flip reaches the utility, `@apply` outside the entry sheet, and a `tailwind.config.js` that is never read. Use when writing or reviewing markup styled with Tailwind utilities, wiring Tailwind into a build, or debugging a class that paints nothing. v4 only; not v3, not Panda, not CSS modules.
+description: Tailwind CSS v4 recipes. Use when writing or reviewing markup styled with Tailwind utilities, wiring Tailwind into a build, or debugging a class that paints nothing. v4 only; not v3, not Panda, not CSS modules.
 user-invocable: false
 ---
 

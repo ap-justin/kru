@@ -1,6 +1,6 @@
 ---
 name: copywriting
-description: When the user wants to write, rewrite, or improve marketing copy for any page — including homepage, landing pages, pricing pages, feature pages, about pages, or product pages. Also use when the user says "write copy for," "improve this copy," "rewrite this page," "marketing copy," "headline help," "CTA copy," "value proposition," "tagline," "subheadline," "hero section copy," "above the fold," "this copy is weak," "make this more compelling," or "help me describe my product." Use this whenever someone is working on website text that needs to persuade or convert. For email copy, see emails. For popup copy, see popups. For editing existing copy, see copy-editing. For the offer underneath the copy (bonuses, guarantees, value framing), see offers.
+description: When the user wants to write, rewrite, or improve marketing copy for any page (homepage, landing, pricing, feature, about, product), including headlines, CTAs, value propositions and hero copy. For editing existing copy, see copy-editing.
 metadata:
   version: 2.0.2
 ---
@@ -11,7 +11,8 @@ metadata:
      mattpocock pack). User-invoked copy pass (`/copywriting`, runs inline) — on-page copy that
      ships in the build, NOT channels/campaigns. Kept verbatim; cross-skill mentions (emails/popups/offers/
      ab-testing) point at unvendored marketing skills and degrade gracefully.
-     re-sync: re-download SKILL.md + references/* from the raw source. -->
+     re-sync: re-download SKILL.md + references/* from the raw source.
+     description trimmed locally — keep on re-sync. -->
 
 # Copywriting
 

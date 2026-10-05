@@ -1,6 +1,6 @@
 ---
 name: modern-css
-description: Curated Baseline reference for which native CSS features are safe to reach for now — container queries, :has(), nesting, subgrid, color-mix()/relative colors/light-dark(), @starting-style transitions, scroll-driven animation, view transitions, @scope, and more. Use before writing CSS that would otherwise reach for a JS workaround, an extra wrapper element, a preprocessor trick, or an older hack — check whether native CSS now does it. Curates Baseline 2023-2025 (web.dev/baseline); for anything newer or unlisted, verify live rather than guessing.
+description: Baseline 2023-2025 native CSS safe to use now — container queries, :has(), nesting, subgrid, color-mix()/light-dark(), @starting-style, scroll-driven animation, view transitions, @scope. Use before writing CSS that would reach for a JS workaround, extra wrapper, or preprocessor trick.
 user-invocable: false
 ---
 

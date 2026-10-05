@@ -1,6 +1,6 @@
 ---
 name: go-fullstack-builder
-description: "Go-served React app implementer — both ends of the wire: the Go HTTP service (`net/http` routing, handlers, middleware, the JSON contract, graceful shutdown, the built SPA embedded and served) and the React side that consumes it (typed api client, query hooks, route glue that mounts components). Use to build or edit the Go backend, the API contract, or the SPA's data layer in a repo with a `go.mod` and a React app. Components are `react-ui-builder`'s; schema and migrations are the data architects'; a Node-served React app (Next.js, React Router 7, TanStack Start) is its framework builder's."
+description: "Go-served React app, both ends of the wire — the Go `net/http` service (handlers, middleware, JSON contract, graceful shutdown, embedded SPA) and the React data layer (typed api client, query hooks, route glue). Use in a repo with a `go.mod` and a React app. Components are `react-ui-builder`'s."
 model: claude-opus-5-5
 memory: local
 experimental:

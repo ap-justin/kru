@@ -1,6 +1,6 @@
 ---
 name: nextjs-builder
-description: Next.js App Router network-boundary implementer — Server Component data fetching, Server Actions, route handlers, layouts, streaming, caching, middleware. Maps server data to serializable props and mounts components built by react-ui-builder. Use to build or edit any Next.js App Router route from a feature spec. Not for Pages Router unless the repo confirms it.
+description: Next.js App Router network boundary — Server Component fetching, Server Actions, route handlers, streaming, caching, middleware; maps server data to serializable props. Use to build or edit an App Router route. Pages Router only if the repo confirms it; components are `react-ui-builder`'s.
 model: claude-opus-5-5
 memory: local
 experimental:

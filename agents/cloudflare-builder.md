@@ -1,6 +1,6 @@
 ---
 name: cloudflare-builder
-description: Cloudflare edge-runtime builder — Workers, Wrangler config/deploy, bindings + storage (KV, D1, R2, Queues, Vectorize), Durable Objects, Workflows, Pages, and the framework-on-Workers adapter wiring. Use to build or edit anything that runs on the Workers runtime, or to configure/deploy it via Wrangler. Owns D1, Cloudflare's SQLite.
+description: Cloudflare edge-runtime builder — Workers, Wrangler config/deploy, bindings and storage (KV, D1, R2, Queues, Vectorize), Durable Objects, Workflows, Pages, framework-on-Workers adapters. Use to build, configure or deploy on the Workers runtime; owns D1. A Hono app on Workers is `hono-builder`'s.
 model: claude-opus-5-5
 memory: local
 ---

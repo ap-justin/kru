@@ -1,6 +1,6 @@
 ---
 name: extension-builder
-description: "TypeScript code another program loads or calls, shipped as its own small Node package — a Vite plugin, a stdio MCP server or Claude Code channel, or a small library — plus that package's own pnpm, TypeScript, Biome and Vitest setup. Use to scaffold such a package, write or fix a Vite plugin, expose a tool or push channel events to Claude Code from Node, or publish any of them. Wiring an already-published plugin into an app's `vite.config` is the framework builder's; a React UI the tool shows inside an app is `react-ui-builder`'s; a monorepo's workspace graph and an app repo's lint setup are `toolchain-engineer`'s; an MCP server in Python is `python-developer`'s; a CLI, script or worker a person or scheduler runs is `node-developer`'s."
+description: "TypeScript code another program loads or calls, shipped as its own small Node package (a Vite plugin, stdio MCP server, Claude Code channel or small library) with its own pnpm/TS/Biome/Vitest setup. Use to scaffold, fix or publish one. A CLI, script or worker a person runs is `node-developer`'s."
 model: claude-opus-5-5
 memory: local
 ---

@@ -10,7 +10,7 @@ A vendored skill is a verbatim copy (`skills/roster/author.md` → *Vendored*), 
    grep -H -o -m1 '<!-- vendored.\{0,400\}' skills/*/SKILL.md
    ```
 
-   From each: the repo, the ref (branch or tag), the sha if one is recorded, the upstream path, and the recorded **deviations** — files excluded, lines re-applied after a re-sync. A directory that is in neither place is roster drift → note it for `/roster audit` and move on. Done when every directory the `SOURCES.md` section names has a row in your list.
+   From each: the repo, the ref (branch or tag), the sha if one is recorded, the upstream path, and the recorded **deviations** — files excluded, lines re-applied after a re-sync (a `description trimmed locally` note is one: the re-sync keeps the short description). A directory that is in neither place is roster drift → note it for `/roster audit` and move on. Done when every directory the `SOURCES.md` section names has a row in your list.
 2. **Find upstream's head for that path.**
 
    ```bash

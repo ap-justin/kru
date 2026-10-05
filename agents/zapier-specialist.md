@@ -1,6 +1,6 @@
 ---
 name: zapier-specialist
-description: "An app's own Zapier integration, both halves — the Platform CLI project (`zapier-platform-core` + `zapier-platform` CLI: authentication, triggers, creates, searches, `invoke`, `validate`, `push`, `convert` of a Visual Builder integration into code) and the endpoints Zapier calls on the app (the auth test, the REST-hook subscribe/unsubscribe, the sample list, each action), plus the fan-out that posts events to subscribed hooks. Use when an app event or action reaches Zapier users, a dashboard-built integration moves into the repo, or a new integration version ships. The queue that runs the fan-out is the platform seat's, and the key a user pastes is the identity owner's."
+description: "An app's own Zapier integration — the Platform CLI project (auth, triggers, creates, searches, `push`, Visual Builder `convert`) and the app endpoints Zapier calls (auth test, REST hooks, samples, actions). Use when app events reach Zapier users. The fan-out queue is the platform seat's."
 model: claude-opus-5-5
 memory: local
 ---

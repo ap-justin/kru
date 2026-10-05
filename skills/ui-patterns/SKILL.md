@@ -1,6 +1,6 @@
 ---
 name: ui-patterns
-description: "House rules for how a built surface behaves — when a form validates and where a failed submit puts focus, where a mutation reports its outcome, what a per-row control announces, how an icon sits beside a label that wraps, what prose to leave out, which spans of a CLI's output the reader can act on. Design-system agnostic: behavior, semantics and grouping only, never appearance. Load the one group matching your build target."
+description: "House rules for how a built surface behaves — form validation and focus, mutation outcomes, per-row control labels, an icon beside a wrapping label, prose to cut, actionable CLI output spans. Behavior, semantics and grouping only, never appearance. Load the one group matching your build target."
 user-invocable: false
 ---
 

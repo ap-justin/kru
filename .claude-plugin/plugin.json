@@ -1,7 +1,7 @@
 {
   "name": "kru",
   "displayName": "kru",
-  "version": "0.142.0",
+  "version": "0.143.0",
   "description": "Your engineering department. Draft your team from a pool of skills and agents.",
   "author": {
     "name": "ap-justin"
@@ -25,7 +25,7 @@
     "KRU_NO_LEAD_GATE": {
       "type": "boolean",
       "title": "Skip the lead gate",
-      "description": "Stop requiring the lead skill before a session's first tool call.",
+      "description": "Stop requiring the lead skill before a session's first tool call, and the startup reminder to run /kru:setup in a repo without one.",
       "required": false,
       "default": false
     },

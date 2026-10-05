@@ -1,6 +1,6 @@
 ---
 name: incentives
-description: "Incentives — everyone who meets a design acts on their own payoff, so design for what they'll actually do rather than the intended path. Load when a choice depends on someone taking the extra step, the honest route or the careful one: an ask in a flow, an abuse case, a public contract, a test's assertion, a finding's severity, a claim's proof, a number to optimize."
+description: "Incentives — everyone acts on their own payoff, so design for what they'll actually do, not the intended path. Load when a choice depends on someone taking the extra step, the honest route or the careful one: an ask in a flow, an abuse case, a public contract, a test's assertion."
 user-invocable: false
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: landing-page
-description: Landing page structure — which sections a marketing page gets, in what order, and the SECTION deck a design agent and a UI builder mount verbatim. Places the visitor by awareness stage × market sophistication before a template is picked, and attaches each proof to the claim it clears. Use when a landing, home, pricing, feature or about page needs its structure and its copy; when copy exists but its order doesn't argue; when asked what sections a page should have; or before a marketing page is dispatched to design or build. Sentence craft is `copywriting`, line edits `copy-editing`, a post-ship audit `cro`.
+description: Landing page structure — which sections a marketing page gets, in what order, as a SECTION deck mounted verbatim. Use when a landing, home, pricing, feature or about page needs structure and copy, when its order doesn't argue, or before it goes to design or build. Post-ship audit is `cro`.
 user-invocable: false
 ---
 

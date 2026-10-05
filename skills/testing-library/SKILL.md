@@ -1,6 +1,6 @@
 ---
 name: testing-library
-description: "Testing Library recipes — the green component test whose query found the wrong element or whose interaction did nothing: `getByText` failing on text split across elements under a regex and `exact: false` alike, a regex `name` matching every button containing the word, `toBeDisabled` passing over `aria-disabled` while `user.click` on it fires, `waitFor` resolving on a falsy return, user-event 14 silently dropping v13 key descriptors, and the act warning that never prints under Vitest's `globals: false`. Use when writing or reviewing a component test in a repo with `@testing-library/react` or `/svelte`, or reading a query failure. Not Playwright, not Vitest Browser Mode locators."
+description: "Testing Library recipes — the green component test whose query found the wrong element or whose interaction did nothing. Use when writing or reviewing a component test in a repo with `@testing-library/react` or `/svelte`, or reading a query failure. Not Playwright, not Vitest Browser Mode locators."
 user-invocable: false
 ---
 

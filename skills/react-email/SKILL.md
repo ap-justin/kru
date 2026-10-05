@@ -1,6 +1,6 @@
 ---
 name: react-email
-description: React Email — an unresolved Tailwind class that ships as a bare `class=` with no style, `rem` units without `pixelBasedPreset`, `render()` returning a Promise that stringifies to `[object Promise]`, a plain-text part that drops the preview and runs table columns together, `<Markdown>` passing raw HTML and `javascript:` links through, and a relative image that works in the preview server and ships broken. Use when writing or reviewing an email template, a `render()` call, or the code that sends one, in a repo with `react-email` or `@react-email/*` in `package.json`. React Email 6; not MJML, not jsx-email.
+description: React Email 6 recipes. Use when writing or reviewing an email template, a `render()` call, or the code that sends one, in a repo with `react-email` or `@react-email/*` in `package.json`. Not MJML, not jsx-email.
 user-invocable: false
 ---
 

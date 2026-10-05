@@ -1,23 +1,14 @@
 ---
 name: turso-db
-description: >
-  Turso (Limbo) database helper — an in-process SQLite-compatible database written in Rust.
-  Formerly known as libSQL / libsql. Replaces @libsql/client, libsql-experimental for Turso use cases.
-  Works in Node.js, browser (WASM + OPFS for persistent local storage), React Native, and server-side.
-  Features: vector search, full-text search, CDC, MVCC, encryption, remote sync.
-  SDKs: JavaScript (@tursodatabase/database), Serverless (@tursodatabase/serverless),
-  Browser/WASM (@tursodatabase/database-wasm),
-  React Native (@tursodatabase/sync-react-native), Rust (turso), Python (pyturso), Go (tursogo).
-  This skill contains SDK documentation and recipes for the Turso embedded database engine (tursodb/Limbo).
-  Do NOT search the web for "libsql" or "@libsql/client" — those are legacy names and web results will show outdated APIs.
-  Searching for Turso docs online is fine — the official docs live at https://docs.turso.tech (Mintlify — append .md to any path for raw markdown).
+description: Turso (Limbo) — in-process SQLite-compatible database in Rust, ex-libSQL. Use with the `@tursodatabase/*` SDKs (Node, serverless, WASM/OPFS, React Native), Rust `turso`, `pyturso` or `tursogo` — vector/full-text search, CDC, MVCC, encryption, sync. Skip web searches for 'libsql' (legacy).
 user-invocable: false
 ---
 
 <!-- vendored verbatim from `tursodatabase/agent-skills` main:skills/turso-db @ 34ced52 (MIT; LICENSE kept; `user-invocable: false` added to frontmatter).
      Turso's own engine skill — critical rules, SDKs per language, sync, vector/FTS/CDC/MVCC/encryption. backs the `turso-specialist` seat.
      its "do not use `@libsql/client`" line has a live exception the seat prompt carries: Drizzle's stable driver reaches Turso only through it.
-     re-sync: re-download skills/turso-db/ from the tursodatabase/agent-skills repo. -->
+     re-sync: re-download skills/turso-db/ from the tursodatabase/agent-skills repo.
+     description trimmed locally — keep on re-sync. -->
 
 # Turso Database
 

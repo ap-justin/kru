@@ -1,6 +1,6 @@
 ---
 name: modern-html
-description: Baseline judgment for native HTML — which platform elements and attributes now do a job that used to need a library or hand-rolled JS. Covers <dialog> vs the popover attribute, invoker commands, exclusive <details> accordions, inert, constraint validation and :user-invalid, <output>, <search>, and the loading/priority hints. Use before reaching for a headless primitive, a wrapper element, or JS for something the platform now ships.
+description: Native HTML that replaces a library or hand-rolled JS — <dialog> vs popover, invoker commands, exclusive <details>, inert, constraint validation, <output>, <search>, loading/priority hints. Use before reaching for a headless primitive, wrapper element, or JS the platform ships.
 user-invocable: false
 ---
 

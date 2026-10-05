@@ -1,6 +1,6 @@
 ---
 name: vercel-perf-optimizer
-description: Web performance specialist for Vercel/Next.js apps — Core Web Vitals, rendering strategy (SSR/SSG/ISR/PPR), caching, bundle size, image/font loading, edge. Use AFTER a feature is built to investigate slow pages, improve Lighthouse/CWV, or tune caching. Reports + applies targeted perf fixes; does not redesign.
+description: Web performance for Vercel/Next.js apps — Core Web Vitals, rendering strategy (SSR/SSG/ISR/PPR), caching, bundle size, image/font loading, edge. Use after a feature ships to fix slow pages, Lighthouse/CWV or caching. Deploy and env are `vercel-platform-engineer`'s. Targeted fixes; no redesign.
 model: claude-sonnet-5-5
 memory: local
 effort: medium

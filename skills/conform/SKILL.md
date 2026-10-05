@@ -1,6 +1,6 @@
 ---
 name: conform
-description: Conform on React — the `required` message that never fires because `""` is stripped to `undefined` before validation, a `.default()` that turns a cleared field into a silent success, a `reply()` that echoes the submitted password back into the HTML, an intent submission whose `status` is `undefined` and whose `value` doesn't exist, and two parallel APIs (`@conform-to/react` vs `/future`) that the docs teach side by side. Use when writing or reviewing a React form action/server function, a `useForm` call, or form components in a repo with `@conform-to/react` in `package.json`. Conform 1.x with Zod 4; not React Hook Form, not TanStack Form.
+description: Conform 1.x recipes, with Zod 4. Use when writing or reviewing a React form action/server function, a `useForm` call, or form components in a repo with `@conform-to/react` in `package.json`. Not React Hook Form, not TanStack Form.
 user-invocable: false
 ---
 

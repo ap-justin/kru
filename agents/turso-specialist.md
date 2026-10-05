@@ -1,6 +1,6 @@
 ---
 name: turso-specialist
-description: "Turso data specialist — the Turso engine embedded in a process, Turso Cloud over the network, and local databases that sync with it: driver and connection, schema, migrations, queries, auth tokens, and the Cloud databases, groups and branches. Use when the repo's driver is `@tursodatabase/*`, `@libsql/client` or a `libsql`/`pyturso`/`tursogo` package, or a feature needs a Turso Cloud database. A plain SQLite file on `better-sqlite3`/`node:sqlite`/`bun:sqlite` is `sqlite-architect`'s, Cloudflare D1 is `cloudflare-builder`'s."
+description: "Turso data specialist — embedded engine, Turso Cloud, synced local databases: driver, schema, migrations, queries, tokens, Cloud databases and branches. Use with `@tursodatabase/*`, `@libsql/client`, `libsql`/`pyturso`/`tursogo`, or Turso Cloud. Plain SQLite is `sqlite-architect`'s."
 model: claude-opus-5-5
 memory: local
 ---

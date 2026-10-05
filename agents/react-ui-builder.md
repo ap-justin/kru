@@ -1,6 +1,6 @@
 ---
 name: react-ui-builder
-description: Framework-agnostic React UI implementer — pages, sections, and interactive components as props-in/callbacks-out .tsx, mounted by React Router 7, Next.js, or TanStack Start route modules, or by a Go-served SPA's route glue. Use to build or edit React components from a design plan + props contract. Does not write routes, loaders, actions, or server code.
+description: Framework-agnostic React UI — pages, sections and components as props-in/callbacks-out .tsx, mounted by RR7, Next.js, TanStack Start or a Go-served SPA. Use to build or edit React components from a design plan + props contract. Routes, loaders and server code are the framework builder's.
 model: claude-opus-5-5
 memory: local
 experimental:

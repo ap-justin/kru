@@ -1,6 +1,6 @@
 ---
 name: go
-description: Use when writing or reviewing a Go `net/http` handler, middleware, JSON contract, session/CSRF code, `database/sql` call, or `_test.go` in a repo with a `go.mod`. The traps that compile, pass `vet` and ship quiet — a nil slice serializing as JSON `null`, `http.Error` not ending the handler, a map race that is `fatal` and skips `recover`, a goroutine dying with the request because it took `r.Context()`, `omitempty` keeping a zero `time.Time` while dropping `false` — with the security, `database/sql`, test-gate and version-gate halves in `reference/`. Go 1.22+ on the stdlib; not Gin/Echo/Fiber internals, not gRPC.
+description: Go `net/http` recipes. Use when writing or reviewing a handler, middleware, JSON contract, session/CSRF code, `database/sql` call, or `_test.go` in a repo with a `go.mod`. Go 1.22+ on the stdlib; not Gin/Echo/Fiber internals, not gRPC.
 user-invocable: false
 ---
 

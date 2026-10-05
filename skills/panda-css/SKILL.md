@@ -1,6 +1,6 @@
 ---
 name: panda-css
-description: "Panda CSS 2 recipes — the class that ships with no rule and no warning: a config recipe called with a runtime variant, a JSX style prop fed a prop, a `css()` wrapper whose call sites never warn, a file outside `include` (Vite plugin included), a CSS entry missing the `@layer` line, `removeUnusedTokens` stripping a variable plain CSS reads, a config with no `presets` emitting `bg: red.500`. Also `css()`/`cx` overrides lost to sheet order, semantic tokens that need `{}` references, `_dark` matching only `.dark`, and `strictTokens` as a type-only gate. Use when writing or reviewing styles in a repo with a `panda.config.*` / `styled-system/`, wiring Panda into a build or CI, or debugging a Panda style that renders with no CSS. Not Tailwind, vanilla-extract or StyleX."
+description: "Panda CSS 2 recipes — the class that ships with no rule and no warning. Use when writing or reviewing styles in a repo with a `panda.config.*` / `styled-system/`, wiring Panda into a build or CI, or debugging a Panda style that renders with no CSS. Not Tailwind, vanilla-extract or StyleX."
 user-invocable: false
 ---
 

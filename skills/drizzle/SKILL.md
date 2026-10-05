@@ -1,6 +1,6 @@
 ---
 name: drizzle
-description: Drizzle ORM recipes for the Postgres and SQLite dialects — the version split between what npm installs and what orm.drizzle.team documents, reading the SQL `drizzle-kit generate` writes before it ships (its SQLite table rebuild deletes child rows), `generate`+`migrate` vs `push`, the connection settings Drizzle does not set for you, and relational queries vs joins. Use when writing or reviewing a Drizzle schema, a drizzle-kit migration, or a query built with Drizzle, in either the pg or sqlite dialect. Not MySQL, not Prisma.
+description: Drizzle ORM recipes for the Postgres and SQLite dialects — schema, drizzle-kit migrations (`generate`+`migrate` vs `push`), connection settings, relational queries vs joins. Use when writing or reviewing a Drizzle schema, migration, or query. Not MySQL, not Prisma.
 user-invocable: false
 ---
 

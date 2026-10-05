@@ -1,6 +1,6 @@
 ---
 name: typescript
-description: TypeScript language + type-system reference every builder loads — compiler config (tsconfig strictness, module resolution, path aliases, project references, the `tsc --noEmit` gate), the type system (generics, conditional/mapped/template-literal types, branded/opaque types, discriminated unions, inference, `satisfies`, `.d.ts` + module augmentation), ESM/CJS, monorepo project-reference builds, JS→TS migration, and type-error/type-perf diagnostics. Use when setting up or tightening a tsconfig, resolving a cryptic type error, writing a gnarly generic/inference type or a `.d.ts`, fixing module-resolution/path-alias breakage, wiring monorepo references, migrating JS→TS, or diagnosing slow type-checking. This is the ambient TypeScript craft woven through feature code — not a separate hand-off. (Does not cover the formatter/linter — Biome/ESLint/Prettier are a separate tooling concern.)
+description: TypeScript language + type system — tsconfig, module resolution, path aliases, project references, generics/conditional/mapped types, `.d.ts`, ESM/CJS, JS→TS migration, type-error and type-perf diagnostics. Use when a tsconfig, a cryptic type error or a gnarly type is in play. Not the linter.
 user-invocable: false
 ---
 

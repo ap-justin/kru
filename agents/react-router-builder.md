@@ -1,6 +1,6 @@
 ---
 name: react-router-builder
-description: React Router 7 (framework mode, ex-Remix) network-boundary implementer — route modules, loaders, actions, fetchers, nested routing, typegen. Maps server data to serializable props and mounts components built by react-ui-builder. Use to build or edit route modules in a React Router v7 codebase. Not for React Router 6 / library-only setups unless the repo confirms it.
+description: React Router 7 framework-mode (ex-Remix) network boundary — route modules, loaders, actions, fetchers, nested routing, typegen; maps server data to serializable props. Use to build or edit route modules in an RR7 codebase; v6 only if the repo confirms it. Components are `react-ui-builder`'s.
 model: claude-opus-5-5
 memory: local
 experimental:

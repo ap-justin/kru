@@ -1,6 +1,6 @@
 ---
 name: copy-editing
-description: "When the user wants to edit, review, or improve existing marketing copy, or refresh outdated content. Also use when the user mentions 'edit this copy,' 'review my copy,' 'copy feedback,' 'proofread,' 'polish this,' 'make this better,' 'copy sweep,' 'tighten this up,' 'this reads awkwardly,' 'clean up this text,' 'too wordy,' 'sharpen the messaging,' 'refresh this content,' 'update this page,' 'this content is outdated,' or 'content audit.' Use this when the user already has copy and wants it improved or refreshed rather than rewritten from scratch. For writing new copy, see copywriting."
+description: "When the user wants to edit, proofread or tighten existing marketing copy, or refresh outdated content. Use when copy exists and needs improving rather than rewriting. For new copy, see copywriting."
 metadata:
   version: 2.0.0
 ---
@@ -11,7 +11,8 @@ metadata:
      mattpocock pack). User-invoked line-edit pass (`/copy-editing`, runs inline) — on-page copy
      that ships in the build, NOT channels/campaigns. Kept verbatim; cross-skill mentions (marketing-psychology/
      ab-testing) point at unvendored marketing skills and degrade gracefully.
-     re-sync: re-download SKILL.md + references/* from the raw source. -->
+     re-sync: re-download SKILL.md + references/* from the raw source.
+     description trimmed locally — keep on re-sync. -->
 
 # Copy Editing
 

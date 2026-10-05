@@ -1,6 +1,6 @@
 ---
 name: tui-design
-description: Terminal UI recipes for Bubble Tea (Go), Ratatui (Rust), Textual (Python) and Ink (React) — the frame measured in cells rather than characters, color on a background you have to detect, I/O that leaves the render loop, the exit path that gives the terminal back in every branch including panic, and resize as an event rather than a startup fact. Use when building or reviewing a terminal app, making an existing CLI interactive, or choosing a TUI framework. Terminal surfaces only — a browser UI is the UI builders' lane.
+description: Terminal UI recipes for Bubble Tea (Go), Ratatui (Rust), Textual (Python) and Ink (React) — cells, background color detection, I/O off the render loop, terminal restore on every exit, resize. Use when building or reviewing a terminal app, making a CLI interactive, or choosing a TUI framework.
 user-invocable: false
 ---
 

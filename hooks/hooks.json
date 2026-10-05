@@ -8,6 +8,11 @@
             "type": "command",
             "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/check-task-tools.sh\"",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/setup-nudge.sh\" \"${CLAUDE_PLUGIN_ROOT}\"",
+            "timeout": 10
           }
         ]
       },

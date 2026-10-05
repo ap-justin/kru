@@ -1,6 +1,6 @@
 ---
 name: cli
-description: Use when writing or reviewing a command-line tool's contract — its flags and arguments, what goes to stdout vs stderr, its exit status, `--json` output, reading stdin, prompts, env/config precedence, or `--dry-run` — in Node/TS, Python or Go. The failures where the caller sees success or hangs — a `catch` that exits 0, a usage error that exits 1, a log line or prompt that breaks `| jq`, a pipe to `head` that prints a stack trace, a SIGINT handler that lets the caller's loop run on, a confirm that reads EOF as yes in CI — with the parser traps per language in `reference/`. What the output says to a watching human is `ui-patterns` (terminal output); a full-screen terminal app is `tui-design`.
+description: CLI contract recipes. Use when writing or reviewing a command-line tool's flags and arguments, stdout vs stderr, exit status, `--json`, stdin, prompts, env/config precedence or `--dry-run`, in Node/TS, Python or Go. A full-screen terminal app is `tui-design`'s.
 user-invocable: false
 ---
 

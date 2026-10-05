@@ -1,6 +1,6 @@
 ---
 name: xstate
-description: "XState 5 (actor model + statecharts): an invoked promise actor that rejects with no `onError` handler doesn't fail its state — it throws an **uncaught exception on the process** and puts the whole root actor into `status: 'error'`; an `always` transition with no exit condition runs its action in an unbounded microstep loop that grows heap until the process OOMs; an `invoke`d actor is torn down and recreated from scratch every time its state is re-entered, silently losing whatever internal state it accumulated, where a `spawn`ed one (held in `context`) survives; and the docs' own `llms.txt` links to a `v6` doc tree whose quick start says `npm install xstate@alpha`, which breaks the peer range of any `@xstate/react` installed at `latest`. Use when writing or reviewing an XState machine or actor, or a repo with `xstate` in `package.json`. XState 5.x; the React bindings (`useMachine`/`useSelector`) are the sibling `xstate-react` skill, not this one."
+description: "XState 5 (actor model + statecharts). Use when writing or reviewing an XState machine or actor, or a repo with `xstate` in `package.json`. XState 5.x; the React bindings (`useMachine`/`useSelector`) are the sibling `xstate-react` skill."
 user-invocable: false
 ---
 

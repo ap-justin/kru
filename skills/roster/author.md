@@ -13,10 +13,11 @@ On the page that means: sequences whose order matters, defaults with the reason 
 
 ## First-party (write it)
 1. `skills/<name>/SKILL.md` to the `writing-for-agents` standard (its `SKILL-MECHANICS.md` carries the skill-only half) — loaded **before the first edit, and run again over the finished draft and every file that draft touched**. The second pass is not optional and it is not the first one repeated: the pruning bars (no-ops, duplication, relevance, sprawl) are measurements over text, so they have no input until a draft exists, and duplication has none until *every* surface does — which is why the catches land across files rather than inside the new one. Decide **invocation** per that skill: model-invoked (keeps a trigger-rich `description`, pays context load) only if the agent or another skill must reach it on its own; else **user-invoked** (`disable-model-invocation: true`, zero context load). Disclose long reference to sibling files (disclosure-by-branch), keeping `SKILL.md` legible.
+   Its `description` is 300 characters at most: what it is, when to reach for it, one boundary — it loads into every session, and the trap list belongs in the body.
 2. Wire: if it **backs a seat**, add it to that seat's `SOURCES.md` row and have the seat's file load it; note it in `ROSTER.md` → *Reused, not owned*.
 
 ## Vendored (bring it in verbatim)
-1. Download the source **unmodified** into `skills/<name>/`. Add the provenance HTML comment at the top — source repo + branch + sha + a one-line re-sync instruction (copy the exact shape at the top of `skills/writing-for-agents/SKILL.md`).
+1. Download the source **unmodified** into `skills/<name>/`. Add the provenance HTML comment at the top — source repo + branch + sha + a one-line re-sync instruction (copy the exact shape at the top of `skills/writing-for-agents/SKILL.md`). The one local change is the `description`: over 300 characters, trim it to the first-party bar and say so in the provenance comment (`description trimmed locally — keep on re-sync`).
 2. Record it in `SOURCES.md` → *Vendored resources* (repo, license, what it backs) and in `ROSTER.md` → *Reused, not owned*. Confirm the license permits vendoring; note it.
 
 ## Refresh (`author <existing name>`) — executing an `/update` verdict

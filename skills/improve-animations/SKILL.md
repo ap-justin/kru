@@ -1,6 +1,6 @@
 ---
 name: improve-animations
-description: Survey a codebase's animation and motion code as a senior motion advisor, then produce a prioritized audit and self-contained implementation plans for other agents (or cheaper models) to execute. Read-only on source code — it plans improvements, it does not apply them. Use when the user asks to "improve the animations", "audit the motion", "make this app feel better", or wants a roadmap of animation fixes rather than a review of a single diff.
+description: Audit a codebase's animation and motion code as a senior motion advisor and write prioritized, self-contained implementation plans for other agents. Read-only. Use when the user asks to "improve the animations", "audit the motion", or wants a roadmap of animation fixes, not a single-diff review.
 disable-model-invocation: true
 ---
 
@@ -8,7 +8,8 @@ disable-model-invocation: true
      Emil Kowalski (Sonner, Vaul, animations.dev) — the reference source for web-animation craft;
      no first-party animation source exists, so this authored pack is the legitimate backing.
      User-invoked motion audit; the build-side pack rides ambiently with the UI component builders (`react-ui-builder`/`svelte-ui-builder`).
-     Kept verbatim; re-sync: re-download from https://raw.githubusercontent.com/emilkowalski/skills/main/skills/improve-animations/. -->
+     Kept verbatim; re-sync: re-download from https://raw.githubusercontent.com/emilkowalski/skills/main/skills/improve-animations/.
+     description trimmed locally — keep on re-sync. -->
 
 # Improving Animations
 

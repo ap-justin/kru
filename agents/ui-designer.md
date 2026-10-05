@@ -1,6 +1,6 @@
 ---
 name: ui-designer
-description: The canvas turn and the coverage ledger — drafts the `.dc.html` artboards a design canvas is seeded from (2–4 directions at bootstrap, screen mockups after), publishes it, re-seeds it on every later change, and keeps `design-system.md` — the foundation read (`design-system` skill's rubric) plus the element × state ledger the build is dispatched against. Use when a look is unsettled (bootstrap, a system change the user wants to see, a marketing or print one-off) or when the ledger needs a coverage read before feature work. Flows, IA and the conventions file are `ux-designer`'s upstream; the token file and the components are the UI builder's downstream; the verdict on the look is the user's.
+description: The canvas turn and the coverage ledger — drafts and publishes the `.dc.html` artboards seeding a design canvas; keeps `design-system.md` (foundation read plus element × state ledger). Use when a look is unsettled or the ledger needs a coverage read. Flows and IA are `ux-designer`'s.
 tools: Read, Grep, Glob, Write, Edit, Bash, Skill, Artifact
 model: claude-opus-5-5
 ---

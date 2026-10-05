@@ -1,6 +1,6 @@
 ---
 name: python
-description: "Use when writing or reviewing Python in a repo with a `pyproject.toml` or `.py` files — an MCP server, a library, a CLI, packaging, or a `test_*.py`. The failures that pass `ruff` and `mypy` and ship quiet: a lint rule that skips every `_`-prefixed name, `x or default` eating a legitimate `0`, an `except` that returns a plausible value, a `dict` return annotation that silently drops structured output, a wheel that builds green and ships none of your package. MCP-server, packaging and test-mechanics halves in `reference/`. Python 3.10+ on the stdlib; not Django/Flask internals, not notebooks."
+description: "Python recipes. Use when writing or reviewing Python in a repo with a `pyproject.toml` or `.py` files — an MCP server, a library, a CLI, packaging, or a `test_*.py`. Python 3.10+ on the stdlib; not Django/Flask internals, not notebooks."
 user-invocable: false
 ---
 

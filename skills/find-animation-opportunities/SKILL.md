@@ -1,6 +1,6 @@
 ---
 name: find-animation-opportunities
-description: Search a codebase or UI for places that don't animate but should, and reject everything that shouldn't. Read-only; it proposes motion with exact values, it does not implement it. Use when the user asks "what could be animated here?" or wants to "make this feel more alive". For fixing existing animations, use improve-animations or review-animations instead.
+description: Search a codebase or UI for places that don't animate but should, and reject what shouldn't. Read-only; proposes motion with exact values. Use when the user asks "what could be animated here?" or wants to "make this feel more alive". For fixing existing animations, use improve-animations.
 user-invocable: false
 ---
 
@@ -8,7 +8,8 @@ user-invocable: false
      Emil Kowalski (Sonner, Vaul, animations.dev) — the reference source for web-animation craft;
      no first-party animation source exists, so this authored pack is the legitimate backing.
      Carried ambiently by the UI component builders (`react-ui-builder`/`svelte-ui-builder`) — build-side motion craft.
-     Kept verbatim; re-sync: re-download from https://raw.githubusercontent.com/emilkowalski/skills/main/skills/find-animation-opportunities/. -->
+     Kept verbatim; re-sync: re-download from https://raw.githubusercontent.com/emilkowalski/skills/main/skills/find-animation-opportunities/.
+     description trimmed locally — keep on re-sync. -->
 
 # Finding Animation Opportunities
 

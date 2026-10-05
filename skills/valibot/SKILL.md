@@ -1,6 +1,6 @@
 ---
 name: valibot
-description: Valibot 1.x recipes — `v.is()` over an async schema returning `true` under strict TypeScript, `v.toBoolean()` on `"false"` being `true`, a failed `safeParse` that still carries `output`, and `fallback` swallowing a validation issue into a typed value. Use when writing or reviewing a Valibot schema, a parse boundary, or issue plumbing in a repo with `valibot` in `package.json`. Not Zod, Yup, or ArkType.
+description: Valibot 1.x recipes. Use when writing or reviewing a Valibot schema, a parse boundary, or issue plumbing in a repo with `valibot` in `package.json`. Not Zod, Yup, or ArkType.
 user-invocable: false
 ---
 
