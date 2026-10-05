@@ -18,6 +18,8 @@ copies deviate from upstream — is in `SOURCES.md` → *Vendored resources*.
 | `vercel/turborepo` | MIT (`skills/turborepo/LICENSE`) | `skills/turborepo/` |
 | `shadcn-ui/ui` | MIT | `skills/shadcn/` |
 | `cloudflare/skills` | Apache-2.0 (`LICENSE` per directory) | `skills/cloudflare/`, `skills/wrangler/` |
+| `honojs/skills` | MIT (`skills/hono/LICENSE`) | `skills/hono/` |
+| `tursodatabase/agent-skills` | MIT (`LICENSE` per directory) | `skills/turso-db/`, `skills/turso-cloud/` |
 | `dgreenheck/webgpu-claude-skill` | MIT per the upstream README; no license file upstream | `skills/webgpu-threejs-tsl/` |
 
 Everything else in this repository — the lead skill, the seat definitions under

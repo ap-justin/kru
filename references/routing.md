@@ -15,6 +15,7 @@ names the seat and its skills has this question answered — take the answer.
 | TanStack Start, `@tanstack/react-start` — file routes, `createServerFn`, server routes, middleware, loaders/`beforeLoad`, SSR/RSC (network boundary); also `@tanstack/react-router` routing in a Start-less SPA | `tanstack-start-builder` |
 | Python — `pyproject.toml` / `.py`: an MCP server (the official `mcp` SDK), a library's public API, a CLI, packaging, or a red `ruff`/`mypy`/`pytest` gate | `python-developer` |
 | A Vite plugin (a package exporting a `Plugin` for someone's `vite.config` — dev-server-only code, page script injection, dev endpoints), a stdio MCP server in TypeScript (`@modelcontextprotocol/server` / `@modelcontextprotocol/sdk`) incl. a Claude Code channel (`claude/channel`), or a small Node/TS library — the code and the package's own pnpm/TS/Biome/Vitest scaffold | `extension-builder` |
+| Hono, `hono` — an API: routes, middleware, validators, `onError`/`notFound`, streaming/SSE, the exported `AppType` + `hc` client (any runtime; the runtime's config, bindings and deploy stay with its platform seat) | `hono-builder` |
 | Go, `go.mod` serving a React SPA — `net/http` handlers/middleware, the JSON contract, embed + serve the built app, **and** the SPA's typed client/query hooks/route glue (whole request path) | `go-fullstack-builder` |
 | React **component implementation** — pages/sections/interactive UI as props-in/callbacks-out `.tsx` (RR7, Next, TanStack Start, or Go-served repo) | `react-ui-builder` |
 | Svelte **component implementation** — pages/sections/interactive UI as props-in/callbacks-out `.svelte` | `svelte-ui-builder` |
@@ -25,6 +26,7 @@ names the seat and its skills has this question answered — take the answer.
 | Vercel platform-ops: deploy/CI-CD, env/secrets, `vercel.json`, Functions/edge runtime, Cron, domains, Firewall/WAF, AI Gateway, storage provisioning | `vercel-platform-engineer` |
 | Fly.io platform-ops: `fly deploy` / `fly.toml`, the `Dockerfile`, Machines + scaling, Volumes, `fly secrets`, regions, private networking, MPG/Tigris provisioning | `fly-platform-engineer` |
 | Postgres / Drizzle / Prisma / postgres.js | `postgres-architect` |
+| Turso / libSQL — `@tursodatabase/*`, `@libsql/client`, `libsql`/`pyturso`/`tursogo`, or a feature needing a Turso Cloud database: driver, schema, migrations, queries, sync, tokens, Cloud databases/branches | `turso-specialist` |
 | embedded SQLite — a local `.db` file the app opens directly (`better-sqlite3` / `node:sqlite` / `bun:sqlite`, Drizzle's `sqlite` dialect) | `sqlite-architect` |
 | auth / login / signup / sessions / social-OAuth / SSO / `better-auth` · `@neondatabase/auth` — the **server + session** half | `better-auth-specialist` |
 | payments / checkout / subscriptions / paywall or plan-gating / refunds / Stripe webhooks / Connect / `stripe` — the **server + money** half | `stripe-specialist` |
@@ -57,7 +59,8 @@ names the seat and its skills has this question answered — take the answer.
 | **no specialist matches** | the **user**, naming the seat it would need (*Handling gaps*); the general path only on their say-so |
 
 **Contested lanes — the tie-breaks the table can't hold.** Each seat's own definition states its half; read that rather than a copy, and reach for these when two rows look plausible:
-- **SQLite three ways**: an embedded `.db` file the app opens = `sqlite-architect` · **D1** = `cloudflare-builder` (it's CF's SQLite) · a Postgres server = `postgres-architect`.
+- **Hono splits like a framework on Workers**: the Hono app = `hono-builder` · `wrangler` config, bindings, D1 and deploy = `cloudflare-builder` (on Node/Bun, the image and deploy = `fly-platform-engineer`) · the code calling its `hc` client = that consumer's seat.
+- **SQLite four ways, split by the driver**: an embedded `.db` file on `better-sqlite3`/`node:sqlite`/`bun:sqlite` = `sqlite-architect` · **D1** = `cloudflare-builder` (it's CF's SQLite) · **Turso/libSQL**, local, Cloud or synced = `turso-specialist` · a Postgres server = `postgres-architect`.
 - **Vercel two ways**: app code = the framework builder · deploy/env/infra = `vercel-platform-engineer` · speed and caching-for-speed = `vercel-perf-optimizer`.
 - **Three platform lanes, split by runtime shape, not by vendor preference**: Vercel = `vercel-platform-engineer` · the Workers runtime = `cloudflare-builder` · a **long-lived VM with a persistent disk** (a container that has to be a container, a background worker, scale-to-zero with state) = `fly-platform-engineer`. App code is the framework builder's in all three.
 - **Copy splits by the route's job, not by the file**: a route that persuades someone who has not committed is `conversion-copywriter`'s (the pricing page), a route that operates the product is `ux-designer`'s (the billing settings screen). A page that already ships and reads badly is the user's `/copy-editing`; one that converts badly is their `/cro`.
