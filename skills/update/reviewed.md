@@ -54,14 +54,11 @@ Previous: 2.1.280 — 2026-09-23, read back to 2.1.251. Before that: 2.1.250 —
 
 ### Swept through
 
-**2026-09-23**, first sweep. Tag-pinned copies are compared tag to tag. Copies with no recorded sha were diffed file by file against the upstream head.
+**2026-09-23**, first sweep; **2026-10-05**, mattpocock copies only (v1.3.1). Tag-pinned copies are compared tag to tag. Copies with no recorded sha were diffed file by file against the upstream head.
 
 | Skill | Recorded | Upstream head | Verdict |
 |---|---|---|---|
-| `diagnosing-bugs` | mattpocock v1.2.0 · 2ffb184 | v1.2.3 | **Re-synced 2026-09-23.** `SKILL.md`: new *Redact* section (secrets become `<REDACTED>`, loops run against env vars), plus "redacted" added to the Phase 1 artifact and done-when lines. `scripts/hitl-loop.template.sh`: a comment saying `capture` echoes its value, so sign-in stays a user `step`. Re-apply: provenance comment, `user-invocable: false`. |
-| `codebase-design` | mattpocock v1.2.0 · 2ffb184 | v1.2.3 | **Decline.** The only hunk is `DESIGN-IT-TWICE.md` dropping "using the Agent tool". That neutralises the line for Codex, and this team runs on Claude Code only. Mark → v1.2.3. |
-| `writing-for-agents` | mattpocock v1.2.0 · 2ffb184 | v1.2.3 | **Current.** Only `agents/openai.yaml` changed, and that file is excluded. |
-| `tdd` · `domain-modeling` · `grilling` · `to-spec` · `to-tickets` · `wayfinder` | mattpocock v1.2.0 · 2ffb184 | v1.2.3 | **Current.** Nothing changed under their paths. |
+| `codebase-design` · `tdd` · `diagnosing-bugs` · `domain-modeling` · `to-spec` · `to-tickets` · `wayfinder` · `grilling` · `writing-for-agents` | mattpocock v1.2.0/v1.2.3 | v1.3.1 · 24fe0ef | **Re-synced 2026-10-05**, all nine on one pin. Substance: the glossary file is renamed `CONTEXT.md` → `GLOSSARY.md` (`CONTEXT-MAP.md` → `GLOSSARY-MAP.md`, `CONTEXT-FORMAT.md` → `GLOSSARY-FORMAT.md`) across `domain-modeling`, `tdd`, `diagnosing-bugs` and `codebase-design/DESIGN-IT-TWICE.md`, with `agents/planner.md` following; no repo under `~/projects` had either file, so nothing to migrate. `domain-modeling` description now triggers on terminology talk, `GLOSSARY.md` and ADR edits. `tdd` and `wayfinder` invoke sibling skills as "call the Skill tool with …" instead of `/name`. `grilling` separates a round's questions with `---`. `diagnosing-bugs` Phase 6 drops the post-mortem hand-off to `/improve-codebase-architecture` (a skill this team doesn't carry; upstream moved it to `retro`). `to-spec`/`to-tickets`/`wayfinder` say "tell the user to run `/setup-matt-pocock-skills`" (moot here: `TRACKER.md` supplies the tracker). `DESIGN-IT-TWICE.md` loses "using the Agent tool" (declined at v1.2.3; taken now with the verbatim file). Everything else is upstream's em-dash purge, cosmetic, taken to keep the copies verbatim. Re-applied: provenance comments, `user-invocable: false`, the `NAVIGATION.md` pointer, *Two fixes failed*, the four `writing-for-agents` deviations. |
 | `accessibility-review` · `user-research` · `research-synthesis` · `ux-copy` | knowledge-work design v1.2.0 · 15898ec | c71b6f3 (repo) | **Current.** Last upstream touch was 2d6f7e2/4fa3cb9 (2026-03), before the recorded sha. |
 | `copywriting` | marketingskills main · 286d371 | 5b2c000 | **Re-synced 2026-09-23.** `SKILL.md` goes to 2.0.2 with a clarity paragraph and two pointers. `references/copy-frameworks.md` gains a *Clarity & Message-Market Fit* section: the "Now you can" test, the Human Action Model, the Perception Gap. Re-apply the provenance comment. The new paragraph has unsourced stats ("+81% conversions…"); flag them when `conversion-copywriter` quotes them. |
 | `cro` · `copy-editing` | marketingskills main · 286d371 | 30f9b9a (path) | **Current.** |
@@ -80,7 +77,7 @@ Previous: 2.1.280 — 2026-09-23, read back to 2.1.251. Before that: 2.1.250 —
 
 ### Considered — the user's call
 
-- **mattpocock v1.2.3**: pick up the tag as the pin for all nine copies when `diagnosing-bugs` re-syncs.
+- **mattpocock v1.3 new siblings**: `implement-spec` (runs a spec's tickets through parallel implementers on an integration branch), `pr` (a PR body template built for fast human review: before/after evidence, domain language), `retro` (post-session reflection that pushes mechanical findings toward deterministic checks). `implement-spec` overlaps the lead's frontier dispatch, `retro` overlaps `/roster learn`; `pr` is the one with no counterpart here.
 - **emilkowalski new siblings**: `animate`, `pick-ui-library`, `prototype`, `ask-sonner`, `expo`, `write-swift`, `mobile-native`. `animate` and `pick-ui-library` sit nearest the UI builders' motion and primitive lanes.
 
 ### For `/roster audit`

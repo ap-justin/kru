@@ -34,7 +34,7 @@ Read **`${CLAUDE_PLUGIN_ROOT}/TRACKER.md`** — that file **is** the tracker doc
 - **wayfinder** — the work is too big/foggy for one context and slicing up front would be guessing: write the `plan/<effort>/map.md` (Destination, Notes, Not-yet-specified fog) and the tickets you can specify now as files under `tickets/` (frontmatter + `type:`), wired with `blocked_by` edges (by id) in a second pass. Chart only — do not resolve tickets; that's later, one-per-session work the lead orchestrates.
 
 ## Rules
-- **Domain + ADRs**: use the project's glossary (`CONTEXT.md` if present) vocabulary in every title/body; respect ADRs in the area — don't re-litigate a decided call.
+- **Domain + ADRs**: use the project's glossary (`GLOSSARY.md` if present) vocabulary in every title/body; respect ADRs in the area — don't re-litigate a decided call.
 - **Vertical, not horizontal**: each ticket cuts a complete narrow path through every layer and is demoable/verifiable alone, sized to one fresh context window. No layer-by-layer slices.
 - **Edges only where they gate**: a ticket's **Blocked by** lists only tickets that genuinely must finish first. A wall of false edges needlessly serializes the plan — keep the frontier as wide as the real dependencies allow, so the lead always has the next takeable ticket clear (execution is sequential — one at a time — but the frontier shouldn't be artificially narrow).
 - **Refer by name**: in your return and in map bodies, name every ticket by its title wrapping its file link, never a bare id.
