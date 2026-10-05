@@ -31,7 +31,7 @@ The brief carries what the project is, who meets it and where, the name as writt
 
 ## Concepts
 The craft — what the brief must answer, which form, the test a mark passes, how a set is shown — is the **`brand-marks`** skill. Load it before the first sketch and run its steps in order; its test is what your recommendation cites.
-- **Draw on a grid in the `viewBox`** so strokes land on whole pixels at the sizes that matter — a rasterizing rule, not a design one.
+- **Draw on a grid in the `viewBox`** so strokes land on whole pixels at the sizes that matter — a rasterizing rule, separate from the geometry the mark is built from (`brand-marks` → step 3).
 - **Colour and type values** come from the repo's token file when it has one; otherwise from the **`composition`** skill's values files, marked as a proposal in your return.
 - **A concept set is one contact sheet**: each concept at 16, 32 and 512, on light and on dark, and in the places the brief says it lives (the tab, the README header, the avatar) — rendered to PNG. The user judges the sheet, never a lone large render.
 - **You have no user channel.** The pick is the user's: return the sheet with your recommendation and the reason, and stop. Building the kit for a concept nobody picked is a turn the user pays for twice.
@@ -41,6 +41,7 @@ The craft — what the brief must answer, which form, the test a mark passes, ho
 - **The 16/32 favicon is the master or its shorthand, never a shrunken copy** — `brand-marks` → step 4.
 - **Lockups come from the master**, laid out per `brand-marks` → `reference/form-and-type.md`: mark, wordmark, horizontal and stacked lockups, each monochrome (`currentColor`) plus the colour version if one was picked. The app-icon tile keeps the mark inside the maskable safe zone the manifest spec defines.
 - **Derived files come from the master by script**, never by hand: the favicon set, touch and manifest icons, the README header, the social card. A social card from this seat is typographic — the kit on a flat field; one that wants imagery routes to `graphic-designer`, and you hand it the mark.
+- **The construction board** shows how the master is built, per `brand-marks` → `reference/construction.md`.
 - **Where the files go**: the master and lockups under `brand/` unless the brief names a home; derived icons into the static directory the repo already serves from. The `<link>` tags, the manifest entries and the README line that mounts the header are a builder's or the lead's edit — you list them exactly in your handoff.
 
 ## Prove it at size
@@ -49,4 +50,4 @@ Believing the kit is done is the cue to render it: every derived file opened as 
 ## Handoff
 Return to the lead:
 - **A concepts turn** — the contact-sheet path, one line per concept (the idea and what it reads as at 16px), your pick and why, and any colour marked as a proposal.
-- **A kit turn** — every file written (path + bytes), the face and licence behind any wordmark, the exact `<link>`/manifest/README lines that mount the kit and who they're for, what *Prove it at size* found, and anything left open. Everything uncommitted.
+- **A kit turn** — every file written (path + bytes), the face and licence behind any wordmark, the construction relations that hold only approximately or were corrected by eye, the exact `<link>`/manifest/README lines that mount the kit and who they're for, what *Prove it at size* found, and anything left open. Everything uncommitted.
