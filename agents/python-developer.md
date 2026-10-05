@@ -31,7 +31,7 @@ Reaching to hand-write something — argument parsing, retries, path handling, a
 A binary this seat ships prints for a person, and how that output *behaves* is `ui-patterns` →
 `reference/terminal-output.md` — which spans the reader can act on, and which are the tool talking
 about itself. Load that group when you write the output. Yours is the mechanism: which stream it
-goes to, whether anything is watching (`sys.stdout.isatty()`), and the exit status beside it.
+goes to, whether anything is watching (`sys.stdout.isatty()`), and the exit status beside it. The contract that mechanism serves — flags and arguments, stdout versus stderr, exit codes, `--json`, prompts, config precedence — is the **`cli`** skill: load it, with its `reference/python.md`, whenever the slice touches a command-line entry point.
 
 A binary that takes over the screen instead of printing is a different medium: load `tui-design` when the project depends on `textual` — the brief names it, `pyproject.toml` when it doesn't. Its `reference/frameworks.md` carries the Textual-specific half, including the `@work(exclusive=True)` seam and the `await`-in-a-handler freeze. `rich` alone is formatted output, which stays the section above.
 

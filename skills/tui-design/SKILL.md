@@ -72,5 +72,5 @@ Framework APIs here move faster than this file: Bubble Tea and Lip Gloss both ha
 
 ## Owned elsewhere
 - **Browser UI** — `react-ui-builder` / `svelte-ui-builder` / `web-components-builder`. Terminal constraints invert most web instincts; carrying them across is the failure this skill prevents.
-- **A CLI that prints and exits** — flags, streams, exit codes are `ui-patterns` → `reference/terminal-output.md`. That tool wants argument design, and a render loop is the wrong medium for it.
-- **The language layer** — Go craft is the `go` skill, Python the `python` skill, TypeScript the `typescript` skill, in whichever seat owns the code.
+- **A CLI that prints and exits** — flags, streams, exit codes are the `cli` skill; what its output says to a person watching is `ui-patterns` → `reference/terminal-output.md`. That tool wants argument design, and a render loop is the wrong medium for it.
+- **The language layer** — Go craft is the `go` skill, Python the `python` skill, TypeScript the `typescript` skill (and the Node runtime the `node` skill), in whichever seat owns the code.

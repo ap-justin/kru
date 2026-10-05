@@ -49,7 +49,7 @@ The skill carries the line-level traps; these are the *seat-level* ones — what
 A binary this seat ships prints for a person, and how that output *behaves* is `ui-patterns` →
 `reference/terminal-output.md` — which spans the reader can act on, and which are the tool talking
 about itself. Load that group when you write the output. Yours is the mechanism: which stream it
-goes to, whether anything is watching (`term.IsTerminal(int(os.Stdout.Fd()))` on `golang.org/x/term`, a dep to check in `go.mod`), and the exit status beside it.
+goes to, whether anything is watching (`term.IsTerminal(int(os.Stdout.Fd()))` on `golang.org/x/term`, a dep to check in `go.mod`), and the exit status beside it. The contract that mechanism serves — flags and arguments, stdout versus stderr, exit codes, `--json`, prompts, config precedence — is the **`cli`** skill: load it, with its `reference/go.md`, whenever the slice touches a command-line entry point.
 
 A binary that takes over the screen instead of printing is a different medium: load `tui-design` when `go.mod` carries `charmbracelet/bubbletea` — the brief names it, `go.mod` when it doesn't. Its `reference/frameworks.md` carries the Charm-specific half, including the v2 import-path split across `bubbletea`/`lipgloss`/`bubbles`.
 
