@@ -26,13 +26,13 @@ A file still carrying `_not investigated_` is a **stub**; a read pass fills a st
 
 **Done when every candidate has a bucket** — fixed + moved + open + tombstone + counted-out equals the number of files in the dir.
 
-## 2. Score — every open file carries an effort
+## 2. Score — every open file carries an urgency and an effort
 
-`severity` is filed (`low`–`critical`) and is the value axis; leave it as filed. `effort` is `1`–`5` (`TRACKER.md` anchors), sized from the §1 read, and the team's estimate — never put to the user. A file with none gets `~n` now; a `~n` is re-read and kept or revised, still `~`; a bare digit is one the user volunteered, and stays.
+`severity` is filed (`low`–`critical`) and is the value axis; leave it as filed. `urgency` is `1`–`5` (`TRACKER.md` anchors); a file with none gets `~n` from the §1 read, a `~n` is re-read and kept or revised, a bare digit is the user's. `effort` is `1`–`5` (`TRACKER.md` anchors), sized from the §1 read, and the team's estimate — never put to the user. A file with none gets `~n` now; a `~n` is re-read and kept or revised, still `~`; a bare digit is one the user volunteered, and stays.
 
 ## 3. Rank and propose the batch
 
-**Rank**: `critical` → `high` → `medium` → `low`, then `effort` ascending, then **newest first** (file mtime) — a fresh defect is still reproducible in the code as filed. A `~n` ranks as `n`.
+**Rank**: `critical` → `high` → `medium` → `low`, then `urgency` descending, then `effort` ascending, then **newest first** (file mtime) — a fresh defect is still reproducible in the code as filed. A `~n` ranks as `n`.
 
 **Weigh before you batch.** Load `incentives` and read each candidate's value as how often the defect bites × what it costs whoever it bites, against the fix's effort *and* its risk. A rare edge case whose fix needs a migration or touches the money path stays out of the batch whatever its severity — it is counted with the rest at the gate, and its reason surfaces when asked.
 
@@ -44,12 +44,12 @@ First the bookkeeping, without asking: delete every file §1 verified fixed, re-
 
 ```
 Worth fixing now — pick by number, or strike any:
-  1. <the symptom a user sees, in plain words> — serious
-  2. <the symptom> — minor, but hits everyone who <does the thing>
+  1. <the symptom a user sees, in plain words> — serious, biting now
+  2. <the symptom> — minor, but hits everyone who <does the thing>; needed within weeks?
 Plus 2 already fixed and cleared, 4 more known, 12 not looked at yet.
 ```
 
-Only the batch gets a line — numbered, each written as the symptom someone using the product would notice, with its severity in words. Everything else — cleared files, re-anchors, stub fills, the rest of the ranking, the unread count — is one counted clause. No slugs, `file:line`, effort or scoring notation. A tombstone or a decline is the user's to raise, not a line here. **Nothing past the bookkeeping is written before they answer.** No answer → say so in one line and return to whatever was in flight.
+Only the batch gets a line — numbered, each written as the symptom someone using the product would notice, with its severity and urgency in words (`todos` §4's words; a `~` urgency asked as a question, written bare once they answer). Everything else — cleared files, re-anchors, stub fills, the rest of the ranking, the unread count — is one counted clause. No slugs, `file:line`, effort or scoring notation. A tombstone or a decline is the user's to raise, not a line here. **Nothing past the bookkeeping is written before they answer.** No answer → say so in one line and return to whatever was in flight.
 
 ## 5. Fix what they picked
 

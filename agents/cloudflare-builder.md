@@ -37,7 +37,7 @@ Reaching to hand-write something — queue retry/backoff, a cron trigger, the Ca
 - **The Workers runtime is not Node.** Respect Web-standard APIs; set an accurate `compatibility_date` + `nodejs_compat` only when actually needed. Verify which Node APIs are available against the source, not memory.
 - **A new site is a Worker with static assets, not a Pages project.** Cloudflare's own router now recommends Workers + Static Assets for every new site — static, SPA or full-stack — and Pages only stays where a deployment already lives: a repo on Pages keeps it through unrelated work, and moving it is the user's call, not a tidy-up you make mid-slice.
 - **Durable Objects**: one instance = one coordination point; use them for stateful/real-time (rooms, rate limits, sequencing), not as a general DB. Storage API + WebSocket hibernation per the `durable-objects` skill.
-- **`@cloudflare/vitest-pool-workers` pins an exact `wrangler` in its own dependencies.** The repo's `wrangler` equals that pin, or tests run on a different workerd build than `deploy` — bump the two together.
+- **Worker integration tests on Vitest 5 run through wrangler's `createTestHarness()`.** `@cloudflare/vitest-pool-workers` peers `vitest ^4.1` and has no v5 build; the harness runs under any Node runner on real workerd — `getWorker()`, `applyD1Migrations()`, `getLogs()`. A repo still on Vitest 4 with the pool keeps its `wrangler` equal to the pool's exact pin, or tests run on a different workerd build than `deploy` — bump the two together.
 - **Subrequest/CPU limits, `waitUntil` for post-response work, `ctx.props`** — confirm current limits/patterns from the skill before relying on them.
 
 ## Validation at the boundary (the repo's schema library)

@@ -38,6 +38,9 @@ Reaching to hand-write something — a redirect, progressive enhancement on a fo
 - Data: `load` in `+page.ts` / `+page.server.ts`; mutations via form actions (`+page.server.ts`) with progressive enhancement (`use:enhance`), not ad-hoc fetch handlers unless a real API is needed.
 - Keep secrets server-only: `$app/env/private` (declared in `src/env.ts`), and modules in any `server/` directory or with a `server` filename segment. `src/lib` is imported as `#lib/…` with the file's extension (`#lib/server/db.js`) — the `package.json` `imports` alias. Never leak DB clients into shared/client code.
 - For data/DB work, expect a schema + query layer from `postgres-architect`; consume it, don't reinvent it. Flag if it's missing.
+- `src/env.ts` validates its vars at every Vite startup — dev, `vitest`, build — not on import, so a fresh clone or worktree without `.env` fails `pnpm test` on unrelated suites. A `static: true` var needs only to be set; empty is fine.
+- Navigation types (`AfterNavigate`, `BeforeNavigate`, …) export from `$app/navigation`, not `@sveltejs/kit`. A link to the current URL re-runs the navigation, so `afterNavigate` fires again — dedupe pageviews on `from`/`to` pathname.
+- `@vercel/analytics/sveltekit` imports `$app/stores`, which kit 3 stubs to throw on subscribe: typecheck and build stay green, hydration breaks. Use the generic `inject({ disableAutoTrack: true, framework: 'sveltekit' })` and send `pageview` from `afterNavigate`.
 
 ## Mutation feedback — where the outcome lands
 The rules are `ui-patterns` → `reference/forms-and-mutations.md` — when a form validates, where feedback reports, how a cross-screen outcome travels, what a same-screen save does to scroll. Load that group when you write an action. Yours is the SvelteKit mechanism behind each:

@@ -47,6 +47,7 @@ Reaching to hand-write something — a `crons` entry, a WAF rule, a `vercel.json
 - **Provisioning is stateful** — Marketplace/storage resources touch the real account; report exactly what you created/changed and confirm before destructive changes.
 - **A green typecheck + test gate doesn't prove the server boots.** A promotion gate requests `/` on the preview deployment and fails on a 5xx before anything is promoted.
 - **`sharp` on Vercel**: libvips is `dlopen`'d, so output tracing never ships `libvips-cpp.so`. Force it per route with `outputFileTracingIncludes`; under pnpm that include resolves through symlinked `@img/` dirs the packager rejects, so the workspace sets `nodeLinker: hoisted`.
+- **TypeScript 7 (native `tsgo`, no JS API) under `@vercel/node`**: the builder type-checks through a temp tsconfig in `os.tmpdir()` that extends the repo's, so `types: ["node"]` fails `TS2688` until `typeRoots` is set explicitly; `VERCEL_EXPERIMENTAL_BACKENDS=1` crashes on `ts.sys` being undefined, so leave it off.
 
 ## Production outage
 - **Roll back to the newest deployment whose runtime status breakdown is clean** — status codes grouped per `deploymentId` — since that one carries every fix the last good deploy shipped.

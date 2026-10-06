@@ -41,7 +41,7 @@ prose in its seat.
 |---|---|---|
 | no `sql.raw` over input | `` `sql.raw($x)` `` | `postgres-architect`, `sqlite-architect`; `drizzle` → queries |
 | no truthy coercion of a string flag | `` `z.coerce.boolean($x)` ``, `` `v.toBoolean()` `` | `zod`, `valibot` |
-| source never branches on the test environment | `process.env.NODE_ENV` compared to `'test'`, `includes` excluding test globs | `code-reviewer`; `testing` → *Principles* |
+| source never branches on the test environment or the deployment stage | `process.env.NODE_ENV` / `VERCEL_ENV` / `import.meta.env.MODE` compared to a stage literal (`'test'`, `'production'`, `'preview'`, `'development'`), `includes` excluding test globs | `code-reviewer` → *Test accommodation in source*, *Stage branching*; `testing` → *Principles* |
 | no `<noscript>` fallback | JSX `noscript` element | UI + framework builders → *Scope — build the real path* |
 | no placeholder text ships | string literal matching `lorem ipsum` | UI builders → *Phase 0* |
 | class names are whole literals | template literal inside `class` / `className` | `tailwind` → *The scan is text*; `panda-css` |

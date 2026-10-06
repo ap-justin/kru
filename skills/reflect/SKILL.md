@@ -2,7 +2,7 @@
 name: reflect
 description: Every seat on the repo's sheet looks back over a target — working tree, commit, branch, PR, or the code as it stands — then the lead scopes, slices and partitions the fixes and lands them.
 disable-model-invocation: true
-argument-hint: "[<pr number> | <branch> | <commit> | everything — omit for the working tree]"
+argument-hint: "[<pr number> | <branch> | <commit> | <a>..<b> | everything — omit for the working tree]"
 ---
 
 A review gates a slice about to land. **Reflecting looks back at work that already landed** — and then fixes it. The seat that wrote a lane is the one that knows what it got wrong there: the migration's lock, the session cookie's `sameSite`, the webhook's idempotency key, the loader that fetches on every navigation. A generic reviewer reads that code and sees code. The seat reads it against the official source it was built from.
@@ -21,11 +21,12 @@ What keeps the first phase affordable: **every seat runs in its own context**, s
    | --- | --- |
    | *(none)* | the working tree — `git diff HEAD`, plus untracked files |
    | a sha | that commit — `git show <sha>` |
+   | a range `<a>..<b>` | those commits — `git diff <a>..<b>` |
    | a branch name | `git diff <base>...<branch>` — three dots, the branch's own work |
    | a number | a PR — `gh pr diff <n>`, and `gh pr view <n>` for what it claimed to do |
    | `everything` | **the code as it stands**, not a diff. Every lane the sheet seats, over its own files, sliced by subsystem |
 
-   The first four look back **on a change**: what it got wrong that is still standing. A diff target is what that change wrote, and the files it merely grazed are `everything`'s scope. `everything` has no diff to anchor it, and is the only scope that needs slicing up front (step 4).
+   The first five look back **on a change**: what it got wrong that is still standing. A diff target is what that change wrote, and the files it merely grazed are `everything`'s scope. `everything` has no diff to anchor it, and is the only scope that needs slicing up front (step 4).
 
 2. **Read the roster off the repo's sheet** — `.claude/CLAUDE.md`'s seat lines (`routes`, `ui`, `data`, `skills`, `project`, and whatever else that repo answered). Those are the seats that built this code, and each line's own citation tells you the stack version the seat should be reading against. A brief hands a line down by its name (`routes`), per `lead` Step 3 → *Ambient blocks*.
 
@@ -64,7 +65,7 @@ What keeps the first phase affordable: **every seat runs in its own context**, s
 
 6. **Merge and rank.** **A return carrying no `Look-back:` line is unverified** — ask that seat for it before its findings enter the list, as `gates.md` does for a build return missing its `Return pass:`.
 
-   Then one list, deduplicated — two seats finding the same thing in the same file is one finding, credited to both — ranked by severity **across** seats rather than within them. Then split by `${CLAUDE_PLUGIN_ROOT}/TRACKER.md` → **wrong → `issues/`, wanted → `TODOS.md`, unformed → `notes/`**. Behavior nothing tests is a wrong. A look-back produces all three, and the split is what keeps this phase honest: **only the wrongs are candidates to fix now.** A want dressed as a fix is how a reflection becomes a refactor nobody scoped.
+   Then one list, deduplicated, past the trigger bar (`${CLAUDE_PLUGIN_ROOT}/skills/lead/references/gates.md` → *A finding enters the fix list only when its trigger happens in normal use*) — two seats finding the same thing in the same file is one finding, credited to both — ranked by severity **across** seats rather than within them. Then split by `${CLAUDE_PLUGIN_ROOT}/TRACKER.md` → **wrong → `issues/`, wanted → `TODOS.md`, unformed → `notes/`**. Behavior nothing tests is a wrong. A look-back produces all three, and the split is what keeps this phase honest: **only the wrongs are candidates to fix now.** A want dressed as a fix is how a reflection becomes a refactor nobody scoped.
 
 7. **Scope, slice, partition** — the three cuts, in that order, over the wrongs:
 

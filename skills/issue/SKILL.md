@@ -20,6 +20,7 @@ Write the defect file from what the user just told you and get out. They hit som
    ```markdown
    ---
    severity: medium
+   urgency: ~3
    ---
    # <what's wrong, one line — the symptom a user sees, in the user's framing>
 
@@ -31,9 +32,9 @@ Write the defect file from what the user just told you and get out. They hit som
    **Fix options:** _not investigated_
    ```
 
-   Take `severity` from the user when they state it, else `medium` — and name which in the confirm line so they can correct it in one word. Never infer severity from how alarmed the message sounds.
+   Take `severity` from the user when they state it, else `medium` — and name which in the confirm line so they can correct it in one word. Never infer severity from how alarmed the message sounds. `urgency` (`TRACKER.md` anchors) is bare when they said how soon ("before launch", "whenever"), else `~3`.
 4. **What the user already supplied fills its field.** They named a `file:line`, or said how to reproduce it? Write it in and drop that field's marker — recording what you were told isn't investigation. This skill skips *finding*, not *keeping*. Cite `file:line` for anything they gave you: the write-up sits outside the repo, so an unanchored reference is unfollowable.
-5. **Confirm in one line** — "logged as <severity>; not looked into yet." No path. Pass through whatever `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" where` prints, which is usually nothing. Then straight back to whatever was in flight.
+5. **Confirm in one line** — "logged as <severity>, needed <urgency in words>; not looked into yet." No path. Pass through whatever `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" where` prints, which is usually nothing. Then straight back to whatever was in flight.
 
 ## Don't
 

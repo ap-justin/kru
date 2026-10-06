@@ -62,7 +62,7 @@ cx(css({ color: 'green.500' }), css({ color: 'red.500' }))    // red wins again
 /* src/index.css, imported by the entry */
 @layer reset, base, tokens, recipes, utilities;
 ```
-`@pandacss/vite` appends the generated CSS only to a `.css` module that declares Panda's layers. Leave the line out and `vite build` ships the file without any Panda CSS, and prints nothing. With `transform: true`, static `css()`, pattern, recipe and `styled` calls compile to class strings (`el.title = "m_0 mt_4"`), and two `panda_call_unextractable` warnings point at `styled-system/css/cva.js` and `sva.js` themselves. Those two are expected. A warning that points at your own file is a real drop.
+`@pandacss/vite` appends the generated CSS only to a `.css` module that declares Panda's layers. A Vitest config kept separate from `vite.config.ts` inherits none of its plugins or `css.postcss`: re-add Panda's (`@pandacss/vite`, or `css.postcss.plugins: [pandacss()]` under the PostCSS integration), or Browser Mode renders raw UA styles and nothing errors. Leave the line out and `vite build` ships the file without any Panda CSS, and prints nothing. With `transform: true`, static `css()`, pattern, recipe and `styled` calls compile to class strings (`el.title = "m_0 mt_4"`), and two `panda_call_unextractable` warnings point at `styled-system/css/cva.js` and `sva.js` themselves. Those two are expected. A warning that points at your own file is a real drop.
 
 ## `optimize.removeUnusedTokens` deletes variables that plain CSS reads
 ```ts
@@ -105,6 +105,8 @@ conditions: { extend: { dark: '[data-theme=dark] &, .dark &' } }
 
 ## Unlayered CSS beats every Panda rule (source-verified)
 Output lives in `@layer reset, base, tokens, recipes, utilities`. Under the cascade-layers spec, an unlayered declaration beats any layered one regardless of specificity, so a third-party plain stylesheet overrides your utilities (panda-css.com/blog/panda-css-v2, *Caveats*). Import it into a layer you order (`@import "lib.css" layer(vendor);`) instead of raising specificity. A library that ships Panda styles can rename its layers (`layers: { recipes: 'ds.recipes', utilities: 'ds.utilities' }`) so the consuming app's unlayered CSS wins predictably.
+
+A repo resolving `@pandacss/dev` below 2: `reference/migration.md`.
 
 ## Consult current docs (official sources first)
 1. **Panda MCP**: `npx -y @pandacss/mcp`. It answers against this repo's resolved config, which no docs page can. `get_usage_report` audits used, unused and misused tokens, recipes, utilities, patterns and keyframes. Run it before inventing a token that already exists.

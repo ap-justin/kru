@@ -79,7 +79,7 @@ The held state is `aria-disabled` and the handler ignores the press. `disabled` 
 ## A confirm dialog itemises only what the press will touch
 
 **Trigger:** a save that commits several fields at once, at least one of them destructive or irreversible.
-**Pattern:** list one line per *changed* field, naming the act against the operator's own values — `Password · Removed`, `Mail host · Replaced`. Focus lands on the dismiss control.
+**Pattern:** list one ledger row per *changed* field — the field as its label, the act against the operator's own values as its value (`Password` → `Removed`, `Mail host` → `Replaced`; `lists-and-rows.md` → *Each fact about an item gets its own place*). Focus lands on the dismiss control.
 **Default it corrects:** a generic "Are you sure?" over a paragraph of consequences written above the form in the abstract, and a dialog that opens with focus on the control that commits.
 **Why:** this is the trade that lets the page carry no prose — the explanation is relocated to the one moment it changes a decision, stated against real values rather than in general. An untouched field listed anyway dilutes the three lines that matter. And focus on the committing control hands the operator the answer before the question, which is worse than no dialog.
 **Applies when:** the press is hard to walk back. A save with no destructive branch reports at its control instead — and inside a dialog that has earned its place, a change with no way to hurt is still left off the list: the itemisation is what the press will **cost**, so a safe act padded in spends the read on a line to ignore and makes the destructive ones harder to count.

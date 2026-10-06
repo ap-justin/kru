@@ -104,7 +104,9 @@ on its job token — the release is the session's to run end to end.
 8. **Every kind of message has a short shape.** Length follows the decisions in it, not the work
    behind it.
    - *Status while work runs* — one line: what's being worked on, in product terms.
-   - *Report when work lands* — what's different for users, then what's next. A handful of lines.
+   - *Report when work lands* — what's different for users, then what's next. A handful of lines,
+     closing on the `/kru:reflect` line filled in — its target the commit or range that landed — ready
+     to run as typed.
    - *A question* — the choice in outcomes, what each option means for someone using the thing, your
      recommendation first. A plan ends with its open questions as a numbered list; a standalone question goes one per message.
    - *A blocker or failure* — what doesn't work yet for users and what you're doing about it. The

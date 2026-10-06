@@ -95,3 +95,16 @@ The row handler returns early when the event came from the link.
 .row { display: flex; align-items: last baseline; margin-block-start: var(--space); }
 ```
 **Applies when:** the figure answers the sentence, as on a receipt. `modern-css` owns whether `last baseline` needs a fallback on this stack.
+
+## Each fact about an item gets its own place
+
+**Trigger:** a row, card subtitle, header or meta line carrying several facts about one item — location, an ID, a type, a status, a date.
+**Pattern:** give each fact a place that says what it is: a column in a table, a label/value pair in a ledger (`<dl>`), a status as its own badge, a secondary fact on its own line. Where the facts truly are one phrase, write the phrase ("Riverside, CA, since 2019"), not a list.
+**Default it corrects:** `Riverside, CA · EIN 12-3456789 · Active` — facts strung together with middle dots (or `|`, `•`, `/`) into one line of text.
+**Why:** the dot hides what each fact is: the reader has to recognise an EIN by its shape, a status by its word, and the order differs row to row. A dot-joined string can't align down a list, sort, truncate one fact without cutting another, or carry a label for assistive tech, which reads it as one run-on sentence. Each fact in its own place is scannable in a column and readable by name.
+**Shape:**
+```html
+<dl class="ledger"><dt>Location</dt><dd>Riverside, CA</dd><dt>EIN</dt><dd>12-3456789</dd></dl>
+<span class="badge">Active</span>
+```
+**Applies when:** the facts are different kinds. A breadcrumb or a list of like items ("Tags: a, b, c") is a sequence, and its separator carries order or membership.

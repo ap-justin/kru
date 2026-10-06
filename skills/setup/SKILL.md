@@ -77,13 +77,18 @@ the *Reproduced on* line beneath its frontmatter — the packages before its `wi
 ones after are context. Where the lockfile resolves one of those packages a major below the pin, the
 skill is coaching code the repo can't run, so the upgrade is a want: append it to the file
 `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" path todos` names, `discovered`, `plan: —`, value
-`~3`, effort `~3` per major behind (cap `~5`), one sub-bullet citing the skill's pin line, the
+`~3`, urgency `~2`, effort `~3` per major behind (cap `~5`), one sub-bullet citing the skill's pin line, the
 lockfile entry, and the skill's `reference/migration.md` when it has one. A line already there naming
 the package is the want, filed — leave it.
 
+**Every other outdated dependency gets a todo too** — `pnpm outdated` (or the stack's equivalent)
+names them. Patch and minor bumps file as one catch-up line; each remaining major files as its own,
+same fields as above minus the skill pin. The lockfile is the evidence either way.
+
 Completion: every field carries a value with its derivation, or is absent — because this repo has no
 answer for it, or because the repo's own docs already are the answer (step 2); every repo-held recipe a
-plugin skill lacks has an inbox line; every package a major behind its skill's pin has a todo line.
+plugin skill lacks has an inbox line; every package a major behind its skill's pin has a todo line, and
+every other outdated one is on the catch-up line or its own major's.
 
 ### 1b. Blank repo — grill, then deploy — *full run*
 Nothing on disk answers step 1, so the user does, and the sheet is written from the **decision**. Load
@@ -306,7 +311,9 @@ per-machine and kept out of version control, and the repo's `.gitignore` is what
 .claude/agent-memory-local/x` answers that), so the first `git add -A` after a build leaves it behind.
 
 Completion: every grant traces to evidence the derivation already produced, the `verify` skill
-matches the sheet's line or is the repo's own, the memory path is ignored, and the report names what the team may now do unasked (step 6).
+matches the sheet's line or is the repo's own, the memory path is ignored, `.claude/cloud-setup.md`
+and `.claude/cloud-install.sh` (passing `bash -n`) exist with the hook registered — on every full
+run, whether or not the user names cloud sessions — and the report names what the team may now do unasked (step 6).
 
 ### 1e. Encode what the seats would otherwise be told — *full run*
 **`${CLAUDE_PLUGIN_ROOT}/references/lint-rules.md`** is the catalog of seat rules a check can hold. Take the rows whose stack

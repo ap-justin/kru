@@ -86,6 +86,9 @@ For a class of your own, the two homes are not equivalent: `@utility card { … 
 ## `hover:` does not apply where there is no hover
 Hover variants compile inside `@media (hover: hover)` — reproduced. A control whose only affordance is its hover state has **no** affordance on touch; the resting state has to carry the signal on its own.
 
+## `outline-none` beside a `focus-visible:` ring paints no ring
+`outline-none` and `outline-hidden` both set `--tw-outline-style: none`, and a width utility like `focus-visible:outline-2` reads `outline-style: var(--tw-outline-style)` without setting it — so `outline-none focus-visible:outline-2` keeps the style at `none` and the ring never draws. Suppress the resting outline with `outline-0` (width only), or scope the suppression with `not-focus-visible:outline-none`; variants sort after `focus-visible:`, so a variant-gated `outline-none` wins over the ring.
+
 ## Consult current docs (official sources first)
 Never answer config or utility specifics from memory — the v3→v4 rename table especially (`outline-none` → `outline-hidden`, `ring` → `ring-3`, `shadow-sm` → `shadow-xs`, default border color now `currentColor`) is a lookup, not a recipe.
 1. **tailwindcss.com** — `/docs/upgrade-guide` for the v3→v4 diff, `/docs/theme`, `/docs/detecting-classes-in-source-files`, `/docs/functions-and-directives`.

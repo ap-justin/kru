@@ -3,7 +3,8 @@
 # contract's handoff scan (lead SKILL.md step 3). refuses a team-seat dispatch
 # whose brief asserts a file:line coordinate, a verbatim run of an always-loaded
 # rule, a paraphrase of the user CLAUDE.md
-# machine budget or the comment standard, or a hedged term — or a planner brief
+# machine budget or the comment standard, a request for the return-pass line,
+# or a hedged term — or a planner brief
 # naming no brief.md, or a review brief naming no report path — and hands the
 # reason back so the lead re-anchors and dispatches again, logging the refusal
 # on the way out (see the refusal branch). the learnings channel
@@ -43,12 +44,12 @@ done
 [ -z "$cwd_slug" ] && [ -n "$cwd" ] && cwd_slug=$(basename "$cwd")
 
 reasons=""
-# a coordinate is a stale cache: file.ext:NN, its approximate "file.ext ~:NN",
-# or a bare "line 91" / "lines 20-21". one inside quoted tool output — a fenced
-# block or a "> " quote line, where a stack trace or a failing test's output
-# lands — is evidence the brief observed rather than a location it asserts.
+# a coordinate is a stale cache: file.ext:NN, its approximate "file.ext ~:NN" /
+# ":~NN" / "~L218", or a bare "line 91" / "lines 20-21". one inside quoted tool
+# output — a fenced block or a "> " quote line, where a stack trace or a failing
+# test's output lands — is evidence the brief observed rather than a location it asserts.
 asserted=$(printf '%s\n' "$prompt" | awk '/^[[:space:]]*```/ { fence = !fence; next } !fence && !/^[[:space:]]*>/')
-coords=$(printf '%s' "$asserted" | grep -oE '\.(tsx?|jsx?|mjs|cjs|svelte|vue|astro|md|go|py|rs|css|scss|json|sql|html|ya?ml|toml|sh)\b ?~?:[0-9]+|\blines? [0-9]+' | head -5 | tr '\n' ' ')
+coords=$(printf '%s' "$asserted" | grep -oE '\.(tsx?|jsx?|mjs|cjs|svelte|vue|astro|md|go|py|rs|css|scss|json|sql|html|ya?ml|toml|sh)\b ?~?:~?[0-9]+|~L[0-9]+|\blines? [0-9]+' | head -5 | tr '\n' ' ')
 [ -n "$coords" ] && reasons="coordinates instead of named anchors: ${coords}(re-anchor each to its function/const/section — item 2, scan 1). "
 # the learnings channel is the same literal path on every brief, so the hook
 # supplies it rather than refusing over its absence — a refusal costs a whole
@@ -69,8 +70,11 @@ hedge=$(printf '%s' "$prompt" | tr '\n' ' ' | tr '.' '\n' |
 # the call. one bounded span, no \b — the hook runs under whatever grep is on
 # PATH, and two spans exceed ugrep's complexity limit.
 # a sentence that names its fallback's trigger ("if X can't, do Y instead")
-# resolved the call, and the report-back only says which branch fired.
-opencall=$(printf '%s' "$prompt" | tr '\n' ' ' | tr '.' '\n' | grep -viE '(^| )if .* instead' | grep -oiE '(say|tell|report|note)[^.]{0,30}(which (way|one)|what) you (went|chose|took|picked|decided|used)' | head -1)
+# resolved the call, and the report-back only says which branch fired. so does
+# "what you chose/used" after a bound the seat measures against (the key that
+# gives both, whatever test is practical) or a named fix it may depart from —
+# only "what you decided" and "which way you went" hand a choice down.
+opencall=$(printf '%s' "$prompt" | tr '\n' ' ' | tr '.' '\n' | grep -viE '(^| )if .* instead|depart from' | grep -oiE '(say|tell|report|note)[^.]{0,30}(which (way|one) you (went|chose|took|picked|decided|used)|what you decided)' | head -1)
 [ -n "$opencall" ] && reasons="${reasons}open design call: \"${opencall}\" — resolve the decision, or make it an investigation naming what each answer resolves to (item 3, scan 3). "
 
 # the two texts briefs re-type as paraphrase, which no shingle sees — lead scan 2
@@ -132,11 +136,16 @@ if [ -n "$cctx" ]; then
   # quantifiers are what the standard itself spends, so they hold the refusal
   # even where a nearby identifier is backticked —
   # "existing" only on the plural, since "its existing comment" names one.
-  if printf '%s' "$cctx" | grep -qiE '`|\b(above|below|beside)\b|\b(its|this|that|each|whose|a) comments?\b' &&
+  # a singular "the comment" or "a one-line comment" is one comment too.
+  if printf '%s' "$cctx" | grep -qiE '`|\b(above|below|beside)\b|\b(its|this|that|each|whose|a) comments?\b|\b(the|a|an)( [a-z-]+){0,2} comment\b' &&
     ! printf '%s' "$cctx" | grep -qiE '\b(every|all|any) comments?\b|\bexisting comments\b'; then
     comments=""
   fi
 fi
+# the return-pass line is Block O's, already in every code-writing seat's prompt — a
+# brief asking for it is a second source of that block (scan 2).
+retpass=$(printf '%s' "$prompt" | grep -oiE 'return pass:?[^.]{0,40}' | head -1)
+[ -n "$retpass" ] && reasons="${reasons}restates Block O: \"${retpass}\" — the seat prompt carries the return pass; cut the clause (scan 2). "
 [ -n "$comments" ] && reasons="${reasons}paraphrases the comment standard: \"${comments}\" — Block I rides in the seat prompt; cut that clause, keep the rest of the sentence (scan 2). "
 
 # a review seat writes its report where the brief says and returns a pointer —
@@ -233,18 +242,27 @@ if [ -n "$named" ]; then
   nhit=$(shingle "$named")
   [ -n "$nhit" ] && shadow="${shadow}quotes a named file: \"${nhit#*	}\" is in ${nhit%%	*} — fine for a passage the slice edits or its invariant; a rule the seat already loads is a pointer (scan 2). "
 fi
-# scan 3's imperative half: a choice handed to the builder names its object
-# (decide whether, pick which). "decide" also sits in briefs that settled the
-# call, so this one proves its hit rate in shadow first. one bounded span.
-decide=$(printf '%s' "$prompt" | grep -oiE '(decide|determine|establish|pick) (whether|which|what|how|if|between)[^.]{0,40}' | head -1)
-[ -n "$decide" ] && shadow="${shadow}open decision: \"${decide}\" — resolve it, or name what each answer resolves to (item 3, scan 3). "
-# the return-pass line is Block O's, already in every code-writing seat's prompt — a
-# brief asking for it is a second source of that block (scan 2).
-retpass=$(printf '%s' "$prompt" | grep -oiE 'return pass:?[^.]{0,40}' | head -1)
-[ -n "$retpass" ] && shadow="${shadow}restates Block O: \"${retpass}\" — the seat prompt carries the return pass; cut the clause (scan 2). "
+# a version pin re-typed beside the sheet line that carries it is a second
+# source of that line (scan 2). a sentence moving the version — an upgrade, a
+# bump, an old→new — names the pin as slice content.
+pin=""
+for f in "$cwd/.claude/CLAUDE.md" "$cwd/CLAUDE.md"; do
+  [ -f "$f" ] || continue
+  pins=$(grep -oE '\b[0-9]+\.[0-9]+\.[0-9]+\b' "$f" | sort -u)
+  [ -z "$pins" ] && continue
+  # sentences split on ". " and ";", since a version's own dots aren't one
+  pin=$(printf '%s\n' "$prompt" | sed 's/\. /\
+/g; s/;/\
+/g' |
+    grep -viE 'bump|upgrad|migrat|downgrad|→|->|\bfrom\b.*\bto\b|\bto [0-9]' |
+    grep -oE '\b[0-9]+\.[0-9]+\.[0-9]+\b' | grep -Fxf <(printf '%s\n' "$pins") | head -1)
+  [ -n "$pin" ] && break
+done
+[ -n "$pin" ] && shadow="${shadow}re-types a sheet pin: \"${pin}\" — the seat reads the sheet line itself; name the line instead (scan 2). "
 # grouping: a sheet line names the directories its seat owns in backticks, so a
 # file under another seat's directory rides in the wrong brief. only a seat the
-# sheet gives directories to is checked — a reviewer's brief names every lane.
+# sheet gives directories to is checked, and only a seat that edits — a
+# read-only seat's brief (a reviewer, an auditor) names every lane it reads.
 # a sheet line names skills as kru:<skill> too, and a skill owns no directory,
 # so an owner counts only when it is a seat.
 lanes=""
@@ -259,7 +277,9 @@ for f in "$cwd/.claude/CLAUDE.md" "$cwd/CLAUDE.md"; do
   }' | while read -r d o; do [ -f "$plugin_root/agents/$o.md" ] && printf '%s %s\n' "$d" "$o"; done)
 "
 done
-if [ -n "$lanes" ] && printf '%s' "$lanes" | awk -v s="$seat" '$2 == s { f = 1 } END { exit !f }'; then
+readonly_seat=false
+grep -m1 '^tools:' "$plugin_root/agents/$seat.md" | grep -qvE '\b(Edit|Write)\b' && readonly_seat=true
+if [ -n "$lanes" ] && ! $readonly_seat && printf '%s' "$lanes" | awk -v s="$seat" '$2 == s { f = 1 } END { exit !f }'; then
   misroute=$(printf '%s' "$prompt" | grep -oE '[A-Za-z0-9_.@-]+(/[][A-Za-z0-9_.@()-]+)+' | sort -u | head -40 |
     awk -v s="$seat" 'NR == FNR { if (NF == 2) { dir[++n] = $1; own[n] = $2 }; next }
       { best = ""; bl = 0

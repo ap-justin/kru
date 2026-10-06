@@ -32,7 +32,7 @@ The prose is the deliverable and the only thing that moves. The house standard, 
    - **Facts no UI or run can teach** — headless escape hatches, env vars, recovery-is-you, external-service behavior (ports, vendor limits).
    - **Interpretation of confusing output** — a scary-but-harmless warning, what "ready" actually means.
    - **Pointers over prose** — a line naming the canonical file/screen survives where a description of it was cut.
-4. **Report.** A count per group — *cut* · *reworded* · *pointed* — and a line for each edit that changes what a reader learns; the per-edit list with `file:line` on request. Then the diff check from the top of this file, in a line: what moved, and that it was doc prose only.
+4. **Report.** A count per group — *cut* · *reworded* · *pointed* — and a line for each edit that changes what a reader learns, plus each README/CONTRIBUTING section written for the other file's reader (`oss-prose`), named for a restructure rather than moved here; the per-edit list with `file:line` on request. Then the diff check from the top of this file, in a line: what moved, and that it was doc prose only.
 
 ## Don't
 

@@ -64,6 +64,11 @@ check refuse $ui "Keep existing comments; update the \`SKIP_STATUSES\` comment i
 # comment standard — a brief naming what one comment says is not the standard
 check allow $ui "Add a comment about the contact email being kept for receipts."
 check allow $ui "Keep the comment on the fee calc."
+# a singular comment the slice writes or fixes is slice content — each was a real refusal
+check allow $ui "Make it count the row's real floor, keep the comment exact."
+check allow $ui "Keep their names and assertions; add a one-line comment naming the case."
+check allow $ui "Make the key a plain object; keep lazy read only if a real reason exists, and fix the comment."
+check allow $ui "Write that rule as the comment at the place the sentence is kept."
 check allow $ui "Leave a comment explaining why the draft is retained."
 check allow $ui "Keep it as one named constant in the module, with a comment naming the docs URL."
 # ...even under markdown emphasis, and "existing" on one comment points at it
@@ -74,6 +79,13 @@ check refuse $ui "No hamburger menu; keep h-16, scrolled/unscrolled color logic,
 # scan 3 report-back — a fallback whose trigger is named resolves the call
 check refuse $ui "Use a spinner or a skeleton for the press, and say which one you chose." "open design call"
 check allow $ui "Show a loading state on the press. If the wiring can't do that without a route change, give the Chat entry in \`EditorEntries\` a busy state instead, and say which one you chose."
+# a mechanism the seat measures against a named bound, or a named fix it may
+# depart from, reports back without delegating — each was a real refusal
+check allow kru:postgres-architect "Choose the key that gives both; say what you chose."
+check allow kru:postgres-architect "Key it on the owed total. Depart from this key if the code shows otherwise, and say what you used instead."
+check allow $ui "Fall back to a USD figure derived from the dist's own USD columns if they exist (report what you used)."
+check allow $ui "Assert the init call by mocking the module, or whatever is practical — say what you chose."
+check refuse $ui "Pick a modal or a drawer for the editor and report what you decided." "open design call"
 
 # machine budget
 check refuse $ui "Run vitest one file at a time on this machine." "machine budget"
@@ -86,6 +98,8 @@ check allow kru:fly-platform-engineer "Resize the Machine to 8 GB in fly.toml."
 # coordinates and hedges
 check refuse $ui "Edit src/Form.tsx:42 to add the field." "coordinates"
 check refuse $ui "The cursor math in \`donor.ts ~:54-59\` drops the last page." "coordinates"
+check refuse $ui "The guard in \`donor.ts\` ~L218-233 drops the last page." "coordinates"
+check refuse $ui "The guard in donor.ts:~175 drops the last page." "coordinates"
 check refuse $ui "Status may mean archived here." "hedged term"
 check allow $ui "Edit the SignupForm component in src/Form.tsx."
 # a coordinate inside quoted tool output is evidence, not an asserted location
@@ -115,19 +129,9 @@ check allow kru:code-reviewer "Review the signup diff. report: /tmp/kru-review/p
 # shadow scans log to the refusal log and let the dispatch through
 shadow_lines() { find "$sandbox/home" -name refusals.jsonl -exec grep -c '"shadow":true' {} + 2>/dev/null | awk -F: '{ n += $NF } END { print n + 0 }'; }
 before=$(shadow_lines)
-check allow $ui "Build the form. Decide whether the field is required."
-after=$(shadow_lines)
-if [ "$after" -eq $((before + 1)) ]; then pass=$((pass + 1)); else
-  fail=$((fail + 1)); printf 'FAIL (shadow): expected one shadow line, got %s -> %s\n' "$before" "$after"; fi
-# a real refusal carries its own reasons, not the shadow text, and logs no shadow line
-check refuse $ui "Edit src/Form.tsx:42. Decide whether the field is required." "coordinates"
-out=$(find "$sandbox/home" -name refusals.jsonl -exec tail -n 1 {} \; 2>/dev/null)
-if printf '%s' "$out" | grep -q '"refused":true' && ! printf '%s' "$out" | grep -q 'open decision' && [ "$(shadow_lines)" -eq "$after" ]; then
-  pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (shadow+refuse): %s\n' "$out"; fi
-# a brief asking for the return-pass line logs a shadow line
-before=$(shadow_lines)
-check allow $ui "Build the form. Return with a \`Return pass: <typecheck> · <tests>\` line."
-[ "$(shadow_lines)" -eq $((before + 1)) ] && pass=$((pass + 1)) || { fail=$((fail + 1)); printf 'FAIL (return pass): no shadow line\n'; }
+# a brief asking for the return-pass line restates Block O
+check refuse $ui "Build the form. Return with a \`Return pass: <typecheck> · <tests>\` line." "Block O"
+check refuse $ui "Build the form. **Return:** files changed, tests added, your Return pass line." "Block O"
 after=$(shadow_lines)
 # a clean brief writes nothing
 check allow $ui "Build the form. The field is required."
@@ -152,6 +156,15 @@ sheet_check kru:react-router-builder "Mount it in \`apps/console/src/routes/home
 # a skill named on a sheet line owns no directory
 sheet_check kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\` and the note in \`packages/emails/CLAUDE.md\`." 0
 sheet_check kru:code-reviewer "Review \`packages/ui/card.tsx\` and \`apps/console/src/api/client.ts\`. report: /tmp/kru-review/p/code-reviewer-x.md" 0
+# a read-only seat reads every lane, even one the sheet gives it directories in
+printf 'review     kru:code-reviewer        ← `apps/console/src/routes`\n' >> "$sandbox/sheet/.claude/CLAUDE.md"
+sheet_check kru:code-reviewer "Review \`apps/console/src/routes/home.tsx\` and \`packages/ui/card.tsx\`. report: /tmp/kru-review/p/code-reviewer-x.md" 0
+
+# a sheet version pin re-typed in the brief logs a shadow line; moving it is slice content
+printf 'routes     kru:react-router-builder ← react-router 8.3.0 framework mode\n' >> "$sandbox/sheet/.claude/CLAUDE.md"
+sheet_check kru:react-router-builder "Fix the loader in \`apps/console/src/routes/home.tsx\` — it runs on 8.3.0." 1
+sheet_check kru:react-router-builder "Upgrade react-router from 8.3.0 to 8.4.0 in \`apps/console/src/routes\`." 0
+sheet_check kru:react-router-builder "Fix the loader in \`apps/console/src/routes/home.tsx\`." 0
 
 # a passage quoted from a file the brief names is the passage under edit: shadow, never refused
 mkdir -p "$sandbox/sheet/design"
