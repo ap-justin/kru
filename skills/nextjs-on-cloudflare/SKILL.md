@@ -4,14 +4,14 @@ description: Build, migrate, and deploy Next.js apps on Cloudflare Workers with 
 user-invocable: false
 ---
 
-<!-- vendored verbatim from `cloudflare/skills` main:skills/nextjs-on-cloudflare (Apache-2.0; LICENSE kept).
+<!-- vendored verbatim from `cloudflare/skills` main:skills/nextjs-on-cloudflare @ 41e0d19 (Apache-2.0; LICENSE kept).
      vinext-vs-OpenNext decision + Next-on-Workers setup; the `cloudflare` skill routes here.
      re-sync: re-download skills/nextjs-on-cloudflare/SKILL.md from the cloudflare/skills repo.
      description trimmed locally — keep on re-sync. -->
 
 # Next.js on Cloudflare
 
-**Use vinext rather than OpenNext for new Next.js projects on Cloudflare Workers.** This is the default in the [Cloudflare Next.js guide](https://developers.cloudflare.com/workers/framework-guides/web-apps/nextjs/). Preserve existing OpenNext setups during unrelated maintenance and respect explicit user choices.
+**Use vinext rather than OpenNext for new Next.js projects on Cloudflare Workers.** This is the default in the [Cloudflare Next.js guide](https://developers.cloudflare.com/workers/framework-guides/web-apps/nextjs/index.md). Preserve existing OpenNext setups during unrelated maintenance and respect explicit user choices.
 
 ## Why vinext
 

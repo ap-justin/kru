@@ -59,12 +59,14 @@ The repo usually decides before you do — a TUI in a Rust workspace is Ratatui.
 
 ## Ink (React/TypeScript) — React in the terminal
 
-**Free:** flexbox layout via Yoga, so `<Box>` composition behaves like a familiar mental model; `useInput` enables raw mode on its own; `render(<App/>, {alternateScreen: true})` gives fullscreen with scrollback preserved.
+**Free:** flexbox layout via Yoga, so `<Box>` composition behaves like a familiar mental model; `useInput` enables raw mode on its own; `useWindowSize()` re-renders on resize and falls back to 80×24 when stdout isn't a terminal; `render(<App/>, {alternateScreen: true})` gives fullscreen and hands the user's screen back on exit (ignored when stdout is piped).
 
-**Yours:** everything the React ecosystem normally hands you at the data layer. No built-in request exclusion — cancel in the effect's cleanup and stamp responses. No built-in resize gate beyond `useStdout`.
+**Yours:** everything the React ecosystem normally hands you at the data layer. No built-in request exclusion — cancel in the effect's cleanup and stamp responses.
 
-**Two traps:**
-- **Raw mode isn't always available.** `useInput` needs it, and a non-TTY stdin (CI, a pipe) doesn't have it. Guard with `useStdin().isRawModeSupported` and render a non-interactive fallback rather than crashing on mount.
-- **Growing output.** Ink redraws a live region; content that only accumulates — a log stream — belongs in `<Static>`, which prints above the live region permanently and is never re-rendered. Cap what you pass it (`logs.slice(-100)`), because `<Static>` holds every item you give it in memory. Reaching for a third-party fullscreen wrapper is stale advice: `alternateScreen` is a render option now.
+**Four traps:**
+- **Raw mode isn't always available.** `useInput` needs it, and a non-TTY stdin (CI, a pipe) doesn't have it — mounting `useInput` there throws `Raw mode is not supported`. Guard with `useStdin().isRawModeSupported` and render a non-interactive fallback (or pass `useInput(handler, {isActive: false})`).
+- **`useStdout()` is not the resize gate.** Its `stdout` is typed as a plain `NodeJS.WritableStream`, so `stdout.columns` doesn't type-check; read size from `useWindowSize()`.
+- **Growing output.** Ink redraws a live region; content that only accumulates — a log stream — belongs in `<Static>`, which prints above the live region permanently and never re-renders a printed item. It tracks what it printed by array length, so pass it an append-only array: trimming with `logs.slice(-100)` stops printing at the 100th item, silently. If the stream is unbounded, `useStdout().write(line)` prints above the live region without keeping an array.
+- **Alternate-screen teardown is dropped.** With `alternateScreen`, the last frame and anything printed during teardown vanish when the primary screen comes back. Print the summary the user should keep after `await instance.waitUntilExit()`. Reaching for a third-party fullscreen wrapper is stale advice: `alternateScreen` is a render option now.
 
 **Alongside:** `@inkjs/ui` (the component collection), `ink-testing-library` (render-to-string assertions, and what makes a golden frame cheap here).

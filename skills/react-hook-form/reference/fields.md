@@ -1,6 +1,6 @@
 # Fields — the component half
 
-The component/UI half of `react-hook-form`. Reproduced on the versions pinned in `SKILL.md`.
+The component/UI half of `react-hook-form`. Reproduced on the versions pinned in `SKILL.md` — `useFieldArray` and `fieldState` on 7.89.0, the rest on 7.88.0.
 
 ## Where a re-render lands
 Three subscriptions, and the choice is *which component re-renders*, not whether one does:

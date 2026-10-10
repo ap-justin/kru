@@ -43,11 +43,6 @@ Ark ships one package per framework — `@ark-ui/react`, `@ark-ui/vue`, `@ark-ui
 - Use whatever the repo already uses to apply styles (Tailwind, CSS modules, vanilla-extract, Panda) — match it, don't introduce a styling system.
 - Map the repo's tokens onto the component; keep styling co-located the way the repo does. If a token you need is missing, ask the lead — don't improvise a value.
 
-## Under a browser-mode test
-Two things zag does that a Playwright-driven test reads as failure (reproduced on `@ark-ui/react@5.37.2`, Vitest 5 Browser Mode):
-- **`Dialog.Backdrop` fails actionability.** The backdrop is `fixed; inset: 0`, and Playwright's pre-click check reads it as intercepting the pointer, so `locator.click()` on anything inside an open dialog times out. Click the element directly — `(loc.element() as HTMLElement).click()` — which skips the check; the dialog's own handlers still run.
-- **Escape is registered late.** The dismissable layer attaches its document `keydown` listener in a deferred `requestAnimationFrame`, so one `{Escape}` right after render races the registration and passes or fails by timing. Dispatch it inside `vi.waitFor` until the content is gone.
-
 ## TypeScript
 Ark components are TS-heavy (generic `value`/`collection` types, part props). For any hard type work — a cryptic generic on `Select`/`Combobox`, controlled-state typing, a `.d.ts` — load the **`typescript`** skill and solve it in-context.
 

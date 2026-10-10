@@ -4,9 +4,9 @@ description: React Email 6 recipes. Use when writing or reviewing an email templ
 user-invocable: false
 ---
 
-**An email renders once, on the server, into a client you don't control — and React Email's own Tailwind decides what reaches it.** Its `<Tailwind>` is a second Tailwind that compiles at render time against the `config` prop and nothing else; a class it can't resolve stays in the markup as a bare `class=` that no inbox will ever style, and nothing fails. The preview server is the one place that hides the rest: it serves `static/`, shows the HTML part only, and never runs the plain-text part your recipients' clients may fall back to. So check the output of `render()`, not the preview.
+**An email renders once, on the server, into a client you don't control — and React Email's own Tailwind decides what reaches it.** Its `<Tailwind>` is a second Tailwind that compiles at render time against the `config` prop and nothing else; a class it can't resolve stays in the markup as a bare `class=` that no inbox will ever style, and nothing fails. The preview server is the one place that hides the rest: it serves `static/`, and what it draws is the HTML part; the plain-text part your recipients' clients may fall back to sits only in its code panel's `md` tab. So check the output of `render()`, not the preview.
 
-Reproduced on **`react-email@6.9.5`** (`@react-email/render@2.1.0`) with `react@19.3.0` and `resend@6.28.1`, 2026-09-23. Re-verify after a minor bump.
+Reproduced on **`react-email@6.11.1`** (`@react-email/render@2.1.0`, `@react-email/ui@6.11.1`) with `react@19.3.0` and `resend@6.32.1`, 2026-10-10. Re-verify after a minor bump.
 
 ## Import from `react-email`
 Components, `render`, `pixelBasedPreset` and `toPlainText` all export from **`react-email`**. **`@react-email/components`** — what most examples online, and older Context7 snippets, import from — is deprecated on npm at 1.0.12. In a repo still on it, keep its imports consistent within a file and move a file whole.
@@ -24,7 +24,7 @@ Typed code catches it at a `string` parameter. Untyped code catches it nowhere: 
 | `<Tailwind>` with no preset, `text-base p-4` | `font-size:1rem;padding:1rem`. Client support for `rem` is uneven (caniemail.com → `rem`). **`config={{ presets: [pixelBasedPreset] }}`** gives `16px`/`16px` |
 | `bg-brand` defined in the app's `@theme` or `tailwind.config` | `class="bg-brand"` with **no style at all**. With `text-white` beside it, you get white text on white. The email's Tailwind never reads the app's CSS |
 | `` className={`text-${c}-500`} `` | **works**: classes are resolved from the rendered string at render time. The app-side scan that drops this belongs to the `tailwind` skill and doesn't apply here |
-| `sm:text-lg` with the preset | the `<style>` rule stays in `rem` (`@media (min-width:40rem)`, `1.125rem`). The preset converts only inlined styles |
+| `sm:text-lg` with the preset | the `<style>` rule's sizes convert (`font-size:18px`), its breakpoint doesn't: `@media (min-width:40rem)`. With no `<Head />` inside `<Tailwind>`, `render()` throws instead |
 
 **Brand values go into the email's `config` as literal values** (`theme.extend.colors.brand: '#007bff'`), from one module every template imports. The app's token file is CSS custom properties, and `var()` support in mail clients is too patchy to rely on (caniemail.com). Grep the output for `class="` after any theme change: a surviving class with no style beside it names an unresolved token.
 

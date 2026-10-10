@@ -4,7 +4,8 @@ description: Neon's serverless driver — WebSocket vs HTTP transport, pooled vs
 user-invocable: false
 ---
 
-Reproduced on **`@neondatabase/serverless@1.1.0`** with **`drizzle-orm@0.45.2`**, read off the installed bundles rather than the docs. Re-verify after a minor bump on either.
+Reproduced on **`@neondatabase/serverless@1.2.0`**, 2026-10-10, run against a stubbed `fetchFunction` with no live endpoint: the listener latch, the HTTP path's connection string and function `password`, the `NeonDbError` shape, the `-pooler` rewrite.
+Reproduced on **`@neondatabase/serverless@1.1.0`** with **`drizzle-orm@0.45.2`**, 2026-09-17, read off the installed bundles rather than the docs: everything else — the WebSocket side, `webSocketConstructor`, the Drizzle transaction leak. Re-verify after a minor bump on either.
 
 **Neon splits one connection string across two transports, and the driver decides per query which one carries it.** That decision is a global flag — `poolQueryViaFetch`, which returns zero results on `neon.com` — and it changes the error object's class and can erase its Postgres `code`.
 
@@ -29,7 +30,8 @@ What turns that flag off, what it changes, and what it leaves alone:
 
 - **Any pool listener that isn't literally `error` turns it off.** `NeonPool.on` sets `hasFetchUnsupportedListeners` whenever the event name `!== "error"` — broader than `CONFIG.md`, which enumerates only `connect`/`acquire`/`release`/`remove`, so an event name pg never even emits trips it. `once` trips it too (it routes through the overridden `on`); **`prependListener` does not**, because it reaches `_addListener` directly — leaving a listener that never fires while queries still go over HTTP. The latch is **one-way**: nothing resets it, and `removeListener`/`off` are inherited untouched, so removing the listener never restores the HTTP path. A library handed your pool can reinstate the socket failure above.
 - **It is global, and it changes the error class.** It lives in the driver's static defaults and cannot be set per `Client`. With it on, a non-transaction query throws `NeonDbError` where the WebSocket path throws pg's `DatabaseError` — so **duck-type on `code`, never `instanceof`**, or a guard keeps matching writes inside transactions while ceasing to match reads.
-- **The HTTP path rebuilds the connection string from four fields** — user, password, host, database; no port, no search params. What you configured on the `Pool` governs transactions and not single-statement queries.
+- **The HTTP path rebuilds the connection string from four fields** — user, password, host, database; no port, no search params. What you configured on the `Pool` governs transactions and not single-statement queries. `neon()` itself keeps the port and params; only `pool.query` drops them.
+- **A function `password` breaks every HTTP read.** 1.2.0 accepts `new Pool({ ...parseIntoClientConfig(url), password: () => token })`, but `pool.query` never calls the function — it URL-encodes its source text as the password (`u:()%20%3D%3E%20%22tok%22@…`). With the flag on, single-statement reads fail auth while transactions, which take the socket, work. Pair a function password with `poolQueryViaFetch = false`, or send reads through `neon(url, { password: fn })`, which resolves it per query.
 - **Transactions stay atomic regardless.** `NeonPool` doesn't override `connect`, and the flag is consulted only inside `pool.query` — so a `BEGIN … COMMIT` on a checked-out client is one WebSocket session and genuinely atomic whatever the flag says.
 
 ## Code-keyed branching fails closed

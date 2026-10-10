@@ -1,6 +1,6 @@
 # The server half — load, action, and what you return
 
-Reproduced against `sveltekit-superforms@2.30.2` / `zod@4.4.3` / `@sveltejs/kit@2.70.2`. The traps live in `SKILL.md`; this file is the shape the code takes once you know them.
+Reproduced against `sveltekit-superforms@3.0.0` / `zod@4.6.5` / `@sveltejs/kit@3.0.1`. The traps live in `SKILL.md`; this file is the shape the code takes once you know them.
 
 ## The canonical route
 
@@ -28,9 +28,9 @@ export const actions = {
 }
 ```
 
-Order matters in two places. **`superValidate` before any other read of the body** — it calls `request.formData()` itself, and doing that first makes it rethrow `body already been consumed`. And **`if (!form.valid) return fail` before any side effect**, because `form.data` is fully populated with generated defaults either way; it is not a parsed-or-nothing result.
+Order matters in two places. **`superValidate` before any other read of the body** — it calls `request.formData()` itself. Read the body first and it does not throw: its rethrow matches `already been consumed`, Node 24 says `Body has already been read`, so it returns an **empty, unposted form** and the action answers `fail(400)` with no errors on a form the user filled. And **`if (!form.valid) return fail` before any side effect**, because `form.data` is fully populated with generated defaults either way; it is not a parsed-or-nothing result.
 
-`superValidate` accepts `RequestEvent | Request | FormData | URL | URLSearchParams | Partial<In> | null`. Anything unrecognized falls through as plain partial data with `posted: false`. So does a body it fails to parse: `tryParseFormData` swallows every error except body-consumed and returns an **empty, unposted form** — a malformed multipart POST arrives looking like a fresh page load rather than an error.
+`superValidate` accepts `RequestEvent | Request | FormData | URL | URLSearchParams | Partial<In> | null`. Any other object is taken as partial data with `posted: false` (a primitive throws a `TypeError`). So does a body it fails to parse: `tryParseFormData` swallows every error except body-consumed and returns an **empty, unposted form** — a malformed multipart POST arrives looking like a fresh page load rather than an error.
 
 ## The return ladder
 
@@ -42,11 +42,11 @@ Order matters in two places. **`superValidate` before any other read of the body
 | `setError(form, 'email', 'Taken')` | field error, `valid: false` | Returns an ActionFailure (`{ status, data }`), so `return` it directly. `setError(form, 'Whole-form problem')` files under `errors._errors`. |
 | `redirect(303, '/done')` | navigation | The form object is gone with the page; carry the confirmation in a flash message, not in `message()`. |
 
-`message` and `fail` strip files by default. Pass `{ removeFiles: false }` to `message` only if something downstream can serialize them, which in a normal action it cannot.
+The status is the response's HTTP status too, enhanced submit or not. `message` and `fail` strip files by default. Pass `{ removeFiles: false }` to `message` only if something downstream can serialize them, which in a normal action it cannot.
 
 ## `errors` is suppressed unless the data was posted
 
-`addErrors = options.errors ?? (options.strict ? true : !!parsedData)`. An un-posted form — the `load` call, a `URL`/`URLSearchParams` source, an unparseable body — returns `errors: {}` even when `valid` is `false`, which is why a schema whose generated defaults violate their own constraints looks clean on first render. Pass `{ errors: true }` when you deliberately want the empty form to show its errors up front (a resumed draft, an SPA prefill).
+`addErrors = options.errors ?? (options.strict ? true : !!parsedData)`. An un-posted form with no data — the bare `load` call, an unparseable body — returns `errors: {}` even when `valid` is `false`, which is why a schema whose generated defaults violate their own constraints looks clean on first render. Pass `{ errors: true }` when you deliberately want the empty form to show its errors up front (a resumed draft, an SPA prefill).
 
 `constraints` is the mirror image: it's attached **only when `posted` is false**. The form returned from a failed action carries none — `superForm` reuses the ones from the initial page data, so this is invisible until something re-derives constraints from the action's return value.
 
@@ -68,7 +68,7 @@ login: async (event) => {
 }
 ```
 
-On the client, give every form but the one being submitted `invalidateAll: false`, and `resetForm: false` on any form whose response carries data to keep. Without `use:enhance`, the id has to travel in the body: `<input type="hidden" name="__superform_id" bind:value={$formId} />`. A posted `__superform_id` **outranks the `id` option** (`parsed.id ?? options.id ?? validator.id`), so a stale hidden field silently retargets the response.
+On the client, `invalidateAll: false` on the form being submitted keeps unsaved edits in the others, and `resetForm: false` on any form whose response carries data to keep. Without `use:enhance`, the id has to travel in the body: `<input type="hidden" name="__superform_id" bind:value={$formId} />`. A posted `__superform_id` **outranks the `id` option** (`parsed.id ?? options.id ?? validator.id`), so a stale hidden field silently retargets the response.
 
 ## GET forms (search, filters)
 
@@ -78,7 +78,7 @@ export const load = async ({ url }) => ({
 })
 ```
 
-`posted` is forced to `false` for a URL source, so errors stay suppressed and constraints are attached — right for a filter bar, wrong if you wanted the invalid query string called out (`{ errors: true }`).
+`posted` is forced to `false` for a URL source and constraints are attached, but errors are **not** suppressed: the parsed query counts as data, so even an empty query string comes back with every violated rule in `errors`. A filter bar that shouldn't open red needs `{ errors: false }`.
 
 ## Files, end to end
 

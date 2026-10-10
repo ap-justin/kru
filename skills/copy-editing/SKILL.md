@@ -2,10 +2,10 @@
 name: copy-editing
 description: "When the user wants to edit, proofread or tighten existing marketing copy, or refresh outdated content. Use when copy exists and needs improving rather than rewriting. For new copy, see copywriting."
 metadata:
-  version: 2.0.0
+  version: 2.1.1
 ---
 
-<!-- vendored from `coreyhaines31/marketingskills` (main, sha 286d371) → `skills/copy-editing`.
+<!-- vendored from `coreyhaines31/marketingskills` (main, sha b7fb899) → `skills/copy-editing`.
      Corey Haines is a recognized SaaS-marketing authority; no first-party source exists for
      conversion copy-editing, so this curated community skill is the backing (same tier as the
      mattpocock pack). User-invoked line-edit pass (`/copy-editing`, runs inline) — on-page copy
@@ -23,7 +23,7 @@ You are an expert copy editor specializing in marketing and conversion copy. You
 **Check for product marketing context first:**
 If `.agents/product-marketing.md` exists (or `.claude/product-marketing.md`, or the legacy `product-marketing-context.md` filename, in older setups), read it before editing. Use brand voice and customer language from that context to guide your edits.
 
-Good copy editing isn't about rewriting—it's about enhancing. Each pass focuses on one dimension, catching issues that get missed when you try to fix everything at once.
+Good copy editing improves what's already there. Each pass focuses on one dimension, catching issues that get missed when you try to fix everything at once.
 
 **Key principles:**
 - Don't change the core message; focus on enhancing it
@@ -337,10 +337,14 @@ Use these for faster reviews when a full seven-sweep process isn't needed.
 | Implement | Set up |
 | Leverage | Use |
 | Facilitate | Help |
-| Innovative | New |
-| Robust | Strong |
-| Seamless | Smooth |
-| Cutting-edge | New/Modern |
+
+**Replace with the fact** (a synonym swap just makes a new tell):
+
+| Vague | Write the fact instead |
+|-------|------------------------|
+| Innovative / cutting-edge | What it does that alternatives don't |
+| Robust | The uptime, scale, or failure case it handles |
+| Seamless | The real setup step count or time |
 
 **Watch for:**
 - Adverbs (usually unnecessary)
@@ -362,6 +366,30 @@ Use these for faster reviews when a full seven-sweep process isn't needed.
 - Strong opening sentences
 - Logical flow between paragraphs
 - White space for scannability
+
+### AI-Tell Check
+
+Run this on every edit, after the sweeps. A reader who spots an AI tell tends to doubt the claims around it. The shape of a sentence gives it away more than any word does.
+
+**Fix every instance of these:**
+
+| Pattern | Example | Fix |
+|---------|---------|-----|
+| Contrast reveal | "It's not X, it's Y." "Not because X. Because Y." | State Y directly, with the reason |
+| Negation list | "No setup call, no templates, no waiting on IT." | Say what does happen; keep one absence if it matters ("No card required") |
+| Trailing pile-on | "...the data you already have, no exports, no spreadsheets." / "..., ensuring nothing slips." | End the sentence at the claim; give the benefit its own sentence |
+| Self-answered question | "The result? 3x faster." | Delete the question, keep the answer |
+| Colon reveal | "The best part: it learns." | Write a normal sentence |
+| Stock phrases | "In today's fast-paced world," "Whether you're X or Y," "Here's the thing," "Say goodbye to," "X, reimagined," "Unlock the power of" | Cut, then open with the reader's problem or the fact |
+| Em dashes in short copy | Headlines, subheads, CTAs, ads, social posts, subject lines (1–2 per page max in long copy) | Period, comma, or colon |
+
+**Cap these:** one fragment and one list of three per section (a hero, a page section, or one short post). Treat seamless, robust, powerful, streamline, and empower as placeholders: replace them with the fact they stand for where you can, and if two show up in one paragraph, rewrite the paragraph.
+
+**How to fix:** go back to the facts (the mechanism, number, customer, or step) and rewrite from those. Swapping in synonyms creates new tells. If the fact isn't available, mark `[NEED: ...]` instead of inventing one. Keep the brand's register. A formal sentence that makes a specific claim is fine.
+
+**Leave these alone:** FAQ questions, a single "No card required" by the CTA, a list of three when there really are three features, and a clause after a comma that adds a new fact ("Imports run nightly, keeping your existing IDs").
+
+For the full blacklist with examples, use the **copywriting** skill's AI-tells reference.
 
 ---
 
@@ -401,6 +429,10 @@ For a final QA pass before delivering edits, work through the full checklist in 
 **Symptom:** Copy tries to speak to everyone, resonates with no one
 **Fix:** Pick one audience and write directly to them
 
+### Problem: Reads as AI-Written
+**Symptom:** "Not X. Y." reveals, "no X, no Y, no Z" lists, long sentences trailing extra clauses, stock openers
+**Fix:** Run the AI-Tell Check above and rewrite those sentences from the underlying facts
+
 ### Problem: Feature Overload
 **Symptom:** Listing every capability, overwhelming the reader
 **Fix:** Focus on 3-5 key benefits that matter most to the audience
@@ -424,8 +456,8 @@ This iterative process ensures each edit doesn't create new problems while respe
 ## References
 
 - [Plain English Alternatives](references/plain-english-alternatives.md): Replace complex words with simpler alternatives
-- [Content Refresh](references/content-refresh.md): Full checklist, refresh vs. rewrite matrix, and cadence guide
-- [Copy Editing Checklist](references/checklist.md): Full QA checklist across all seven sweeps
+- [Content Refresh](references/content-refresh.md): SERP gap analysis, full checklist, refresh vs. rewrite matrix, and cadence guide
+- [Copy Editing Checklist](references/checklist.md): Full QA checklist across all seven sweeps plus the AI-tell check
 
 ---
 
@@ -433,7 +465,7 @@ This iterative process ensures each edit doesn't create new problems while respe
 
 Copy editing isn't just for new content. Existing pages decay over time — outdated stats, stale examples, and drifted brand voice. Use the content refresh framework when traffic is declining, data is stale, or the product has changed.
 
-**For the full refresh checklist, refresh vs. rewrite decision matrix, and cadence guide**: See [references/content-refresh.md](references/content-refresh.md)
+**For the SERP gap analysis, full refresh checklist, refresh vs. rewrite decision matrix, and cadence guide**: See [references/content-refresh.md](references/content-refresh.md)
 
 ---
 

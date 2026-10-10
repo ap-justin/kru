@@ -4,7 +4,7 @@ description: Build, debug, or review Cloudflare Durable Objects code for persist
 user-invocable: false
 ---
 
-<!-- vendored verbatim from `cloudflare/skills` main:skills/durable-objects @ 320fbbc (Apache-2.0; LICENSE kept; `user-invocable: false` added to frontmatter).
+<!-- vendored verbatim from `cloudflare/skills` main:skills/durable-objects @ 41e0d19 (Apache-2.0; LICENSE kept; `user-invocable: false` added to frontmatter).
      DO class + state/coordination playbook; the `cloudflare` skill routes here and no longer carries
      references/durable-objects itself. re-sync: re-download skills/durable-objects/ from the cloudflare/skills repo. -->
 
@@ -18,11 +18,11 @@ Your knowledge of Durable Objects APIs and configuration may be outdated. **Pref
 
 | Resource | URL |
 |----------|-----|
-| Docs | https://developers.cloudflare.com/durable-objects/ |
-| API Reference | https://developers.cloudflare.com/durable-objects/api/ |
-| Best Practices | https://developers.cloudflare.com/durable-objects/best-practices/ |
-| Examples | https://developers.cloudflare.com/durable-objects/examples/ |
-| Roles and permissions | https://developers.cloudflare.com/workers/authorization/durable-objects/ |
+| Docs | https://developers.cloudflare.com/durable-objects/index.md |
+| API Reference | https://developers.cloudflare.com/durable-objects/api/index.md |
+| Best Practices | https://developers.cloudflare.com/durable-objects/best-practices/index.md |
+| Examples | https://developers.cloudflare.com/durable-objects/examples/index.md |
+| Roles and permissions | https://developers.cloudflare.com/workers/authorization/durable-objects/index.md |
 
 Fetch the relevant doc page when implementing features.
 
@@ -127,7 +127,7 @@ export default {
 
 ## Authorization
 
-Durable Objects do not have separate roles or permissions; access follows the Worker that implements them. Retrieve the current [Durable Objects authorization guidance](https://developers.cloudflare.com/workers/authorization/durable-objects/) before granting observability or Data Studio access, and scope the Workers role to the intended Worker or Workers product.
+Durable Objects do not have separate roles or permissions; access follows the Worker that implements them. Retrieve the current [Durable Objects authorization guidance](https://developers.cloudflare.com/workers/authorization/durable-objects/index.md) before granting observability or Data Studio access, and scope the Workers role to the intended Worker or Workers product.
 
 ## Anti-Patterns (NEVER)
 

@@ -1,6 +1,6 @@
 # The client half — `superForm`, its defaults, and binding
 
-Defaults below are read from `dist/client/superForm.js` in `sveltekit-superforms@2.30.2`, not from the docs page. The traps live in `SKILL.md`.
+Defaults below are read from `dist/client/superForm.js` in `sveltekit-superforms@3.0.0`, not from the docs page. The traps live in `SKILL.md`.
 
 ## Defaults that decide behavior
 
@@ -10,8 +10,8 @@ Defaults below are read from `dist/client/superForm.js` in `sveltekit-superforms
 | `validationMethod` | `'auto'` | Reward early, validate late: `input` for a field that has or had an error, `blur` otherwise. Marks a **pristine** field on blur, before any submit — `SKILL.md` has the ladder. |
 | `dataType` | `'form'` | The DOM's fields are posted, not `$form`. Nested objects need `'json'`. |
 | `resetForm` | `true` | On a valid result, fields revert to the form the page currently holds. |
-| `invalidateAll` | `true` | A successful submit re-runs `load` first. |
-| `applyAction` | `true` | The action's result is applied to `page.form`/`page.status`. |
+| `invalidateAll` | `true` | A successful submit re-runs `load` first, through Kit's deprecated `invalidateAll()`, which also empties `page.state` (a shallow-routed modal closes). There is no `refreshAll` switch. |
+| `applyAction` | `true` | The action's result is applied to the **current** page's `page.form`/`page.status`, even when the action belongs to another route; Kit 3's own `enhance` would navigate there. |
 | `taintedMessage` | `false` | No "unsaved changes" prompt unless you ask for one. |
 | `clearOnSubmit` | `'message'` | Errors stay on screen through a submit; only the status message clears. |
 | `onError` | throws | Without an `onError` handler, a server exception throws in the browser. |
@@ -22,7 +22,7 @@ Defaults below are read from `dist/client/superForm.js` in `sveltekit-superforms
 
 Setting `legacy: true` (or the v1 build flag) flips `resetForm` to `false` and `taintedMessage` to `true` — the v1 defaults, which is why older tutorials describe the opposite behavior.
 
-**Neither reset path returns to the schema's defaults.** `resetForm` restores the data currently in `data.form`; the `reset()` method restores what `superForm` was constructed with. With `invalidateAll` on (the default) the page reloads before the reset, so an edit form lands on the freshly saved record — the intended pairing. Turn `invalidateAll` off while leaving `resetForm` on and the screen reverts to the stale load data instead.
+**Neither reset path returns to the schema's defaults, nor to the freshly saved record.** `resetForm` and `reset()` both restore what `superForm` was constructed with, and the default `invalidateAll: true` re-runs `load` without moving that target: an edit form saved as `"abc"` reverts to the value the page first loaded with. `invalidateAll: 'force'` (or `'pessimistic'`) is the setting that lands it on the reloaded data.
 
 ## Events
 

@@ -1,12 +1,12 @@
 ---
 name: superforms
-description: "Superforms 2 (`sveltekit-superforms`) recipes on SvelteKit 2. Use when writing or reviewing a SvelteKit form action, a `superForm` call, or form components in a repo with `sveltekit-superforms` in `package.json`. Not Formsnap internals, not React Hook Form."
+description: "Superforms 3 (`sveltekit-superforms`) recipes on SvelteKit 3. Use when writing or reviewing a SvelteKit form action, a `superForm` call, or form components in a repo with `sveltekit-superforms` in `package.json`. Not Formsnap internals, not React Hook Form."
 user-invocable: false
 ---
 
 **Superforms fills in what the browser didn't send, and then validates what it filled in.** A missing field is not a missing field — it's a generated default that passes. Two consequences drive the rest: `valid: true` is a claim about the *merged* object, never about what the user typed · the client stores hold values (`NaN`, `Invalid Date`, `"42"`) that `JSON.stringify` renders as something else, so SuperDebug shows you a value the form does not have.
 
-Reproduced on **`sveltekit-superforms@2.30.2`** (npm `latest`, 2026-08-04) with `zod@4.4.3`, `@sveltejs/kit@2.70.2`, `svelte@5.56.8`. Re-verify after a major bump.
+Reproduced on **`sveltekit-superforms@3.0.0`** (npm `latest`, 2026-10-10) with `zod@4.6.5`, `@sveltejs/kit@3.0.1`, `svelte@5.57.2`, Node 24.20.0. Re-verify after a major bump.
 
 ## An absent field is a default, not an error
 The most dangerous line in this skill, because nothing anywhere reports it.
@@ -20,7 +20,7 @@ await superValidate(new FormData(), zod4(invite))   // a completely empty POST
 // → valid: true, errors: {}, data: { name: "", role: "admin", active: false, quota: 0 }
 ```
 
-`superValidate` fills every key the request didn't carry from the schema's JSON-Schema type — `string → ""`, `number → 0`, `boolean → false`, `array → []`, **`enum → its first member`** — and validates the merged object. A field the browser never sent is indistinguishable from one submitted blank, so a `disabled` input, an input you forgot to render, a typo'd `name=` attribute, and a bare `curl -X POST` all validate. Order an enum with the privileged value first and the empty POST grants it.
+`superValidate` fills every key the request didn't carry from the schema's JSON-Schema type — `string → ""`, `number → 0`, `boolean → false`, `array → []`, **`enum → its first member`** — and validates the merged object. A field the browser never sent is indistinguishable from one submitted blank, so a `disabled` input, an input you forgot to render, a typo'd `name=` attribute, and a script posting an empty form-encoded body all validate. Order an enum with the privileged value first and the empty POST grants it.
 
 **`strict: true` is the switch that makes absent ≠ default** — the same POST then fails with `expected string, received undefined` on every field. It also breaks every checkbox, since an unchecked box is absent from FormData. The combination that works, verified: `strict: true` on the call **plus `.default(false)` on each boolean** (unchecked → `false`, valid; checked → `true`; a genuinely missing text field → error). Authorization is never the schema's job either way.
 
@@ -31,7 +31,7 @@ await superValidate(fd([['user.name', 'bob']]), zod4(nested))
 // → valid: true, data: { user: { name: "" } }   — "bob" is gone
 ```
 
-Both `user.name` and `user[name]` do this. FormData is flat and Superforms does not unflatten it: the posted value is dropped, the generated default takes its place, and the default passes. **`dataType: 'json'`** is the fix — it posts `$form` itself rather than the DOM's fields, and needs JavaScript plus Superforms' own `use:enhance`. Two things change once it's on: `disabled` no longer excludes a field (everything in `$form` is posted), and the init-time guard that throws `Object found in form field "x"` inspects only top-level keys and the **first** element of an array — an array that starts empty clears the check and then silently posts nothing.
+Both `user.name` and `user[name]` do this. FormData is flat and Superforms does not unflatten it: the posted value is dropped, the generated default takes its place, and the default passes. **`dataType: 'json'`** is the fix — it posts `$form` itself rather than the DOM's fields, and needs JavaScript plus Superforms' own `use:enhance`. Once it's on, `disabled` no longer excludes a field (everything in `$form` is posted). Until it's on, the init-time guard that throws `Object found in form field "x"` inspects only top-level keys and the **first** element of an array — an array that starts empty clears the check and then silently posts nothing.
 
 Arrays of primitives are the exception that needs nothing: repeated `name=` attributes arrive as `["a","b"]`, and `z.array(z.number())` coerces per element.
 
@@ -41,7 +41,9 @@ superValidate(zod4(z.object({ email: z.email(), password: z.string() })))   // i
 superValidate(zod4(z.object({ email: z.email(), password: z.string() })))   // id: 1p3ituu
 ```
 
-Same id — deterministic across processes, and a different variable name is not a different schema. A login and a register form built from structurally identical schemas share an id, so each action's response updates **both**, and `superForm` warns `Duplicate form id's found`. Pass `{ id: 'login' }` to `superValidate`. Then, on every form that isn't the one being submitted, `invalidateAll: false` — a successful submit invalidates the page by default and reloads the others out from under their edits — and `resetForm: false` wherever the response carries data you want kept.
+Same id — deterministic across processes, and a different variable name is not a different schema. A login and a register form built from structurally identical schemas share an id: `superForm` warns `Duplicate form id's found`, and every response lands on whichever form was constructed **first** — submit register and its message shows on login while register shows nothing. Pass `{ id: 'login' }` to `superValidate`.
+
+Distinct ids don't protect a sibling's unsaved edits: a successful submit invalidates the page by default and every other form rebinds to the fresh `load` data. `invalidateAll: false` goes on the form being **submitted** — set on the sibling, it protects nothing. `resetForm: false` wherever the response carries data you want kept.
 
 ## The client writes `NaN` and logs it as `null`
 ```js
@@ -68,7 +70,7 @@ The rest of the return path is similarly implicit:
 `allowFiles` defaults to **on** (`options?.allowFiles !== false`), and an empty file input arrives as **`undefined`, not an empty `File`** (`entry.size ? entry : …`) — so `z.instanceof(File)` reports `expected File, received undefined` for a field the user simply left alone; `.optional()` on the field is what you meant. `allowFiles: false` doesn't reject an upload either — it strips the file to `undefined` and lets the schema produce that same confusing error. The form needs `enctype="multipart/form-data"`.
 
 ## Stores, not runes — and `superForm` reads its input once
-2.30.2 ships **zero `.svelte.js` modules**: `$form`, `$errors`, `$tainted` are Svelte stores, not `$state`. `superForm` reads the object it's given at init and never again, so a parent re-rendering with a fresh `data.form` does not reach the child.
+3.0.0 ships **zero `.svelte.js` modules**: `$form`, `$errors`, `$tainted` are Svelte stores, not `$state` — 3 rebuilt only its internal `page` store over `$app/state`. `superForm` reads the object it's given at init and never again, so a parent re-rendering with a fresh `data.form` does not reach the child.
 
 This is the one place the team's data-agnostic-component seam legitimately doesn't hold: a field component takes the whole **`SuperForm<T>` object** plus a `FormPathLeaves<T>` field name and builds its own bindings with `formFieldProxy` — deconstructed stores can't be re-bound. Everything above that (labels, layout, error rendering) stays ordinary props.
 
@@ -80,7 +82,7 @@ This is the one place the team's data-agnostic-component seam legitimately doesn
 Keep `.transform()` out of a form schema: `defaults(zod4(z.object({ n: z.string().transform(v => v.length) })))` returns **`{}`** — no default at all, so `$form.n` is `undefined` and the input binds to nothing. `superValidate` types the form from the schema's *output* while the browser posts its *input*.
 
 ## No `validationMethod` gives the ladder
-The house ladder is submit-first, then correct-on-change (`ui-patterns` → `forms-and-mutations`), and no single value produces it. `'auto'` marks a **pristine** field invalid on blur, before any submit. `'onsubmit'`/`'submit-only'` skip every input **and** blur event (`dist/client/superForm.js:387`), so a field the user has already corrected stays marked until the next press.
+The house ladder is submit-first, then correct-on-change (`ui-patterns` → `forms-and-mutations`), and no single value produces it. `'auto'` marks a **pristine** field invalid on blur, before any submit. `'onsubmit'`/`'submit-only'` skip every input **and** blur event (`dist/client/superForm.js`), so a field the user has already corrected stays marked until the next press.
 
 It's two settings, and the second one is a live write:
 
@@ -97,7 +99,9 @@ const superform = superForm(data.form, {
 The `formnovalidate` branch is the one that bites: a row-editor's Add/Remove submits without validating, and flipping on the way past leaves the whole form marking on every keystroke.
 
 ## Consult current docs (official sources first)
-`https://superforms.rocks/` is first-party and v2-native (there is **no `llms.txt`**; the v1 docs live on a separate host and will answer v1 questions as if current). Use it for API surface, Context7 (`sveltekit-superforms`) for exact call signatures. Neither tells you which successful validations are describing data nobody entered, which is what this file is for. Verify anything version-sensitive against the installed package.
+`https://superforms.rocks/` is first-party; it still says *Version 2*, the same API as 3 (there is **no `llms.txt`**; the v1 docs live on a separate host and will answer v1 questions as if current). Use it for API surface, Context7 (`sveltekit-superforms`) for exact call signatures. Neither tells you which successful validations are describing data nobody entered, which is what this file is for. Verify anything version-sensitive against the installed package.
+
+A repo resolving `sveltekit-superforms` or `@sveltejs/kit` below 3: `reference/migration.md`.
 
 ## Recipes
 Pull the one the task needs, not both.
