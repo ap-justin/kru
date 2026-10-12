@@ -1,6 +1,7 @@
 ---
 name: kru-drizzle
-description: Drizzle ORM recipes for the Postgres and SQLite dialects — the version split between what npm installs and what orm.drizzle.team documents, reading the SQL `drizzle-kit generate` writes before it ships (its SQLite table rebuild deletes child rows), `generate`+`migrate` vs `push`, the connection settings Drizzle does not set for you, and relational queries vs joins. Use when writing or reviewing a Drizzle schema, a drizzle-kit migration, or a query built with Drizzle, in either the pg or sqlite dialect. Not MySQL, not Prisma.
+description: Drizzle ORM recipes for the Postgres and SQLite dialects — schema, drizzle-kit migrations (`generate`+`migrate` vs `push`), connection settings, relational queries vs joins. Use when writing or reviewing a Drizzle schema, migration, or query. Not MySQL, not Prisma.
+user-invocable: false
 ---
 
 **Drizzle is a typed SQL builder with a migration generator attached — not a database, and not a safety net.** Three consequences drive everything below: the SQL in `drizzle/` is a *draft the generator wrote*, not a reviewed migration · Drizzle owns neither the connection nor its settings · the types prove a query compiles, never that it is correct against the rows already in the table.
@@ -22,13 +23,15 @@ Read `package.json` before writing a line. On 0.45.x, these v1 APIs **do not exi
 Writing v1 code against 0.45 fails at import. Writing 0.45 code and pasting a v1 doc snippet beside it is the likelier accident — it type-checks in isolation and breaks at the seam. If a project wants v1, that is a deliberate upgrade to an **RC**, with the migration-folder format change (v3, no `_journal.json`) attached — not a default.
 
 ## The generated SQL is a draft — read it before it ships
-`drizzle-kit generate` diffs two snapshots and emits SQL. It does not know what data is in the table, so it cannot know which of its statements is destructive. Three failures that survive review only because nobody opened the `.sql` file:
+`drizzle-kit generate` diffs two snapshots and emits SQL. It does not know what data is in the table, so it cannot know which of its statements is destructive. Four failures that survive review only because nobody opened the `.sql` file:
 
 **A constraint change with existing rows aborts the migration.** Adding `.notNull().default(0)` to a populated nullable column generates `INSERT INTO __new_users(...) SELECT ... FROM users` — the `SELECT` copies the existing `NULL` straight into the new `NOT NULL` column and the column default never applies. Verified: the migration throws on that statement and rolls back. Backfill first, in a separate `drizzle-kit generate --custom` migration, *then* add the constraint.
 
 **Renames are guesses.** A dropped column plus an added column looks identical to a rename in a snapshot diff; the CLI asks, and a wrong answer is a `DROP COLUMN` on live data. Answer it deliberately, and never let it run unattended in CI.
 
 **The sqlite rebuild can `SELECT` a column the old table doesn't have.** Adding a column alongside a rebuild-forcing change (`drizzle-kit@0.31.x`) can emit a copy step that selects the *new* column from the old table — better-sqlite3 fails with `no such column`; under SQLite's double-quoted-string misfeature the literal column name is silently written into every row instead. Prefer a hand-written `ADD COLUMN` migration, and keep a guard test that fails when a generated migration contains an unasked-for rebuild.
+
+**A sqlite `ADD … REFERENCES` can ship without its `ON DELETE`.** drizzle-kit can emit the `ALTER TABLE … ADD … REFERENCES` line bare while `meta/*_snapshot.json` records the rule — snapshot and database then disagree silently, `generate` reports no changes forever, and the live foreign key is `NO ACTION`. It surfaces much later as a parent delete failing `FOREIGN KEY constraint failed` instead of nulling the child. After any generated `ADD … REFERENCES`, check the emitted line carries the rule, and confirm on the database with `pragma_foreign_key_list('<table>')`.
 
 **Reviewed means every statement in the file is named** — safe, or destructive and with the rows it touches said out loud. A file skimmed for the statement you expected is a file not read.
 
@@ -90,7 +93,7 @@ Pull the file that matches the task, not all four.
 - `reference/queries.md` — relational queries vs joins, left-join nullability, `$dynamic()` builders, prepared statements and `placeholder`, the `sql` template and where `sql.raw` becomes injection, transactions.
 
 ## Not this skill's job
-- **Engine semantics** — WAL, `busy_timeout`, `IMMEDIATE` transactions, the official 12-step rebuild, `STRICT`: the **`sqlite`** skill. Indexing strategy, normalization, lock impact of DDL: the **`postgres-architect`** seat's own discipline. This skill is only the ORM layer over them.
+- **Engine semantics** — WAL, `busy_timeout`, `IMMEDIATE` transactions, the official 12-step rebuild, `STRICT`: the **`sqlite`** skill. Lock impact of DDL, enums, index builds: the **`postgres`** skill. Modeling, NULL semantics, expand/contract: the **`sql`** skill. This skill is only the ORM layer over them.
 - **MySQL / SingleStore / MSSQL / CockroachDB dialects** — no seat owns them; the recipes here are pg + sqlite and mislead if stretched.
-- **Cloudflare D1** — `cloudflare-builder`'s. It is the sqlite dialect, but the binding and migration CLI are Workers-shaped.
+- **Cloudflare D1** — the sqlite dialect over the `d1` driver, but the migration CLI and the rebuild are D1's: the `sqlite` skill's `reference/d1.md`.
 - **Typing the query surface** (generics, inference, `.d.ts`) — the `typescript` skill, in whichever seat owns the code.

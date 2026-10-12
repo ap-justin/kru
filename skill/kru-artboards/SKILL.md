@@ -1,6 +1,6 @@
 ---
 name: kru-artboards
-description: Artboards — self-contained `.dc.html` files drafted into the repo's design-work path for the user to open in a browser. Use when a look is unsettled and someone has to see it before a screen is built: 2-4 directions at bootstrap, a screen set once a look is settled, a re-draft after the user's verdict.
+description: Artboards — self-contained `.dc.html` files drafted into the repo's design-work path for the user to open in a browser. Use when a look is unsettled and someone has to see it before a screen is built — 2-4 directions at bootstrap, a screen set once a look is settled, a re-draft after the user's verdict.
 ---
 
 The artboard mechanics `ui-designer` draws on, and the team's whole design surface. A direction is a **static render the user opens in a browser**, and reshaping one is a re-brief to the seat (`{KRU_HOME}/kru/references/ui-practice.md` → *The artboards*).

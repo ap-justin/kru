@@ -3,7 +3,7 @@
 *(said “crew”)*
 
 An engineering team for **opencode**. A primary `kru` agent scopes the work, detects the stack, and
-routes it to 31 specialist subagents — builders, reviewers, design, platform — each pinned to its
+routes it to 41 specialist subagents — builders, reviewers, design, platform — each pinned to its
 framework's official source rather than to training data, and each **on the model its seat is worth**
 through opencode zen (`MODELS.md`).
 
@@ -29,7 +29,7 @@ is known. The repo stays the source — edit, `node scripts/port.mjs`, then `kru
 ### Alongside the Claude Code original
 The two never collide. opencode reads `~/.config/opencode` and `~/.claude/skills`; the Claude plugin
 lives in `~/.claude/plugins/cache`, which opencode never scans. What they **share on purpose** is the
-state store at `~/.claude/kru/` — the same briefs, plans, tickets, todos and learnings inbox, so a
+state store at `~/.kru/` — the same briefs, plans, tickets, todos and learnings inbox, so a
 plan started in one harness continues in the other.
 
 - **Already running kru, adding opencode** → `kru-oc install`. It reports the Claude-side version and
@@ -42,11 +42,11 @@ file — `~/.config/opencode/AGENTS.md` if it exists, otherwise `~/.claude/CLAUD
 would silently shadow your own global rules.
 
 ## Requirements
-- **opencode 1.18 or newer**, and **node 22+** for the port and install scripts.
+- **opencode 1.19 or newer**, and **node 22+** for the port and install scripts.
 - **opencode zen access** to the five models the seats are pinned to: `claude-opus-5`, `kimi-k3`,
   `glm-5.3`, `glm-5.3-flash`, `gemini-3.8-flash`. Retier them in one place — `scripts/port.mjs` →
   `ZEN` — then re-port. The reasoning per tier is `MODELS.md`.
-- **`jq`**, for the two shell gates. Without it they fail open and the team still runs, ungated.
+- **`jq`**, for the shell gates. Without it they fail open and the team still runs, ungated.
 - **The `chrome-devtools` MCP server**, for the visual and accessibility reviewers only; without it they audit from source. In `~/.config/opencode/opencode.json`, keyed exactly `chrome-devtools` (the key is the tool prefix the seats name):
   ```json
   {
@@ -64,8 +64,8 @@ would silently shadow your own global rules.
   { "mcp": { "context7": { "type": "remote", "enabled": true, "url": "https://mcp.context7.com/mcp" } } }
   ```
 - **Optional, for generated image/video assets:** `GOOGLE_API_KEY` (Google AI Studio) and a one-time
-  `npm install` in this repo. Without them the `graphic-designer` seat reports what's missing
-  and offers a fallback instead of shipping a placeholder.
+  `npm` on the PATH — the asset script installs its own deps on first run. Without them the
+  `graphic-designer` seat reports what's missing and offers a fallback instead of shipping a placeholder.
 
 ## First run
 In the repo you want the team to work on:
@@ -83,39 +83,60 @@ Then just ask: *"add feature Y"*, *"fix Z"*, *"build a landing page for X"*. The
 
 ## What it does to your machine
 The team is opinionated about process, and it enforces that with one plugin (`plugin/kru.ts`) wrapping
-the two shell gates. Each interruption below is one you can turn off.
+upstream's shell gates. Each interruption below is one you can turn off.
 
 | When | What happens | Turn it off |
 |---|---|---|
-| First tool call of a session not on the `kru` agent | Refuses once, naming the two routes to the lead contract, so no build starts off-contract | `export KRU_NO_LEAD_GATE=1`, or `touch ~/.claude/kru/lead-gate/off` to keep it off for good |
-| Dispatching a seat | Refuses a handoff that carries stale line numbers, restates a rule the seat already has, or leaves a decision open | `export KRU_NO_GATE=1` |
+| Session start, in a repo with no sheet | Asks the lead to name `/kru/setup` once | the lead gate's switches |
+| First tool call of a session not on the `kru` agent | Refuses once, naming the two routes to the lead contract, so no build starts off-contract | `export KRU_NO_LEAD_GATE=1`, or `touch ~/.kru/lead-gate/off` to keep it off for good |
+| During `/kru/brainstorm` | Refuses every write until you say go (or run `/kru/brief`); reads stay open | — |
+| Dispatching a seat | Refuses a handoff that carries stale line numbers, restates a rule the seat already has, or leaves a decision open, and logs the refusal; adds the learnings channel and a review's report path to the brief when it lacks them | `export KRU_NO_GATE=1` |
 | While a session has unaudited dispatches | Adds a standing line asking for the dispatch auditor before the turn ends | `export KRU_NO_AUDIT=1` |
-| After each dispatch | Appends one line to a session ledger the auditor reads | — |
+| After each dispatch | Appends one line to a session ledger the auditor reads; a return missing its `Return pass:` line comes back with an ask to request it | — |
+| Session start and every turn end, with `KRU_STORE_REPO` set | Pulls, then commits and pushes, the store through that git repo | `export KRU_NO_STORE_SYNC=1` |
 
-It writes outside your repo, never inside it — the one exception is `/kru/setup`, which edits
-that repo's `AGENTS.md`:
+It writes outside your repo. Two things land inside it: `/kru/setup`, which edits that repo's
+`AGENTS.md`, and what the seats learn about the repo, in `.claude/agent-memory-local/` (setup
+git-ignores it). Every path below is resolved by `scripts/kru-store.sh`; `bash
+~/.config/opencode/kru/scripts/kru-store.sh where` prints where yours is when it isn't here.
 
-- `~/.claude/kru/management/<project>/` — briefs, plans, tickets, todos, issues. Kept at user
+- `~/.kru/management/<project>/` — briefs, plans, tickets, todos, issues. Kept at user
   level on purpose: your repo stays clean, and the plan survives branch churn and a re-clone.
-- `~/.claude/kru/inbox.md`, `patterns/` — preferences you bank with `/kru/remember`.
-- `~/.claude/kru/audit/`, `lead-gate/` — per-session bookkeeping for the hooks above; audit
+- `~/.kru/inbox.md`, `patterns/` — preferences you bank with `/kru/remember`.
+- `~/.kru/refusals.jsonl` — dispatches the handoff gate refused, capped at 500 lines;
+  `/kru/roster learn` reads it for misfires and drains it.
+- `~/.kru/audit/`, `lead-gate/` — per-session bookkeeping for the hooks above; audit
   ledgers self-delete after 7 days.
 - `${TMPDIR}/kru-review/` — review reports, so an audit trail stays out of the conversation.
+
+Three env vars move it: **`KRU_HOME`** relocates everything (default `~/.kru` — upstream's name for
+the store, unrelated to this fork's install dir), **`KRU_PROJECT`** names the project's store folder
+in place of the repo's folder name, and **`KRU_PROJECT_STORE`** pins one project's plan store.
+`references/store.md` is the whole map. A store kept at `~/.claude/kru/` by this fork's earlier
+versions moves to `~/.kru/` the first time the plugin loads or `kru-oc install` runs — never over a
+`~/.kru/` that already holds files, and not when `KRU_HOME` names another root.
 
 ## Commands
 **Getting started**
 - `/kru/setup`: set the team up in this repo. Once per repo, again when the repo or the plugin moves.
+- `/kru/propagate` `[vX.Y.Z]`: from this repo, carry a release's setup changes to every set-up repo and push them after one confirm.
 - Then ask: "add feature Y", "fix Z", "build a landing page for X". Or `/kru/lead <task>`.
 
 **Coding sessions**
+- `/kru/brainstorm <idea>`: grill an idea like `/kru/brief`, nothing saved; say go and it becomes the brief.
 - `/kru/brief <subject>`: grill a change and keep the record before building.
+- `/kru/copy-deck` `[<page>]`: write a marketing page's argument and copy before it's designed or built.
 - `/kru/todo <the thing>`, `/kru/issue <what's wrong>`: park a want or a defect without breaking the session.
 - `/kru/remember <what you liked>`: bank a preference for the team to absorb later.
 - `/kru/landed`: after the PR merges, sync back onto the base branch.
-- `/kru/comment-fix`, `/kru/prose-fix`, `/kru/doc-fix` `[<path> | <branch> | <pr>]`: fix comments, rendered copy, or doc prose in place.
+- `/kru/text-fix` `[<path> | <branch> | <pr>]`: every text pass the target earns — comments, rendered copy, doc prose, agent docs — in one go. The three verbs under it run alone too: `/kru/comment-fix`, `/kru/prose-fix`, `/kru/doc-fix`.
+- `/kru/eval-review` `[<eval dir>]`: audit a Claude Code plugin eval suite for checks that pass or fail for the wrong reason, and fix them.
 
 **Backlog and tech debt**
+- `/kru/reflect` `[<pr> | <branch> | <commit> | everything]`: every seat looks back over its own lane, then the fixes get scoped, sliced and landed.
 - `/kru/todos`, `/kru/issues`: work the backlog; each entry landed is deleted.
+- `/kru/issues-loop`, `/kru/todos-loop` `[<max files>]`: fix defects or build wants one commit at a time, without stopping to ask, until the branch reaches the changed-file cap (default 80); product calls wait for the end.
+- `/kru/briefs`: check every brief against what shipped; tick, archive, or resume one.
 - `/kru/design-system audit`: audit the design system.
 - `/kru/seo-review`, `/kru/review-animations`, `/kru/improve-animations`, `/kru/design-gallery`: audits on shipped pages.
 - `/kru/ux-review <flow>`: audit a user flow — signup, checkout — end to end through source.
@@ -123,12 +144,15 @@ that repo's `AGENTS.md`:
 ## Stack
 - **UI**: React, Svelte 5, Web Components.
 - **Framework**: React Router 7, Next.js App Router, TanStack Start, SvelteKit, Go-served React, Python.
-- **Data**: Postgres, SQLite, Sanity.
-- **Auth and payments**: Better Auth, Stripe.
+- **API**: Hono, on any runtime.
+- **Data**: Postgres, SQLite, Turso, Sanity.
+- **Auth, payments and accounting**: Better Auth, Stripe, PayPal, Chariot (DAF grants), NOWPayments (crypto), QuickBooks Online.
+- **Integrations**: Zapier.
 - **Platform**: Vercel, Cloudflare, Fly.io.
 - **Tooling**: pnpm, Turborepo, Biome.
+- **Programs and packages**: Node CLIs, scripts and workers; Vite plugins, MCP servers, small Node libraries.
 
-Design runs upstream of every build (flows, artboards, assets) and review after it (correctness, structure, rendered UI, accessibility, UX). The seats behind each layer, and how to spawn one directly: `ROSTER.md`.
+Design runs upstream of every build (flows, artboards, brand identity, marketing copy, assets) and review after it (correctness, structure, rendered UI, accessibility, UX). The seats behind each layer, and how to spawn one directly: `ROSTER.md`.
 
 A stack with no seat is a question the lead brings to you before it guesses.
 

@@ -1,6 +1,6 @@
 # Models — one per seat, through opencode zen
 
-Upstream pins every seat to `claude-opus-5` (three to `claude-sonnet-5`), because that is what its
+Upstream pins most seats to `claude-opus-5-5` (seven to `claude-sonnet-5-5`), because that is what its
 harness sells. This fork is zen-native: each seat runs on the model its *work* is worth, and the map
 lives in exactly one place — `scripts/port.mjs` → `ZEN` and `SEATS`. Nothing else in the tree names a
 model id: `ROSTER.md` → *Model tiers* points here, and every seat's frontmatter is generated. Edit there, run
@@ -10,9 +10,9 @@ model id: `ROSTER.md` → *Model tiers* points here, and every seat's frontmatte
 
 | tier | model | $/1M in | seats |
 |---|---|---|---|
-| **judgment** | `opencode/claude-opus-5` | 5.00 | the lead (primary), `planner`, `code-reviewer`, `architecture-reviewer`, `ux-auditor`, `ux-designer` |
-| **ui** | `opencode/kimi-k3` | 3.00 | `react-ui-builder`, `svelte-ui-builder`, `web-components-builder`, `ui-designer`, `graphic-designer` |
-| **coding** | `opencode/glm-5.3` | 1.40 | the 18 remaining builders — frameworks, data, auth, payments, platform, tooling, tests |
+| **judgment** | `opencode/claude-opus-5` | 5.00 | the lead (primary), `planner`, `code-reviewer`, `architecture-reviewer`, `ux-auditor`, `ux-designer`, `conversion-copywriter` |
+| **ui** | `opencode/kimi-k3` | 3.00 | `react-ui-builder`, `svelte-ui-builder`, `web-components-builder`, `ui-designer`, `graphic-designer`, `brand-designer` |
+| **coding** | `opencode/glm-5.3` | 1.40 | the 26 remaining seats — frameworks, APIs, data, auth, payments, integrations, platform, tooling, tests |
 | **vision** | `opencode/gemini-3.8-flash` | 1.50 | `visual-reviewer`, `accessibility-reviewer` |
 | **mechanical** | `opencode/glm-5.3-flash` | 0.15 | `dispatch-auditor` |
 
@@ -23,9 +23,11 @@ routing, briefing and reading returns: a bad call there costs a whole build, whi
 where the most expensive model is the cheap option. The two adversarial reviewers are the same
 economics inverted — a missed bug ships. `planner` and `ux-designer` write the documents every later
 seat executes against, so an error compounds across sessions rather than staying in one file.
+`conversion-copywriter` is the same case on a marketing page: its deck settles the position, the
+section order and every claim, and the artboards and the build are both drawn around it verbatim.
 
 **UI — `kimi-k3` for the seats where taste is the deliverable.** Component structure, spacing rhythm,
-state coverage, the artboards a look is settled on. Strong instruction-following on long style
+state coverage, the artboards a look is settled on, and `brand-designer`'s hand-drawn marks. Strong instruction-following on long style
 contracts matters more here than raw reasoning depth, and these seats are handed a closed token set
 rather than asked to decide anything.
 
@@ -68,10 +70,10 @@ here.
 
 Two things worth knowing before a retier:
 
-- **The cheap tier is where the volume is.** 18 of 31 seats are `coding`, and a build dispatches them
+- **The cheap tier is where the volume is.** 26 of 41 seats are `coding`, and a build dispatches them
   repeatedly. Raising that tier moves the bill far more than raising `judgment`, which runs once per turn.
 - **A model id that no longer exists fails at dispatch, not at install.** Nothing in the port validates
   against the catalog; `opencode models` is the check.
 
 The current catalog and prices: <https://opencode.ai/docs/zen/>. Prices above are the input side as of
-this fork's port of kru 0.82.0 — they move, and the tiers are the decision, not the numbers.
+this fork's port of kru 0.82.0 (not re-checked at 0.148.0) — they move, and the tiers are the decision, not the numbers.

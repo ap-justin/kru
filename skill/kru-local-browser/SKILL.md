@@ -2,6 +2,7 @@
 name: kru-local-browser
 description: Drive the running local dev app in a real browser at localhost — QA a change, reproduce a UI bug, measure rendered DOM and computed styles. Use whenever the target URL is localhost.
 allowed-tools: chrome-devtools_new_page, chrome-devtools_navigate_page, chrome-devtools_list_pages, chrome-devtools_select_page, chrome-devtools_close_page, chrome-devtools_take_snapshot, chrome-devtools_take_screenshot, chrome-devtools_emulate, chrome-devtools_resize_page, chrome-devtools_click, chrome-devtools_hover, chrome-devtools_fill, chrome-devtools_fill_form, chrome-devtools_press_key, chrome-devtools_wait_for, chrome-devtools_evaluate_script, chrome-devtools_list_console_messages, chrome-devtools_list_network_requests, read
+user-invocable: false
 ---
 
 <!-- vendored (locally authored — no upstream) → `skills/local-browser`. Thin project wrapper over the `chrome-devtools` MCP server (ChromeDevTools/chrome-devtools-mcp), backing the `/kru/visual-review` and `/kru/accessibility-review` passes. Every fact below was verified against chrome-devtools-mcp@1.7.0 on 2026-08-24 by driving the server directly — re-verify the clamp and the whole-state behaviour after a server upgrade rather than trusting this file. No upstream skill exists → no re-sync source; maintain it here. -->
@@ -14,13 +15,13 @@ The server runs **headless** on a persistent profile at `~/.cache/chrome-devtool
 
 ## 1. The dev server is the user's
 
-Ask the user to start it, and wait for their confirmation before opening anything. If nothing responds at the target URL, stop and ask — a failed load is theirs to fix, not yours to route around.
+Starting it is the user's, never yours. Probe the target URL first; if nothing responds, stop and report that, naming the URL — to the user inline, in your return as a seat. A failed load is theirs to fix, not yours to route around.
 
 One 500 is not the app's: a workspace package's new `exports` entry doesn't reach a running Vite dev server — Node caches the `package.json` it already resolved, so every import of the new subpath fails with *is not exported under the conditions […]* while `tsc` and vitest both pass. Read it as a restart, never as a bad `exports` entry, and ask for the restart in the same slice.
 
 ## 2. Work from snapshots, not screenshots
 
-`take_snapshot` returns the a11y tree with a `uid` per element, and every interaction tool takes that `uid`. Screenshots are for the human reading the report: capture with `filePath` and `read` the file when a defect needs to be *seen*.
+`take_snapshot` returns the a11y tree with a `uid` per element, and every interaction tool takes that `uid`. Screenshots are for the human reading the report: capture with `filePath` and `read` the file when a defect needs to be *seen*. A full-viewport capture taken just after a sheet, dialog or popover opens can paint a stale compositor frame that disagrees with `getBoundingClientRect` and the computed transform; before reporting geometry read off one, re-take it element-scoped (by `uid`) — where the picture and the numbers disagree, the picture is the one that's wrong.
 
 ## 3. Set a breakpoint with `emulate`, and carry every override on every call
 
@@ -33,7 +34,7 @@ The viewport override **survives navigation** — set it once per breakpoint and
 
 ## 4. On an auth redirect, hand back
 
-Headless means there is no window for the user to log into. The profile is the seam: it persists, so one interactive login serves every later run. Give them the command, wait for confirmation, then re-navigate.
+Headless means there is no window for the user to log into. The profile is the seam: it persists, so one interactive login serves every later run. Give them the command and stop — inline, wait for their confirmation, then re-navigate; as a seat with no user channel, return the command and the routes it blocked.
 
 ```bash
 # user runs this, logs in, quits Chrome — the headless server picks up the cookies
@@ -72,4 +73,4 @@ CDP scrolls the target into view before the press, so a scroll-position read acr
 
 ## Done when
 
-Every claim about the app is backed by an observed snapshot, screenshot, or `evaluate_script` result — never inferred from source — and `close_page` has run on the pages you opened.
+Every claim about what rendered is backed by an observed snapshot, screenshot, or `evaluate_script` result; a cause may come from source, cited `file:line`; and `close_page` has run on the pages you opened.

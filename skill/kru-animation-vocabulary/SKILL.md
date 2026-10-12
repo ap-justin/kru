@@ -1,13 +1,15 @@
 ---
 name: kru-animation-vocabulary
-description: Reverse-lookup glossary that turns a vague description of a web animation or motion effect into its exact term ("the bouncy thing when a popover opens" → Pop in; "the iOS rubber-band scroll" → Rubber-banding). Use when the user asks "what's it called when…", or describes a motion effect without knowing its name and wants the right word to prompt an AI or designer with. For naming an effect, not designing or building one.
+description: Reverse-lookup glossary turning a vague description of a web animation or motion effect into its exact term ("the bouncy thing when a popover opens" → Pop in). Use when the user asks "what's it called when…" or describes a motion effect without its name. For naming, not building.
+user-invocable: false
 ---
 
 <!-- vendored from `emilkowalski/skills` (main, sha 6bf2443) → `skills/animation-vocabulary`.
      Emil Kowalski (Sonner, Vaul, animations.dev) — the reference source for web-animation craft;
      no first-party animation source exists, so this authored pack is the legitimate backing.
      Carried ambiently by the UI component builders (`react-ui-builder`/`svelte-ui-builder`) — build-side motion craft.
-     Kept verbatim; re-sync: re-download from https://raw.githubusercontent.com/emilkowalski/skills/main/skills/animation-vocabulary/. -->
+     Kept verbatim; re-sync: re-download from https://raw.githubusercontent.com/emilkowalski/skills/main/skills/animation-vocabulary/.
+     description trimmed locally — keep on re-sync. -->
 
 # Animation Vocabulary
 

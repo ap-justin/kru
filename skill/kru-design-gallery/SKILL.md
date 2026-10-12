@@ -9,7 +9,7 @@ Every component and every state it has, on one page, out of the repo's real part
 
 ## Convention over configuration — the whole design
 
-A preview is a source file that renders one component in the states worth seeing and default-exports it. The gallery finds it by globbing the directory. **Registration is the file existing.**
+A preview is `previews/<component>.tsx` (the stack's extension): one default export rendering one component in each state worth seeing, using the component's own prop names. The gallery finds it by globbing the directory. **Registration is the file existing.**
 
 ```tsx
 // previews/button.tsx
@@ -17,10 +17,9 @@ import { Button } from "@app/ui";
 
 export default () => (
   <>
-    <Button variant="primary">Donate</Button>
-    <Button variant="primary" disabled>Donate</Button>
-    <Button variant="primary" is_loading>Donate</Button>
-    <Button variant="primary" icon aria-label="Donate" />
+    <Button>Label</Button>
+    <Button disabled>Label</Button>
+    {/* each state the component's own props name */}
   </>
 );
 ```

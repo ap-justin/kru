@@ -10,11 +10,14 @@
 import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync, rmSync, statSync, copyFileSync } from "node:fs"
 import { join, dirname } from "node:path"
 import { fileURLToPath } from "node:url"
-import { homedir } from "node:os"
+import { homedir, tmpdir } from "node:os"
 import { execFileSync } from "node:child_process"
+import { migrateStore } from "../scripts/kru-store-migrate.mjs"
 
 const REPO = join(dirname(fileURLToPath(import.meta.url)), "..")
-const STORE = join(homedir(), ".claude", "kru")
+// the store's cross-project root, as scripts/kru-store.sh resolves it — KRU_HOME
+// is upstream's env var for the store, not this fork's {KRU_HOME} placeholder
+const STORE = process.env.KRU_HOME || join(homedir(), ".kru")
 const CLAUDE_CACHE = join(homedir(), ".claude", "plugins", "cache", "kru", "kru")
 
 const args = process.argv.slice(2)
@@ -47,7 +50,33 @@ const LAYOUT = [
   ["scripts", "kru/scripts"],
 ]
 
+// the placeholders install fills in. a seat's external_directory block lists
+// {KRU_TMP} beside /tmp, so where they coincide the second line is dropped —
+// opencode rejects a frontmatter mapping with a repeated key.
+const PLACEHOLDERS = () => [
+  ["{KRU_HOME}", null],
+  ["{KRU_STORE}", STORE],
+  ["{KRU_TMP}", tmpdir()],
+]
+const PLACEHOLDER = /\{KRU_(HOME|STORE|TMP)\}/
+function materialize(src, home) {
+  let out = src
+  for (const [token, value] of PLACEHOLDERS()) out = out.replaceAll(token, value ?? home)
+  const seen = new Set()
+  return out
+    .split("\n")
+    .filter((l) => {
+      if (!/^ {4}".*": allow$/.test(l)) return true
+      if (seen.has(l)) return false
+      seen.add(l)
+      return true
+    })
+    .join("\n")
+}
+
 const TEXT = /\.(md|sh|ts|mjs|js|json|txt|html|css|py)$/
+// the repo's own checks: they run from a checkout, never from a config dir
+const DEV_ONLY = new Set(["verify.sh", "verify-tree.mjs", "smoke.sh", "hooks.test.sh", "kru-store-migrate.test.mjs"].map((f) => join(REPO, "scripts", f)))
 const version = () => readFileSync(join(REPO, "VERSION"), "utf8").trim()
 const log = (...a) => console.log(...a)
 
@@ -56,7 +85,7 @@ function copyTree(from, to, home, stats) {
   if (st.isDirectory()) {
     mkdirSync(to, { recursive: true })
     for (const e of readdirSync(from)) {
-      if (e === "node_modules" || e.startsWith(".venv") || e === ".DS_Store") continue
+      if (e === "node_modules" || e.startsWith(".venv") || e === ".DS_Store" || DEV_ONLY.has(join(from, e))) continue
       copyTree(join(from, e), join(to, e), home, stats)
     }
     return
@@ -64,9 +93,9 @@ function copyTree(from, to, home, stats) {
   mkdirSync(dirname(to), { recursive: true })
   if (TEXT.test(from)) {
     const src = readFileSync(from, "utf8")
-    // {KRU_HOME} is the one thing install materializes; everything else ships
-    // as the repo spells it
-    const next = src.replaceAll("{KRU_HOME}", home)
+    // the placeholders are the one thing install materializes; everything
+    // else ships as the repo spells it
+    const next = materialize(src, home)
     const prev = existsSync(to) ? readFileSync(to, "utf8") : null
     if (prev !== next) {
       writeFileSync(to, next)
@@ -80,7 +109,14 @@ function copyTree(from, to, home, stats) {
 
 function claudeSide() {
   if (!existsSync(CLAUDE_CACHE)) return null
-  const versions = readdirSync(CLAUDE_CACHE).filter((v) => /^\d/.test(v)).sort()
+  // numeric per part: a plain sort puts 0.99.0 after 0.148.0
+  const parts = (v) => v.split(/[.+-]/).map((n) => parseInt(n, 10) || 0)
+  const newer = (a, b) => {
+    const [x, y] = [parts(a), parts(b)]
+    for (let i = 0; i < Math.max(x.length, y.length); i++) if ((x[i] ?? 0) !== (y[i] ?? 0)) return (x[i] ?? 0) - (y[i] ?? 0)
+    return 0
+  }
+  const versions = readdirSync(CLAUDE_CACHE).filter((v) => /^\d/.test(v)).sort(newer)
   return versions.length ? versions[versions.length - 1] : null
 }
 
@@ -119,6 +155,9 @@ function install() {
 
   // the shared state store: briefs, plans, tickets, todos, the learnings inbox.
   // both forks read and write it, which is what makes a plan portable between them.
+  // an older store under ~/.claude moves first, or the mkdir below would shadow it
+  const moved = migrateStore()
+  if (moved) log(moved)
   mkdirSync(join(STORE, "management"), { recursive: true })
 
   if (flag("default-agent")) setDefaultAgent(home)
@@ -129,7 +168,7 @@ function install() {
   const claude = claudeSide()
   if (claude) {
     const pin = upstreamPin()
-    log(`\nclaude-code kru ${claude} is also installed — they share the store at ~/.claude/kru/`)
+    log(`\nclaude-code kru ${claude} is also installed — they share the store at ${STORE}`)
     if (pin && claude !== pin)
       log(`  this fork is ported from kru ${pin}; re-port before trusting a contract difference (see PORTING.md)`)
   }
@@ -157,7 +196,8 @@ function uninstall() {
   const home = configDir()
   const targets = [
     ...LAYOUT.map(([, to]) => to),
-    ...readdirSync(join(home, "skill"), { withFileTypes: true })
+    // a config dir that never got skills (or lost them) has no skill/ at all
+    ...(existsSync(join(home, "skill")) ? readdirSync(join(home, "skill"), { withFileTypes: true }) : [])
       .filter((e) => e.name.startsWith("kru-"))
       .map((e) => join("skill", e.name)),
   ]
@@ -169,7 +209,7 @@ function uninstall() {
     n++
   }
   log(`removed ${n} path(s) from ${home}`)
-  log(`left alone: ~/.claude/kru/ — the shared store (plans, tickets, todos, learnings inbox)`)
+  log(`left alone: ${STORE} — the shared store (plans, tickets, todos, learnings inbox)`)
 }
 
 function doctor() {
@@ -202,11 +242,11 @@ function doctor() {
     for (const e of readdirSync(dir, { withFileTypes: true })) {
       const p = join(dir, e.name)
       if (e.isDirectory()) scan(p)
-      else if (TEXT.test(p) && readFileSync(p, "utf8").includes("{KRU_HOME}")) stale++
+      else if (TEXT.test(p) && PLACEHOLDER.test(readFileSync(p, "utf8"))) stale++
     }
   }
   for (const d of ["agent", "command", "skill", "kru", "plugin"]) scan(join(home, d))
-  stale ? bad("paths materialized", `${stale} file(s) still carry {KRU_HOME} — run: kru-oc sync`) : ok("paths materialized", "no placeholders left")
+  stale ? bad("paths materialized", `${stale} file(s) still carry a {KRU_*} placeholder — run: kru-oc sync`) : ok("paths materialized", "no placeholders left")
 
   const seats = existsSync(join(home, "agent", "kru")) ? readdirSync(join(home, "agent", "kru")).length : 0
   const skills = existsSync(join(home, "skill")) ? readdirSync(join(home, "skill")).filter((d) => d.startsWith("kru-")).length : 0
@@ -230,7 +270,7 @@ function claudeInstructions() {
   log(`to run the claude-code fork alongside this one, install upstream kru${pin ? ` ${pin}` : ""}:\n`)
   log(`  claude plugin marketplace add ap-justin/kru`)
   log(`  claude plugin install kru@kru\n`)
-  log(`both forks then share ~/.claude/kru/ — the same briefs, plans, tickets, todos and learnings inbox.`)
+  log(`both forks then share ${STORE} — the same briefs, plans, tickets, todos and learnings inbox.`)
   log(`this fork is a port, so the two can differ: \`kru-oc doctor\` compares versions and PORTING.md says what opencode has no equivalent for.`)
 }
 

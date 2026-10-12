@@ -37,12 +37,14 @@ const SEATS = {
   "architecture-reviewer": { model: ZEN.judgment, temperature: 0.1 },
   "ux-auditor": { model: ZEN.judgment, temperature: 0.1 },
   "ux-designer": { model: ZEN.judgment },
+  "conversion-copywriter": { model: ZEN.judgment },
   // ui + design craft
   "react-ui-builder": { model: ZEN.ui },
   "svelte-ui-builder": { model: ZEN.ui },
   "web-components-builder": { model: ZEN.ui },
   "ui-designer": { model: ZEN.ui },
   "graphic-designer": { model: ZEN.ui },
+  "brand-designer": { model: ZEN.ui },
   // vision
   "visual-reviewer": { model: ZEN.vision, temperature: 0.1 },
   "accessibility-reviewer": { model: ZEN.vision, temperature: 0.1 },
@@ -81,13 +83,27 @@ const TOOLS = {
   SendUserFile: null,
 }
 
+// the paths outside the working repo an allowlisted seat still reaches: the
+// install dir (skills it reads by path, the store script, references), the
+// store (ledgers, inbox, plan/), and where review seats write their reports.
+// opencode gates every read, edit and bash path outside the repo on
+// `external_directory`, and `"*": deny` denies that too. its patterns expand
+// only ~ and $HOME, so the store and $TMPDIR are placeholders bin/kru-oc.mjs
+// materializes at install, next to {KRU_HOME}.
+const EXTERNAL = ["{KRU_HOME}/**", "{KRU_STORE}/**", "{KRU_TMP}/kru-review/**", "/tmp/kru-review/**"]
+
 const mcpTool = (name) => name.replace(/^mcp__/, "").replace(/__/g, "_")
 
 // ---------------------------------------------------------------------------
 // harness vocabulary. order matters: the narrow path rules run before the
 // generic ones, and every replacement is a string the rule can never re-match.
 // ---------------------------------------------------------------------------
+// where a seat keeps what it learned about one repo (Block Q)
+const MEMORY_DIR = ".claude/agent-memory-local"
+
 const PLUGIN_ROOT = /\$\{CLAUDE_PLUGIN_ROOT\}/g
+
+const PATHS_END = Symbol("paths-end")
 
 const REWRITES = [
   // plugin-root paths → the installed config dir ({KRU_HOME}, materialized by
@@ -103,15 +119,24 @@ const REWRITES = [
   [/`agents\/`/g, "`agent/kru/`"],
   [/`skills\/\*`/g, "`skill/kru-*`"],
   [/(^|[\s`('"])skills\/\*\//g, "$1skill/kru-*/"],
+  [/(^|[\s`('"])skills\/\{([a-z0-9,-]+)\}\//g, "$1skill/kru-{$2}/"],
   // slash commands: /kru:brief → /kru/brief
   [/\/kru:([a-z0-9-]+)/g, "/kru/$1"],
+  [/`\/kru-([a-z0-9-]+)/g, "`/kru/$1"],
+  // ↑ the layout and the names: everything above also runs on PATHS_ONLY files
+  PATHS_END,
   // tools: claude capitalizes its tool names, opencode lower-cases them. only
   // the backticked and list forms are safe to touch — bare "Read the file" is
   // the verb, and a rule that renamed it would rewrite half the prose.
   [/`(Read|Write|Edit|Grep|Glob|Bash|Skill|Task)`/g, (_m, t) => "`" + t.toLowerCase() + "`"],
   [/\b(Read|Grep|Glob|Write|Edit)\b(?=\s*[/,]\s*(Read|Grep|Glob|Write|Edit|Bash)\b)/g, (_m, t) => t.toLowerCase()],
   [/(?<=[/,]\s*)(Read|Grep|Glob|Write|Edit|Bash)\b/g, (_m, t) => t.toLowerCase()],
+  // opencode has one board tool, always on — no task tools to fall back from
+  [/the task tools \(`TaskCreate` ·\s+`TaskUpdate`, or `TodoWrite` where those are off\)/g, "`todowrite`"],
+  [/the task tools \(`TaskCreate` · `TodoWrite`\)/g, "the board (`todowrite`)"],
   [/\bTodoWrite\b/g, "todowrite"],
+  // the prose form vendored skills use ("call the Skill tool with …")
+  [/\b([Tt])he (Read|Write|Edit|Grep|Glob|Bash|Skill) tool\b/g, (_m, th, t) => th + "he `" + t.toLowerCase() + "` tool"],
   [/\bthe `?Agent`? tool\b/g, "the `task` tool"],
   [/\bAgent call\b/g, "`task` call"],
   [/`Agent` call/g, "`task` call"],
@@ -125,6 +150,8 @@ const REWRITES = [
   [/(^|[\s`(])\/diagnosing-bugs\b/g, "$1kru-diagnosing-bugs"],
   [/(^|[\s`(])\/testing\b/g, "$1kru-testing"],
   [/(^|[\s`(])\/research\b(?!-)/g, "$1`explore`"],
+  // the rule above lands inside a code span upstream already opened
+  [/``explore``/g, "`explore`"],
   [/`\/code-review`/g, "`kru/code-reviewer`"],
   [/(^|[\s(])\/code-review\b/g, "$1`kru/code-reviewer`"],
   // claude's built-in delegates → opencode's
@@ -186,11 +213,25 @@ const REWRITES = [
   [/`\.claude-plugin\/plugin\.json`/g, "`package.json`"],
   [/`\.claude-plugin\/marketplace\.json`/g, "`README.md`"],
   [/`plugin\.json`/g, "`package.json`"],
+  [/ equals the `marketplace\.json` plugin entry's `version`/g, ""],
   [/`marketplace\.json`/g, "`README.md`"],
   [/the plugin manifest is the one that gets forgotten/g, "`package.json` is the one that gets forgotten"],
   [/\| 3 \| `ROSTER\.md` → \*Model tiers\* \| a \*\*pinned\*\* row \(explicit full ID\) \+ one-line why — `inherit` is retired \|/g, "| 3 | `scripts/port.mjs` → `SEATS` | the seat's tier, or nothing where the `coding` default is right (`MODELS.md`) |"],
   [/\(b\) a \*Model tiers\* entry/g, "(b) a `scripts/port.mjs` → `SEATS` tier or the `coding` default"],
-  [/\(`claude-opus-5` \/ `claude-sonnet-5` — never omitted, never a floating `opus`\/`sonnet` alias\) and it matches its `ROSTER\.md` \*Model tiers\* row/g, "(`opencode/<model>`, never a floating alias) and it comes from `scripts/port.mjs` → `SEATS` rather than a hand edit"],
+  [/\(`claude-opus-5(?:-5)?` \/ `claude-sonnet-5(?:-5)?` — never omitted, never a floating `opus`\/`sonnet` alias\) and it matches its `ROSTER\.md` \*Model tiers\* row/g, "(`opencode/<model>`, never a floating alias) and it comes from `scripts/port.mjs` → `SEATS` rather than a hand edit"],
+  // seat memory: claude supplies it from a `memory: local` key, opencode has
+  // none, so the port writes the file and its read/write line into each seat
+  // carrying the block (portAgents). the path stays claude's so store-sync and
+  // setup's ignore line cover both forks.
+  [/Each carries `memory: local` in its frontmatter, and the harness supplies the directory, its read\/write instructions and the index on every run\./g, `opencode supplies no agent memory, so \`scripts/port.mjs\` writes the file (\`${MEMORY_DIR}/<seat>/MEMORY.md\`) and its read/write line into each one's block.`],
+  [/carries `memory: local` in its frontmatter and `## Memory \(this repo's facts\)`/g, "carries `## Memory (this repo's facts)`"],
+  [/ and `grep -l '\^memory: local' agent\/kru\/\*\.md` must list the same 29/g, ` and \`grep -l '${MEMORY_DIR}' agent/kru/*.md\` must list the same 29`],
+  [/\(\+ `memory: local` on a code-writing seat, Block Q\)/g, "(+ Block Q on a code-writing seat)"],
+  // the store's home: upstream argues it from claude's protected-path rule,
+  // which opencode doesn't have; here it is the home both forks share, and an
+  // older store under .claude is moved once (scripts/kru-store-migrate.mjs)
+  [/\*\*`~\/\.kru\/`, never `~\/\.claude\/kru\/`\*\*: `\.claude` is a protected directory[^\n]*?out of reach entirely\./g,
+    "**`~/.kru/`**: the home both forks of this team share, so a plan started in one harness continues in the other. A store this fork's earlier versions kept under `.claude` is moved there once, by `plugin/kru.ts` at load and by `kru-oc install`, and never over a store already there."],
   // the harness itself
   [/\bClaude Code\b/g, "opencode"],
   // opencode names an MCP tool `<server>_<tool>`, sanitizing the server; claude
@@ -203,7 +244,17 @@ const REWRITES = [
 // the harness this fork runs on; they stay hand-owned (PORTING.md).
 // the fork's own documents: they talk *about* both harnesses, so the vocabulary
 // rules would rewrite the sentences that explain the difference
-const HAND_OWNED = new Set(["skill/kru-update/SKILL.md", "SOURCES.md", "PORTING.md", "MODELS.md", "README.md"])
+const HAND_OWNED = new Set(["skill/kru-update/SKILL.md", "PORTING.md", "MODELS.md", "README.md"])
+
+// the fork's own checks and the store move: they name claude's vocabulary in
+// order to look for it, so normalizing them would blind the scan
+const FORK_OWNED = /^scripts\/(verify-tree\.mjs|verify\.sh|smoke\.sh|hooks\.test\.sh|kru-store-migrate(\.test)?\.mjs)$/
+
+// the official-source map names claude's surfaces on purpose (its design and
+// harness rows say what upstream uses and what this fork does instead), so only
+// the layout and name rules run on it; the prose is hand-owned. eval-review is
+// the same case: it audits a claude code plugin's eval suite, and says so.
+const PATHS_ONLY = new Set(["SOURCES.md", "skill/kru-eval-review/SKILL.md"])
 
 // references to surfaces opencode has no equivalent for. the port cannot
 // rewrite them — each is a judgment call recorded in PORTING.md — so it counts
@@ -221,14 +272,57 @@ const WATCH = [
 // phrasing no rule covers — the port fails rather than shipping it.
 const FORBIDDEN = [/\$\{CLAUDE_PLUGIN_ROOT\}/, /mcp__/, /\/kru:/]
 
-function rewrite(text, seats) {
+// the shell hooks take the install's config dir as their root, and the support
+// tree sits under its kru/ (bin/kru-oc.mjs → LAYOUT). upstream's root is the
+// plugin dir, laid out the way this repo used to be.
+const SH_REWRITES = [
+  [/\$\{([12]):-\$CLAUDE_PLUGIN_ROOT\}/g, "${$1:-}"],
+  [/"\$plugin_root\/agents"/g, '"$plugin_root/agent/kru"'],
+  [/\$plugin_root\/agents\//g, "$plugin_root/agent/kru/"],
+  [/\$plugin_root\/skills\/([a-z0-9-]+)\//g, "$plugin_root/skill/kru-$1/"],
+  [/\$plugin_root\/(scripts|hooks|references)\//g, "$plugin_root/kru/$1/"],
+  [/\$\{?plugin_root\}?\/(TRACKER|ROSTER|SOURCES|PREFERENCES)\.md/g, "$plugin_root/kru/$1.md"],
+  // seats are addressed kru/<seat>, and a sheet names them that way too
+  [/#kru:\}/g, "#kru/}"],
+  [/kru:\[a-z-\]\+/g, "kru/[a-z-]+"],
+  // a read-only seat: upstream reads the tools: allowlist, here the permission block
+  [/grep -m1 '\^tools:' "\$plugin_root\/agent\/kru\/\$seat\.md" \| grep -qvE '\\b\(Edit\|Write\)\\b' && readonly_seat=true/g,
+    `grep -q '^  "\\*": deny' "$plugin_root/agent/kru/$seat.md" && ! grep -q '^  edit: allow' "$plugin_root/agent/kru/$seat.md" && readonly_seat=true`],
+  [/\(substituted in hooks\.json\)/g, "(passed by plugin/kru.ts)"],
+  // the team's own repo has no sheet by design
+  [/\[ -f "\$top\/\.claude-plugin\/plugin\.json" \]/g, '[ -f "$top/scripts/port.mjs" ]'],
+  // the read-only listings of the harness a triage turn reaches for
+  [/'claude mcp list'\*\|'claude plugin list'\*\|'claude plugin details'\*\)/g, "'opencode mcp list'*|'opencode agent list'*|'opencode auth list'*|'opencode models'*)"],
+  // .claude/CLAUDE.md and CLAUDE.md both became AGENTS.md
+  [/"\$cwd\/AGENTS\.md" "\$cwd\/AGENTS\.md"/g, '"$cwd/AGENTS.md"'],
+]
+
+const MEMORY_LINE = (seat) =>
+  `Your memory is \`${MEMORY_DIR}/${seat}/MEMORY.md\` in the working repo — opencode supplies none, so read it at the start of a run when it exists, and keep it with \`edit\`.`
+
+function rewrite(text, seats, { sh = false, pathsOnly = false } = {}) {
   let out = text
-  for (const [re, to] of REWRITES) out = out.replace(re, to)
+  if (sh) for (const [re, to] of SH_REWRITES) out = out.replace(re, to)
+  for (const rule of REWRITES) {
+    if (rule === PATHS_END) {
+      if (pathsOnly) break
+      continue
+    }
+    out = out.replace(rule[0], rule[1])
+  }
+  // claude spelled an MCP tool `mcp__<server>__<tool>`; opencode `<server>_<tool>`
+  if (pathsOnly) out = out.replace(/\bmcp__[A-Za-z0-9_-]*/g, (m) => m.slice(5).replace(/__/g, "_") || "MCP")
   // upstream spells its own commands both `/kru:x` and bare `/x`; this fork
   // namespaces every one of them, so a bare reference is re-pointed from the
   // command set on disk rather than from a list that drifts
   for (const name of commandNames())
     out = out.replace(new RegExp(`(^|[\\s\`('"])\\/${name}(?![\\w/-])`, "g"), `$1/kru/${name}`)
+  // a vendored skill names its siblings bare ("call the `skill` tool with
+  // "grilling""); installed here they are kru-<name>, and the tree says which
+  // quoted words are skills
+  out = out.replace(/^.*\b[Tt]he `skill` tool\b.*$/gm, (line) =>
+    line.replace(/"([a-z0-9-]+)"/g, (m, n) => (existsSync(join(ROOT, "skill", `kru-${n}`)) ? `"kru-${n}"` : m)),
+  )
   // a bare `kru:<name>` is a seat (an agent address) or a skill (a skill-tool
   // name); the tree says which, so the rule doesn't have to guess.
   return out.replace(/\bkru:([a-z0-9-]+)/g, (_m, n) => (seats.has(n) ? `kru/${n}` : `kru-${n}`))
@@ -309,7 +403,7 @@ function portAgents() {
       ? null
       : fm.raw
           .split("\n")
-          .filter((l) => /^\s+\S+: allow$/.test(l))
+          .filter((l) => /^ {2}\S+: allow$/.test(l))
           .map((l) => l.trim().replace(/: allow$/, "").replace(/^"|"$/g, ""))
 
     const out = [`description: ${description}`, `mode: subagent`, `model: ${seat.model}`]
@@ -337,10 +431,17 @@ function portAgents() {
       out.push("permission:")
       out.push(`  "*": deny`)
       for (const k of allow) out.push(`  ${/[^a-z_]/.test(k) ? `"${k}"` : k}: allow`)
+      out.push("  external_directory:")
+      for (const p of EXTERNAL) out.push(`    "${p}": allow`)
       if (dropped.length) log(`  ${name}: dropped ${dropped.join(", ")} (no opencode equivalent)`)
     }
 
-    write(path, `---\n${out.join("\n")}\n---\n${fm.body.replace(/^\n*/, "\n")}`)
+    // Block Q's heading marks a seat upstream gives `memory: local`
+    let body = fm.body
+    if (!body.includes(MEMORY_LINE(name)))
+      body = body.replace(/^## Memory \(this repo's facts\)\n/m, (h) => `${h}${MEMORY_LINE(name)}\n`)
+
+    write(path, `---\n${out.join("\n")}\n---\n${body.replace(/^\n*/, "\n")}`)
   }
 }
 
@@ -395,9 +496,9 @@ function portText() {
     const rel = relative(ROOT, path)
     // generated trees are their generator's to normalize, or the two passes
     // fight over a line forever
-    if (/^(scripts\/port\.mjs|bin\/|plugin\/|command\/|agent\/kru\.md)/.test(rel)) continue
+    if (/^(scripts\/port\.mjs|bin\/|plugin\/|command\/|agent\/kru\.md)/.test(rel) || FORK_OWNED.test(rel)) continue
     const before = readF(path)
-    const src = HAND_OWNED.has(rel) ? before : rewrite(before, seats)
+    const src = HAND_OWNED.has(rel) ? before : rewrite(before, seats, { sh: rel.endsWith(".sh"), pathsOnly: PATHS_ONLY.has(rel) })
     if (src !== before) write(path, src)
   }
 }

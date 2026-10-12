@@ -1,5 +1,5 @@
 ---
-description: Survey a codebase's animation and motion code as a senior motion advisor, then produce a prioritized audit and self-contained implementation plans for other agents (or cheaper models) to execute.
+description: Audit a codebase's animation and motion code as a senior motion advisor and write prioritized, self-contained implementation plans for other agents.
 agent: kru
 ---
 

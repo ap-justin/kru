@@ -26,7 +26,7 @@ Flake confirmation: `go test -count=100 -run TestSuspect -failfast ./pkg/...`; p
 go test -covermode=atomic -coverpkg=./... -coverprofile=cover.out ./...
 go tool cover -func=cover.out
 ```
-Go's coverage is **statement** coverage, not branch — an `if err != nil { return err }` counts as covered when only the happy path ran. And `go test ./...` **drops any package with no `_test.go`** from the aggregate — not 0%, absent — which is what `-coverpkg=./...` corrects.
+Go's coverage is **statement** coverage, not branch — an `if err != nil { return err }` counts as covered when only the happy path ran. And without `-coverpkg=./...` each package counts only its own tests — a helper package with no `_test.go`, exercised end to end by a handler test, reads 0%; `-coverpkg=./...` credits it with what the other packages' tests ran.
 
 ## Integration tests
 - `//go:build integration` on the file; `go test -tags=integration ./...` runs them. Without the tag, `go test ./...` tries to reach a database on every developer's machine.

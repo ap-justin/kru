@@ -1,5 +1,5 @@
 ---
-description: The shape of a design system before its values exist — the seven foundations (color · typography · size · elevation · motion · primitives · shells) and whether each is whole.
+description: The shape of a design system before its values exist — seven foundations (color · typography · size · elevation · motion · primitives · shells).
 agent: kru
 ---
 

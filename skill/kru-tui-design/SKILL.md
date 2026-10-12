@@ -1,9 +1,12 @@
 ---
 name: kru-tui-design
-description: Terminal UI recipes for Bubble Tea (Go), Ratatui (Rust), Textual (Python) and Ink (React) — the frame measured in cells rather than characters, color on a background you have to detect, I/O that leaves the render loop, the exit path that gives the terminal back in every branch including panic, and resize as an event rather than a startup fact. Use when building or reviewing a terminal app, making an existing CLI interactive, or choosing a TUI framework. Terminal surfaces only — a browser UI is the UI builders' lane.
+description: Terminal UI recipes for Bubble Tea (Go), Ratatui (Rust), Textual (Python) and Ink (React) — cells, background color detection, I/O off the render loop, terminal restore on every exit, resize. Use when building or reviewing a terminal app, making a CLI interactive, or choosing a TUI framework.
+user-invocable: false
 ---
 
-Verified against docs on 2026-09-11 — Ratatui 0.30.2 · Bubble Tea v1.3.10 + v2.0.9 · Lip Gloss v1.1.0 + v2.0.6 · Textual 8.2.8 · Ink 7.1.1. Re-verify after a major bump; the per-stack currency check is `reference/frameworks.md`. What's below is the layer the docs don't carry.
+Verified against docs on 2026-09-11 — Ratatui 0.30.2 · Bubble Tea v1.3.10 + v2.0.9 · Lip Gloss v1.1.0 + v2.0.6 · Textual 8.2.8.
+Ink claims reproduced on **`ink@8.0.0`** with `react@19.3.0` and `ink-testing-library@4.0.0`, 2026-10-10.
+Re-verify after a major bump; the per-stack currency check is `reference/frameworks.md`. What's below is the layer the docs don't carry.
 
 **You borrow the terminal; you don't own it.** Its width changes mid-frame, its background may be white, its color depth may be four bits, its user may be piping you into `less`, and every mode you switch on is theirs to get back. Every recipe here follows from that, and the visual craft in `reference/visual.md` sits on top of it — a frame that survives the terminal comes first, which is the order most TUIs get wrong.
 
@@ -71,5 +74,5 @@ Framework APIs here move faster than this file: Bubble Tea and Lip Gloss both ha
 
 ## Owned elsewhere
 - **Browser UI** — `react-ui-builder` / `svelte-ui-builder` / `web-components-builder`. Terminal constraints invert most web instincts; carrying them across is the failure this skill prevents.
-- **A CLI that prints and exits** — flags, streams, exit codes are `ui-patterns` → `reference/terminal-output.md`. That tool wants argument design, and a render loop is the wrong medium for it.
-- **The language layer** — Go craft is the `go` skill, Python the `python` skill, TypeScript the `typescript` skill, in whichever seat owns the code.
+- **A CLI that prints and exits** — flags, streams, exit codes are the `cli` skill; what its output says to a person watching is `ui-patterns` → `reference/terminal-output.md`. That tool wants argument design, and a render loop is the wrong medium for it.
+- **The language layer** — Go craft is the `go` skill, Python the `python` skill, TypeScript the `typescript` skill (and the Node runtime the `node` skill), in whichever seat owns the code.

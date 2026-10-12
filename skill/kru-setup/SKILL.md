@@ -1,6 +1,6 @@
 ---
 name: kru-setup
-description: Set the team up in a repo — derive its standing answers, run the bars over its always-loaded AGENTS.md, and write the team into it in that file's own voice. A blank repo is grilled first (what, stack, finalize) and the team deployed from the decision. `prose` runs the pass alone. Re-run to re-derive.
+description: Set the team up in a repo — derive its standing answers, run the bars over its AGENTS.md, and write the team into it in that file's own voice. A blank repo is grilled first. `prose` runs the pass alone. Re-run to re-derive.
 disable-model-invocation: true
 argument-hint: "[prose | <repo path> — omit for cwd]"
 ---
@@ -27,7 +27,7 @@ it is a bigger hammer than the pruning needs.
 | *(none)* | this repo, both jobs — every step below |
 | a repo path | both jobs, there |
 | `prose` | the pass alone — every step below not marked *full run*. Read the surface, run the bars over every line already in it, propose the cuts. |
-| *(a blank repo)* | no manifest, lockfile or source to derive from — step 1b, then steps 4–6 |
+| *(a blank repo)* | no manifest, lockfile or source to derive from — step 1b, then 1c–1e and steps 4–6 |
 
 ## Do
 
@@ -67,14 +67,28 @@ for its own subsystem knows something the plugin does not.
 **What the repo knows that a skill lacks goes upstream.** The derivation reads the repo's own testing
 docs, configs and `.claude/skills/*`; where one carries a recipe a plugin skill would need in the next
 repo too — a `vitest` gotcha `skill/kru-vitest/` has no row for, a runner cost the skill doesn't state, a
-convention its docs are silent on — append it to `~/.claude/kru/inbox.md` in
+convention its docs are silent on — append it to the file `bash "{KRU_HOME}/kru/scripts/kru-store.sh" path inbox` names, in
 `{KRU_HOME}/kru/PREFERENCES.md`'s line format: lane `[code]`, source `setup`, citing the repo
 file it came from. The sheet still cites the fact for this repo (*The line between the plugin and the
 repo*, below).
 
+**A repo a major behind a skill gets a todo.** Each skill the `skills` field names carries its pin on
+the *Reproduced on* line beneath its frontmatter — the packages before its `with` are the claims, the
+ones after are context. Where the lockfile resolves one of those packages a major below the pin, the
+skill is coaching code the repo can't run, so the upgrade is a want: append it to the file
+`bash "{KRU_HOME}/kru/scripts/kru-store.sh" path todos` names, `discovered`, `plan: —`, value
+`~3`, urgency `~2`, effort `~3` per major behind (cap `~5`), one sub-bullet citing the skill's pin line, the
+lockfile entry, and the skill's `reference/migration.md` when it has one. A line already there naming
+the package is the want, filed — leave it.
+
+**Every other outdated dependency gets a todo too** — `pnpm outdated` (or the stack's equivalent)
+names them. Patch and minor bumps file as one catch-up line; each remaining major files as its own,
+same fields as above minus the skill pin. The lockfile is the evidence either way.
+
 Completion: every field carries a value with its derivation, or is absent — because this repo has no
 answer for it, or because the repo's own docs already are the answer (step 2); every repo-held recipe a
-plugin skill lacks has an inbox line.
+plugin skill lacks has an inbox line; every package a major behind its skill's pin has a todo line, and
+every other outdated one is on the catch-up line or its own major's.
 
 ### 1b. Blank repo — grill, then deploy — *full run*
 Nothing on disk answers step 1, so the user does, and the sheet is written from the **decision**. Load
@@ -86,11 +100,15 @@ Nothing on disk answers step 1, so the user does, and the sheet is written from 
    (`{KRU_HOME}/kru/references/routing.md`) and the from-scratch defaults
    (`{KRU_HOME}/kru/references/ui-practice.md`: `pnpm`, React where a design system will be
    built), with the reason each fits *this* subject. A lane the subject needs and no seat covers is
-   named as exactly that — the gate line's case, put to the user now.
-3. **Finalize the stack** — the user accepts, swaps or strikes per lane. Completion: every lane the
-   subject needs has a named library, or is struck.
+   named as exactly that — the gate line's case, put to the user now. Put each lane to the user in
+   outcome terms — what the choice means for cost, where it can be hosted, what the product can do —
+   with the library in parentheses. A pick with no effect they could feel (a form library, a test
+   runner, a formatter) is the team's: state it as a decision, not a question.
+3. **Finalize the stack** — the user accepts, swaps or strikes each lane put to them; the stack is
+   costly to undo, so it stays their call. Completion: every lane the subject needs has a named
+   library, or is struck.
 
-Then **deploy the team**: steps 4–6 as on a full run, each line citing the decision it came from
+Then **deploy the team**: 1c–1e and steps 4–6 as on a full run, each line citing the decision it came from
 (shape in `sheet.md`). The scaffold that follows is `lead`'s (its Step 2); the first re-run after it
 lands swaps each decision citation for the manifest that now carries it.
 
@@ -137,6 +155,57 @@ stdio form spawns a process per session and re-resolves `@latest` on every start
 
 Completion: every seat the derivation named can reach the source its row names, or the user has been
 told which one it can't and what enabling it would cost.
+
+### 1d. Grant what the team does on every run — *full run*
+Two sets of actions repeat in every project, and each prompts until something grants it — with no
+error and no log line, so the gap survives by being answered rather than noticed.
+
+**The store, once, at user scope.** The cross-project root is reached from every engagement — the
+case the scope rule above reserves, not an instance of the habit it warns about. Run
+`bash "{KRU_HOME}/kru/scripts/kru-store.sh" home` and write the grant against **what it prints**, in
+`~/.config/opencode/opencode.json` → `permission` (opencode's permissions page, `opencode.ai/docs/permissions`):
+
+```json
+{ "permission": { "external_directory": { "~/.kru/**": "allow" } } }
+```
+
+That one key covers every tool that touches a path outside the working dir — reads, the `edit` a
+todo or a brief needs, and the shell commands `planner` and `dispatch-auditor` write the store with,
+since neither carries `edit`. Substitute what `home` printed when it differs: a grant against a path
+the files left silently covers nothing. `TRACKER.md` carries why that path and no other, and
+`{KRU_HOME}/kru/references/store.md` carries the surfaces that move it.
+
+**The store repo, when the user works on more than one machine.** `KRU_STORE_REPO` — a private repo
+the user owns — keeps the store's home synced through `hooks/store-sync.sh` at session start and every
+turn end. Unset: offer it once; on a yes, it goes in the user's shell profile as
+`export KRU_STORE_REPO=<owner>/<store-repo>`. `KRU_NO_STORE_SYNC=1` turns the sync off for one
+session. The mechanics and the merge rules: `{KRU_HOME}/kru/references/store.md` → *The store repo*.
+
+**The repo's gates, per repo.** Step 1 derived `test` and `verify`, and each of those commands prompts
+on first use. They go in the repo's own `opencode.json` → `permission.bash`, one pattern per command
+with its trailing ` *` (`"pnpm test *": "allow"`) — **narrow to the commands the sheet names**:
+`"pnpm *"` grants the install and the publish with it. That file is the record, so no sheet field
+states it — an `AGENTS.md` line would be the cache bar 3 rejects. A repo that keeps its
+`opencode.json` out of version control keeps it that way; one that commits it gets the grant as a
+diff the user reviews.
+
+**The seats' repo memory, ignored.** The seats carrying Block Q write what they learn about this repo
+to `.claude/agent-memory-local/<seat>/` — per-machine, and kept out of version control by the repo's
+`.gitignore`. Add `.claude/agent-memory-local/` to it when no line already covers the path (`git
+check-ignore -q .claude/agent-memory-local/x` answers that), so the first `git add -A` after a build
+leaves it behind.
+
+Completion: every grant traces to evidence the derivation already produced, the memory path is
+ignored, and the report names what the team may now do unasked (step 6).
+
+### 1e. Encode what the seats would otherwise be told — *full run*
+**`{KRU_HOME}/kru/references/lint-rules.md`** is the catalog of seat rules a check can hold. Take the rows whose stack
+step 1 found, diff each against the repo's own config (`biome.json` rules and `plugins`, the
+`tsconfig`, `pyproject.toml`'s `[tool.ruff]`/`[tool.mypy]`, `.golangci.yml`, `vite.config.ts`'s `sveltekit({...})`),
+and file each unwired row as a slice for its owner — a lint rule is the team's call, not the
+user's, and setup's part ends at the filing. The report counts them in one clause.
+
+Completion: every catalog row for this stack is wired or filed as a slice for its owner.
 
 ### 2. Read what the repo already says
 Open the repo's `AGENTS.md` and every `AGENTS.md` above it up to the worktree root, plus an `AGENTS.md`
@@ -244,26 +313,30 @@ rather than a fork.
 Completion: the section reads as though the file's own author wrote it, and the stamp carries the
 installed `VERSION`.
 
-### 5. Confirm, then write
+### 5. Write, asking only before a cut of theirs
 `AGENTS.md` is checked in and read by everyone who clones the repo — teammates without this
-plugin included, and the hand that wrote whatever you are proposing to cut. Show one reviewable diff:
-the pass's edits grouped by what each one is (step 3's table), and on a full run the section going
-in. Write on the user's OK, per item — they accept, keep, or reword each.
+plugin included, and the hand that wrote whatever you are proposing to cut. The sheet's lines and the
+pass's edits that cut a copy another file answers are the team's: write them. Ask first only before
+cutting a rule the user (or a teammate) authored whose only copy is here — one question, in their
+words, with what dropping it would cost. Everything the answer can't touch is written already.
 
-Completion: the user has seen every line going in and every line coming out, and the file holds what
-they approved.
+Completion: the file holds the pass and the sheet, and no rule the user authored left it without
+their yes.
 
 ### 6. Report
-What the pass reclaimed — and on a full run, the seats this repo runs, anything the derivation
-turned up that the repo had never written down, and each inbox line filed upstream. One paragraph, in
-the user's vocabulary.
+A short paragraph, in the user's vocabulary: what the team now knows about this project and what it
+will do differently for it — the seats this repo runs, anything the derivation turned up that the
+repo had never written down, what the team may now do without asking (step 1d) in one line. The pass's edits, filed lint slices and inbox lines ride as one counted
+clause ("plus 6 cleanups to the project notes"); the diff is there if asked.
 
-Completion: every line that went in is accounted for in what you said, and every line that came out
-is named with the file that answers it.
+Completion: before you send it, check yourself — every line that went in traces to a derivation, and
+every line that came out to the file that answers it. That accounting is your check, not the report's
+content.
 
-## Re-run — the only update path
+## Re-run — the full update path
 The file is a function of *(plugin version × repo state)*, so re-deriving from scratch settles both
-directions it goes stale from:
+directions it goes stale from. One release's patch to what setup wrote, carried across every repo at
+once, is `/kru/propagate`'s; a change that needs the file re-derived comes here.
 
 - **The repo moved** — a dependency swap, a new gate, a design system where there was none. The
   citations are the signal: a derived line that no longer matches disk is a line to re-derive.

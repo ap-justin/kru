@@ -12,7 +12,7 @@ The inverse of `hire`: strip the seat from **every** point of the wiring map in 
 - Remove its row from `{KRU_HOME}/kru/references/routing.md`, or its review wiring (Step 4). A deployed repo still naming it in its sheet sheds the line on its next `/kru/setup`.
 - Fix every inbound reference from step 1 — if another seat's boundary clause named this one, rewrite it.
 
-## 3. Version + count (map #6–#8)
-Recompute `ls agent/kru/*.md | wc -l` → set the count in `package.json` + `README.md`. Version bump: **minor** normally; **major** if removing the seat changes the orchestration contract others depend on (a stack now has no route). `VERSION` · `package.json` · `ROSTER.md` header, all equal.
+## 3. Version (map #6–#8)
+Version bump: **minor** normally; **major** if removing the seat changes the orchestration contract others depend on (a stack now has no route). `VERSION` · `package.json` · `README.md` plugin entry · `ROSTER.md` header, all equal.
 
 Completion: **`audit` passes** and `grep -rn "<name>"` returns nothing. Leave commit/tag to the user (git rule).
