@@ -55,7 +55,7 @@ Prevention, recovery, undo. This is the most directly greppable group in the cor
   - an error string that's the exception's raw message or a generic constant ("Something went wrong", "Invalid input") with no field-specific detail
   - a validation schema whose custom error messages restate the rule's name rather than the fix (`"emailInvalid"` surfaced verbatim instead of "enter an email with an @ and a domain")
   - a caught error rendered to the user as a status code or error class name instead of a written message
-**Fix:** write the message as diagnosis plus remedy ("Password needs 8+ characters — you have 5"), sourced from the rule that actually failed, not the exception object.
+**Fix:** write the message as the remedy, sourced from the rule that actually failed, not the exception object. A field's own message takes the shape `ui-patterns` sets (*A field's error is the predicate its label completes*, in `reference/forms-and-mutations.md`) — grade a field error against that, not a shape of your own; a system-level error pairs what failed with the next step.
 **Detect:** STATIC
 **Source:** *10 Usability Heuristics* (help users recognize, diagnose, and recover from errors) · https://www.nngroup.com/articles/error-message-guidelines/ (2023)
 

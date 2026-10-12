@@ -1,6 +1,7 @@
 ---
 name: kru-ark-ui
-description: Ark UI headless-component reference every UI builder loads for accessible interactive primitives — dialog/modal, dropdown/menu, combobox, select, date-picker, tabs, tooltip, popover, toast, and the rest of Ark's catalog on Zag.js state machines, across React / Vue / Solid / Svelte. Covers when to reach for Ark vs. the repo's existing lib, compound-component part anatomy, the built-in a11y surface (ARIA/focus/keyboard) and how not to defeat it, and the styling hookup (data-attributes / CSS vars) onto the design system's tokens. Use when a feature needs an interactive UI primitive built accessibly instead of hand-rolled — reach for it on the complex ones (overlays, form controls, date pickers), not a styled button. This is ambient component craft woven into the route you're already building — not a separate hand-off.
+description: Ark UI headless components (Zag.js; React/Vue/Solid/Svelte) for accessible interactive primitives — dialog, menu, combobox, select, date-picker, tabs, tooltip, popover, toast. Use when a feature needs a complex primitive (overlay, form control, date picker) built accessibly instead of hand-rolled.
+user-invocable: false
 ---
 
 Ark UI is the **headless component layer** — accessible, unstyled interactive primitives on Zag.js state machines. It's **ambient craft**: you (the framework builder) build the primitive in-place in the route you're already writing, style it against the design tokens, and place it — no separate hand-off. Load this when a feature needs a real interactive primitive (an overlay, a form control, a date picker) done accessibly, and you're deciding whether to reach for Ark, and how to compose it so its built-in a11y actually fires.
@@ -12,6 +13,7 @@ The reach-for-Ark call is the load-bearing judgment — get it wrong and you eit
 - **Reach for Ark** when the stack is **Vue/Solid/Svelte** (where a React-only kit like Radix doesn't fit) or when the repo **already uses Ark**.
 - **Greenfield React is the one open call, and it isn't yours** — Ark and shadcn are both available, they answer to the same design tokens, and the choice belongs to the plan the lead hands down. Build the primitive the plan names; with no name in it, ask the lead rather than default. Whichever comes down, it's the only primitive library in the repo from then on.
 - **Reach for it on the complex primitives** — the ones where a11y is hard and hand-rolling silently breaks it: dialogs/modals, dropdowns/menus, comboboxes, selects, date pickers, tabs, tooltips, popovers, toasts. A styled button or a plain `<a>` doesn't need Ark — don't over-reach.
+- **Past the primitives, survey before hand-rolling.** A complex component no primitive covers — a data grid, a date-range picker, a virtualized list, a rich-text box — starts from the libraries that already solve it; a hand-roll ships only when none fits, with the rejected ones named in the return. In a shadcn repo that search covers the component **and the block** registries before any other library. Between candidates, take the proven one that absorbs the likely next request over the minimal fit it would throw away — bundle cost is answered by lazy-loading, not by the smaller library.
 
 ## Consult current docs (official sources first)
 Never answer Ark component/API specifics from memory — the part/anatomy API and per-component props move fast, and there are four framework packages. In priority order:
@@ -32,6 +34,7 @@ Ark ships one package per framework — `@ark-ui/react`, `@ark-ui/vue`, `@ark-ui
 ## Accessibility (non-negotiable)
 - Ark + Zag already provide the correct ARIA roles/attributes, focus management, keyboard interaction, and typeahead for each primitive. **Don't reinvent or override them** — compose all documented parts so the built-in a11y actually fires. A dialog missing its `Backdrop`/`Positioner`/`CloseTrigger` loses focus-trap and escape handling; the config *looks* fine while silently broken.
 - Preserve labelling: wire `Label`/`Description` parts (or `aria-label`) so every control has an accessible name.
+- **`required` on a `Field.Root` around a Combobox blocks submit silently.** The combobox reads it off field context and Zag sets it on the search input, so native constraint validation swallows the submit before a JS resolver runs. Leave `required` off the `Field.Root`, put `aria-required` on the control, and enforce it in the schema.
 - Respect `prefers-reduced-motion` for any open/close animation you add.
 - Never render a raw `<div onClick>` in place of the `Trigger` part or suppress focus return — that defeats the reason to use Ark. If you catch yourself doing it, stop.
 
@@ -39,11 +42,6 @@ Ark ships one package per framework — `@ark-ui/react`, `@ark-ui/vue`, `@ark-ui
 - Ark is **headless/unstyled** — style via the parts' `data-*` state attributes (`[data-state=open]`, `[data-disabled]`, `[data-highlighted]`, …) and Ark's CSS variables, per the `styling_guide`. Consult it; don't assume attribute names.
 - Use whatever the repo already uses to apply styles (Tailwind, CSS modules, vanilla-extract, Panda) — match it, don't introduce a styling system.
 - Map the repo's tokens onto the component; keep styling co-located the way the repo does. If a token you need is missing, ask the lead — don't improvise a value.
-
-## Under a browser-mode test
-Two things zag does that a Playwright-driven test reads as failure (reproduced on `@ark-ui/react@5.37.2`, Vitest 5 Browser Mode):
-- **`Dialog.Backdrop` fails actionability.** The backdrop is `fixed; inset: 0`, and Playwright's pre-click check reads it as intercepting the pointer, so `locator.click()` on anything inside an open dialog times out. Click the element directly — `(loc.element() as HTMLElement).click()` — which skips the check; the dialog's own handlers still run.
-- **Escape is registered late.** The dismissable layer attaches its document `keydown` listener in a deferred `requestAnimationFrame`, so one `{Escape}` right after render races the registration and passes or fails by timing. Dispatch it inside `vi.waitFor` until the content is gone.
 
 ## TypeScript
 Ark components are TS-heavy (generic `value`/`collection` types, part props). For any hard type work — a cryptic generic on `Select`/`Combobox`, controlled-state typing, a `.d.ts` — load the **`typescript`** skill and solve it in-context.

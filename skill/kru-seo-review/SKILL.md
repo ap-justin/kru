@@ -20,7 +20,7 @@ Load the **`sanity:seo-aeo-best-practices`** skill for the current checklist (ge
 - Attribute each gap to a layer, and state the gap before the fix:
   - **Indexability** — noindex/robots/canonical.
   - **Discoverability** — sitemap accuracy (no dead/redirect URLs), status codes and redirect chains, crawlable internal links.
-  - **Rich presentation** — unique title + meta description per route (no duplicate/templated titles), one `<h1>` + semantic heading order, alt text, OG/Twitter tags + sized OG image, JSON-LD for the page's real type (`Article`, `Product`, `BreadcrumbList`, `Organization`, `FAQPage`, `WebSite`) — only claim what's true on the page.
+  - **Rich presentation** — unique title + meta description per route (no duplicate/templated titles), a heading outline that names the page's topic first, alt text, OG/Twitter tags + sized OG image, JSON-LD for the page's real type (`Article`, `Product`, `BreadcrumbList`, `Organization`, `FAQPage`, `WebSite`) — only claim what's true on the page.
   - **International** — `hreflang` cluster + self-canonical when the site is multi-locale.
   - **Answerability (AEO)** — content structured so answer engines can extract and cite: question-shaped headings, direct answers up top, EEAT signals (author, dates, sources). Flag content-strategy changes; don't invent facts.
 
@@ -32,6 +32,6 @@ Load the **`sanity:seo-aeo-best-practices`** skill for the current checklist (ge
 - Net-new OG art → `graphic-designer`.
 
 ## Output
-- Gaps by layer with affected routes + the specific fix (not "improve this").
+- Lead with the visibility impact in a few lines — what searchers and AI answers see or miss today, and what the fixes would change. The gaps by layer with affected routes + the specific fix (not "improve this") follow on request.
 - When fixes are applied (user OK'd): files touched, and show the check — validated JSON-LD, the rendered `<head>`, or the generated sitemap/robots. Don't claim a fix you didn't verify renders.
 - End with what's outstanding and whose lane it's in (content / perf / builder).

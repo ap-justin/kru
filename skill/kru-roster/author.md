@@ -9,12 +9,15 @@ Docs are hammer and nails. Having them doesn't build a house on the first try, a
 
 On the page that means: sequences whose order matters, defaults with the reason attached, traps written as the failure they cause, and — the one nobody writes — what to deliberately leave out. Every load-bearing claim verified at the source or reproduced, and cited, since a recipe outranks the docs in the reader's hands.
 
+**A library skill is written for its pin.** The body teaches the version on its *Reproduced on* line as the only one. A repo still below the pin migrates as repo work, and what that migration teaches lands in `reference/migration.md` beside the skill (`learn.md` → step 2), reached by one pointer line whose branch is *the repo resolves this package below the pin*. A major refresh rewrites that file for the new step.
+
 ## First-party (write it)
 1. `skills/<name>/SKILL.md` to the `writing-for-agents` standard (its `SKILL-MECHANICS.md` carries the skill-only half) — loaded **before the first edit, and run again over the finished draft and every file that draft touched**. The second pass is not optional and it is not the first one repeated: the pruning bars (no-ops, duplication, relevance, sprawl) are measurements over text, so they have no input until a draft exists, and duplication has none until *every* surface does — which is why the catches land across files rather than inside the new one. Decide **invocation** per that skill: model-invoked (keeps a trigger-rich `description`, pays context load) only if the agent or another skill must reach it on its own; else **user-invoked** (`disable-model-invocation: true`, zero context load). Disclose long reference to sibling files (disclosure-by-branch), keeping `SKILL.md` legible.
+   Its `description` is 300 characters at most: what it is, when to reach for it, one boundary — it loads into every session, and the trap list belongs in the body.
 2. Wire: if it **backs a seat**, add it to that seat's `SOURCES.md` row and have the seat's file load it; note it in `ROSTER.md` → *Reused, not owned*.
 
 ## Vendored (bring it in verbatim)
-1. Download the source **unmodified** into `skills/<name>/`. Add the provenance HTML comment at the top — source repo + branch + sha + a one-line re-sync instruction (copy the exact shape at the top of `skill/kru-writing-for-agents/SKILL.md`).
+1. Download the source **unmodified** into `skills/<name>/`. Add the provenance HTML comment at the top — source repo + branch + sha + a one-line re-sync instruction (copy the exact shape at the top of `skill/kru-writing-for-agents/SKILL.md`). The one local change is the `description`: over 300 characters, trim it to the first-party bar and say so in the provenance comment (`description trimmed locally — keep on re-sync`).
 2. Record it in `SOURCES.md` → *Vendored resources* (repo, license, what it backs) and in `ROSTER.md` → *Reused, not owned*. Confirm the license permits vendoring; note it.
 
 ## Refresh (`author <existing name>`) — executing an `/kru/update` verdict
@@ -24,6 +27,6 @@ On the page that means: sequences whose order matters, defaults with the reason 
 - **Rewrite**: the entry bar above, on the new version, from a blank page.
 
 ## Both
-Minor version bump — `VERSION` · `ROSTER.md` header · `package.json`, all equal (`package.json` is the one that gets forgotten — it has shipped stale before). Leave commit/tag to the user (git rule).
+Minor version bump — `VERSION` · `ROSTER.md` header · `package.json` · the `README.md` plugin entry's `version`, all equal (`package.json` is the one that gets forgotten — it has shipped stale before). Leave commit/tag to the user (git rule).
 
 Completion: the skill loads, meets the standard (or is verbatim-vendored with provenance), and is recorded in `ROSTER.md`/`SOURCES.md` if it backs a seat or is vendored.

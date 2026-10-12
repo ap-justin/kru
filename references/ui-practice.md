@@ -23,7 +23,8 @@ The look is **drafted as artboards and settled by the user's eye on a render** �
 | **the artboards** — `.dc.html` in the tree, drafted by `ui-designer` | the look as drafted, and every value in it |
 | `ui-designer` | the artboards themselves — 2–4 directions at bootstrap, screen mockups after, re-drafted on every later change — and `design-system.md`: the **foundation** shape (`design-system` skill) and the coverage ledger under it |
 | the lead | the design turn's **user channel** — briefing the seat, opening the artboards in the browser, putting the directions to the user, and handing the pick to a builder |
-| `ux-designer` | flows, IA, the screen + state inventory, copy — and **the conventions file**, in both its eras (*The conventions file*, below) |
+| `ux-designer` | flows, IA, the screen + state inventory, the product's own strings — and **the conventions file**, in both its eras (*The conventions file*, below) |
+| `conversion-copywriter` | a marketing route's argument and its strings — the SECTION deck an artboard is drawn around and a builder mounts verbatim |
 | the UI builder | the token file, the **conformance gate**, the components |
 | the user | the design gate — the eye on the render, which is the only design verdict on this team |
 
@@ -127,4 +128,4 @@ What runs, and when:
 Applied when scaffolding a new project; brownfield always matches the existing repo instead.
 
 - **Package manager (JS/Node): `pnpm`** — install, scripts, lockfile (`pnpm-lock.yaml`). Don't emit `package-lock.json`/`yarn.lock`. N/A for non-JS stacks.
-- **UI stack: React**, on the framework the brief names — the stack the sync lane is available in if the project ever earns it.
+- **UI stack: React when the user states no preference**, on the framework the brief names — the stack the sync lane is available in if the project ever earns it. A stated stack wins; it gets the canvas, the token file and its gate (`design-sync.md` → *The entry bar*).

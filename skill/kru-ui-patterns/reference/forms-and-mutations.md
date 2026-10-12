@@ -43,6 +43,14 @@ The held state is `aria-disabled` and the handler ignores the press. `disabled` 
 **Shape:** set the flash server-side on the redirect, read and clear it on the next render — a cookie cleared on read, or the framework's session flash. Render the status region on every screen, empty, and write the flash into it — or move focus to the outcome itself.
 **Applies when:** the outcome genuinely lands elsewhere. Same-screen is the previous entry. Errors that block the operation are neither — they belong at the field or control that produced them, where the user can act on them.
 
+## A live region stays rendered while it is empty
+
+**Trigger:** a `role="status"` / `role="alert"` region kept mounted so a later message is announced — a save result, a flash, a count that updates.
+**Pattern:** mounted **and rendered**: the empty region takes no visual room of its own, but nothing hides it.
+**Default it corrects:** `empty:hidden`, `hidden`, or a conditional `display:none` on the region — mounted, so "keep it mounted" reads as satisfied.
+**Why:** a hidden node is out of the accessibility tree, so the first message arrives as a node appearing rather than a region changing, and a screen reader may announce nothing. The comment above such a region usually says "stays mounted", which is how the half-applied rule spreads to the next component.
+**Shape:** `<p role="status">{message}</p>` — the same element empty and full; no class or attribute that hides it when empty.
+
 ## A save that returns to the same screen doesn't move the scroll position
 
 **Trigger:** a mutation that re-renders the current screen — a settings save, an inline edit, a row action on a long list.
@@ -71,7 +79,7 @@ The held state is `aria-disabled` and the handler ignores the press. `disabled` 
 ## A confirm dialog itemises only what the press will touch
 
 **Trigger:** a save that commits several fields at once, at least one of them destructive or irreversible.
-**Pattern:** list one line per *changed* field, naming the act against the operator's own values — `Password · Removed`, `Mail host · Replaced`. Focus lands on the dismiss control.
+**Pattern:** list one ledger row per *changed* field — the field as its label, the act against the operator's own values as its value (`Password` → `Removed`, `Mail host` → `Replaced`; `lists-and-rows.md` → *Each fact about an item gets its own place*). Focus lands on the dismiss control.
 **Default it corrects:** a generic "Are you sure?" over a paragraph of consequences written above the form in the abstract, and a dialog that opens with focus on the control that commits.
 **Why:** this is the trade that lets the page carry no prose — the explanation is relocated to the one moment it changes a decision, stated against real values rather than in general. An untouched field listed anyway dilutes the three lines that matter. And focus on the committing control hands the operator the answer before the question, which is worse than no dialog.
 **Applies when:** the press is hard to walk back. A save with no destructive branch reports at its control instead — and inside a dialog that has earned its place, a change with no way to hurt is still left off the list: the itemisation is what the press will **cost**, so a safe act padded in spends the read on a line to ignore and makes the destructive ones harder to count.
@@ -116,6 +124,14 @@ The held state is `aria-disabled` and the handler ignores the press. `disabled` 
 **Default it corrects:** a status row above the input ("Not set" / "Configured"), a second label, or a Remove checkbox beside the field — plus a snap-back on blur that refills an emptied box.
 **Why:** the status row is a second representation of one fact, and the day it disagrees with the box the operator has no way to tell which is right. The snap-back is the costlier half: it makes deletion the one intent the form cannot express, so the operator retypes a value they meant to remove.
 **Applies when:** the stored value is a scalar the field can seed. A list, or a value the server declines to echo, carries its own state; this is the single-slot case.
+
+## A value the user can change is the control that changes it
+
+**Trigger:** a displayed value with an edit affordance — a date, a range, a plan, an assignee — outside a full form.
+**Pattern:** render the value as the control itself: the date opens the picker, the assignee opens the menu. The field and any controls it carries stay on one line, and its empty state is the same control reading as a prompt ("Pick a date").
+**Default it corrects:** the value as static text with a *Change date* button beside it, or wrapping the button onto its own line, with the empty state drawn as a different element.
+**Why:** a value and a button that edits it are two things to scan for one fact, and the reader has to work out that they're linked; the button's label restates the value's name. A separate empty-state element means the control moves or changes shape the moment a value lands.
+**Applies when:** one value, edited in place. A value whose edit is a multi-field form, or whose change needs a confirm, keeps a separate trigger.
 
 ## A decoration inside a control is contained by the control, not by its own position
 
@@ -223,3 +239,10 @@ The held state is `aria-disabled` and the handler ignores the press. `disabled` 
 **Default it corrects:** rendering it in the field-message slot for its key, where the framework's error map files it — a message that mounts against nothing, or mounts somewhere no focus move will ever reach.
 **Why:** submit-time focus walks the form's own controls to find the first refused one, so a key matching no control is skipped: the press validates, refuses, moves nothing and scrolls nothing, and reads as a button that did nothing. The pressed control is the one element the operator is certainly standing on.
 **Applies when:** the key names no control. A key that does name one is marked at that field — or once on its group, above.
+
+## In a compact field stack, fields separate more than a label from its box
+
+**Trigger:** a dense form — a sign-in box, a sidebar filter, a modal — where the gap between fields is tightened.
+**Pattern:** the gap between one field and the next is at least one ladder step larger than the gap from a label to its own box.
+**Default it corrects:** one uniform gap for the whole stack, or a field gap tightened below the label-to-box step.
+**Why:** proximity is how the reader pairs a label with its box. Once the field-to-field gap is less than or equal to the label-to-box gap, each label reads as belonging to the box above it. Which steps are used is the token file's; their order is this entry.

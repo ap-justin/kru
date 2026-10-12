@@ -14,7 +14,9 @@ import { homedir } from "node:os"
 import { execFileSync } from "node:child_process"
 
 const REPO = join(dirname(fileURLToPath(import.meta.url)), "..")
-const STORE = join(homedir(), ".claude", "kru")
+// the store's cross-project root, as scripts/kru-store.sh resolves it — KRU_HOME
+// is upstream's env var for the store, not this fork's {KRU_HOME} placeholder
+const STORE = process.env.KRU_HOME || join(homedir(), ".kru")
 const CLAUDE_CACHE = join(homedir(), ".claude", "plugins", "cache", "kru", "kru")
 
 const args = process.argv.slice(2)
@@ -129,7 +131,7 @@ function install() {
   const claude = claudeSide()
   if (claude) {
     const pin = upstreamPin()
-    log(`\nclaude-code kru ${claude} is also installed — they share the store at ~/.claude/kru/`)
+    log(`\nclaude-code kru ${claude} is also installed — they share the store at ${STORE}`)
     if (pin && claude !== pin)
       log(`  this fork is ported from kru ${pin}; re-port before trusting a contract difference (see PORTING.md)`)
   }
@@ -169,7 +171,7 @@ function uninstall() {
     n++
   }
   log(`removed ${n} path(s) from ${home}`)
-  log(`left alone: ~/.claude/kru/ — the shared store (plans, tickets, todos, learnings inbox)`)
+  log(`left alone: ${STORE} — the shared store (plans, tickets, todos, learnings inbox)`)
 }
 
 function doctor() {
@@ -230,7 +232,7 @@ function claudeInstructions() {
   log(`to run the claude-code fork alongside this one, install upstream kru${pin ? ` ${pin}` : ""}:\n`)
   log(`  claude plugin marketplace add ap-justin/kru`)
   log(`  claude plugin install kru@kru\n`)
-  log(`both forks then share ~/.claude/kru/ — the same briefs, plans, tickets, todos and learnings inbox.`)
+  log(`both forks then share ${STORE} — the same briefs, plans, tickets, todos and learnings inbox.`)
   log(`this fork is a port, so the two can differ: \`kru-oc doctor\` compares versions and PORTING.md says what opencode has no equivalent for.`)
 }
 

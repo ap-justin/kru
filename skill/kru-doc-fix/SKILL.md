@@ -18,21 +18,21 @@ The prose is the deliverable and the only thing that moves. The house standard, 
    | *(none)* | the repo's human docs — `README*`, `CONTRIBUTING*`, `DEPLOY*`, `docs/**`, root-level `*.md` |
    | a path or glob | those files, whole |
 
-   Agent-consumed documents — `AGENTS.md`, skill and agent definitions — are `writing-for-agents`' standard, not this one; leave them out unless named.
+   Agent-consumed documents — `AGENTS.md`, skill and agent definitions — are `writing-for-agents`' standard, not this one; leave them out unless named. `/kru/text-fix` runs both standards over one target.
 
 2. **Cut** — each is a class, not a phrasing:
    - **Negatives** — what a doc doesn't state is simply not a path, so there's no need to deny it: "there is no X", "no A, no B, no C" enumerations, "X does not do Y" where nothing implied it would. Whole sections of the form *what is deliberately not here* go entirely.
-   - **Run-output narration** — if running `a` shows `b`, the doc doesn't describe `b`: UI walkthroughs ("press X, a confirm names Y"), CLI flag/output descriptions `--help` already covers, "the screen says / draws as / reports" sentences, tables restating what a screen lists.
+   - **Run-output narration** — narration a reader of *this doc* has already seen by the time they read it: once running `a` shows `b`, the doc doesn't describe `b`. UI walkthroughs ("press X, a confirm names Y"), CLI flag/output descriptions `--help` already covers, "the screen says / draws as / reports" sentences, tables restating what a screen lists. A README's usage section and sample output are read on GitHub or npm before anything is installed — nothing has run yet, so they stay.
    - **Code restatement** — details literally in the code (constant values, clamp ranges, example CSS a reader could derive) stay in the code; the doc keeps only the pointer to the canonical file.
    - **AI tells** — the phrasings a model reaches for when it's performing rather than informing, and a reader clocks in one pass. Cut or reword: filler verbs (*elevate*, *seamless*, *unleash*, *next-gen*, *revolutionize*) where a concrete verb exists; poetic section labels (*From the field*, *Field notes*, *On our desks*) where the functional one says it (*Testimonials*, *Recent writing*); mock-humble asides and micro-meta sentences under a heading that explain the heading; generic step labels (*Stage 1*, *Step 2*, *Phase 03*) where the step's own verb is the label; fake-perfect numbers (`99.99%`, `50%`, `1234567`) standing in for a real one; and `·` used as the default separator for everything. The catalog these come from is the `design-taste-frontend` skill's **AI Tells** section — its prose half.
-   - **Em-dashes** — binary, no *sparingly* allowance: no `—` survives, and no `–` used as a separator. Restructure instead — two sentences with a period, a comma, parentheses, or a colon; ranges take a hyphen (`2018-2026`, `$40-80k`); attribution takes ` - ` or a line break. The regular hyphen is the only dash the pass leaves behind, and it's checkable: at the end, `grep -n '—\|–' <touched files>` returns nothing.
+   - **Em-dashes** — binary, no *sparingly* allowance: no `—` survives, and no `–` used as a separator, in prose. Code fences, real command output and quoted titles keep theirs — rewording them falsifies the sample. Restructure instead — two sentences with a period, a comma, parentheses, or a colon; ranges take a hyphen (`2018-2026`, `$40-80k`); attribution takes ` - ` or a line break. The regular hyphen is the only dash the pass leaves behind, and it's checkable: at the end, `grep -n '—\|–' <touched files>` hits nothing outside fences and quotations.
    - **Era-bound status** — pre-release/private-repo notes, "history will be squashed", migration paths for deployments predating a change: moot the day the doc's audience exists, so cut rather than maintain.
 3. **Keep, always:**
    - **Traps with consequences** — one-way doors, silent failures ("renders fine but refuses every gift"), destructive-command warnings.
    - **Facts no UI or run can teach** — headless escape hatches, env vars, recovery-is-you, external-service behavior (ports, vendor limits).
    - **Interpretation of confusing output** — a scary-but-harmless warning, what "ready" actually means.
    - **Pointers over prose** — a line naming the canonical file/screen survives where a description of it was cut.
-4. **Report.** One line per edit, grouped *cut* · *reworded* · *pointed*, each with `file:line`. Then the diff check from the top of this file, in a line: what moved, and that it was doc prose only.
+4. **Report.** A count per group — *cut* · *reworded* · *pointed* — and a line for each edit that changes what a reader learns, plus each README/CONTRIBUTING section written for the other file's reader (`oss-prose`), named for a restructure rather than moved here; the per-edit list with `file:line` on request. Then the diff check from the top of this file, in a line: what moved, and that it was doc prose only.
 
 ## Don't
 

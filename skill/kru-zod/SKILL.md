@@ -1,11 +1,13 @@
 ---
 name: kru-zod
-description: Zod 4 recipes — a `.default()` that never validates its own default, `z.coerce.boolean('false') === true`, `safeParse` throwing on async schemas, `.catch()` that isn't try/catch, transform output nothing checks, and `flatten()` losing which nested field failed. Use when writing or reviewing a Zod schema, a parse boundary, or validation-error plumbing in a repo with `zod` in `package.json`. Zod 4 classic + mini; not Valibot, Yup, or ArkType.
+description: Zod 4 recipes, classic + mini. Use when writing or reviewing a Zod schema, a parse boundary, or validation-error plumbing in a repo with `zod` in `package.json`. Not Valibot, Yup, or ArkType.
+user-invocable: false
 ---
 
 **Zod's dangerous failure is not the throw — it's the parse that succeeds.** Every trap below returns a value: an unvalidated default, a coerced truthy string, an unchecked transform output, an error object that can't name the field that failed. Two consequences drive the rest: a schema that parses is not a schema that validated · the type checker proves the shape, never the boundary.
 
-Reproduced on **`zod@4.4.3`** (npm `latest`, 2026-08-04), TypeScript 7.0.2, `strict: true`. Re-verify after a major bump. Pin `zod@^4` rather than installing by dist-tag — `next`/`alpha` resolve to an older major and `beta` is currently behind `latest`.
+Reproduced on **`zod@4.6.5`** (2026-09-23): `.default()`/`.prefault()`, `.catch()`, `flatten()`, records over enums, JSON Schema.
+The rest on **`zod@4.4.3`** (npm `latest`, 2026-08-04), TypeScript 7.0.2, `strict: true`. Re-verify after a major bump. Pin `zod@^4` rather than installing by dist-tag — `next`/`alpha` resolve to an older major and `beta` is currently behind `latest`.
 
 ## `.default()` never validates its own default
 The most dangerous line in this skill, because both layers stay quiet.

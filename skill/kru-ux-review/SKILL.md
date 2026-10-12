@@ -22,7 +22,7 @@ You audit a **journey**, not a screen — entry route through to terminal state,
 ## Dispatch — spawn the walk, never run it inline
 A flow's source is more than the main thread should spend, and the user is still working in that context. Spawn the **`ux-auditor`** agent with: the flow by name, the entry route if the user named one, what the user says the flow is *meant* to do (the seat has only the code), and a report path when the flow is large. The walk is static — no browser, and no dev server to start.
 
-Relay the return unedited, then the half a subagent can't do:
+Translate the return: the user hears each problem as what goes wrong for someone walking the flow, and the `file:line` findings stay in the seat's report (on file when a path was named) for the fix. Then the half a subagent can't do:
 - **Lead with the resolved entry route.** The seat returns it uncapped for this reason — walk the wrong entry and every finding after it is void, correctable in one line.
 - **Questions stay questions.** A `HEURISTIC` match turns on intent the code doesn't state, so it goes to the user as a question. Handed to a builder, it ships as an invented requirement.
 - **Fixes only when asked.** The seat has no user channel; you do. An accepted fix routes to the seat that owns the file.

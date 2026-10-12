@@ -2,3 +2,5 @@
 node_modules
 scripts/.venv-rembg
 .claude/settings.local.json
+.claude/agent-memory-local/
+evals/results/

@@ -1,6 +1,7 @@
 ---
 name: kru-modern-css
-description: Curated Baseline reference for which native CSS features are safe to reach for now — container queries, :has(), nesting, subgrid, color-mix()/relative colors/light-dark(), @starting-style transitions, scroll-driven animation, view transitions, @scope, and more. Use before writing CSS that would otherwise reach for a JS workaround, an extra wrapper element, a preprocessor trick, or an older hack — check whether native CSS now does it. Curates Baseline 2023-2025 (web.dev/baseline); for anything newer or unlisted, verify live rather than guessing.
+description: Baseline 2023-2025 native CSS safe to use now — container queries, :has(), nesting, subgrid, color-mix()/light-dark(), @starting-style, scroll-driven animation, view transitions, @scope. Use before writing CSS that would reach for a JS workaround, extra wrapper, or preprocessor trick.
+user-invocable: false
 ---
 
 This is the **Baseline** judgment: which native CSS a builder can reach for today without a fallback, and which still needs one. Load it when writing or reviewing CSS, and specifically when you're about to write a JS workaround, an extra wrapper `div`, a preprocessor trick, or an older hack for something — check first whether native CSS now does it outright.
@@ -9,7 +10,7 @@ This is the **Baseline** judgment: which native CSS a builder can reach for toda
 Every feature below carries a Baseline status (from web.dev/baseline), and the status *is* the decision:
 - **Widely available** — interoperable across Chrome/Edge/Firefox/Safari for 30+ months. Use it outright, no fallback, no `@supports` check.
 - **Newly available** — interoperable now, but hasn't crossed the 30-month mark. Safe for an evergreen-browser audience; check the repo's actual browser-support target (a `browserslist` entry, a stated "supports X+" note) before treating it as unconditional, and pair it with `@supports` when the fallback is cheap and the feature is non-critical (decorative, progressive enhancement).
-- **Limited availability** — not yet interoperable across all four. Don't reach for it without the user's explicit go-ahead, and always behind `@supports`.
+- **Limited availability** — not yet interoperable across all four. Free where the browsers without it fall back to the baseline behavior unaided; gate CSS that breaks without it behind `@supports`; ask the user before shipping one the design depends on.
 
 ## Aging rule — this snapshot goes stale, recompute against today
 Baseline status moves with the calendar, not with this file. Rule: **feature's Baseline year (`BL` column in `reference/baseline.md`) + ~30 months ≈ when it crosses into Widely available.** So as of any given date:

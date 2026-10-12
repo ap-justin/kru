@@ -1,6 +1,9 @@
 # Boundaries — a parse recipe per entry point
 
-All examples verified on `zod@4.4.3`. The shared rule: parse **once**, at the edge, and pass the parsed value inward. A schema applied twice to the same data is a smell — the second call is either dead work or an admission the first one didn't own the boundary.
+Env vars, every `.prefault()`, unknown-key behavior and the email table verified on `zod@4.6.5` (2026-09-23).
+The rest verified on `zod@4.4.3`.
+
+The shared rule: parse **once**, at the edge, and pass the parsed value inward. A schema applied twice to the same data is a smell — the second call is either dead work or an admission the first one didn't own the boundary.
 
 ## Env vars (parse at boot, crash loudly)
 Everything is a string, and `undefined` for anything unset. Two traps live here — `z.coerce.boolean()` (see `SKILL.md`) and defaults that never validate.
@@ -77,7 +80,7 @@ Pick the unknown-key behavior deliberately — the default is silent removal:
 `strictObject` for a request body you control end-to-end (a client sending an unknown field is a version skew you want to hear about); plain `z.object` for third-party payloads that will grow fields without telling you. `z.json()` validates arbitrary JSON-shaped data when you genuinely don't know the shape yet — better than `z.any()`, which asserts nothing.
 
 ## Search params
-`URLSearchParams` has the same all-strings problem as env, plus repeated keys collapsing under `Object.fromEntries` (last one wins). Coerce explicitly and give every optional param a `.prefault()` so downstream code never branches on `undefined`:
+`URLSearchParams` has the same all-strings problem as env, plus repeated keys collapsing under `Object.fromEntries` (last one wins). Coerce explicitly and give every param whose absence has a default meaning a `.prefault()` so downstream code never branches on `undefined` — a filter whose absence means "no filter" stays `.optional()`:
 
 ```js
 const Query = z.object({

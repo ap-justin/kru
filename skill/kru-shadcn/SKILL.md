@@ -1,11 +1,11 @@
 ---
 name: kru-shadcn
-description: Manages shadcn components and projects — adding, searching, fixing, debugging, styling, and composing UI, including chat interfaces. Provides project context, component docs, and usage examples. Applies when working with shadcn/ui, component registries, presets, --preset codes, or any project with a components.json file. Also triggers for "shadcn init", "create an app with --preset", or "switch to --preset".
+description: shadcn/ui work in a repo with a root components.json, or creating one — adding and composing components and blocks, updating installed ones from upstream against local edits, theming and CSS variables, chat and conversation UI, authoring a source registry, and init/apply of a --preset code.
 user-invocable: false
 allowed-tools: Bash(npx shadcn@latest *), bash(pnpm dlx shadcn@latest *), bash(bunx --bun shadcn@latest *)
 ---
 
-<!-- vendored from `shadcn-ui/ui` (main, sha efac598) → `skills/shadcn`. shadcn's own first-party skill, MIT. Kept verbatim minus `agents/openai.yml` (Codex metadata), `evals/` (fixtures) and `assets/*.png` (branding) — none referenced by the prose. Frontmatter needs no port: `user-invocable: false`, `allowed-tools`, and the `!`cmd`` injection under *Current Project Context* are all native opencode fields, so `npx shadcn@latest info --json` really does run before the body is read. Re-sync: re-download `SKILL.md` + `cli.md` + `customization.md` + `mcp.md` + `registry.md` + `rules/*.md` from https://github.com/shadcn-ui/ui/tree/main/skills/shadcn. -->
+<!-- vendored from `shadcn-ui/ui` (main @ 2d3f1cd, the `skills/shadcn` path head) → `skills/shadcn`. shadcn's own first-party skill, MIT. Body verbatim minus `agents/openai.yml` (Codex metadata), `evals/` (fixtures) and `assets/*.png` (branding) — none referenced by the prose. Frontmatter needs no port: `user-invocable: false`, `allowed-tools`, and the `!`cmd`` injection under *Current Project Context* are all native opencode fields, so `npx shadcn@latest info --json` really does run before the body is read. Two deviations, both re-applied after any re-sync: (1) the `description`, rewritten to one trigger per branch; (2) **blocks** named as a capability in *Workflow* step 3, plus the `--chart-*` tokens on the *Charts* row. `SOURCES.md` carries the reasoning for both — this comment loads on every invocation, so it holds only what a re-sync has to re-apply. Re-sync: re-download `SKILL.md` + `cli.md` + `customization.md` + `design-system.md` + `design-system-page.md` + `mcp.md` + `registry.md` + `rules/*.md` + `scripts/*` + `assets/showcase/*` from https://github.com/shadcn-ui/ui/tree/main/skills/shadcn. -->
 
 # shadcn/ui
 
@@ -141,7 +141,7 @@ These are the most common patterns that differentiate correct shadcn/ui code. Fo
 | Overlays                   | `Dialog` (modal), `Sheet` (side panel), `Drawer` (bottom sheet), `AlertDialog` (confirmation)       |
 | Feedback                   | `toast` (Base UI), `sonner` (Radix/Aria), `Alert`, `Progress`, `Skeleton`, `Spinner`                 |
 | Command palette            | `Command` inside `Dialog`                                                                           |
-| Charts                     | `Chart` (wraps Recharts)                                                                            |
+| Charts                     | `Chart` (wraps Recharts); series colors are the `--chart-1`…`--chart-5` tokens                       |
 | Layout                     | `Card`, `Separator`, `Resizable`, `ScrollArea`, `Accordion`, `Collapsible`                          |
 | Empty states               | `Empty`                                                                                             |
 | Menus                      | `DropdownMenu`, `ContextMenu`, `Menubar`                                                            |
@@ -180,7 +180,7 @@ npx shadcn@latest docs button dialog select
 
 1. **Get project context** — already injected above. Run `npx shadcn@latest info` again if you need to refresh.
 2. **Check installed components first** — before running `add`, always check the `components` list from project context or list the `resolvedPaths.ui` directory. Don't import components that haven't been added, and don't re-add ones already installed.
-3. **Find components** — `npx shadcn@latest search`.
+3. **Find components** — `npx shadcn@latest search`. A **block** installs a whole page or section at once (`@shadcn/dashboard-01`) rather than a single component — the fastest scaffold for a new surface. List them with `-t block`, which is also where the chart compositions live.
 4. **Get docs and examples** — run `npx shadcn@latest docs <component>` to get URLs, then fetch them. Use `npx shadcn@latest view` to browse registry items you haven't installed. To preview changes to installed components, use `npx shadcn@latest add --diff`.
 5. **Install or update** — `npx shadcn@latest add`. When updating existing components, use `--dry-run` and `--diff` to preview changes first (see [Updating Components](#updating-components) below).
 6. **Fix imports in third-party components** — After adding components from community registries (e.g. `@bundui`, `@magicui`), check the added non-UI files for hardcoded import paths like `@/components/ui/...`. These won't match the project's actual aliases. Use `npx shadcn@latest info` to get the correct `ui` alias (e.g. `@workspace/ui/components`) and rewrite the imports accordingly. The CLI rewrites imports for its own UI files, but third-party registry components may use default paths that don't match the project.
@@ -194,6 +194,17 @@ npx shadcn@latest docs button dialog select
    - **Merge**: `npx shadcn@latest init --preset <code> --force --no-reinstall`, then run `npx shadcn@latest info` to list installed components, then for each installed component use `--dry-run` and `--diff` to [smart merge](#updating-components) it individually.
    - **Skip**: `npx shadcn@latest init --preset <code> --force --no-reinstall`. Only updates config and CSS, leaves components as-is.
    - **Important**: Always run preset commands inside the user's project directory. `apply` only works in an existing project with a `components.json` file. The CLI automatically preserves the current base (`base` vs `radix`) from `components.json`. If you must use a scratch/temp directory (e.g. for `--dry-run` comparisons), pass `--base <current-base>` explicitly — preset codes do not encode the base.
+
+## Design Systems from DESIGN.md
+
+When the user asks for a design system from a `DESIGN.md` (or a brand spec), with or without a preset, follow [design-system.md](./design-system.md) end to end:
+
+1. `init --preset <code> --template <vite|next> --name <app> --no-monorepo -y`. Without a preset code, pick the closest style and pass `--base base --preset <style>`. Then `add --all -y`.
+2. Read the DESIGN.md frontmatter, Do's and Don'ts, and Known Gaps before editing.
+3. Map its tokens onto the shadcn variables in `tailwindCssFile`. Pin the radius scale, shadows, fonts and `type-*` utilities.
+4. Restyle components by editing their `cva` variants. Change control heights together.
+5. Build the design system page per [design-system-page.md](./design-system-page.md): contrast-checked color roles, type specimens, pinned state matrices, edge cases, do/don't pairs, recipes. Check coverage with `scripts/showcase-coverage.mjs`.
+6. Verify in a browser: typecheck, no console errors, loads at the top, no horizontal overflow, dark mode.
 
 ## Updating Components
 
@@ -213,6 +224,11 @@ When the user asks to update a component from upstream while keeping their local
 # Create a new project.
 npx shadcn@latest init --name my-app --preset base-nova
 npx shadcn@latest init --name my-app --preset a2r6bw --template vite
+
+# Create a design system app (then follow design-system.md).
+npx shadcn@latest init --name my-ds --preset b0 --template vite --no-monorepo -y
+npx shadcn@latest init --name my-ds --base base --preset maia --template vite --no-monorepo -y
+npx shadcn@latest add --all -y
 
 # Create a monorepo project.
 npx shadcn@latest init --name my-app --preset base-nova --monorepo
@@ -277,3 +293,5 @@ npx shadcn@latest view owner/repo/item
 - [cli.md](./cli.md) — Commands, flags, presets, templates
 - [registry.md](./registry.md) — Authoring source registries, `include`, item definitions, dependencies, GitHub registry rules
 - [customization.md](./customization.md) — Theming, CSS variables, extending components
+- [design-system.md](./design-system.md): DESIGN.md (with or without a preset) to a themed app: style picking, token mapping, radius, fonts, type scale, control heights, showcase traps, verification
+- [design-system-page.md](./design-system-page.md): What goes on a design system page and how: foundations, component tiers, pinned state matrices, contrast pairs, edge cases, do/don't, recipes

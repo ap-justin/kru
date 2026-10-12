@@ -1,11 +1,12 @@
 ---
 name: kru-xstate
-description: "XState 5 (actor model + statecharts): an invoked promise actor that rejects with no `onError` handler doesn't fail its state — it throws an **uncaught exception on the process** and puts the whole root actor into `status: 'error'`; an `always` transition with no exit condition runs its action in an unbounded microstep loop that grows heap until the process OOMs; an `invoke`d actor is torn down and recreated from scratch every time its state is re-entered, silently losing whatever internal state it accumulated, where a `spawn`ed one (held in `context`) survives; and the docs' own `llms.txt` links to a `v6` doc tree whose quick start says `npm install xstate@alpha`, which breaks the peer range of any `@xstate/react` installed at `latest`. Use when writing or reviewing an XState machine or actor, or a repo with `xstate` in `package.json`. XState 5.x; the React bindings (`useMachine`/`useSelector`) are the sibling `xstate-react` skill, not this one."
+description: "XState 5 (actor model + statecharts). Use when writing or reviewing an XState machine or actor, or a repo with `xstate` in `package.json`. XState 5.x; the React bindings (`useMachine`/`useSelector`) are the sibling `xstate-react` skill."
+user-invocable: false
 ---
 
 XState models behavior as an **actor** — something started, sent events, and eventually stopped — and a machine is one kind of actor logic. Every trap below follows from actors being genuinely concurrent and supervised rather than a bag of `useState` hooks bolted together: an actor that errors doesn't return an error value, it **stops** and tells whoever is watching; an actor scoped to a state doesn't pause when you leave, it **stops**; and a transition that produces no visible change can still **run forever**, because nothing about a statechart requires a microstep to be observable to end it.
 
-Reproduced on **`xstate@5.32.6`** (npm `latest`), Node 24, with **`@xstate/react@6.1.0`** (`peerDependencies: { xstate: "^5.28.0" }`). Re-verify after a minor bump — the ecosystem is also mid-migration to a `6.0.0-alpha` line (below).
+Reproduced on **`xstate@5.33.2`** (npm `latest`, 2026-09-23), Node 24, TypeScript 7.0.2 `strict: true`, with **`@xstate/react@6.1.0`** (`peerDependencies: { xstate: "^5.28.0" }`). Re-verify after a minor bump — the ecosystem is also mid-migration to a `6.0.0-alpha` line (below).
 
 ## An actor's own error is not caught by the machine that has it — it propagates up
 ```ts
@@ -49,7 +50,7 @@ actions: [
 Reproduced: `count` ends at `2`, not `1` — each `assign` in an `actions` array resolves against the context the **previous** `assign` in that same array just produced, sequentially, not against one shared snapshot taken at the start of the transition. Don't reach for `enqueueActions` to sequence a chain of `assign` calls that already work in order; reach for it when you need to conditionally choose *which* actions to run based on a value an earlier action in the same transition just computed, since a plain `actions` array can't branch on that.
 
 ## A crashed actor throws where it's read, not where it crashed
-An actor whose `status` becomes `'error'` (previous section) doesn't just stop quietly — `getSnapshot()` and every subscriber's `next` stop firing, and the error surfaces the next time *anything* reads the snapshot through XState's own accessors. In a plain script that's your own `actor.subscribe({ error })` catching it; in a component tree using `@xstate/react`'s `useSelector`/`useActor`/`useMachine`, that "next read" is the next render — see the `xstate-react` skill for the reproduced React-side consequence (it throws **during render**, and needs an Error Boundary, not a `try`/`catch`, to stop it from blanking the tree).
+An actor whose `status` becomes `'error'` (previous section) doesn't just stop quietly — every subscriber's `next` stops firing, and the error surfaces the next time *anything* observes the actor. Reproduced: `getSnapshot()` itself doesn't throw — it returns the dead snapshot, `status: 'error'` with the cause on `.error` — and a `send` to it is dropped (the development build only warns), but an observer that subscribes *after* the crash gets its `error` callback at once, never a `next`. In a plain script that's your own `actor.subscribe({ error })` catching it; in a component tree using `@xstate/react`'s `useSelector`/`useActor`/`useMachine`, that "next read" is the next render — see the `xstate-react` skill for the reproduced React-side consequence (it throws **during render**, and needs an Error Boundary, not a `try`/`catch`, to stop it from blanking the tree).
 
 ## `setup()` is the whole typed-implementations story now
 ```ts

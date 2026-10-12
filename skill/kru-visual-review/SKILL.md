@@ -20,13 +20,13 @@ You review the UI as it actually renders, in a real browser.
 **Target**: `$ARGUMENTS` if given (URL, pages, specific states/viewports); otherwise the running dev server's pages touched by the current build. Read the `AGENTS.md` `## Design system` pointer if one exists — not to certify intent, but so a cause you trace lands on the token that owns it. **Report-only**: findings with their evidence, unsoftened; fixes only when the user asks after reading the report.
 
 ## Dispatch — spawn the sweep, never run it in the main thread
-The sweep is browser-driven and pins a thread for minutes (viewport drives, state drives, screenshots); the main thread must stay free for the user. After gathering the target + context above, spawn the **`visual-reviewer`** agent with a prompt carrying: the target (URL/pages/states/viewports) and the context (design plan / token pointer / user-named states). Relay the returned report unedited. Everything outside this section is the sweep body that seat executes.
+The sweep is browser-driven and pins a thread for minutes (viewport drives, state drives, screenshots); the main thread must stay free for the user. After gathering the target + context above, spawn the **`visual-reviewer`** agent with a prompt carrying: the target (URL/pages/states/viewports) and the context (design plan / token pointer / user-named states). The return is the record, not the message: it stays at the report path, and the user hears the breakage someone using the product would hit — which screen, which state, what goes wrong — with the rest counted in one clause. Everything outside this section is the sweep body that seat executes.
 
 **Two callers, one body.** The user runs `/kru/visual-review` and lands here; the lead dispatches `visual-reviewer`, which reads this same file and executes every section but this one (it *is* what gets dispatched, and subagents can't spawn subagents). `disable-model-invocation` still holds on the skill, so the slash command stays the user's front door and nothing fires this ambiently.
 
 ## Drive the browser via local-browser
 Invoke and follow the **`local-browser`** skill — it wraps the `chrome-devtools` MCP server, headless, on a profile that keeps the login. Its rules bind you:
-- **The dev server must already be running — never start it.** If nothing responds at the target URL, stop and ask the user to start it.
+- **The dev server must already be running — never start it.** If nothing responds at the target URL, stop and report that, naming the URL — to the user inline, in your return as a seat.
 - **`emulate` owns the breakpoint** — `resize_page` clamps at ~500px and reports success, so anything narrower measured that way is a fiction.
 - Work from `take_snapshot` uids; the skill's *Done when* binds this pass too.
 
@@ -38,21 +38,22 @@ Capture screenshots to files and `read` them — the capture is the evidence, an
 
 ## Scope the sweep before you start — breadth is what makes this pass expensive
 The full matrix is pages × viewports × states, and driven literally it runs for tens of minutes and returns the same finding many times. Cut it before the first screenshot:
-- **One representative page per layout family gets the full matrix** — every viewport, every state. Pick the densest instance of each family (a form page, a list/table page, a detail page, the marketing hero). Every *other* page gets a targeted check only: does it overflow at 375, does its own unique content render.
+- **One representative page per layout family gets the full matrix** — every viewport, every state. Pick the densest instance of each family (a form page, a list/table page, a detail page, the marketing hero). Every *other* page gets a targeted check only: does it overflow at 360, does its own unique content render.
 - **Chase a systemic cause once, then stop enumerating.** A defect that appears on every route is one finding — a shared header, a token, a root `font-size` — not one per route. The moment it traces to something global, trace it to source, name the cause, state its scope ("all 7 admin routes"), and move on. Re-confirming it route by route is the single biggest way this pass burns time for no new information.
 - **Don't re-derive what source can tell you faster.** One `grep` for the token or the class usually gives the cause in a step; iterating screenshots to infer it does not.
 - **Say what you skipped** in the report (see *Output*). A bounded sweep that names its bounds is honest; a bounded sweep presented as exhaustive is worse than either.
 
 ## Sweep — for each target page
 1. **States first — this is the half nobody else covers.** Empty, loading, error, disabled, hover, focus-visible, and the content extremes (a long string, a name that wraps, a list of one, a list of two hundred). Drive them via snapshot+click/fill; capture each. **A state you couldn't reach is reported, not skipped silently** — behind auth, needs seed data, no way to trigger it from the UI. A state that doesn't exist at all is a finding.
-2. **Viewports**: desktop (~1440), tablet (~768), mobile (~375). Set each with **`emulate`** — `{viewport: "375x812x3,mobile,touch"}` renders a true 375px CSS viewport with the right DPR and touch. Chrome floors a real window at ~500px wide, headless included, so `resize_page` at 375 renders 500 and calls it a success. The override survives navigation, so set it once per breakpoint and drive every route under it — but `emulate` replaces the whole emulation state, so a later call for `colorScheme` carries the viewport with it or drops it. 375 is the mobile **floor** — no real phone is narrower; don't test 320/360 widths. Screenshot each.
+2. **Viewports**: desktop (~1440), tablet (~768), mobile (360 and 375 — 360 is the most common Android width, and an overflow there hides at 375). Set each with **`emulate`** — `{viewport: "375x812x3,mobile,touch"}` renders a true 375px CSS viewport with the right DPR and touch. Chrome floors a real window at ~500px wide, headless included, so `resize_page` at 375 renders 500 and calls it a success. The override survives navigation, so set it once per breakpoint and drive every route under it — but `emulate` replaces the whole emulation state, so a later call for `colorScheme` carries the viewport with it or drops it. Screenshot each.
 3. **Trace what broke back to source.** A finding without a cause is a bug report the builder has to re-investigate. `grep` the class/testid/token and give `file:line` with the scope it affects.
 
 ## What to catch (cite viewport + state + evidence, assign severity)
 Everything here is **plainly visible in a capture** — that's the bar.
 - **Missing or broken states**: no empty state, no loading indicator, an error that renders as a blank page, focus that produces nothing visible, a disabled control that looks enabled. Layout shift between states.
 - **Overflow/clipping**: horizontal scroll at any breakpoint, clipped text/controls, content escaping containers, `100vh` vs `100dvh` mobile cutoff.
-- **Breakage in the pixels**: overlapping elements, an element rendering unstyled, a broken grid, content collapsing at one breakpoint, text unreadable over the image or gradient behind it (report it as unreadable and hand the *ratio* to `/kru/accessibility-review`).
+- **Breakage in the pixels**: overlapping elements, an element rendering unstyled, a broken grid, content collapsing at one breakpoint, text unreadable over the image or gradient behind it (report it as unreadable breakage; contrast is the design's).
+- **Ambiguous grouping**: a label as close to the field above as to its own box, a heading equidistant from the section above and the content below, card padding at or above the gutter between cards, a wrapped list item that reads as two — any group whose gap to its siblings is no larger than a gap inside it (`{KRU_HOME}/skill/kru-composition/reference/layout.md`). The pair of gaps is the one number; the cause is usually one container spending a single `gap` across two depths.
 - **Responsive**: does each breakpoint reflow, or is a desktop layout leaking into mobile?
 - **Asset render**: blurry/stretched images, wrong aspect ratio, missing art, icon misalignment.
 - **Motion/keyboard**: `prefers-reduced-motion` honored; keyboard focus visible and ordered; no motion-only affordances.

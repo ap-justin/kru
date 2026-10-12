@@ -81,11 +81,11 @@ How much is being asked of working memory at this step? These entries catch the 
 
 ## One action wears the primary style per screen
 
-**Principle:** at most one control per screen or section carries the high-emphasis (primary/filled/accent) treatment; every other action is visually secondary.
+**Principle:** the eye finds the dominant action first — at most one action per screen or section carries the high-emphasis (primary/filled/accent) treatment; every other action is visually secondary.
 **Mechanism:** the Von Restorff effect — a single visually distinct element is what draws the eye and gets acted on. Style every button "primary," and the effect cancels itself: nothing stands out because everything does, and the user is back to reading labels one by one.
 **Code signal:**
   - 2+ sibling `<button>`/`<Button>` elements in one view sharing the same `variant="primary"` (or equivalent accent-filled class) prop
-  - a design-system `Button` component invoked 3+ times with the primary variant inside one route/section
+  - a design-system `Button` component invoked 3+ times with the primary variant inside one route/section for different actions — one action repeated per item (*Add to cart* on every card, *Choose* per pricing tier) counts once
   - a modal or form where "Cancel" and multiple confirm-style actions all carry equal visual weight
 **Fix:** demote all but one action per screen to secondary/outline/ghost; keep exactly one primary, or none if the screen has no dominant action.
 **Applies when:** a screen of genuinely independent widgets (e.g. a dashboard) may correctly have zero primary actions — absence isn't the defect there, multiplicity is.
@@ -121,3 +121,18 @@ How much is being asked of working memory at this step? These entries catch the 
 **Applies when:** genuinely bimodal or user-specific fields (no dominant value) don't get a default forced onto them — that trades one bias for another.
 **Detect:** HEURISTIC in general (needs usage data the code doesn't state) — narrows to STATIC in the specific case where the schema/DB already declares a default the form fails to mirror; that mismatch is directly checkable.
 **Source:** *10 Usability Heuristics* (error prevention) · https://www.nngroup.com/articles/ten-usability-heuristics/ (1994, rev. 2024)
+
+---
+
+## A required field with no payoff to the user gets fabricated answers
+
+**Principle:** every field the user must fill pays *them* something at that step; one that pays only the product is optional, deferred to where it pays, or derived.
+**Mechanism:** users act to finish the task in front of them, and pay the cheapest price that clears a blocker — a forced field with nothing in it for them gets the minimum that passes validation (`a@a.com`, `asdf`, `000-000-0000`, the first option). The column fills; the data doesn't exist, and nothing downstream can tell the two apart.
+**Code signal:**
+  - `required` / a non-optional schema field on an input whose value nothing in the flow reads back to the user — a job title, company size, "how did you hear about us" at sign-up
+  - a profile, permission or preference ask rendered before the step that delivers the first result (sign-up gating a free tool, a location prompt on page load)
+  - a select over a closed set with an empty placeholder and `required`, where the placeholder is the only way to say "none"
+**Fix:** make the field optional, move it to the step where its answer changes something for the user, or derive it from data already held.
+**Applies when:** a field the task can't complete without (a shipping address to ship, a card to pay) pays by definition — the signal is a required field the user's own task doesn't consume.
+**Detect:** HEURISTIC — whether the answer pays the user turns on intent; report as a question naming the field and the step, unless the value is written and never read anywhere in the codebase, which is STATIC.
+**Source:** *Paradox of the Active User* (Carroll & Rosson 1987) · https://www.nngroup.com/articles/paradox-of-the-active-user/ (1998)
