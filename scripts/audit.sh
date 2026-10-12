@@ -18,7 +18,7 @@ for f in agents/*.md; do
   [ "$(sed -n '2,/^---$/s/^name: *//p' "$f" | tr -d '"')" = "$n" ] || bad "$f name != file stem"
   grep -q "^| \`$n\` |" ROSTER.md || bad "$n has no ROSTER.md specialists row"
   m=$(sed -n '2,/^---$/s/^model: *//p' "$f")
-  [[ $m =~ ^claude-(opus|sonnet)-[0-9]+-[0-9]+$ ]] || bad "$f model '$m' is not a full pinned ID"
+  [[ $m =~ ^claude-(opus|sonnet|haiku)-[0-9]+-[0-9]+$ ]] || bad "$f model '$m' is not a full pinned ID"
 done
 while read -r n; do
   [ -f "agents/$n.md" ] || bad "ROSTER.md row names missing agent $n"
