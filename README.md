@@ -55,7 +55,7 @@ Two things about a cloud session worth knowing before the first run:
   through Anthropic's servers rather than the session's network.
 
 ## Requirements
-- **Claude Code 2.1.280 or newer.** An older CLI runs the seats but silently drops the newer settings they carry.
+- **Claude Code 2.1.293 or newer.** An older CLI runs the seats but silently drops the newer settings they carry.
 - **Recommended: the built-in *You should know* mod** (`/plugin enable cc-plugin-you-should-know@builtin`, Claude Code 2.1.287+). A side agent flags what you or the lead missed while seats are still running; it needs telemetry on. `/kru:setup` enables it on cloud vms too.
 - **`jq`**, for the hooks. Without it every hook fails open and the team still runs, ungated.
 - **The task tools switched on.** Newer models ship with them off, and the lead tracks its work in them.
