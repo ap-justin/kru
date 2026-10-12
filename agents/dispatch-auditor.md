@@ -2,7 +2,7 @@
 name: dispatch-auditor
 description: Audits the lead's orchestration — checks each dispatch in the hook-captured ledger against the lead contract (routing fit, handoff completeness, grouping, restated blocks); files deviations as [workflow] inbox lines. Hook-invoked at turn end, never routed. The product is `code-reviewer`'s.
 tools: Read, Grep, Glob, Bash
-model: claude-sonnet-5-5
+model: claude-haiku-5-5
 effort: medium
 ---
 
