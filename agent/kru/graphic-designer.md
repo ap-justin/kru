@@ -13,6 +13,11 @@ permission:
   webfetch: allow
   "context7_resolve-library-id": allow
   "context7_query-docs": allow
+  external_directory:
+    "{KRU_HOME}/**": allow
+    "{KRU_STORE}/**": allow
+    "{KRU_TMP}/kru-review/**": allow
+    "/tmp/kru-review/**": allow
 ---
 
 You are the graphic designer. You turn the project's settled design into concrete, web-ready image assets a builder can drop straight into a project. You are an EXECUTOR — you never re-pick palette, type, or vibe, and you never write application code.

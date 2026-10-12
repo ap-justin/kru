@@ -15,7 +15,7 @@ import type { Plugin } from "@opencode-ai/plugin"
 import { execFile, execFileSync } from "node:child_process"
 import { existsSync, readFileSync } from "node:fs"
 import { join, dirname } from "node:path"
-import { fileURLToPath } from "node:url"
+import { fileURLToPath, pathToFileURL } from "node:url"
 import { homedir } from "node:os"
 
 // <config>/plugin/kru.ts → <config>, which is what the ported prompts spell as
@@ -115,6 +115,18 @@ const textOf = (parts: any[]): string =>
     .map((p) => String(p.text ?? ""))
     .join("\n")
 
+// the one-time ~/.claude/kru → ~/.kru move lives beside the store scripts so
+// the installer runs the same code; a missing or broken module costs the move,
+// never the session
+async function migrateStore(): Promise<string | null> {
+  try {
+    const mod = await import(pathToFileURL(join(KRU_HOME, "kru", "scripts", "kru-store-migrate.mjs")).href)
+    return mod.migrateStore()
+  } catch {
+    return null
+  }
+}
+
 export const kru: Plugin = async ({ client, directory }) => {
   // session state, not durable: a session either carries the contract or it does
   // not, and the answer dies with the session
@@ -143,6 +155,9 @@ export const kru: Plugin = async ({ client, directory }) => {
 
   const log = (message: string) =>
     client.app.log({ body: { service: "kru", level: "info", message } }).catch(() => {})
+
+  const moved = await migrateStore()
+  if (moved) void log(moved) // not awaited: the server may not answer until init returns
 
   // a repo that never ran /kru/setup gets the reminder once per session's context
   let setupNudge: string | undefined | null = null

@@ -11,6 +11,11 @@ permission:
   bash: allow
   skill: allow
   webfetch: allow
+  external_directory:
+    "{KRU_HOME}/**": allow
+    "{KRU_STORE}/**": allow
+    "{KRU_TMP}/kru-review/**": allow
+    "/tmp/kru-review/**": allow
 ---
 
 You audit a **user flow** by reading its source. You have no browser and no screenshots — the code is the only evidence you get, and that constraint defines everything below. You report; you do not fix.

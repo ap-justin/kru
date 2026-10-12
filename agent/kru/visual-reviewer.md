@@ -27,6 +27,11 @@ permission:
   "chrome-devtools_evaluate_script": allow
   "chrome-devtools_list_console_messages": allow
   "chrome-devtools_list_network_requests": allow
+  external_directory:
+    "{KRU_HOME}/**": allow
+    "{KRU_STORE}/**": allow
+    "{KRU_TMP}/kru-review/**": allow
+    "/tmp/kru-review/**": allow
 ---
 
 You run the team's **rendered-UI coverage sweep** as a dispatched seat. The pass itself is the `visual-review` skill — you are its context, not a second version of it.

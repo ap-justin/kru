@@ -83,6 +83,15 @@ const TOOLS = {
   SendUserFile: null,
 }
 
+// the paths outside the working repo an allowlisted seat still reaches: the
+// install dir (skills it reads by path, the store script, references), the
+// store (ledgers, inbox, plan/), and where review seats write their reports.
+// opencode gates every read, edit and bash path outside the repo on
+// `external_directory`, and `"*": deny` denies that too. its patterns expand
+// only ~ and $HOME, so the store and $TMPDIR are placeholders bin/kru-oc.mjs
+// materializes at install, next to {KRU_HOME}.
+const EXTERNAL = ["{KRU_HOME}/**", "{KRU_STORE}/**", "{KRU_TMP}/kru-review/**", "/tmp/kru-review/**"]
+
 const mcpTool = (name) => name.replace(/^mcp__/, "").replace(/__/g, "_")
 
 // ---------------------------------------------------------------------------
@@ -126,6 +135,8 @@ const REWRITES = [
   [/the task tools \(`TaskCreate` ·\s+`TaskUpdate`, or `TodoWrite` where those are off\)/g, "`todowrite`"],
   [/the task tools \(`TaskCreate` · `TodoWrite`\)/g, "the board (`todowrite`)"],
   [/\bTodoWrite\b/g, "todowrite"],
+  // the prose form vendored skills use ("call the Skill tool with …")
+  [/\b([Tt])he (Read|Write|Edit|Grep|Glob|Bash|Skill) tool\b/g, (_m, th, t) => th + "he `" + t.toLowerCase() + "` tool"],
   [/\bthe `?Agent`? tool\b/g, "the `task` tool"],
   [/\bAgent call\b/g, "`task` call"],
   [/`Agent` call/g, "`task` call"],
@@ -216,6 +227,11 @@ const REWRITES = [
   [/carries `memory: local` in its frontmatter and `## Memory \(this repo's facts\)`/g, "carries `## Memory (this repo's facts)`"],
   [/ and `grep -l '\^memory: local' agent\/kru\/\*\.md` must list the same 29/g, ` and \`grep -l '${MEMORY_DIR}' agent/kru/*.md\` must list the same 29`],
   [/\(\+ `memory: local` on a code-writing seat, Block Q\)/g, "(+ Block Q on a code-writing seat)"],
+  // the store's home: upstream argues it from claude's protected-path rule,
+  // which opencode doesn't have; here it is the home both forks share, and an
+  // older store under .claude is moved once (scripts/kru-store-migrate.mjs)
+  [/\*\*`~\/\.kru\/`, never `~\/\.claude\/kru\/`\*\*: `\.claude` is a protected directory[^\n]*?out of reach entirely\./g,
+    "**`~/.kru/`**: the home both forks of this team share, so a plan started in one harness continues in the other. A store this fork's earlier versions kept under `.claude` is moved there once, by `plugin/kru.ts` at load and by `kru-oc install`, and never over a store already there."],
   // the harness itself
   [/\bClaude Code\b/g, "opencode"],
   // opencode names an MCP tool `<server>_<tool>`, sanitizing the server; claude
@@ -229,6 +245,10 @@ const REWRITES = [
 // the fork's own documents: they talk *about* both harnesses, so the vocabulary
 // rules would rewrite the sentences that explain the difference
 const HAND_OWNED = new Set(["skill/kru-update/SKILL.md", "PORTING.md", "MODELS.md", "README.md"])
+
+// the fork's own checks and the store move: they name claude's vocabulary in
+// order to look for it, so normalizing them would blind the scan
+const FORK_OWNED = /^scripts\/(verify-tree\.mjs|verify\.sh|smoke\.sh|hooks\.test\.sh|kru-store-migrate(\.test)?\.mjs)$/
 
 // the official-source map names claude's surfaces on purpose (its design and
 // harness rows say what upstream uses and what this fork does instead), so only
@@ -268,6 +288,7 @@ const SH_REWRITES = [
   // a read-only seat: upstream reads the tools: allowlist, here the permission block
   [/grep -m1 '\^tools:' "\$plugin_root\/agent\/kru\/\$seat\.md" \| grep -qvE '\\b\(Edit\|Write\)\\b' && readonly_seat=true/g,
     `grep -q '^  "\\*": deny' "$plugin_root/agent/kru/$seat.md" && ! grep -q '^  edit: allow' "$plugin_root/agent/kru/$seat.md" && readonly_seat=true`],
+  [/\(substituted in hooks\.json\)/g, "(passed by plugin/kru.ts)"],
   // the team's own repo has no sheet by design
   [/\[ -f "\$top\/\.claude-plugin\/plugin\.json" \]/g, '[ -f "$top/scripts/port.mjs" ]'],
   // the read-only listings of the harness a triage turn reaches for
@@ -296,6 +317,12 @@ function rewrite(text, seats, { sh = false, pathsOnly = false } = {}) {
   // command set on disk rather than from a list that drifts
   for (const name of commandNames())
     out = out.replace(new RegExp(`(^|[\\s\`('"])\\/${name}(?![\\w/-])`, "g"), `$1/kru/${name}`)
+  // a vendored skill names its siblings bare ("call the `skill` tool with
+  // "grilling""); installed here they are kru-<name>, and the tree says which
+  // quoted words are skills
+  out = out.replace(/^.*\b[Tt]he `skill` tool\b.*$/gm, (line) =>
+    line.replace(/"([a-z0-9-]+)"/g, (m, n) => (existsSync(join(ROOT, "skill", `kru-${n}`)) ? `"kru-${n}"` : m)),
+  )
   // a bare `kru:<name>` is a seat (an agent address) or a skill (a skill-tool
   // name); the tree says which, so the rule doesn't have to guess.
   return out.replace(/\bkru:([a-z0-9-]+)/g, (_m, n) => (seats.has(n) ? `kru/${n}` : `kru-${n}`))
@@ -376,7 +403,7 @@ function portAgents() {
       ? null
       : fm.raw
           .split("\n")
-          .filter((l) => /^\s+\S+: allow$/.test(l))
+          .filter((l) => /^ {2}\S+: allow$/.test(l))
           .map((l) => l.trim().replace(/: allow$/, "").replace(/^"|"$/g, ""))
 
     const out = [`description: ${description}`, `mode: subagent`, `model: ${seat.model}`]
@@ -404,6 +431,8 @@ function portAgents() {
       out.push("permission:")
       out.push(`  "*": deny`)
       for (const k of allow) out.push(`  ${/[^a-z_]/.test(k) ? `"${k}"` : k}: allow`)
+      out.push("  external_directory:")
+      for (const p of EXTERNAL) out.push(`    "${p}": allow`)
       if (dropped.length) log(`  ${name}: dropped ${dropped.join(", ")} (no opencode equivalent)`)
     }
 
@@ -467,7 +496,7 @@ function portText() {
     const rel = relative(ROOT, path)
     // generated trees are their generator's to normalize, or the two passes
     // fight over a line forever
-    if (/^(scripts\/port\.mjs|bin\/|plugin\/|command\/|agent\/kru\.md)/.test(rel)) continue
+    if (/^(scripts\/port\.mjs|bin\/|plugin\/|command\/|agent\/kru\.md)/.test(rel) || FORK_OWNED.test(rel)) continue
     const before = readF(path)
     const src = HAND_OWNED.has(rel) ? before : rewrite(before, seats, { sh: rel.endsWith(".sh"), pathsOnly: PATHS_ONLY.has(rel) })
     if (src !== before) write(path, src)

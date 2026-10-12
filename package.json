@@ -10,7 +10,10 @@
     "gen-asset": "bash scripts/asset/run.sh gen-asset"
   },
   "devDependencies": {
-    "@opencode-ai/plugin": "latest"
+    "@opencode-ai/plugin": "1.19.0",
+    "@types/node": "24.19.2",
+    "typescript": "7.0.2",
+    "yaml": "2.9.1"
   },
   "version": "0.2.0+kru0.148.0",
   "bin": {

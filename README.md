@@ -113,7 +113,8 @@ Three env vars move it: **`KRU_HOME`** relocates everything (default `~/.kru` â€
 the store, unrelated to this fork's install dir), **`KRU_PROJECT`** names the project's store folder
 in place of the repo's folder name, and **`KRU_PROJECT_STORE`** pins one project's plan store.
 `references/store.md` is the whole map. A store kept at `~/.claude/kru/` by this fork's earlier
-versions stays where it is; move it to `~/.kru/` to keep its plans.
+versions moves to `~/.kru/` the first time the plugin loads or `kru-oc install` runs â€” never over a
+`~/.kru/` that already holds files, and not when `KRU_HOME` names another root.
 
 ## Commands
 **Getting started**

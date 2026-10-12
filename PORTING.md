@@ -8,6 +8,8 @@ normalized by one script.
 git fetch upstream && git merge upstream/main
 node scripts/port.mjs            # re-normalize what the merge brought in
 node bin/kru-oc.mjs doctor       # confirm, then: kru-oc sync
+bash scripts/verify.sh           # every static check (CI runs it on each pull request)
+bash scripts/smoke.sh            # local, spends tokens: a real opencode dispatches a real seat
 ```
 
 `scripts/port.mjs` is **idempotent**, which is the whole design: a merge that reintroduces Claude Code
@@ -23,7 +25,7 @@ the tree is not normalized (the installer refuses to build an un-normalized tree
 | `skills/<name>/` | `skill/kru-<name>/` | opencode's skill namespace is flat and global, and the loader requires the frontmatter `name` to match its directory |
 | — | `command/kru/<name>.md` | opencode keeps commands separate from skills; one is generated per user-invoked skill (`argument-hint` upstream, or named as `/kru/<name>` in ported prose) |
 | `hooks/hooks.json` + 10 `.sh` | `plugin/kru.ts` + 6 `.sh` | opencode hooks are a TS plugin. `check-handoff`, `log-dispatch`, `log-return`, `setup-nudge`, `store-sync` and the shared `readonly-bash` test run behind an adapter; `require-lead` and `brainstorm-guard` read a transcript opencode doesn't expose, so the plugin tracks their state itself; `nudge-audit` became a system line and `check-task-tools` has nothing to check (opencode's `todowrite` is always on) |
-| `hooks/*.test.sh`, `TESTING.md`, `evals/`, `.claude/` | — | upstream's hook tests take the plugin root as laid out upstream, its evals run under `claude plugin eval`, and `.claude/` is its own release tooling; none runs here. `scripts/kru-store.test.sh` stays |
+| `hooks/*.test.sh`, `TESTING.md`, `evals/`, `.claude/` | — | upstream's hook tests take the plugin root as laid out upstream, its evals run under `claude plugin eval`, and `.claude/` is its own release tooling; none runs here. `scripts/kru-store.test.sh` stays, and `scripts/hooks.test.sh` runs the ported hooks against an installed tree |
 | `.claude-plugin/` | `bin/kru-oc.mjs` | no plugin manifest; installation is a copy into a config dir. The roster's wiring map follows: the version lives in `package.json`, the seat count in its `description` and `README.md` (upstream dropped its count; `skill/kru-roster/audit.md` keeps assertion 1 for it here) |
 | `scripts/asset/package.json` | same | the asset seats' deps install on first run into a data dir (`scripts/asset/run.sh`), so the root `package.json` carries only the fork's own scripts |
 | `ROSTER.md`, `SOURCES.md`, `TRACKER.md`, `PREFERENCES.md`, `references/`, `scripts/`, `hooks/` | same, installed under `<config>/kru/` | the support tree the prompts read through `{KRU_HOME}` |
@@ -43,7 +45,10 @@ Mechanical, all of it in `scripts/port.mjs`:
 
 - **Agent frontmatter** — `mode: subagent`, the seat's zen model (`MODELS.md`), a temperature where
   the seat wants one, and upstream's `tools:` allowlist translated into opencode's `permission` block
-  (`"*": deny` then the seat's own tools re-allowed). Upstream `experimental:`/`effort:` keys are
+  (`"*": deny` then the seat's own tools re-allowed). `"*": deny` also denies `external_directory`,
+  opencode's gate on any path outside the working repo, so the block re-allows exactly the install
+  dir, the store and the review-report dir (`EXTERNAL`); install fills in `{KRU_STORE}` and
+  `{KRU_TMP}`, since opencode's patterns expand only `~` and `$HOME`. Upstream `experimental:`/`effort:` keys are
   dropped; opencode has no equivalent.
 - **Seat memory** — upstream's `memory: local` has the harness supply a per-repo memory file. opencode
   has none, so the key is dropped and each seat carrying Block Q gets one line naming the file
@@ -148,7 +153,9 @@ human read. `scripts/port.mjs` → `HAND_OWNED` holds the list the rules skip en
   fails open by design, so a wrong assumption costs the gate, not the session.
 - A dispatched seat runs in a child session; the plugin asks the server for the session's parent to
   exempt it from the lead's gates, and treats a failed lookup as a child.
-- The store moved with upstream from `~/.claude/kru/` to `~/.kru/` (`KRU_HOME`). Nothing migrates it.
+- The store moved with upstream from `~/.claude/kru/` to `~/.kru/` (`KRU_HOME`). `scripts/kru-store-migrate.mjs`
+  moves it once — `plugin/kru.ts` at load, `kru-oc install` before it creates the new root — and never
+  over a `~/.kru/` that already holds files, or when `KRU_HOME` names another root.
 - `/kru/eval-review` and `/kru/propagate` came over as upstream wrote them: the first audits a
   `claude plugin eval` suite, the second carries a release of *this* repo to set-up repos and has
   not been checked against the fork's install shape.

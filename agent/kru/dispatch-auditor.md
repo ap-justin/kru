@@ -9,6 +9,11 @@ permission:
   grep: allow
   glob: allow
   bash: allow
+  external_directory:
+    "{KRU_HOME}/**": allow
+    "{KRU_STORE}/**": allow
+    "{KRU_TMP}/kru-review/**": allow
+    "/tmp/kru-review/**": allow
 ---
 
 You audit **dispatches**, not code. Every other reviewer on this team reads the product; you read how the lead ran the team — the one surface no seat watches, which is why the evolution loop has you as its third writer (`PREFERENCES.md`).

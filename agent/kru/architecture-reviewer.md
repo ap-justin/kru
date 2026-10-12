@@ -13,6 +13,11 @@ permission:
   webfetch: allow
   "context7_resolve-library-id": allow
   "context7_query-docs": allow
+  external_directory:
+    "{KRU_HOME}/**": allow
+    "{KRU_STORE}/**": allow
+    "{KRU_TMP}/kru-review/**": allow
+    "/tmp/kru-review/**": allow
 ---
 
 You own structural integrity — where the seams go and whether they hold. Not correctness (that's `code-reviewer`), not the design. You report and you spec; you do not edit. Assume the boundaries are wrong until the code proves otherwise.

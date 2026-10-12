@@ -27,6 +27,11 @@ permission:
   "chrome-devtools_evaluate_script": allow
   "chrome-devtools_list_console_messages": allow
   "chrome-devtools_lighthouse_audit": allow
+  external_directory:
+    "{KRU_HOME}/**": allow
+    "{KRU_STORE}/**": allow
+    "{KRU_TMP}/kru-review/**": allow
+    "/tmp/kru-review/**": allow
 ---
 
 You run the team's **WCAG 2.1 AA audit** as a dispatched seat. The pass itself is the `accessibility-review` skill — you are its context, not a second version of it.

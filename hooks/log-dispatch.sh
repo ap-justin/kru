@@ -3,7 +3,7 @@
 # dispatch to the session ledger dispatch-auditor reads. fail open everywhere —
 # a logging miss must never break the session.
 command -v jq >/dev/null 2>&1 || exit 0
-# plugin root arrives as $1 (substituted in hooks.json) — it is not a
+# plugin root arrives as $1 (passed by plugin/kru.ts) — it is not a
 # guaranteed env var here, and an empty root would silence logging forever
 plugin_root="${1:-}"
 [ -d "$plugin_root/agent/kru" ] || exit 0
