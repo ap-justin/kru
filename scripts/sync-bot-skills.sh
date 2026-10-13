@@ -9,8 +9,9 @@
 # user writes to. no concurrent writer. a process that already has write
 # access to the library can change those files itself; this script does not
 # try to win a race against one. an exclusive flock on <library>/.sync.lock
-# keeps two syncs from overlapping. if that lock is held, exit non-zero and
-# write nothing.
+# keeps two syncs from overlapping. if that lock is held, or the lock path is
+# a symlink, exit non-zero and write nothing. a missing lock is created
+# without following links.
 #
 # a skill directory that is itself a symlink is skipped. a symlink anywhere
 # in the source skill is an error: that skill is not installed. an extra file
@@ -38,6 +39,7 @@
 #   error: <name>: cannot scan source
 #   error: <name>: could not install
 #   error: sync already running
+#   error: lock file is a symlink
 #   parked skill left at <path>
 #   dropped <name>: not in the list, left in place
 set -euo pipefail
@@ -215,15 +217,18 @@ scan_symlinks() {
 }
 
 # true when any component of root/rel is a symlink. does not follow.
+# split on / without globbing, so a component named * stays literal.
 path_has_symlink() {
   local root=$1 rel=$2 acc="" part
+  local -a parts=()
   local IFS=/
-  for part in $rel; do
+  read -ra parts <<< "$rel" || true
+  for part in "${parts[@]}"; do
     [ -n "$part" ] || continue
     if [ -z "$acc" ]; then
       acc=$part
     else
-      acc=$acc/$part
+      acc="$acc/$part"
     fi
     if [ -h "$root/$acc" ] || [ -L "$root/$acc" ]; then
       return 0
@@ -238,7 +243,8 @@ foreign_owner() {
 
 insert_marker() {
   local file=$1 marker=$2 tmp
-  tmp=$(mktemp)
+  # keep the temp next to the staged file, not under TMPDIR.
+  tmp=$(mktemp "$(dirname -- "$file")/.marker.XXXXXX") || return 1
   if ! awk -v marker="$marker" '
     BEGIN { closed = 0 }
     NR == 1 {
@@ -410,9 +416,32 @@ copy_skill() {
 
 command -v flock >/dev/null 2>&1 || { echo "flock is required" >&2; exit 1; }
 mkdir -p "$library"
-# exclusive, non-blocking. a held lock means another sync is in progress:
-# exit before any skill is written. <> does not truncate the lock file.
-exec 9<>"$library/.sync.lock"
+# refuse a symlink before opening it. create a missing lock with noclobber,
+# which does not follow a link, then open it only if it is a regular file.
+# a held lock exits before any skill is written. <> does not truncate.
+lock=$library/.sync.lock
+if [ -h "$lock" ] || [ -L "$lock" ]; then
+  echo "error: lock file is a symlink" >&2
+  exit 1
+fi
+if [ ! -e "$lock" ]; then
+  set -o noclobber
+  if ! : >"$lock"; then
+    set +o noclobber
+    if [ -h "$lock" ] || [ -L "$lock" ]; then
+      echo "error: lock file is a symlink" >&2
+    else
+      echo "error: cannot create lock file" >&2
+    fi
+    exit 1
+  fi
+  set +o noclobber
+fi
+if [ -h "$lock" ] || [ -L "$lock" ] || [ ! -f "$lock" ]; then
+  echo "error: lock file is a symlink" >&2
+  exit 1
+fi
+exec 9<>"$lock"
 if ! flock -n 9; then
   echo "error: sync already running" >&2
   exit 1

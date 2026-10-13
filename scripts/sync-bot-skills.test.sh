@@ -5,7 +5,9 @@
 # symlink is skipped. a symlink inside a source skill fails that skill. an
 # extra whose path contains a symlink is not followed. a failed swap puts the
 # parked tree back. a held lock exits non-zero and writes nothing. nothing
-# outside the library changes. ownership is the exact synced-from line, so
+# outside the library changes. a live, dangling, or relative lock symlink is
+# refused before it is opened. an extra named * is logged as a symlink.
+# ownership is the exact synced-from line, so
 # `owner: kru-other` and prose that mentions `owner: kru` are not kru.
 # `-- -dir` takes a library path that starts with -. an unreadable directory,
 # missing frontmatter, and a BOM are skipped.
@@ -829,6 +831,122 @@ elif ! case "$lock_log" in *"error: sync already running"*) true ;; *) false ;; 
   lock_why="log [$lock_log]"
 fi
 report "held lock exits non-zero and writes nothing" "$lock_ok" "$lock_why"
+
+locklink_list=$sandbox/locklink-list.txt
+printf 'brief\n' > "$locklink_list"
+for kind in live dangling relative; do
+  ll_out=$sandbox/ll-$kind-out
+  ll_lib=$sandbox/ll-$kind-lib
+  mkdir -p "$ll_out" "$ll_lib"
+  echo sentinel > "$ll_out/sentinel.txt"
+  echo 'LOCKLINK SENTINEL' > "$ll_lib/sentinel.txt"
+  case "$kind" in
+    live)
+      echo 'LIVE SECRET' > "$ll_out/secret"
+      ln -s "$ll_out/secret" "$ll_lib/.sync.lock"
+      ll_want=$ll_out/secret
+      ;;
+    dangling)
+      ln -s "$ll_out/missing-lock" "$ll_lib/.sync.lock"
+      ll_want=$ll_out/missing-lock
+      ;;
+    relative)
+      echo 'REL SECRET' > "$ll_out/secret"
+      ln -s ../ll-relative-out/secret "$ll_lib/.sync.lock"
+      ll_want=../ll-relative-out/secret
+      ;;
+  esac
+  seal "$ll_out" "$sandbox/ll-$kind-out.snap"
+  ll_log=$(bash "$sync" "$ll_lib" --list "$locklink_list" 2>&1)
+  ll_code=$?
+  ll_ok=true
+  ll_why=""
+  ll_diff=$(outside_diff "$sandbox/ll-$kind-out.snap" "$ll_out")
+  ll_target=$(readlink "$ll_lib/.sync.lock" 2>/dev/null || true)
+  if [ "$ll_code" = 0 ]; then
+    ll_ok=false
+    ll_why="code $ll_code [$ll_log]"
+  elif [ -n "$ll_diff" ]; then
+    ll_ok=false
+    ll_why="outside changed [$ll_diff]"
+  elif [ ! -h "$ll_lib/.sync.lock" ] || [ ! -L "$ll_lib/.sync.lock" ]; then
+    ll_ok=false
+    ll_why="lock symlink was replaced"
+  elif [ "$ll_target" != "$ll_want" ]; then
+    ll_ok=false
+    ll_why="link target changed [$ll_target]"
+  elif [ -e "$ll_lib/brief" ] || [ -h "$ll_lib/brief" ]; then
+    ll_ok=false
+    ll_why="wrote a skill"
+  elif ! grep -q 'LOCKLINK SENTINEL' "$ll_lib/sentinel.txt"; then
+    ll_ok=false
+    ll_why="library sentinel changed"
+  elif ! grep -F -q 'error: lock file is a symlink' <<< "$ll_log"; then
+    ll_ok=false
+    ll_why="log [$ll_log]"
+  elif [ "$kind" = live ] && ! grep -q 'LIVE SECRET' "$ll_out/secret"; then
+    ll_ok=false
+    ll_why="live target was overwritten"
+  elif [ "$kind" = dangling ] && { [ -e "$ll_out/missing-lock" ] || [ -h "$ll_out/missing-lock" ]; }; then
+    ll_ok=false
+    ll_why="dangling target was created"
+  elif [ "$kind" = relative ] && ! grep -q 'REL SECRET' "$ll_out/secret"; then
+    ll_ok=false
+    ll_why="relative target was overwritten"
+  fi
+  report "$kind lock symlink is refused and nothing is written" "$ll_ok" "$ll_why"
+done
+
+star_out=$sandbox/star-out
+star_lib=$sandbox/star-lib
+mkdir -p "$star_out" "$star_lib/brief"
+echo sentinel > "$star_out/sentinel.txt"
+echo 'STAR SECRET' > "$star_out/secret"
+cat > "$star_lib/brief/SKILL.md" << EOF
+---
+name: brief
+description: local
+---
+$(marker_for brief)
+OLD STAR BODY
+EOF
+echo 'KEEP STAR' > "$star_lib/brief/keep.txt"
+# quotes keep the asterisk literal: the extra's name is *
+ln -s "$star_out/secret" "$star_lib/brief/*"
+star_list=$sandbox/star-list.txt
+printf 'brief\n' > "$star_list"
+seal "$star_out" "$sandbox/star-out.snap"
+star_log=$(bash "$sync" "$star_lib" --list "$star_list" 2>&1)
+star_code=$?
+star_ok=true
+star_why=""
+star_diff=$(outside_diff "$sandbox/star-out.snap" "$star_out")
+if [ "$star_code" != 0 ]; then
+  star_ok=false
+  star_why="code $star_code [$star_log]"
+elif [ -n "$star_diff" ]; then
+  star_ok=false
+  star_why="outside changed [$star_diff]"
+elif ! grep -q 'STAR SECRET' "$star_out/secret"; then
+  star_ok=false
+  star_why="symlink target was overwritten"
+elif ! grep -q 'KEEP STAR' "$star_lib/brief/keep.txt"; then
+  star_ok=false
+  star_why="plain extra was dropped"
+elif [ -e "$star_lib/brief/*" ] || [ -h "$star_lib/brief/*" ]; then
+  star_ok=false
+  star_why="extra named * was kept or followed"
+elif grep -q 'OLD STAR BODY' "$star_lib/brief/SKILL.md"; then
+  star_ok=false
+  star_why="skill was not refreshed"
+elif ! grep -F -q 'skipped brief: extra symlink *' <<< "$star_log"; then
+  star_ok=false
+  star_why="did not log the extra named * [$star_log]"
+elif ! case "$star_log" in *"synced brief"*) true ;; *) false ;; esac; then
+  star_ok=false
+  star_why="log [$star_log]"
+fi
+report "extra named * is logged as a symlink and nothing outside changes" "$star_ok" "$star_why"
 
 unread_out=$sandbox/unread-out
 unread_lib=$sandbox/unread-lib
