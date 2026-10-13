@@ -1,12 +1,14 @@
 #!/bin/bash
 # sync-bot-skills.sh: create, overwrite, skip a foreign owner, skip an
 # unmarked folder, and a second run that changes nothing. a name that leaves
-# the list is reported and left on disk. a symlink (dir, SKILL.md, sibling,
-# or dangling) is skipped and nothing outside the library changes. ownership
-# is the exact synced-from line, so `owner: kru-other` and prose that mentions
-# `owner: kru` are not kru. `-- -dir` takes a library path that starts with -.
-# a swap during install, an unreadable directory, missing frontmatter, and a
-# BOM are skipped.
+# the list is reported and left on disk. a skill directory that is itself a
+# symlink is skipped. a symlink inside a source skill fails that skill. an
+# extra whose path contains a symlink is not followed. a failed swap puts the
+# parked tree back. a held lock exits non-zero and writes nothing. nothing
+# outside the library changes. ownership is the exact synced-from line, so
+# `owner: kru-other` and prose that mentions `owner: kru` are not kru.
+# `-- -dir` takes a library path that starts with -. an unreadable directory,
+# missing frontmatter, and a BOM are skipped.
 # run: bash scripts/sync-bot-skills.test.sh
 set -u
 root=$(cd "$(dirname "$0")/.." && pwd)
@@ -310,21 +312,23 @@ elif [ -n "$linkmd_diff" ]; then
 elif ! grep -q 'LINKMD CANARY' "$linkmd_out/SKILL.md"; then
   linkmd_ok=false
   linkmd_why="linked SKILL.md overwritten"
-elif [ ! -h "$linkmd_lib/writing-for-agents/SKILL.md" ]; then
+elif [ -h "$linkmd_lib/writing-for-agents/SKILL.md" ] || [ -L "$linkmd_lib/writing-for-agents/SKILL.md" ]; then
   linkmd_ok=false
-  linkmd_why="SKILL.md symlink replaced"
-elif [ -e "$linkmd_lib/writing-for-agents/CALIBRATION.md" ] \
-  || [ -e "$linkmd_lib/writing-for-agents/REFUSALS.md" ]; then
+  linkmd_why="SKILL.md is still a symlink"
+elif [ "$(line_after_fm "$linkmd_lib/writing-for-agents/SKILL.md")" != "$(marker_for writing-for-agents)" ]; then
   linkmd_ok=false
-  linkmd_why="wrote sibling files beside the link"
+  linkmd_why="marker missing"
 elif ! grep -q 'keep local' "$linkmd_lib/writing-for-agents/local.txt"; then
   linkmd_ok=false
   linkmd_why="local file changed"
-elif ! case "$linkmd_log" in *"skipped writing-for-agents: symlink"*) true ;; *) false ;; esac; then
+elif ! case "$linkmd_log" in *"synced writing-for-agents"*) true ;; *) false ;; esac; then
   linkmd_ok=false
   linkmd_why="log [$linkmd_log]"
+elif ! case "$linkmd_log" in *"skipped writing-for-agents: extra symlink SKILL.md"*) true ;; *) false ;; esac; then
+  linkmd_ok=false
+  linkmd_why="did not skip the symlinked extra [$linkmd_log]"
 fi
-report "symlinked SKILL.md is skipped and nothing outside changes" "$linkmd_ok" "$linkmd_why"
+report "symlinked SKILL.md is not followed and nothing outside changes" "$linkmd_ok" "$linkmd_why"
 
 linksib_out=$sandbox/linksib-out
 linksib_lib=$sandbox/linksib-lib
@@ -355,20 +359,24 @@ elif [ -n "$linksib_diff" ]; then
 elif ! grep -q 'SIB CANARY' "$linksib_out/CALIBRATION.md"; then
   linksib_ok=false
   linksib_why="linked sibling overwritten"
-elif ! grep -q 'SIB BODY CANARY' "$linksib_lib/writing-for-agents/SKILL.md"; then
+elif [ -h "$linksib_lib/writing-for-agents/CALIBRATION.md" ] \
+  || [ -L "$linksib_lib/writing-for-agents/CALIBRATION.md" ]; then
   linksib_ok=false
-  linksib_why="wrote the kru-owned SKILL.md"
-elif [ ! -h "$linksib_lib/writing-for-agents/CALIBRATION.md" ]; then
+  linksib_why="sibling is still a symlink"
+elif grep -q 'SIB CANARY' "$linksib_lib/writing-for-agents/CALIBRATION.md"; then
   linksib_ok=false
-  linksib_why="sibling symlink replaced"
-elif [ -e "$linksib_lib/writing-for-agents/REFUSALS.md" ]; then
+  linksib_why="followed the sibling symlink"
+elif ! cmp -s "$root/skills/writing-for-agents/CALIBRATION.md" "$linksib_lib/writing-for-agents/CALIBRATION.md"; then
   linksib_ok=false
-  linksib_why="wrote another sibling"
-elif ! case "$linksib_log" in *"skipped writing-for-agents: symlink"*) true ;; *) false ;; esac; then
+  linksib_why="source sibling was not installed"
+elif ! case "$linksib_log" in *"synced writing-for-agents"*) true ;; *) false ;; esac; then
   linksib_ok=false
   linksib_why="log [$linksib_log]"
+elif ! case "$linksib_log" in *"skipped writing-for-agents: extra symlink CALIBRATION.md"*) true ;; *) false ;; esac; then
+  linksib_ok=false
+  linksib_why="did not skip the symlinked extra [$linksib_log]"
 fi
-report "symlinked sibling file is skipped and nothing outside changes" "$linksib_ok" "$linksib_why"
+report "symlinked sibling is not followed and nothing outside changes" "$linksib_ok" "$linksib_why"
 
 dangle_out=$sandbox/dangle-out
 dangle_lib=$sandbox/dangle-lib
@@ -424,23 +432,24 @@ if [ "$danglein_code" != 0 ]; then
 elif [ -n "$danglein_diff" ]; then
   danglein_ok=false
   danglein_why="outside changed [$danglein_diff]"
-elif [ -e "$danglein_out/missing-cal" ]; then
+elif [ -e "$danglein_out/missing-cal" ] || [ -h "$danglein_out/missing-cal" ]; then
   danglein_ok=false
   danglein_why="dangling target was created"
-elif ! grep -q 'DANGLEIN BODY' "$danglein_lib/writing-for-agents/SKILL.md"; then
+elif [ -h "$danglein_lib/writing-for-agents/CALIBRATION.md" ] \
+  || [ -L "$danglein_lib/writing-for-agents/CALIBRATION.md" ]; then
   danglein_ok=false
-  danglein_why="wrote SKILL.md before the dangling link"
-elif [ ! -h "$danglein_lib/writing-for-agents/CALIBRATION.md" ]; then
+  danglein_why="dangling sibling was kept"
+elif ! cmp -s "$root/skills/writing-for-agents/CALIBRATION.md" "$danglein_lib/writing-for-agents/CALIBRATION.md"; then
   danglein_ok=false
-  danglein_why="dangling sibling replaced"
-elif [ -e "$danglein_lib/writing-for-agents/REFUSALS.md" ]; then
-  danglein_ok=false
-  danglein_why="wrote another sibling"
-elif ! case "$danglein_log" in *"skipped writing-for-agents: symlink"*) true ;; *) false ;; esac; then
+  danglein_why="source sibling was not installed"
+elif ! case "$danglein_log" in *"synced writing-for-agents"*) true ;; *) false ;; esac; then
   danglein_ok=false
   danglein_why="log [$danglein_log]"
+elif ! case "$danglein_log" in *"skipped writing-for-agents: extra symlink CALIBRATION.md"*) true ;; *) false ;; esac; then
+  danglein_ok=false
+  danglein_why="did not skip the dangling extra [$danglein_log]"
 fi
-report "dangling link inside a skill is skipped and nothing outside changes" "$danglein_ok" "$danglein_why"
+report "dangling link inside a skill is not followed and nothing outside changes" "$danglein_ok" "$danglein_why"
 
 # --- ownership is the exact marker line, not an unanchored owner: kru -------
 own_out=$sandbox/own-out
@@ -603,69 +612,223 @@ elif ! case "$dash_log" in *"synced brief"*) true ;; *) false ;; esac; then
 fi
 report "-- -dir takes the library path and nothing outside changes" "$dash_ok" "$dash_why"
 
-# --- install races, unreadable trees, and strict frontmatter ----------------
-race_out=$sandbox/race-out
-race_lib=$sandbox/race-lib
-mkdir -p "$race_out/foreign" "$race_lib/brief"
-echo sentinel > "$race_out/sentinel.txt"
-cat > "$race_out/foreign/SKILL.md" << 'EOF'
----
-name: brief
-description: foreign
----
-FOREIGN RACE BODY
-EOF
-cat > "$race_lib/brief/SKILL.md" << EOF
+# --- failed swap, source symlink, symlinked extra, held lock ----------------
+swap_out=$sandbox/swap-out
+swap_lib=$sandbox/swap-lib
+mkdir -p "$swap_out" "$swap_lib/brief"
+echo sentinel > "$swap_out/sentinel.txt"
+cat > "$swap_lib/brief/SKILL.md" << EOF
 ---
 name: brief
 description: local
 ---
 $(marker_for brief)
-RACE CANARY
+ORIGINAL BODY
 EOF
-race_list=$sandbox/race-list.txt
-printf 'brief\n' > "$race_list"
-race_hook=$sandbox/race-hook.sh
-cat > "$race_hook" << EOF
+echo 'KEEP SIBLING' > "$swap_lib/brief/note.txt"
+swap_list=$sandbox/swap-list.txt
+printf 'brief\n' > "$swap_list"
+swap_hook=$sandbox/swap-hook.sh
+cat > "$swap_hook" << EOF
 #!/bin/bash
 dest=\$1
-if [ ! -f "\$dest/SKILL.md" ] || ! grep -q 'RACE CANARY' "\$dest/SKILL.md"; then
-  echo 'WROTE BEFORE HOOK' > "$race_out/wrote-before"
-  exit 0
+stage=\$3
+parked=\$4
+if [ -e "\$dest" ] || [ -h "\$dest" ]; then
+  echo 'NOT PARKED' > "\$dest/SKILL.md"
 fi
-rm -rf -- "\$dest"
-ln -s "$race_out/foreign" "\$dest"
+if [ ! -f "\$parked/SKILL.md" ] || ! grep -q 'ORIGINAL BODY' "\$parked/SKILL.md"; then
+  echo 'PARK MISSING' > "$swap_out/park-missing"
+fi
+rm -rf -- "\$stage"
 EOF
-seal "$race_out" "$sandbox/race-out.snap"
-race_log=$(KRU_SYNC_BEFORE_REPLACE="$race_hook" bash "$sync" "$race_lib" --list "$race_list" 2>&1)
-race_code=$?
-race_ok=true
-race_why=""
-race_diff=$(outside_diff "$sandbox/race-out.snap" "$race_out")
-race_left=$(find "$race_lib" -name '.sync*' -print)
-if [ "$race_code" != 0 ]; then
-  race_ok=false
-  race_why="code $race_code [$race_log]"
-elif [ -n "$race_diff" ]; then
-  race_ok=false
-  race_why="outside changed [$race_diff]"
-elif ! grep -q 'FOREIGN RACE BODY' "$race_out/foreign/SKILL.md"; then
-  race_ok=false
-  race_why="foreign content was overwritten"
-elif [ ! -h "$race_lib/brief" ] || [ ! -L "$race_lib/brief" ]; then
-  race_ok=false
-  race_why="dest symlink was replaced"
-elif ! case "$race_log" in *"skipped brief: symlink"*) true ;; *) false ;; esac; then
-  race_ok=false
-  race_why="log [$race_log]"
-elif case "$race_log" in *"synced brief"*) true ;; *) false ;; esac; then
-  race_ok=false
-  race_why="synced through the swap [$race_log]"
-elif [ -n "$race_left" ]; then
-  race_ok=false
-  race_why="left a stage dir [$race_left]"
+seal "$swap_out" "$sandbox/swap-out.snap"
+swap_log=$(KRU_SYNC_BEFORE_REPLACE="$swap_hook" bash "$sync" "$swap_lib" --list "$swap_list" 2>&1)
+swap_code=$?
+swap_ok=true
+swap_why=""
+swap_diff=$(outside_diff "$sandbox/swap-out.snap" "$swap_out")
+swap_left=$(find "$swap_lib" -name '.sync-old.*' -print)
+if [ "$swap_code" = 0 ]; then
+  swap_ok=false
+  swap_why="code $swap_code [$swap_log]"
+elif [ -n "$swap_diff" ]; then
+  swap_ok=false
+  swap_why="outside changed [$swap_diff]"
+elif ! grep -q 'ORIGINAL BODY' "$swap_lib/brief/SKILL.md"; then
+  swap_ok=false
+  swap_why="original body was not restored"
+elif ! grep -q 'KEEP SIBLING' "$swap_lib/brief/note.txt"; then
+  swap_ok=false
+  swap_why="sibling was not restored"
+elif grep -q 'NOT PARKED' "$swap_lib/brief/SKILL.md"; then
+  swap_ok=false
+  swap_why="dest was still in place when the hook ran"
+elif [ -n "$swap_left" ]; then
+  swap_ok=false
+  swap_why="left a parked tree [$swap_left]"
+elif ! case "$swap_log" in *"error: brief: could not install"*) true ;; *) false ;; esac; then
+  swap_ok=false
+  swap_why="log [$swap_log]"
+elif case "$swap_log" in *"synced brief"*) true ;; *) false ;; esac; then
+  swap_ok=false
+  swap_why="reported synced [$swap_log]"
 fi
-report "swap race does not write through a symlink and foreign content survives" "$race_ok" "$race_why"
+report "failed swap restores the original and nothing outside changes" "$swap_ok" "$swap_why"
+
+srcsym_out=$sandbox/srcsym-out
+srcsym_lib=$sandbox/srcsym-lib
+srcsym_root=$sandbox/srcsym-root
+mkdir -p "$srcsym_out" "$srcsym_lib/brief" "$srcsym_root/brief"
+echo sentinel > "$srcsym_out/sentinel.txt"
+echo 'SECRET BODY' > "$srcsym_out/target"
+cat > "$srcsym_root/brief/SKILL.md" << 'EOF'
+---
+name: brief
+description: source
+---
+SOURCE BODY
+EOF
+ln -s "$srcsym_out/target" "$srcsym_root/brief/extra"
+cat > "$srcsym_lib/brief/SKILL.md" << 'EOF'
+---
+name: brief
+description: foreign
+---
+FOREIGN SOURCE BODY
+EOF
+srcsym_list=$sandbox/srcsym-list.txt
+printf 'brief\n' > "$srcsym_list"
+seal "$srcsym_out" "$sandbox/srcsym-out.snap"
+srcsym_log=$(KRU_SYNC_SKILL_ROOT="$srcsym_root" bash "$sync" "$srcsym_lib" --list "$srcsym_list" 2>&1)
+srcsym_code=$?
+srcsym_ok=true
+srcsym_why=""
+srcsym_diff=$(outside_diff "$sandbox/srcsym-out.snap" "$srcsym_out")
+if [ "$srcsym_code" = 0 ]; then
+  srcsym_ok=false
+  srcsym_why="code $srcsym_code [$srcsym_log]"
+elif [ -n "$srcsym_diff" ]; then
+  srcsym_ok=false
+  srcsym_why="outside changed [$srcsym_diff]"
+elif ! grep -q 'SECRET BODY' "$srcsym_out/target"; then
+  srcsym_ok=false
+  srcsym_why="symlink target was overwritten"
+elif ! grep -q 'FOREIGN SOURCE BODY' "$srcsym_lib/brief/SKILL.md"; then
+  srcsym_ok=false
+  srcsym_why="foreign content was overwritten"
+elif [ -e "$srcsym_lib/brief/extra" ] || [ -h "$srcsym_lib/brief/extra" ]; then
+  srcsym_ok=false
+  srcsym_why="source symlink was installed"
+elif ! case "$srcsym_log" in *"error: brief: source contains a symlink"*) true ;; *) false ;; esac; then
+  srcsym_ok=false
+  srcsym_why="log [$srcsym_log]"
+elif case "$srcsym_log" in *"synced brief"*) true ;; *) false ;; esac; then
+  srcsym_ok=false
+  srcsym_why="synced a source that contains a symlink [$srcsym_log]"
+fi
+report "source symlink is refused and nothing outside changes" "$srcsym_ok" "$srcsym_why"
+
+extra_out=$sandbox/extra-out
+extra_lib=$sandbox/extra-lib
+mkdir -p "$extra_out/via" "$extra_lib/brief/nest"
+echo sentinel > "$extra_out/sentinel.txt"
+echo 'SECRET BODY' > "$extra_out/secret"
+echo 'VIA BODY' > "$extra_out/via/secret.txt"
+cat > "$extra_lib/brief/SKILL.md" << EOF
+---
+name: brief
+description: local
+---
+$(marker_for brief)
+OLD EXTRA BODY
+EOF
+echo 'KEEP EXTRA' > "$extra_lib/brief/keep.txt"
+echo 'KEEP NEST' > "$extra_lib/brief/nest/plain.txt"
+ln -s "$extra_out/secret" "$extra_lib/brief/linked.txt"
+ln -s "$extra_out/secret" "$extra_lib/brief/nest/link"
+ln -s "$extra_out/via" "$extra_lib/brief/via"
+extra_list=$sandbox/extra-list.txt
+printf 'brief\n' > "$extra_list"
+seal "$extra_out" "$sandbox/extra-out.snap"
+extra_log=$(bash "$sync" "$extra_lib" --list "$extra_list" 2>&1)
+extra_code=$?
+extra_ok=true
+extra_why=""
+extra_diff=$(outside_diff "$sandbox/extra-out.snap" "$extra_out")
+if [ "$extra_code" != 0 ]; then
+  extra_ok=false
+  extra_why="code $extra_code [$extra_log]"
+elif [ -n "$extra_diff" ]; then
+  extra_ok=false
+  extra_why="outside changed [$extra_diff]"
+elif ! grep -q 'SECRET BODY' "$extra_out/secret" || ! grep -q 'VIA BODY' "$extra_out/via/secret.txt"; then
+  extra_ok=false
+  extra_why="symlink target was overwritten"
+elif ! grep -q 'KEEP EXTRA' "$extra_lib/brief/keep.txt"; then
+  extra_ok=false
+  extra_why="plain extra was dropped"
+elif ! grep -q 'KEEP NEST' "$extra_lib/brief/nest/plain.txt"; then
+  extra_ok=false
+  extra_why="nested plain extra was dropped"
+elif [ -e "$extra_lib/brief/linked.txt" ] || [ -h "$extra_lib/brief/linked.txt" ] \
+  || [ -e "$extra_lib/brief/nest/link" ] || [ -h "$extra_lib/brief/nest/link" ] \
+  || [ -e "$extra_lib/brief/via" ] || [ -h "$extra_lib/brief/via" ]; then
+  extra_ok=false
+  extra_why="symlinked extra was kept or followed"
+elif grep -q 'OLD EXTRA BODY' "$extra_lib/brief/SKILL.md"; then
+  extra_ok=false
+  extra_why="skill was not refreshed"
+elif ! case "$extra_log" in *"synced brief"*) true ;; *) false ;; esac; then
+  extra_ok=false
+  extra_why="log [$extra_log]"
+elif ! case "$extra_log" in *"skipped brief: extra symlink linked.txt"*) true ;; *) false ;; esac \
+  || ! case "$extra_log" in *"skipped brief: extra symlink nest/link"*) true ;; *) false ;; esac \
+  || ! case "$extra_log" in *"skipped brief: extra symlink via"*) true ;; *) false ;; esac; then
+  extra_ok=false
+  extra_why="did not skip the symlinked extras [$extra_log]"
+fi
+report "symlinked extra is skipped and nothing outside changes" "$extra_ok" "$extra_why"
+
+lock_out=$sandbox/lock-out
+lock_lib=$sandbox/lock-lib
+mkdir -p "$lock_out" "$lock_lib"
+echo sentinel > "$lock_out/sentinel.txt"
+echo 'LOCK SENTINEL' > "$lock_lib/sentinel.txt"
+exec 8<>"$lock_lib/.sync.lock"
+lock_held=false
+if flock -n 8; then
+  lock_held=true
+fi
+lock_list=$sandbox/lock-list.txt
+printf 'brief\n' > "$lock_list"
+seal "$lock_out" "$sandbox/lock-out.snap"
+lock_log=$(bash "$sync" "$lock_lib" --list "$lock_list" 9>&- 2>&1)
+lock_code=$?
+exec 8>&-
+lock_ok=true
+lock_why=""
+lock_diff=$(outside_diff "$sandbox/lock-out.snap" "$lock_out")
+if [ "$lock_held" != true ]; then
+  lock_ok=false
+  lock_why="test could not take the lock"
+elif [ "$lock_code" = 0 ]; then
+  lock_ok=false
+  lock_why="code $lock_code [$lock_log]"
+elif [ -n "$lock_diff" ]; then
+  lock_ok=false
+  lock_why="outside changed [$lock_diff]"
+elif ! grep -q 'LOCK SENTINEL' "$lock_lib/sentinel.txt"; then
+  lock_ok=false
+  lock_why="library sentinel changed"
+elif [ -e "$lock_lib/brief" ] || [ -h "$lock_lib/brief" ]; then
+  lock_ok=false
+  lock_why="wrote a skill while the lock was held"
+elif ! case "$lock_log" in *"error: sync already running"*) true ;; *) false ;; esac; then
+  lock_ok=false
+  lock_why="log [$lock_log]"
+fi
+report "held lock exits non-zero and writes nothing" "$lock_ok" "$lock_why"
 
 unread_out=$sandbox/unread-out
 unread_lib=$sandbox/unread-lib

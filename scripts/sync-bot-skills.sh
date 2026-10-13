@@ -3,21 +3,42 @@
 # a copy is refreshed only when the first line after its frontmatter is the
 # exact synced-from marker this script writes, or when the folder is not
 # there yet. anything else is foreign or unmarked: logged and left untouched.
-# a symlink at the skill dir, or anywhere inside it (a dangling link too),
-# is skipped and nothing is written. the new tree is built in a fresh directory
-# and moved into place with mv -T, never copied into an existing path. a name
-# that leaves the list is reported and stays on disk.
+# a name that leaves the list is reported and stays on disk.
+#
+# threat model: this script runs from /release against a library only this
+# user writes to. no concurrent writer. a process that already has write
+# access to the library can change those files itself; this script does not
+# try to win a race against one. an exclusive flock on <library>/.sync.lock
+# keeps two syncs from overlapping. if that lock is held, exit non-zero and
+# write nothing.
+#
+# a skill directory that is itself a symlink is skipped. a symlink anywhere
+# in the source skill is an error: that skill is not installed. an extra file
+# whose path contains a symlink is not copied and is not followed. the new
+# tree is built in a fresh directory and moved into place with mv -T. if that
+# move fails, the parked tree is moved back. it is removed only after the new
+# tree is in place.
 #
 # the line inserted after each copy's frontmatter is the ownership marker.
 # version comes from .claude-plugin/plugin.json.
 #
 # usage: sync-bot-skills.sh [--] <library-dir> [--list FILE]
+# test seams, unset in normal use:
+#   KRU_SYNC_SKILL_ROOT    directory used instead of <repo>/skills
+#   KRU_SYNC_BEFORE_REPLACE  script run after the old tree is parked and
+#     before the new tree is moved into place. arguments: dest, name, stage, parked
 # logs:
 #   synced <name>
 #   skipped <name>: foreign owner (<owner>)
 #   skipped <name>: no owner marker
 #   skipped <name>: symlink
 #   skipped <name>: cannot scan for symlinks
+#   skipped <name>: extra symlink <path>
+#   error: <name>: source contains a symlink
+#   error: <name>: cannot scan source
+#   error: <name>: could not install
+#   error: sync already running
+#   parked skill left at <path>
 #   dropped <name>: not in the list, left in place
 set -euo pipefail
 
@@ -75,6 +96,15 @@ command -v jq >/dev/null 2>&1 || { echo "jq is required" >&2; exit 1; }
 
 version=$(jq -r '.version // empty' "$root/.claude-plugin/plugin.json")
 [ -n "$version" ] || { echo "plugin manifest has no version" >&2; exit 1; }
+
+skill_root=$root/skills
+if [ -n "${KRU_SYNC_SKILL_ROOT:-}" ]; then
+  skill_root=${KRU_SYNC_SKILL_ROOT}
+  case "$skill_root" in
+    /*) ;;
+    *) skill_root="$caller_pwd/$skill_root" ;;
+  esac
+fi
 
 declare -A listed=()
 names=()
@@ -159,8 +189,9 @@ owner_kind() {
   fi
 }
 
-# symlink | error | clean. find's non-zero status is an error: fail closed.
-# a dangling link counts. -h/-L see dest itself; find -P -type l sees the rest.
+# symlink | inside | error | clean.
+# symlink: the path itself is a link. inside: find -P saw a link below it.
+# find's non-zero status is an error: fail closed. a dangling link counts.
 scan_symlinks() {
   local dest=$1 found status
   if [ -h "$dest" ] || [ -L "$dest" ]; then
@@ -177,10 +208,28 @@ scan_symlinks() {
     return 0
   fi
   if [ -n "$found" ]; then
-    printf 'symlink'
+    printf 'inside'
   else
     printf 'clean'
   fi
+}
+
+# true when any component of root/rel is a symlink. does not follow.
+path_has_symlink() {
+  local root=$1 rel=$2 acc="" part
+  local IFS=/
+  for part in $rel; do
+    [ -n "$part" ] || continue
+    if [ -z "$acc" ]; then
+      acc=$part
+    else
+      acc=$acc/$part
+    fi
+    if [ -h "$root/$acc" ] || [ -L "$root/$acc" ]; then
+      return 0
+    fi
+  done
+  return 1
 }
 
 foreign_owner() {
@@ -215,143 +264,190 @@ insert_marker() {
   fi
 }
 
-# stage dir for the install in progress. the exit trap removes it if a
-# command fails before the directory is moved into place.
+# stage_dir is the new tree, removed on failure. parked_dir is the previous
+# tree. the exit trap restores a parked tree; it never deletes one.
 stage_dir=""
+parked_dir=""
+parked_dest=""
 drop_stage() {
-  if [ -n "$stage_dir" ] && [ -d "$stage_dir" ]; then
+  if [ -n "$stage_dir" ] && { [ -e "$stage_dir" ] || [ -h "$stage_dir" ]; }; then
     rm -rf "$stage_dir"
   fi
   stage_dir=""
 }
-trap drop_stage EXIT
+on_exit() {
+  local rc=$?
+  set +e
+  drop_stage
+  if [ -n "$parked_dir" ] && { [ -e "$parked_dir" ] || [ -h "$parked_dir" ]; }; then
+    if [ -n "$parked_dest" ] && [ ! -e "$parked_dest" ] && [ ! -h "$parked_dest" ]; then
+      if ! mv -T -- "$parked_dir" "$parked_dest"; then
+        echo "parked skill left at $parked_dir" >&2
+        rc=1
+      fi
+    else
+      echo "parked skill left at $parked_dir" >&2
+      rc=1
+    fi
+  fi
+  exit "$rc"
+}
+trap on_exit EXIT
 
-# copy files that exist only in dest into the fresh stage. never follows a
-# symlink and never writes into dest. returns 2 on a scan error, 3 if a
-# symlink is present.
+# copy files that exist only in dest into the fresh stage. find -P on both
+# trees, so a symlink is not descended. an extra whose path contains a symlink
+# is skipped, not followed. returns 2 on a scan error.
 preserve_extras() {
-  local dest=$1 stage=$2 rel list status
+  local dest=$1 stage=$2 name=$3 rel list status
   if [ ! -d "$dest" ] || [ -h "$dest" ] || [ -L "$dest" ]; then
     return 0
   fi
   list=$(find -P "$dest" -mindepth 1 -printf '%P\n' 2>/dev/null) && status=0 || status=$?
   [ "$status" -eq 0 ] || return 2
+  find -P "$stage" -mindepth 1 -printf '%P\n' >/dev/null 2>/dev/null && status=0 || status=$?
+  [ "$status" -eq 0 ] || return 2
   while IFS= read -r rel || [ -n "$rel" ]; do
     [ -n "$rel" ] || continue
-    if [ -h "$dest/$rel" ] || [ -L "$dest/$rel" ]; then
-      return 3
+    if path_has_symlink "$dest" "$rel" || path_has_symlink "$stage" "$rel"; then
+      echo "skipped $name: extra symlink $rel"
+      continue
     fi
     if [ -e "$stage/$rel" ] || [ -h "$stage/$rel" ]; then
       continue
     fi
-    mkdir -p -- "$stage/$(dirname -- "$rel")" || return 2
-    cp -a -- "$dest/$rel" "$stage/$rel" || return 2
+    if [ -d "$dest/$rel" ]; then
+      mkdir -p -- "$stage/$rel" || return 2
+      continue
+    fi
+    if [ -f "$dest/$rel" ] && [ ! -h "$dest/$rel" ] && [ ! -L "$dest/$rel" ]; then
+      mkdir -p -- "$stage/$(dirname -- "$rel")" || return 2
+      cp -a -- "$dest/$rel" "$stage/$rel" || return 2
+    fi
   done <<< "$list"
 }
 
 # build the skill in a fresh directory under the library, then move it onto
-# dest with mv -T. never cp into an existing path. KRU_SYNC_BEFORE_REPLACE, when
-# set, is a test seam: a script run after staging and before the replace,
-# with the dest path and the skill name as arguments.
+# dest with mv -T. never cp into an existing path. the old tree is parked as
+# .sync-old.* and removed only after the new tree is in place. if the second
+# mv fails, the exit trap moves the parked tree back and never deletes it.
+# returns 1 when the skill is skipped, 2 when the install failed.
+# KRU_SYNC_BEFORE_REPLACE, when set, runs after the park and before the second
+# mv. arguments: dest, name, stage, parked.
 copy_skill() {
-  local name=$1 src=$2 dest=$3 old_dir="" extra=0
-  stage_dir=$(mktemp -d "$library/.sync.XXXXXX")
+  local name=$1 src=$2 dest=$3 extra=0 old_slot=""
+  stage_dir=$(mktemp -d "$library/.sync.XXXXXX") || {
+    echo "error: $name: could not install" >&2
+    return 2
+  }
   if ! cp -a -- "$src"/. "$stage_dir"/; then
     drop_stage
-    echo "skipped $name: cannot scan for symlinks"
-    return 1
+    echo "error: $name: could not install" >&2
+    return 2
   fi
   if ! insert_marker "$stage_dir/SKILL.md" \
     "<!-- synced-from: kru@${version} skills/${name} | owner: kru | edit the source, not this copy -->"; then
     drop_stage
+    echo "error: $name: could not install" >&2
+    return 2
+  fi
+  preserve_extras "$dest" "$stage_dir" "$name" || extra=$?
+  if [ "$extra" -ne 0 ]; then
+    drop_stage
     echo "skipped $name: cannot scan for symlinks"
     return 1
   fi
-  preserve_extras "$dest" "$stage_dir" || extra=$?
-  if [ "$extra" -ne 0 ]; then
-    drop_stage
-    if [ "$extra" -eq 3 ]; then
-      echo "skipped $name: symlink"
-    else
-      echo "skipped $name: cannot scan for symlinks"
-    fi
-    return 1
-  fi
-  if [ -n "${KRU_SYNC_BEFORE_REPLACE:-}" ]; then
-    if ! bash "$KRU_SYNC_BEFORE_REPLACE" "$dest" "$name"; then
-      drop_stage
-      echo "skipped $name: cannot scan for symlinks"
-      return 1
-    fi
-  fi
-  # re-check after the seam. a symlink here is left alone.
   if [ -h "$dest" ] || [ -L "$dest" ]; then
     drop_stage
     echo "skipped $name: symlink"
     return 1
   fi
   if [ -e "$dest" ]; then
-    old_dir=$(mktemp -d "$library/.sync-old.XXXXXX")
-    if ! rmdir "$old_dir"; then
-      rm -rf "$old_dir"
+    old_slot=$(mktemp -d "$library/.sync-old.XXXXXX") || {
       drop_stage
-      echo "skipped $name: cannot scan for symlinks"
-      return 1
+      echo "error: $name: could not install" >&2
+      return 2
+    }
+    if ! rmdir "$old_slot"; then
+      rm -rf "$old_slot"
+      drop_stage
+      echo "error: $name: could not install" >&2
+      return 2
     fi
-    if ! mv -T -- "$dest" "$old_dir"; then
+    if ! mv -T -- "$dest" "$old_slot"; then
       drop_stage
-      echo "skipped $name: cannot scan for symlinks"
-      return 1
+      echo "error: $name: could not install" >&2
+      return 2
     fi
-    if [ -h "$dest" ] || [ -L "$dest" ]; then
-      drop_stage
-      rm -rf "$old_dir"
-      echo "skipped $name: symlink"
-      return 1
-    fi
-    if [ -e "$dest" ]; then
-      drop_stage
-      echo "skipped $name: cannot scan for symlinks"
-      return 1
+    parked_dir=$old_slot
+    parked_dest=$dest
+    if [ -n "${KRU_SYNC_BEFORE_REPLACE:-}" ]; then
+      bash "$KRU_SYNC_BEFORE_REPLACE" "$dest" "$name" "$stage_dir" "$parked_dir" || true
     fi
     if ! mv -T -- "$stage_dir" "$dest"; then
-      if [ ! -e "$dest" ] && [ ! -h "$dest" ]; then
-        mv -T -- "$old_dir" "$dest" || true
-      fi
       drop_stage
-      echo "skipped $name: cannot scan for symlinks"
-      return 1
+      echo "error: $name: could not install" >&2
+      exit 1
     fi
     stage_dir=""
-    rm -rf "$old_dir"
+    if ! rm -rf "$parked_dir"; then
+      echo "parked skill left at $parked_dir" >&2
+      parked_dir=""
+      parked_dest=""
+      exit 1
+    fi
+    parked_dir=""
+    parked_dest=""
   else
     if ! mv -T -- "$stage_dir" "$dest"; then
       drop_stage
-      echo "skipped $name: cannot scan for symlinks"
-      return 1
+      echo "error: $name: could not install" >&2
+      return 2
     fi
     stage_dir=""
   fi
   return 0
 }
 
+command -v flock >/dev/null 2>&1 || { echo "flock is required" >&2; exit 1; }
 mkdir -p "$library"
+# exclusive, non-blocking. a held lock means another sync is in progress:
+# exit before any skill is written. <> does not truncate the lock file.
+exec 9<>"$library/.sync.lock"
+if ! flock -n 9; then
+  echo "error: sync already running" >&2
+  exit 1
+fi
 
+sync_failed=0
 for name in "${names[@]}"; do
-  src="$root/skills/$name"
+  src="$skill_root/$name"
   dest="$library/$name"
   [ -f "$src/SKILL.md" ] || { echo "no such skill: $name" >&2; exit 1; }
+  case "$(scan_symlinks "$src")" in
+    symlink|inside)
+      echo "error: $name: source contains a symlink" >&2
+      sync_failed=1
+      continue
+      ;;
+    error)
+      echo "error: $name: cannot scan source" >&2
+      sync_failed=1
+      continue
+      ;;
+    clean) ;;
+    *)
+      echo "error: $name: cannot scan source" >&2
+      sync_failed=1
+      continue
+      ;;
+  esac
   case "$(scan_symlinks "$dest")" in
     symlink)
       echo "skipped $name: symlink"
       continue
       ;;
-    error)
-      echo "skipped $name: cannot scan for symlinks"
-      continue
-      ;;
-    clean) ;;
-    *)
+    inside|clean) ;;
+    error|*)
       echo "skipped $name: cannot scan for symlinks"
       continue
       ;;
@@ -375,6 +471,11 @@ for name in "${names[@]}"; do
   fi
   if copy_skill "$name" "$src" "$dest"; then
     echo "synced $name"
+  else
+    copy_status=$?
+    if [ "$copy_status" -ne 1 ]; then
+      sync_failed=1
+    fi
   fi
 done
 
@@ -387,3 +488,7 @@ for dir in "$library"/*/; do
     echo "dropped $name: not in the list, left in place"
   fi
 done
+
+if [ "$sync_failed" -ne 0 ]; then
+  exit 1
+fi
