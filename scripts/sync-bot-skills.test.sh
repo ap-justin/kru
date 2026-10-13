@@ -5,6 +5,8 @@
 # or dangling) is skipped and nothing outside the library changes. ownership
 # is the exact synced-from line, so `owner: kru-other` and prose that mentions
 # `owner: kru` are not kru. `-- -dir` takes a library path that starts with -.
+# a swap during install, an unreadable directory, missing frontmatter, and a
+# BOM are skipped.
 # run: bash scripts/sync-bot-skills.test.sh
 set -u
 root=$(cd "$(dirname "$0")/.." && pwd)
@@ -600,6 +602,202 @@ elif ! case "$dash_log" in *"synced brief"*) true ;; *) false ;; esac; then
   dash_why="log [$dash_log]"
 fi
 report "-- -dir takes the library path and nothing outside changes" "$dash_ok" "$dash_why"
+
+# --- install races, unreadable trees, and strict frontmatter ----------------
+race_out=$sandbox/race-out
+race_lib=$sandbox/race-lib
+mkdir -p "$race_out/foreign" "$race_lib/brief"
+echo sentinel > "$race_out/sentinel.txt"
+cat > "$race_out/foreign/SKILL.md" << 'EOF'
+---
+name: brief
+description: foreign
+---
+FOREIGN RACE BODY
+EOF
+cat > "$race_lib/brief/SKILL.md" << EOF
+---
+name: brief
+description: local
+---
+$(marker_for brief)
+RACE CANARY
+EOF
+race_list=$sandbox/race-list.txt
+printf 'brief\n' > "$race_list"
+race_hook=$sandbox/race-hook.sh
+cat > "$race_hook" << EOF
+#!/bin/bash
+dest=\$1
+if [ ! -f "\$dest/SKILL.md" ] || ! grep -q 'RACE CANARY' "\$dest/SKILL.md"; then
+  echo 'WROTE BEFORE HOOK' > "$race_out/wrote-before"
+  exit 0
+fi
+rm -rf -- "\$dest"
+ln -s "$race_out/foreign" "\$dest"
+EOF
+seal "$race_out" "$sandbox/race-out.snap"
+race_log=$(KRU_SYNC_BEFORE_REPLACE="$race_hook" bash "$sync" "$race_lib" --list "$race_list" 2>&1)
+race_code=$?
+race_ok=true
+race_why=""
+race_diff=$(outside_diff "$sandbox/race-out.snap" "$race_out")
+race_left=$(find "$race_lib" -name '.sync*' -print)
+if [ "$race_code" != 0 ]; then
+  race_ok=false
+  race_why="code $race_code [$race_log]"
+elif [ -n "$race_diff" ]; then
+  race_ok=false
+  race_why="outside changed [$race_diff]"
+elif ! grep -q 'FOREIGN RACE BODY' "$race_out/foreign/SKILL.md"; then
+  race_ok=false
+  race_why="foreign content was overwritten"
+elif [ ! -h "$race_lib/brief" ] || [ ! -L "$race_lib/brief" ]; then
+  race_ok=false
+  race_why="dest symlink was replaced"
+elif ! case "$race_log" in *"skipped brief: symlink"*) true ;; *) false ;; esac; then
+  race_ok=false
+  race_why="log [$race_log]"
+elif case "$race_log" in *"synced brief"*) true ;; *) false ;; esac; then
+  race_ok=false
+  race_why="synced through the swap [$race_log]"
+elif [ -n "$race_left" ]; then
+  race_ok=false
+  race_why="left a stage dir [$race_left]"
+fi
+report "swap race does not write through a symlink and foreign content survives" "$race_ok" "$race_why"
+
+unread_out=$sandbox/unread-out
+unread_lib=$sandbox/unread-lib
+mkdir -p "$unread_out" "$unread_lib/brief/hidden"
+echo sentinel > "$unread_out/sentinel.txt"
+echo 'SECRET BODY' > "$unread_out/secret"
+ln -s "$unread_out/secret" "$unread_lib/brief/hidden/link"
+cat > "$unread_lib/brief/SKILL.md" << EOF
+---
+name: brief
+description: local
+---
+$(marker_for brief)
+UNREAD BODY
+EOF
+chmod 333 "$unread_lib/brief/hidden"
+unread_list=$sandbox/unread-list.txt
+printf 'brief\n' > "$unread_list"
+seal "$unread_out" "$sandbox/unread-out.snap"
+unread_log=$(bash "$sync" "$unread_lib" --list "$unread_list" 2>&1)
+unread_code=$?
+chmod 755 "$unread_lib/brief/hidden" 2>/dev/null || true
+unread_ok=true
+unread_why=""
+unread_diff=$(outside_diff "$sandbox/unread-out.snap" "$unread_out")
+if [ "$unread_code" != 0 ]; then
+  unread_ok=false
+  unread_why="code $unread_code [$unread_log]"
+elif [ -n "$unread_diff" ]; then
+  unread_ok=false
+  unread_why="outside changed [$unread_diff]"
+elif ! grep -q 'SECRET BODY' "$unread_out/secret"; then
+  unread_ok=false
+  unread_why="foreign target was overwritten"
+elif ! grep -q 'UNREAD BODY' "$unread_lib/brief/SKILL.md"; then
+  unread_ok=false
+  unread_why="skill was written despite the unreadable dir"
+elif [ ! -h "$unread_lib/brief/hidden/link" ]; then
+  unread_ok=false
+  unread_why="hidden symlink was replaced"
+elif ! case "$unread_log" in *"skipped brief: cannot scan for symlinks"*) true ;; *) false ;; esac; then
+  unread_ok=false
+  unread_why="log [$unread_log]"
+elif case "$unread_log" in *"synced brief"*) true ;; *) false ;; esac; then
+  unread_ok=false
+  unread_why="synced an unscanned tree [$unread_log]"
+fi
+report "unreadable subdir skips the skill and foreign content survives" "$unread_ok" "$unread_why"
+
+nofm_out=$sandbox/nofm-out
+nofm_lib=$sandbox/nofm-lib
+mkdir -p "$nofm_out" "$nofm_lib/brief"
+echo sentinel > "$nofm_out/sentinel.txt"
+cat > "$nofm_lib/brief/SKILL.md" << EOF
+This copy has no frontmatter.
+---
+a horizontal rule
+---
+$(marker_for brief)
+NOFM BODY
+EOF
+nofm_list=$sandbox/nofm-list.txt
+printf 'brief\n' > "$nofm_list"
+seal "$nofm_out" "$sandbox/nofm-out.snap"
+nofm_log=$(bash "$sync" "$nofm_lib" --list "$nofm_list" 2>&1)
+nofm_code=$?
+nofm_ok=true
+nofm_why=""
+nofm_diff=$(outside_diff "$sandbox/nofm-out.snap" "$nofm_out")
+if [ "$nofm_code" != 0 ]; then
+  nofm_ok=false
+  nofm_why="code $nofm_code [$nofm_log]"
+elif [ -n "$nofm_diff" ]; then
+  nofm_ok=false
+  nofm_why="outside changed [$nofm_diff]"
+elif ! grep -q 'NOFM BODY' "$nofm_lib/brief/SKILL.md" \
+  || ! grep -q 'This copy has no frontmatter.' "$nofm_lib/brief/SKILL.md"; then
+  nofm_ok=false
+  nofm_why="foreign content was overwritten"
+elif ! case "$nofm_log" in *"skipped brief: no owner marker"*) true ;; *) false ;; esac; then
+  nofm_ok=false
+  nofm_why="log [$nofm_log]"
+elif case "$nofm_log" in *"synced brief"*) true ;; *) false ;; esac; then
+  nofm_ok=false
+  nofm_why="synced a file with no frontmatter [$nofm_log]"
+fi
+report "no frontmatter with two rules is unmarked and foreign content survives" "$nofm_ok" "$nofm_why"
+
+bom_out=$sandbox/bom-out
+bom_lib=$sandbox/bom-lib
+mkdir -p "$bom_out" "$bom_lib/brief"
+echo sentinel > "$bom_out/sentinel.txt"
+{
+  printf '\xef\xbb\xbf'
+  cat << EOF
+---
+name: brief
+description: bom
+---
+$(marker_for brief)
+BOM BODY
+EOF
+} > "$bom_lib/brief/SKILL.md"
+bom_list=$sandbox/bom-list.txt
+printf 'brief\n' > "$bom_list"
+seal "$bom_out" "$sandbox/bom-out.snap"
+bom_log=$(bash "$sync" "$bom_lib" --list "$bom_list" 2>&1)
+bom_code=$?
+bom_ok=true
+bom_why=""
+bom_diff=$(outside_diff "$sandbox/bom-out.snap" "$bom_out")
+bom_head=$(od -An -N 3 -t x1 "$bom_lib/brief/SKILL.md" | tr -d ' \n')
+if [ "$bom_code" != 0 ]; then
+  bom_ok=false
+  bom_why="code $bom_code [$bom_log]"
+elif [ -n "$bom_diff" ]; then
+  bom_ok=false
+  bom_why="outside changed [$bom_diff]"
+elif ! grep -a -q 'BOM BODY' "$bom_lib/brief/SKILL.md"; then
+  bom_ok=false
+  bom_why="foreign content was overwritten"
+elif [ "$bom_head" != "efbbbf" ]; then
+  bom_ok=false
+  bom_why="BOM was stripped [$bom_head]"
+elif ! case "$bom_log" in *"skipped brief: no owner marker"*) true ;; *) false ;; esac; then
+  bom_ok=false
+  bom_why="log [$bom_log]"
+elif case "$bom_log" in *"synced brief"*|*"foreign owner"*) true ;; *) false ;; esac; then
+  bom_ok=false
+  bom_why="did not treat the BOM as unmarked [$bom_log]"
+fi
+report "BOM skips the skill and foreign content survives" "$bom_ok" "$bom_why"
 
 # usage
 set +e
