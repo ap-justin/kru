@@ -6,7 +6,7 @@
 
 ## The unit tests
 
-The hooks and the store resolver are the tested code. Each `<name>.sh` has a `<name>.test.sh` beside it: a plain bash table test.
+The hooks, the store resolver and `scripts/sync-bot-skills.sh` are the tested code. Each `<name>.sh` has a `<name>.test.sh` beside it: a plain bash table test. `scripts/verify.sh` runs every `scripts/*.test.sh`, and CI runs `verify.sh`.
 
 ```sh
 for t in hooks/*.test.sh scripts/*.test.sh; do bash "$t" || break; done
