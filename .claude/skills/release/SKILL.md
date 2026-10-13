@@ -42,6 +42,12 @@ Typing `/release` is the user's go-ahead for every outward step below, except a 
 - **Notes:** what changed for someone using the plugin since the previous tag (`git log <prev>..vX.Y.Z`). Releases lag tags here, so the range is never the previous release.
 - **Missing releases:** when older tags have no release, name the gap in the report instead of backfilling it.
 
-## 6. Report
+## 6. Sync skill copies
+
+After the tag is on the remote, run `bash scripts/sync-bot-skills.sh <library-dir>`. `<library-dir>` is the skills library the copies live in. The script reads the version from `.claude-plugin/plugin.json` and writes it into each copy it owns. The list is `scripts/bot-skills.txt`.
+
+Done when the script exits 0. Include skipped and dropped names in the report; both stay on disk. A session that has the library runs the script. A session without it gives the command and the version, and leaves the run for one that has the library.
+
+## 7. Report
 
 Give the release URL and confirm the branch is even with its remote (`git status -sb`).

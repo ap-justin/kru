@@ -6,7 +6,7 @@
 
 ## The unit tests
 
-The hooks and the store resolver are the tested code. Each `<name>.sh` has a `<name>.test.sh` beside it: a plain bash table test.
+The hooks, the store resolver and `scripts/sync-bot-skills.sh` are the tested code. Each `<name>.sh` has a `<name>.test.sh` beside it: a plain bash table test. `scripts/verify.sh` runs every `scripts/*.test.sh`, and CI runs `verify.sh`.
 
 ```sh
 for t in hooks/*.test.sh scripts/*.test.sh; do bash "$t" || break; done
@@ -22,6 +22,10 @@ Copy the closest existing `*.test.sh`. They share one shape:
 - **The plugin root passed as `$1`**: the repo root, so the hooks find the real `agents/` and `skills/`.
 - **A fresh `session_id` per case** for any hook that writes a once-per-session mark (`require-lead.sh`, `nudge-audit.sh`), or one case's mark lets the next through.
 - **A transcript fixture is jsonl written with `jq -c`**, matching what the hook greps for.
+
+## sync-bot-skills
+
+`scripts/sync-bot-skills.sh` runs from `/release` against a library only this user writes to. It assumes no concurrent writer. A process that already has write access to the library can change those files on its own; the script does not try to win a race against one. An exclusive `flock` on `<library>/.sync.lock` keeps two syncs from overlapping. If that lock is held, the script exits non-zero and writes nothing.
 
 ## Mutation check
 
