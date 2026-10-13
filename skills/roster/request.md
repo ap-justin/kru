@@ -20,6 +20,6 @@ Done when [`audit`](audit.md) passes on the branch.
 
 ## 3. Ship
 
-Ship with the release skill (`.claude/skills/release`). Tell the requester the version, the name of the seat or skill, and to update the plugin and then run `/kru:setup`.
+Leave `commit`+`tag` to the user unless they asked (git rule). A release happens only when the user runs `/release`. Tell the requester the version, the name of the seat or skill, and to update the plugin and then run `/kru:setup`.
 
 Done when the requester has the version, the name, and those two steps.
