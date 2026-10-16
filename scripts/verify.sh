@@ -1,7 +1,7 @@
 #!/bin/bash
 # the static gate: every check that needs no network and no model. CI runs it on every pull
 # request and push to main (.github/workflows/verify.yml); run it before a commit. exit 0 when
-# all pass. the live end-to-end run is scripts/smoke.sh, local only.
+# all pass.
 cd "$(dirname "$0")/.." || exit 2
 results=(); failed=0
 step() { # name, then the command

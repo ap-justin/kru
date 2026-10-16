@@ -2,7 +2,7 @@
 
 ## Verify before shipping
 
-`bash scripts/verify.sh` is the gate CI runs on every pull request and push to `main`: bash syntax, the roster audit (`scripts/audit.sh`), every test below, JSON/YAML and frontmatter parsing, and version agreement. Run it before every commit. For a change to a hook, a skill's or seat's behavior, or the install path, also run `bash scripts/smoke.sh`: it installs this checkout into a temp `HOME`, drives a headless `claude -p` through a small fix, and re-checks the result (needs `ANTHROPIC_API_KEY`; costs cents).
+`bash scripts/verify.sh` is the gate CI runs on every pull request and push to `main`: bash syntax, the roster audit (`scripts/audit.sh`), every test below, JSON/YAML and frontmatter parsing, and version agreement. Run it before every commit.
 
 ## The unit tests
 

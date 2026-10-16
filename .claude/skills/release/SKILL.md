@@ -24,7 +24,7 @@ Typing `/release` is the user's go-ahead for every outward step below, except a 
 
 ## 3. Commit
 
-- `bash scripts/verify.sh` passes first. A red step stops the release; report it. For a change to a hook, a seat's or skill's behavior, or the install path, `bash scripts/smoke.sh` passes too.
+- `bash scripts/verify.sh` passes first. A red step stops the release; report it.
 - Stage tracked changes with `git add -u`.
 - Untracked files: list them first. Add the ones that belong to this change. If it's unclear whether a file belongs, ask.
 - Write the message in the shape `git log` already shows: `vX.Y.Z: <what changed>`, terse.
