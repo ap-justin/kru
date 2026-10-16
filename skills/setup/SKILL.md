@@ -141,7 +141,10 @@ Three that fail with no error:
   `query-docs` in their own tool lists, so Context7 has to be registered under the bare name
   `context7` (user scope, http `https://mcp.context7.com/mcp`). The official plugin namespaces it to
   `mcp__plugin_context7_context7__*` and the claude.ai connector to `mcp__claude_ai_Context7__*` —
-  either leaves those seats holding entries that resolve to nothing.
+  either leaves those seats holding entries that resolve to nothing. The Svelte seats name
+  `mcp__svelte__*` the same way, and the `svelte@svelte` plugin namespaces its server to
+  `mcp__plugin_svelte_svelte__*` — a Svelte repo registers a bare `svelte` entry in its `.mcp.json`
+  (http `https://mcp.svelte.dev/mcp`).
 - **A permission allowlist entry is coupled to that same prefix.** Moving a server between plugin,
   connector and local scope dead-letters every rule naming it: the rule stops matching, nothing
   errors, and the user is re-prompted forever. Re-point the allowlist in the same change that moves
@@ -267,8 +270,10 @@ lockfile and the snapshot doesn't: `.claude/cloud-install.sh`, copied from
 `${CLAUDE_PLUGIN_ROOT}/skills/setup/cloud-install.sh` and filled in, then checked with `bash -n`. The
 template carries each line's reason. The one to keep in view when adapting it: the image puts its own
 node and pnpm on `PATH`, and a hook that lets them win looks fine in a shell and fails in turbo with
-`Exec format error` — so the pinned pnpm binary (not its wrapper) is linked into a directory holding
-nothing else, and that `PATH` reaches later shells through `$CLAUDE_ENV_FILE`. A session
+`Exec format error` — so the pinned pnpm goes first on `PATH` and that `PATH` reaches later shells
+through `$CLAUDE_ENV_FILE`. Where the installer lays down a binary under `.tools/pnpm-exe/<ver>/`, it's
+linked into a directory holding nothing else; pnpm 12 lays down none, and its `$PNPM_HOME/bin/pnpm`
+wrapper resolves relative to its own path, so that directory goes on `PATH` whole. A session
 with several repos attached — the store counts — runs no repo hooks. `CLAUDE_CODE_ENABLE_TODO_TOOLS` goes in
 `.claude/settings.json`'s `env`, beside the hook's registration. The credentials
 posture is the user's to hold: the env-var field is readable by anyone who shares the environment,
