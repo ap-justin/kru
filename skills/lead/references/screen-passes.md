@@ -17,7 +17,7 @@ Hand it:
 3. **Target** — URLs/pages and the states the spec names that mockups do not show.
 4. **Report path** — per `gates.md`.
 
-The seat compares the running UI to the mockups at **1440** and **375**. Mismatches are **FIX** findings for the builder, not deferred to taste. It still covers empty/error/loading/disabled/focus and traces breakage to `file:line`.
+The seat compares the running UI to the mockups at **1440** and **375**. Mismatches are **FIX** findings for the builder. It still covers empty/error/loading/disabled/focus and traces breakage to `file:line`.
 
 Without mockups in the brief, the seat returns that spec match cannot run; you should have stopped at Step 3's design spec gate.
 
