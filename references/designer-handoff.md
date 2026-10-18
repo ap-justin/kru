@@ -4,7 +4,7 @@ For the **designer** (standalone bot or human) using kru's design skills — the
 
 ## Your output to the PM
 
-When the design is ready for build, hand the PM a single package they can attach to an engineering brief (`references/design-spec.md`):
+When the design is ready for build, hand the PM a single package they can attach to an engineering brief (`referencesthe bundled Claude Code `design` skill (designer loads)-spec.md`):
 
 1. **Approved mockups** — link or export path at the viewports engineering will check (**1440** and **375** minimum).
 2. **Build spec** — everything a builder needs without guessing: **flows and IA** (screen inventory, journeys, conventions corpus / `design/conventions.md` when the repo uses it), tokens (or explicit mapping into the repo's token file), components and variants, states per screen, motion notes, final in-product copy on the design, breakpoints, and **asset paths** (marks, icons, imagery, video or generative art exports).
@@ -22,7 +22,7 @@ Invoke the bundled **the bundled Claude Code `design` skill (designer loads) ski
 - The **screen inventory** drives the artboard list — every screen and state gets a frame at the viewports the brief names.
 - Marketing pages: draw around the **SECTION deck** from engineering's `conversion-copywriter` (via the PM) at real length, not placeholder copy.
 - **Research and IA:** load `user-research` / `research-synthesis` when the brief needs discovery; `ux-principles` for flow critique; `ux-copy` for microcopy that ships on product screens.
-- **Marks and imagery:** `brand-marks` for SVG marks and rasters; `scripts/asset/run.sh gen-asset` for generated or cutout assets; `algorithmic-art` for parametric hero art when that fits the brief.
+- **Marks and imagery:** `brand-marks` for SVG marks and rasters; `scripts/assetthe built-in run skill.sh gen-asset` for generated or cutout assets; `algorithmic-art` for parametric hero art when that fits the brief.
 - **Coverage ledger** (`design-system.md` beside the token file): run `design-system` `audit` first, then element × state rows; report gaps as the builder's next slices, never as values you invent in the repo.
 
 ## Questions and approval
@@ -31,7 +31,7 @@ You talk to the **PM**, not the engineering lead. Design questions (static mocku
 
 ## Sync lane (optional)
 
-Where a React repo maintains `.design-sync/`, the designer keeps the bundle current when designing out of real components — read `${CLAUDE_PLUGIN_ROOT}/references/design-sync.md`. UI builders maintain repo code; they do not run the sync for you.
+Where a React repo maintains `.design-sync/`, the designer keeps the bundle current when designing out of real components — read `${CLAUDE_PLUGIN_ROOT}/referencesthe bundled Claude Code `design` skill (designer loads)-sync.md`. UI builders maintain repo code; they do not run the sync for you.
 
 ## Owned elsewhere
 

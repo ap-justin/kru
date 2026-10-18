@@ -1,8 +1,8 @@
 # The sync lane — designing out of the repo's real components
 
-For the **designer** maintaining a React design bundle — not the engineering lead. Read when the tree has a `.design-sync/`, or before standing one up. Engineering builds components; the designer publishes and designs against the bundle (`references/designer-handoff.md`).
+For the **designer** maintaining a React design bundle — not the engineering lead. Read when the tree has a `.design-sync/`, or before standing one up. Engineering builds components; the designer publishes and designs against the bundle (`referencesthe bundled Claude Code `design` skill (designer loads)er-handoff.md`).
 
-`references/design-sync.md` publishes a bundle of the repo's **real** components to a claude.ai/design project. Everything it buys is paid for in maintenance.
+`referencesthe bundled Claude Code `design` skill (designer loads)-sync.md` publishes a bundle of the repo's **real** components to a claude.aithe bundled Claude Code `design` skill (designer loads) project. Everything it buys is paid for in maintenance.
 
 ## The entry bar
 

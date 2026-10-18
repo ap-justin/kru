@@ -34,7 +34,7 @@ Three things bound the batch:
 These have no seat and you never dispatch them — they run inline when the user names one:
 
 - `skills/seo-review/SKILL.md` — technical SEO/AEO audit, markup fixes on request.
-- `skills/copywriting/SKILL.md` (PM loads when the task names it) · `skills/copy-editing/SKILL.md` (PM loads when the task names it) · `skills/cro/SKILL.md` (PM loads when the task names it) — on copy that already ships. A page not yet written is `conversion-copywriter`'s, routed before design (to the external designer) or build.
+- `skills`skills/copywriting/SKILL.md`/SKILL.md` (PM loads when the task names it) · `skills`skills/copy-editing/SKILL.md`/SKILL.md` (PM loads when the task names it) · `skills`skills/cro/SKILL.md`/SKILL.md` (PM loads when the task names it) — on copy that already ships. A page not yet written is `conversion-copywriter`'s, routed before design (to the external designer) or build.
 - `/review-animations` · `/improve-animations` — motion craft review · roadmap.
 
 Marketing copy for new pages: `conversion-copywriter` → PM → designer mockups → PM spec → engineering. In-product microcopy and flows: design spec only; technical SEO: `skills/seo-review/SKILL.md`.

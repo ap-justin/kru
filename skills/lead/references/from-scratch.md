@@ -8,7 +8,7 @@ Loaded by `lead` when the branch is live.
 
 ### UI from scratch — design upstream, system in the repo
 
-A UI with no system yet is **not built and then designed in engineering**. The **PM attaches an approved design spec** — mockups + build spec from the designer (`${CLAUDE_PLUGIN_ROOT}/references/design-spec.md`). Without it, stop and tell the PM to get design first.
+A UI with no system yet is **not built and then designed in engineering**. The **PM attaches an approved design spec** — mockups + build spec from the designer (`${CLAUDE_PLUGIN_ROOT}/referencesthe bundled Claude Code `design` skill (designer loads)-spec.md`). Without it, stop and tell the PM to get design first.
 
 Engineering may run **`conversion-copywriter`** for a marketing first surface — the SECTION deck goes to the PM for the designer, not straight to builders.
 

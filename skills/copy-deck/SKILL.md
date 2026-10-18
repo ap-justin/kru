@@ -16,7 +16,7 @@ You commission the **argument** a marketing page makes: which sections it has, i
 | what the page is for, with no route | a new page — say which route you're assuming before spawning |
 | *(none)* | the marketing route the working tree touches — read `git diff HEAD`, and name the page you resolved |
 
-**A marketing route is the bar.** In-product strings belong in the PM's design spec from the designer; a line edit of copy that already reads well is `skills/copy-editing/SKILL.md` (PM loads when the task names it)'s, and a page that ships and under-performs is `skills/cro/SKILL.md` (PM loads when the task names it)'s.
+**A marketing route is the bar.** In-product strings belong in the PM's design spec from the designer; a line edit of copy that already reads well is `skills`skills/copy-editing/SKILL.md`/SKILL.md` (PM loads when the task names it)'s, and a page that ships and under-performs is `skills`skills/cro/SKILL.md`/SKILL.md` (PM loads when the task names it)'s.
 
 ## Gather what only you can
 The seat cannot invent a fact and will return a gap instead, so the facts it has decide how much of the deck comes back filled. Before spawning, hand it whatever exists: **the traffic source** (what the reader clicked, and what it already told them — this places the whole deck), **the price and what's in each tier**, **proof with sources** (named customers, metrics, ratings, logos), and **research** — reviews, tickets, transcripts the copy should mirror. **Each of the four is accounted for before you spawn — handed over, or declared absent in the brief.** An absence comes back as a gap either way; declared up front, the user can answer it before the run instead of after.
@@ -32,4 +32,4 @@ Relay the return unedited, then:
 Then hand the deck on: **deck → PM → designer → approved spec → UI builder** — always, including when a design system already exists in the repo. The lead does not run the bundled Claude Code `design` skill (designer loads) or dispatch builders until the PM attaches that spec.
 
 ## Boundary
-The argument and the words on a marketing page. The look → the designer's mockups; in-product strings → the design spec; a line edit of existing copy → `skills/copy-editing/SKILL.md` (PM loads when the task names it); a shipped page's conversion → `skills/cro/SKILL.md` (PM loads when the task names it); technical SEO markup → `skills/seo-review/SKILL.md`.
+The argument and the words on a marketing page. The look → the designer's mockups; in-product strings → the design spec; a line edit of existing copy → `skills`skills/copy-editing/SKILL.md`/SKILL.md` (PM loads when the task names it); a shipped page's conversion → `skills`skills/cro/SKILL.md`/SKILL.md` (PM loads when the task names it); technical SEO markup → `skills/seo-review/SKILL.md`.

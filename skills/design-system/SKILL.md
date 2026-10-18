@@ -57,7 +57,7 @@ Those three are also the finding names — `audit.md`.
 | `create [influence…]` | bootstrap — nothing is built yet, and the shape is the direction and the constraints | `create.md` |
 | `audit` | a system already exists, in any form — a generator, a stylesheet, a `@theme` block | `audit.md` |
 
-The **designer** runs `audit` on a coverage read, ahead of the element half of `design-system.md` (`references/designer-handoff.md`). UI builders run `audit` when extending the system in code.
+The **designer** runs `audit` on a coverage read, ahead of the element half of `design-system.md` (`referencesthe bundled Claude Code `design` skill (designer loads)er-handoff.md`). UI builders run `audit` when extending the system in code.
 
 ## The bounds both verbs hold
 
@@ -69,7 +69,7 @@ The **designer** runs `audit` on a coverage read, ahead of the element half of `
 
 - **The values and the look** — the designer's approved spec (the bundled Claude Code `design` skill (designer loads) + handoff to PM), transcribed once by a builder.
 - **Whether a consumer resolves to the token file** — the repo's conformance gate, at every commit (`${CLAUDE_PLUGIN_ROOT}/references/ui-practice.md` → *The conformance gate*).
-- **What components exist and what they render** — `/design-gallery`, on the app's own dev server.
+- **What components exist and what they render** — `the bundled Claude Code `design` skill (designer loads)-gallery`, on the app's own dev server.
 - **The rendered states and widths** — `skills/visual-review/SKILL.md` checks the build against the approved spec at 1440 and 375, plus coverage states mockups omit.
-- **Flows, IA, the screen × state inventory, the conventions file** — the designer's build spec (`references/design-spec.md`).
+- **Flows, IA, the screen × state inventory, the conventions file** — the designer's build spec (`referencesthe bundled Claude Code `design` skill (designer loads)-spec.md`).
 - **How a component behaves** — `ui-patterns`, design-system agnostic by construction.
