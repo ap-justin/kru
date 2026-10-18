@@ -41,7 +41,7 @@ names the seat and its skills has this question answered — take the answer.
 | design/landing/marketing/portfolio UI — **no system yet** | *UI from scratch*, Step 2 — **PM must attach approved design spec** before builders |
 | UI feature or screen — **system exists** | PM's **approved design spec** → UI builder (*UI on an existing system*, Step 2) |
 | a builder returned a **named gap** | the **PM**, with the token name it would need. No seat fills it, and no seat extends the system |
-| correctness/quality review of a diff | `code-reviewer` (or the built-in code-review skill skill inline) |
+| correctness/quality review of a diff | `code-reviewer` (or the built-in code-review skill inline) |
 | module/interface design, refactor with fuzzy boundaries, "where's the seam", coupling/testability | `architecture-reviewer` (design mode, before builder) |
 | structural-integrity gate on a change (boundary erosion, coupling drift) | `architecture-reviewer` (review mode, after builder) |
 | coverage sweep or fan-out across many files; repair a red/flaky suite; an exempt seat's logic-dense output; a repo with no testing conventions captured yet | `test-writer` |
