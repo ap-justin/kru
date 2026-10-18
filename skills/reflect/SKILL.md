@@ -1,10 +1,10 @@
 ---
 name: reflect
-description: Every seat on the repo's sheet looks back over a target — working tree, commit, branch, PR, or the code as it stands — then the lead scopes, slices and partitions the fixes and lands them.
+description: Every stack seat on the repo's sheet re-reads its own lane over a target — working tree, commit, branch, PR, or the code as it stands — against official sources, then the lead scopes, slices and partitions fixes and lands them. No separate code-review seats.
 disable-model-invocation: true
 ---
 
-A review gates a slice about to land. **Reflecting looks back at work that already landed** — and then fixes it. The seat that wrote a lane is the one that knows what it got wrong there: the migration's lock, the session cookie's `sameSite`, the webhook's idempotency key, the loader that fetches on every navigation. A generic reviewer reads that code and sees code. The seat reads it against the official source it was built from.
+**Look-back is not in-build review.** Work that already landed gets re-read by the seats that own each stack — against the official sources their definitions name — and then fixed. The seat that wrote a lane knows what it got wrong there: the migration's lock, the session cookie's `sameSite`, the webhook's idempotency key, the loader that fetches on every navigation. Training data is not that source; the sheet's citation is.
 
 Two phases, and the second is why the first is worth running. **Look back** fans the roster out read-only and comes back with findings. **Then fix it** turns that pile into scoped, sliced, partitioned work and lands it. A findings list nobody sliced is a document; the slices are the deliverable.
 
@@ -31,20 +31,15 @@ What keeps the first phase affordable: **every seat runs in its own context**, s
 
    **No sheet** → the roster is a guess, and a look-back off a guess reads the wrong lanes. Return that gap to the caller with **`skills/setup/SKILL.md`** named in one line; if the task still asks to proceed without a sheet, derive the lanes from `${CLAUDE_PLUGIN_ROOT}/references/routing.md` and say in the report that the roster was derived, not read. A **stale** sheet — its stamp below the installed `VERSION`, or a cited line that no longer matches disk — gets the same line, and the run continues off it meanwhile.
 
-3. **Assign every file in the target to a seat**, by the grouping rule at `${CLAUDE_PLUGIN_ROOT}/skills/lead/SKILL.md` → Step 3, *Group the change's files by seat* — a file's seat owns its stack, not the feature it was named after. Then add the review-only seats the target earns, by `${CLAUDE_PLUGIN_ROOT}/skills/lead/references/gates.md`.
+3. **Assign every file in the target to a stack seat on the sheet**, by the grouping rule at `${CLAUDE_PLUGIN_ROOT}/skills/lead/SKILL.md` → Step 3, *Group the change's files by seat* — a file's seat owns its stack, not the feature it was named after. **Do not dispatch `code-reviewer`, `architecture-reviewer`, `accessibility-reviewer`, or `visual-reviewer` here** — in-build gates in `gates.md` already ran (or should have) before merge; look-back is owning seats re-reading their lanes, not a second review pass.
 
-   **That file prices a batch for a slice about to merge, and this code already shipped. Four of its rules are overridden here:**
+   When the target carries test files, also assign them to **`test-writer`** for a read-only pass — behavior nothing covers, assertions that can't go red, tests that pass by order or clock; it runs nothing.
 
-   - **`architecture-reviewer` runs on every look-back whose target crosses a module boundary, and always on `everything`.** Structural debt accumulates in landed code precisely because nothing gated it on the way in, so the run that looks back is the first thing that ever reads for it.
-   - **`code-reviewer` reads for what shipping leaves unproven** — the error branch nothing reached, the race no load has hit, the webhook that has never seen a duplicate. Working code is evidence about the paths that ran.
-   - **`test-writer` reads the tests on every look-back** — the target's test files, against the behavior the rest of the target ships. It reads for behavior nothing covers, assertions that can't go red, and tests that pass by order or clock; it runs nothing. Before merge, coverage is the test-first builder's; landed code had no one watching for the test never written.
-   - ***live-versus-latent* applies to genuinely dead paths only.** It trims a pre-merge batch down to code something reaches; here, shipping is that evidence, so it trims little.
-
-   The stack seats need no override — their read is the premise of the run.
+   UI stack seats (`react-ui-builder`, `svelte-ui-builder`, `web-components-builder`) include **spec conformance** in their lane read when the PR or brief names mockups: compare shipped UI to `${CLAUDE_PLUGIN_ROOT}/references/design-spec.md` from source and whatever the seat's official chain names — that is the owning builder checking the approved spec, not a separate `visual-reviewer` dispatch.
 
    Every file assigned is checkable: list the target's files, list the assignments, and the two match.
 
-4. **Dispatch in waves, parallel inside a wave.** Every seat in a wave goes out in a single message; the next wave waits. Cheap read-only lanes go first, and the seats that drive a browser (`visual-reviewer`, `accessibility-reviewer`) take a wave of their own, because each is a browser and a wave of them is that many at once. `test-writer` rides the cheap wave. The session's own always-loaded instructions set what a wave may cost on this machine — read them and size the wave to it.
+4. **Dispatch in waves, parallel inside a wave.** Every seat in a wave goes out in a single message; the next wave waits. Cheap read-only lanes go first; `test-writer` rides that wave when step 3 assigned it. There is no browser-only wave — no `visual-reviewer` or `accessibility-reviewer` in look-back. The session's own always-loaded instructions set what a wave may cost on this machine — read them and size the wave to it.
 
    On `everything`, a lane is a wave's worth of work by itself: one lane per seat per wave, sliced by subsystem (`apps/api`, `packages/ui`). A seat handed a whole repo returns a survey; a seat handed a subsystem returns findings.
 
@@ -78,7 +73,7 @@ What keeps the first phase affordable: **every seat runs in its own context**, s
 
    **Text pass:** when the invoking task already asked for a text pass (or names `text-fix`), plan to run it after slices land — step 9. Otherwise return whether a text pass is recommended and let the next task approve it. The builders in step 9 write comments and strings alongside the code; full cleanup is `${CLAUDE_PLUGIN_ROOT}/skills/text-fix/SKILL.md`.
 
-9. **Land the slices.** Dispatch each to its partitioned seat as an ordinary build — the handoff contract, the test posture, the gates it earns, the fix loop and its 2-round cap are all `lead`'s Step 3 and 4, unchanged by having come from a reflection. Two things this origin adds: each slice's brief names **the finding it closes** and the seat's report path so the builder can read the full write-up, and a fix that lands **deletes its `issues/` file** in the same change (`lead` Step 4.5).
+9. **Land the slices.** Dispatch each to its partitioned seat as an ordinary build — `lead` Step 3 and 4 handoff contract, test posture, and 2-round fix cap — **without** the review-only seats or fix→re-review loop in `${CLAUDE_PLUGIN_ROOT}/skills/lead/references/gates.md` (no `code-reviewer`, `architecture-reviewer`, `accessibility-reviewer`, or `visual-reviewer` on remediation slices). Two things this origin adds: each slice's brief names **the finding it closes** and the seat's report path so the builder can read the full write-up, and a fix that lands **deletes its `issues/` file** in the same change (`lead` Step 4.5).
 
    **Then the text pass when step 8 committed to it or the task already asked** — once every slice has landed, not between them. Read `${CLAUDE_PLUGIN_ROOT}/skills/text-fix/SKILL.md` and run it. Hand it **what the slices landed on** — the branch where Step 4.5 committed them, or the working tree where they are still uncommitted.
 
