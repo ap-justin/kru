@@ -48,7 +48,7 @@ Seats whose source chain starts there are covered on routing only.
 | `python-mcp-tool` | an MCP tool that looks up a donor | `python-developer` | `python` | a typed result (a model, `TypedDict`, dataclass or `dict[...]`), not a bare `dict` |
 | `turbo-cache-miss` | CI never hits the turbo cache | `toolchain-engineer` | `turborepo` | the build task declares `outputs` |
 | `homepage-copy` | write the homepage copy | `conversion-copywriter`, not `ux-designer` | `landing-page` | |
-| `billing-settings-copy` | billing settings wording confuses people | `ux-designer`, not `conversion-copywriter` | `ux-copy` | |
+| `billing-settings-copy` | billing settings wording confuses people | none: lead tells PM the design spec needs updating | | |
 | `payments-seam-design` | where the boundary goes before PayPal | `architecture-reviewer` | `codebase-design` | |
 | `flaky-test-suite` | suite fails one run in five | `test-writer` | `testing` | the clock is faked or passed in, not read |
 | `fly-worker-disk` | deploy a worker whose outbox is on disk | `fly-platform-engineer`, not `vercel-platform-engineer` | | `fly.toml` mounts a volume |
