@@ -46,13 +46,13 @@ Follow **`local-browser`** — dev server must already be running; use **`emulat
 - **Spec mismatches** — wrong spacing, type, colour role, missing/extra element, wrong breakpoint behavior vs mockup at 1440 or 375.
 - **Missing or broken states** per build spec.
 - **Overflow/clipping**, unreadable text, broken layout, assets wrong.
-- **Ambiguous grouping** — see `composition/reference/layout.md` when it affects match to spec.
+- **Ambiguous grouping** — see `skills/composition/reference/layout.md` when it affects match to spec.
 
 ## Output
 - Per finding: `SEV(high|med|low) — <what>` + page/state/viewport + evidence + mockup/spec reference + fix (and `file:line` when traced).
 - **Spec summary line** — screens checked at 1440/375, pass or count of mismatches.
 - **Coverage line** — states reached, states unreachable, skips.
-- Verdict: **SHIP** (no high/med) or **FIX** (builder should address, priority order). Mismatches to the approved spec are **FIX**, not deferred to "user glance."
+- Verdict: **SHIP** (no high/med) or **FIX** (builder should address, priority order). Mismatches to the approved spec are **FIX**.
 
 ## Boundary
 Spec match at 1440 and 375, coverage, root cause. WCAG → `/accessibility-review`; off-token values → repo gate; correctness → `code-reviewer`; journey → `ux-auditor`.

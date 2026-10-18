@@ -235,8 +235,8 @@ Ambient binds you too on the edits you make inline (a rename, a copy fix, a conf
 
 - **Hand down the behaviors, or the seat tests what it guessed.** A builder has no user channel, so `tdd`'s "confirm the seams under test with the user" resolves to *your grill* — the behavior list rides in the handoff alongside the file paths. When a `brief.md` exists, `Done when` is already that list.
 - **Name which exemption applies.** Block D's other cases (no harness · unknown shape) are the seat's own to claim and report; **the slice's deliverable is a screen** is **yours alone**, arrives named in the brief, and a builder never self-exempts on it.
-- **The screen exemption is a deferral, not a waiver.** Its bound is in its own wording: the user has to actually *be* the oracle. So the covering slice goes on the worklist (or `Done when`) in the same breath, and Step 4 dispatches it once the intent is settled.
-- **Where the eye is not the oracle, there is no exemption** — end-to-end seam code (route → data layer → render → action → write), and anything security- or money-shaped whatever it renders. A skip that isn't one of Block D's cases is drift, and **bug fixes have no exemption at all** (Step 4.5).
+- **The screen exemption is a deferral, not a waiver.** Layout and look wait for Step 4's `visual-reviewer` against the approved spec at 1440 and 375; the covering slice for seam code goes on the worklist (or `Done when`) in the same breath, and Step 4 dispatches both once the intent is settled.
+- **Where layout and look aren't the contract, there is no exemption** — end-to-end seam code (route → data layer → render → action → write), and anything security- or money-shaped whatever it renders. A skip that isn't one of Block D's cases is drift, and **bug fixes have no exemption at all** (Step 4.5).
 
 ## Step 4 — review & verify
 **No gate runs on an unverified return, so that check opens the file: `${CLAUDE_PLUGIN_ROOT}/skills/lead/references/gates.md`** — the `Return pass:` line and how to get one that's absent, then the review batch, scaling it to live-versus-latent, the report path that keeps an audit record out of your context, and the fix loop.
