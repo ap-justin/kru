@@ -4,7 +4,7 @@ The output shape of `SKILL.md` → *5. Return the deck*.
 
 ## Who reads it
 
-- **the design agent** (`ui-designer`) draws artboards around these strings. It needs the real copy, at real length, in final order — a wireframe drawn around lorem sizes to a different page.
+- **the designer** (standalone session, not the engineering lead) draws mockups around these strings. It needs the real copy, at real length, in final order — a wireframe drawn around lorem sizes to a different page.
 - **the UI builder** mounts the strings verbatim into components.
 
 Neither is a human reader. The deck therefore carries no rationale, no annotations and no alternatives — `copywriting` → *Output Format* produces those for a person, and they belong in the return's prose, outside the deck. Two headline options in a deck is a decision handed to an agent that has no basis to make it.

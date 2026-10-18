@@ -36,12 +36,11 @@ names the seat and its skills has this question answered — take the answer.
 | Crypto payments or donations via NOWPayments / `@nowpaymentsio/nowpayments-sdk-nodejs` / `api.nowpayments.io` / pay-currency minimums + estimates / NOWPayments IPN callbacks — the **server + settlement** half | `nowpayments-specialist` |
 | QuickBooks Online / `intuit-oauth` / Intuit OAuth connect / syncing settled payments, gifts or corrections into QuickBooks / reading its chart of accounts — the **adapter** half | `quickbooks-specialist` |
 | Zapier integration / `zapier-platform-core` / `zapier-platform-cli` / `.zapierapprc` / Zapier triggers, actions or searches / REST-hook subscribe + unsubscribe endpoints / fanning an app event out to Zapier hooks — the **integration + its app endpoints** half | `zapier-specialist` |
-| user research / user flows / IA / usability critique / UX copy / the conventions file the design agent works from (corpus **or** header) | `ux-designer` |
-| a **marketing page's words** — landing, home, pricing, feature or about: a new page before it reaches design or build, or one whose copy is placeholder or whose section order doesn't argue | `conversion-copywriter` → its deck briefs the canvas or the builder |
-| design/landing/marketing/portfolio UI — **no system yet** | the chain in *UI from scratch*, Step 2 |
-| a look that is genuinely unsettled — bootstrap directions, a system change the user wants to see, a marketing or print one-off — or a **coverage read** of the ledger before feature work | `ui-designer` (drafts + publishes the canvas; you put it to the user) |
-| UI feature or screen — **system exists** | `ux-designer` (flow pass) → UI builder against the existing tokens (*UI on an existing system*, Step 2) |
-| a builder returned a **named gap** | the **user**, with the token name it would need. No seat fills it, and no seat extends the system |
+| user research / user flows / IA / usability critique / UX copy / the conventions file (corpus **or** header) when engineering needs experience work | `ux-designer` |
+| a **marketing page's words** — landing, home, pricing, feature or about: a new page before it reaches the designer or build, or one whose copy is placeholder or whose section order doesn't argue | `conversion-copywriter` → its deck briefs the **designer**, then the PM's spec briefs the builder |
+| design/landing/marketing/portfolio UI — **no system yet** | *UI from scratch*, Step 2 — **PM must attach approved design spec** before builders; lead does not design |
+| UI feature or screen — **system exists** | PM's **approved design spec** + optional `ux-designer` (flow pass) → UI builder (*UI on an existing system*, Step 2) |
+| a builder returned a **named gap** | the **PM**, with the token name it would need. No seat fills it, and no seat extends the system |
 | a logo, mark or wordmark; a favicon, app icon or manifest icon set; a README or social header in the project's own identity | `brand-designer` (concepts → the user picks → the kit) → builder or you for the `<link>`/manifest/README lines it hands back |
 | needs generated/enhanced image assets (hero art, textures, image-led OG, restyle a photo — carrying the kit's mark, never drawing one) | `graphic-designer` → builder (**preflight** below) |
 | correctness/quality review of a diff | `code-reviewer` (or `/code-review` skill inline) |

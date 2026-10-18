@@ -8,7 +8,7 @@ Each block below has **invariant clauses** (copy verbatim — `audit` checks the
 
 ## Block A — `## Context hygiene (stay lean)`
 
-Required on every seat that **reads or edits repo files**. The four text-producing seats (`ux-designer`, `graphic-designer`, `planner`, `conversion-copywriter`) are exempt by decision: their input is a brief handed to them, and they already carry an `## Output`/`## Handoff` contract. `ui-designer` and `brand-designer` carry it despite being artifact seats: matching the existing app means hunting tokens, stylesheets, the closest screens or the brand files already in the tree, which is exactly the read this block bounds.
+Required on every seat that **reads or edits repo files**. The four text-producing seats (`ux-designer`, `graphic-designer`, `planner`, `conversion-copywriter`) are exempt by decision: their input is a brief handed to them, and they already carry an `## Output`/`## Handoff` contract. `brand-designer` carries it despite being an artifact seat: matching the existing app means hunting brand files already in the tree, which is exactly the read this block bounds.
 
 ```
 ## Context hygiene (stay lean)
@@ -23,7 +23,7 @@ Return: {what the lead gets back — paths, commands run, what the next seat sti
 
 **Invariant clauses** — the two marked ⚠ are the ones that drift dropped:
 - `can't be capped mid-run`
-- ⚠ `If you're reading around to *find* code, stop and ask the lead for paths` — this is the rule's **trigger condition**. Without it the bullet degrades to a vague "read less" and stops telling the seat *when to stop and ask*. Bounded by `A search this prompt itself directs (a token hunt, say) is in bounds` — the UI builders' and `ui-designer`'s token hunt is a named search, not reading around.
+- ⚠ `If you're reading around to *find* code, stop and ask the lead for paths` — this is the rule's **trigger condition**. Without it the bullet degrades to a vague "read less" and stops telling the seat *when to stop and ask*. Bounded by `A search this prompt itself directs (a token hunt, say) is in bounds` — the UI builders' token hunt is a named search, not reading around.
 - `broad search is` + `` `Explore`'s job ``
 - `Never re-read a file` + `already confirms its state`, plus ⚠ `to confirm the edit landed` — the **bound**. Unbounded, this bullet reads as a ban on Block O's pass and takes the return pass down with it: the seat that just edited six files is exactly the seat told never to read them again. The clause bans *verifying an edit landed*, which the harness already confirms; measuring the finished surface is the other question, and the bullet names it in its own words. It must stay self-contained: Block A binds more seats than Block O does, so a cross-reference here would dangle on every seat that carries A alone.
 - `let the lead slice it`
@@ -136,7 +136,6 @@ Required on every seat that implements **executable behavior with a specifiable 
 - `react-ui-builder`, `svelte-ui-builder` — you can't go red on a layout or a motion curve; their gate is the user's visual-intent inspection. Logic-dense component internals (a reducer, validation rules) route to `test-writer` after the build.
 - `web-components-builder` is the **partial**, and it's in rather than out: its element's public API (attribute→property reflection and the pre-upgrade path, emitted events and their `detail`, `ElementInternals` form value/validity, idempotent connect/disconnect) is a specifiable contract other people's pages depend on, and every one of its failures is invisible on screen — so Block D applies to it in full. What it *renders* is covered by the block's existing screen exemption, which the lead names in the brief; it needs no fourth case.
 - `sanity-builder` — its primary artifact is declarative schema; TypeGen is the correctness gate on GROQ.
-- `ui-designer` — its artifact is a mockup, not a running behavior: the `.dc.html` it drafts is transcribed by a builder and never ships, and the gate on it is the user's eye on the render.
 - `brand-designer` — its artifact is a drawing: an SVG mark and the rasters derived from it have no behavior to go red on, and the gate is the render at size (its `## Prove it at size`) plus the user's pick.
 - `vercel-perf-optimizer` — already carries the same discipline in a different currency: `## Prove the win` demands a measured before/after.
 - `toolchain-engineer`, `vercel-platform-engineer`, `fly-platform-engineer` — config, not behavior. The Fly seat's artifact is an image plus `fly.toml`; what verifies it is a health check against a real deploy, not a red test.
@@ -250,13 +249,13 @@ Required on the three **UI component builders** (`react-ui-builder`, `svelte-ui-
 **Not on the framework builders.** They mount components and write no style values, so the vocabulary is nothing they can get wrong. The **conformance gate** the builder sets up in Phase 0 is what enforces it afterwards — structural in the build where the stack allows, plus a test in the repo, and never a seat.
 
 ```
-- **The token vocabulary is shadcn's semantic set** — the naming convention only: no shadcn or Tailwind dependency is implied. Read the names off the project's token file, which is the only authority — it was transcribed from what Claude Design settled, and no seat here extends it. **How a value was derived is the system's business, not yours** — a hover step may be a named `--primary-hover`, an alpha step like `bg-primary/90`, or a `color-mix()`; use whichever the file has, and return a named gap when it has none. One trap, and it arrives by pasting shadcn's own component code rather than by inventing anything: `--accent` is the **hover/selected surface**, not the brand accent (that's `--primary`) — read backwards it puts brand hue on every resting row.
+- **The token vocabulary is shadcn's semantic set** — the naming convention only: no shadcn or Tailwind dependency is implied. Read the names off the project's token file, which is the only authority — it was transcribed from the approved design spec, and no seat here extends it. **How a value was derived is the system's business, not yours** — a hover step may be a named `--primary-hover`, an alpha step like `bg-primary/90`, or a `color-mix()`; use whichever the file has, and return a named gap when it has none. One trap, and it arrives by pasting shadcn's own component code rather than by inventing anything: `--accent` is the **hover/selected surface**, not the brand accent (that's `--primary`) — read backwards it puts brand hue on every resting row.
 ```
 
 **Invariant clauses:**
 - `the naming convention only` + the no-dependency clause — without it a seat installs shadcn or reaches for Tailwind because the names implied a stack. The names are a vocabulary, not a package.
 - ⚠ `Read the names off the project's token file, which is the only authority` — this is what keeps the block from becoming a **stale cache** of a list that lives in the repo being built. Enumerating the ~30 names here instead is drift: the seat opens that file anyway, and a copy goes wrong the first time the contract grows.
-- ⚠ `How a value was derived is the system's business, not yours` — the team conforms to the system it was given and holds no opinion on the CSS behind it. Without this clause a seat re-derives a state step it dislikes, which is a design decision taken from Claude Design at the last possible moment, in a file nobody reviews as design.
+- ⚠ `How a value was derived is the system's business, not yours` — the team conforms to the system it was given and holds no opinion on the CSS behind it. Without this clause a seat re-derives a state step it dislikes, which is a design decision taken from the approved spec at the last possible moment, in a file nobody reviews as design.
 - ⚠ the `--accent` trap. It is the block's reason to exist — the part **no token file confesses**, because it's a plausible-looking line imported from shadcn's published components rather than a value the seat invented. Read backwards it tints every resting row, and it is expensive to unpick later.
 
 **Tailored slots**: none. The bullet is identical on all three seats by design — `audit`'s cluster check (step 6) treats any divergence between them as drift. `web-components-builder` carries **one added bullet after it**, never an edit to it: inside a shadow root distributed beyond the app the token names take a prefix, because custom properties inherit across the boundary and a generic `--primary` on a host page the team doesn't own bleeds in. An addition is fine; changing the block's own text is drift.
@@ -336,7 +335,6 @@ Required on the same 28 seats as Block N — every seat that **writes code or co
 **Exempt by decision** — record the reason, don't just omit:
 - `test-writer` — its completion criterion is already hard and external (*the suite is green*), and a green suite is the one bound that resists premature completion without being asked to. It writes tests, not app code, which is also why it sits outside Blocks F and N.
 - `brand-designer` — outside Blocks F and N as an artifact seat; its own `## Prove it at size` is the return pass in its currency, fired by the same belief-of-done trigger and aimed at the rendered files rather than a diff.
-- `ui-designer` — outside Blocks F and N as an artifact seat, so it inherits their boundary here. **Weakest of the exemptions**: its output is judged only by the user's eye, so it has no green to reach and the most room to stop early. Revisit if the artboard passes start coming back thin.
 
 It sits **immediately before `## Context hygiene (stay lean)`** — the last action before the return it gates.
 
@@ -385,7 +383,7 @@ Required on the 29 seats that **write code or config into the working repo** —
 
 **Exempt by decision** — record the reason, don't just omit:
 - reviewers and auditors — `memory` grants `Write`/`Edit`, and *reports; does not edit* is their contract. A recurring finding still reaches the team as an inbox line.
-- the text-producing seats, `ui-designer` and `brand-designer` — their input is a brief, not a tree they re-learn each run.
+- the text-producing seats and `brand-designer` — their input is a brief, not a tree they re-learn each run.
 - **`user` and `project` scopes, on every seat.** `user` is cross-project memory the seat writes and reads back with no gate, which is exactly what the inbox → `/roster learn` sweep exists to gate. `project` is committed into someone else's repo. `local` is the one scope that stays per repo and off the repo's history — the single exception to `TRACKER.md`'s *no management files in it, ever*, taken because the harness offers no out-of-tree path.
 
 It sits **immediately before `## The return pass`** (before `## Context hygiene (stay lean)` on `test-writer`, which carries no return pass) — the pass is where a run learns what it would have wanted to know at the start.

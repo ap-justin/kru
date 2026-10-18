@@ -1,6 +1,6 @@
 ---
 name: copy-deck
-description: Write a marketing page's argument and its copy — the section order, the headline, the proof — as a deck the design canvas and a UI builder mount verbatim.
+description: Write a marketing page's argument and its copy — the section order, the headline, the proof — as a deck the designer and UI builder mount verbatim.
 disable-model-invocation: true
 argument-hint: "[a route, a page name, or what the page is for — omit for the page the current change touches]"
 ---

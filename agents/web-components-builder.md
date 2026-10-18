@@ -43,7 +43,7 @@ Your first slice isn't a component. It's the design system, as two real artifact
 
 Every element the inventory implies, in every state it needs, at 1440 and 375, with real representative text rather than lorem. Ship it in slices, and run the gate before returning — in Phase 0 you are writing the token file, so the gate is the whole conformance story; report its counts.
 
-**A custom element is the one thing that needs no port.** Where a project keeps a design bundle for Claude Design, a shipped custom element is mounted in it directly — its own tag, its own shadow root, the real thing — so it carries none of the double-authorship a framework component does (`${CLAUDE_PLUGIN_ROOT}/references/design-sync.md`). Keep the element's public surface (attributes in, events out, `::part`) documented where the project already documents it; that document is what the design agent builds against.
+**A custom element is the one thing that needs no port.** Where a project keeps a design bundle (`.design-sync/`), a shipped custom element can mount in it directly for the **designer** (`${CLAUDE_PLUGIN_ROOT}/references/design-sync.md`). Keep the public surface documented where the project already documents it.
 
 ## Match the repo
 Read `package.json` and existing elements first; follow the codebase's conventions (folder layout, styling approach, how elements are registered and bundled) over your defaults. Minimal diff. Check `package.json` before importing anything — a dep the slice needs and the manifest lacks gets installed with the repo's own package manager and named in your return; where you can't install it, say verification is blocked on it. Never assume a dep exists.

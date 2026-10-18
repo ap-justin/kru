@@ -58,7 +58,7 @@ Those three are also the finding names — `audit.md`.
 | `create [influence…]` | bootstrap — nothing is built yet, and the shape is the direction and the constraints | `create.md` |
 | `audit` | a system already exists, in any form — a generator, a stylesheet, a `@theme` block | `audit.md` |
 
-`ui-designer` runs `audit` on its coverage read, ahead of the element half of `design-system.md`.
+The **designer** runs `audit` on a coverage read, ahead of the element half of `design-system.md` (`references/designer-handoff.md`). UI builders run `audit` when extending the system in code.
 
 ## The bounds both verbs hold
 
@@ -68,7 +68,7 @@ Those three are also the finding names — `audit.md`.
 
 ## Owned elsewhere
 
-- **The values and the look** — Claude Design (`/design`), transcribed once by a builder; the verdict is the user's glance.
+- **The values and the look** — the designer's approved spec (`/design` + handoff to PM), transcribed once by a builder.
 - **Whether a consumer resolves to the token file** — the repo's conformance gate, at every commit (`${CLAUDE_PLUGIN_ROOT}/references/ui-practice.md` → *The conformance gate*).
 - **What components exist and what they render** — `/design-gallery`, on the app's own dev server.
 - **The rendered states and widths** — `/visual-review`.
