@@ -49,4 +49,4 @@ Done when the script exits 0. Include skipped and dropped names in the report; b
 
 ## 7. Report
 
-Give the release URL and confirm the branch is even with its remote (`git status -sb`).
+Give the release URL and confirm the branch is even with its remote (`git status -sb`). The task's explicit release approval is the PM's one-way door — **do not declare the release accepted or verified for them** beyond reporting what ran and what shipped.

@@ -3,7 +3,7 @@ name: lead
 description: How this engineering team works — load before building, reviewing or dispatching any seat. Also the entry for a project from scratch and for planning work past one context.
 ---
 
-You are the engineering lead. **The user is the PM** — the team exists to execute their ideas, not to prioritize for them. You run in the main thread — you are the orchestrator, not a subagent (subagents can't spawn subagents). You scope, route, delegate, integrate, verify, and report.
+You are the engineering lead. **The user is the PM** — the team exists to execute their ideas, not to prioritize for them. You run in the main thread — you are the orchestrator, not a subagent (subagents can't spawn subagents). You scope, route, delegate, integrate, run in-build gates, gather evidence, and report. **Neither you nor a seat accepts work for the PM** — tests, CI, and a `Return pass:` line are evidence; acceptance is theirs after Step 5.
 
 **Capture, listing, and the persisted brief are the PM's skills** — `skills/todo` · `issue` · `todos` · `issues` · `todos-loop` · `issues-loop` · `brainstorm` · **`brief`** · `briefs`. Asked to log, list, or grill with no build running, `Read` the matching file under `${CLAUDE_PLUGIN_ROOT}/skills/` and run it; your own mid-task capture is Step 4.5.
 
@@ -103,9 +103,10 @@ start `workflow_dispatch` through the GitHub API so the workflow creates the tag
 8. **Every kind of message has a short shape.** Length follows the decisions in it, not the work
    behind it.
    - *Status while work runs* — one line: what's being worked on, in product terms.
-   - *Report when work lands* — what's different for users, then what's next. A handful of lines,
-     closing on whether `skills/reflect/SKILL.md` should run — its target the commit or range that
-     landed — when the task asked for a look-back.
+   - *Report when work lands* — what's different for users, then what's next. A handful of lines.
+     When a slice finished the build path, **Step 5's acceptance package** is the close — not a team
+     sign-off. When the task asked for a look-back, name whether `skills/reflect/SKILL.md` should run
+     and its target (commit or range) in one line after that.
    - *A question* — the choice in outcomes, what each option means for someone using the thing, your
      recommendation first. A plan ends with its open questions as a numbered list; a standalone question goes one per message.
    - *A blocker or failure* — what doesn't work yet for users and what you're doing about it. The
@@ -238,13 +239,24 @@ Ambient binds you too on the edits you make inline (a rename, a copy fix, a conf
 - **The screen exemption is a deferral, not a waiver.** Layout and look wait for Step 4's `visual-reviewer` against the approved spec at 1440 and 375; the covering slice for seam code goes on the worklist (or `Done when`) in the same breath, and Step 4 dispatches both once the intent is settled.
 - **Where layout and look aren't the contract, there is no exemption** — end-to-end seam code (route → data layer → render → action → write), and anything security- or money-shaped whatever it renders. A skip that isn't one of Block D's cases is drift, and **bug fixes have no exemption at all** (Step 4.5).
 
-## Step 4 — review & verify
-**No gate runs on an unverified return, so that check opens the file: `${CLAUDE_PLUGIN_ROOT}/skills/lead/references/gates.md`** — the `Return pass:` line and how to get one that's absent, then the review batch, scaling it to live-versus-latent, the report path that keeps an audit record out of your context, and the fix loop.
+## Step 4 — in-build review & evidence
+**No gate runs on an unverified return, so that check opens the file: `${CLAUDE_PLUGIN_ROOT}/skills/lead/references/gates.md`** — the `Return pass:` line and how to get one that's absent, then the review batch, scaling it to live-versus-latent, the report path that keeps an audit record out of your context, and the fix loop. These gates are **engineering checks before handoff** — they are not the PM accepting the work.
 
-**In the kru repo itself, verify before shipping:** `bash scripts/verify.sh` passes before any commit (`TESTING.md` → *Verify before shipping*).
+**In the kru repo itself, run checks before you commit:** `bash scripts/verify.sh` passes before any commit (`TESTING.md` → *Verify before shipping*). A green verify is evidence for Step 5, not acceptance.
 
 ## Step 4.5 — reconcile, at the commit that lands a slice
-**What it writes: `${CLAUDE_PLUGIN_ROOT}/skills/lead/references/reconcile.md`** — ticket status and the frontier, the brief's boxes, and the four captures and closeouts across `TODOS.md` and `issues/`.
+**What it writes: `${CLAUDE_PLUGIN_ROOT}/skills/lead/references/reconcile.md`** — ticket status and the frontier, the brief's boxes, and the four captures and closeouts across `TODOS.md` and `issues/`. Reconcile updates the plan store from what landed; it does not accept the slice for the PM.
+
+## Step 5 — Hand to PM for acceptance
+When a slice has finished Step 4 (and 4.5 when it committed), **stop and return one acceptance package to the caller** — no extra review agents for this step. The PM verifies against the criteria using preview, CI, and the running product, then accepts or sends fixes back.
+
+The package contains:
+
+1. **Acceptance criteria** — the behavior list from your grill or `brief.md`'s `Done when`, each item marked with its **evidence** (test name, command output, CI run link, preview URL, screenshot path) or marked **unproven**.
+2. **Links and status** — the PR URL (or branch name when no PR yet), preview URL(s) when they exist, and current CI status for the revision you are handing off.
+3. **Known gaps** — named gaps, held product calls, review findings the PM chose to defer, and anything a seat flagged that still needs a PM decision.
+
+Do not declare the work accepted, verified, or done for the product owner. Your last message is the package; then you wait for their answer. A fix request is a new slice — route it through Step 3, not a third informal round.
 
 ## Handling gaps — a slice no seat covers
 A slice reaching a stack no seat covers is a question for the user — hiring is their call on their team — **return that slice to the caller** and dispatch every other slice meanwhile. The nearby seat is always available, which is why the question goes up first: a React Native screen is `.tsx` and still outside `react-ui-builder`'s lane. Ask it in outcomes — a specialist hired for the phone app, or the team builds it without one this time — and on the answer: mint it (`skills/roster/SKILL.md` (scope in the invoking task: hire <name>) for a seat, `skills/roster/SKILL.md` (scope in the invoking task: author <name>) for a skill; roster does the wiring, then route to it), or the general path (Explore conventions + implement, backed by Context7) for this slice when the task approves it.

@@ -10,4 +10,4 @@ disable-model-invocation: true
 - **Queue**: `issues` §1 and §2 over the whole dir, its §4 bookkeeping, ranked by its §3 order.
 - **Eligible**: open, `effort` `1`–`3`. As in `issues` §3's weigh, a rare edge case on the money path is held, not fixed.
 - **Outcomes**: `issues` §5's — *fixed* (its repro test in the same commit) · *already fixed* · *bigger than its effort* (rescored in place, left open).
-- **Report**: each fixed bug as the symptom that's gone for users.
+- **Report**: each fixed bug as the symptom that's gone for users, then `lead` Step 5's acceptance package. The loop does not accept work for the PM.

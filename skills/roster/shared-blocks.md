@@ -341,6 +341,7 @@ Believing the work is done is the cue to run this pass — that belief is what i
 - **Did I use what I had?** Every skill above whose trigger this slice hit, loaded — and every pointer those skills point at, followed? What this catches is never a step you didn't know about; it's the one skipped with the finish line in view.
 - **What did I leave across the whole surface?** Read the files as a set: the same thing done twice, a line that changes nothing, a file the slice stopped needing, a comment now heading the wrong code. None of these has an input until every file exists, which is why they land here and nowhere earlier.
 Fix what it finds. What this slice can't absorb, name in your return rather than widening it. Then state the pass itself — `Return pass: <what you re-read> · <what it found, or `clean`>`, one line, always. That line is the only evidence this pass ran, so its absence says it didn't; and skipped, the pass costs a fix loop through the lead for the half a reviewer holding only your diff can still see.
+**Never declare the slice accepted, verified, or done for the PM.** Report tests run, commands, counts, and gaps — evidence is not acceptance.
 ```
 
 **No tailored slot** — deliberately, on Block I's precedent. Both questions are seat-independent: the first is self-referential (*this* definition's skills, whatever they are) and the second names defects no stack changes the shape of. Any divergence between seats is drift, which makes the audit a plain string check.
@@ -353,6 +354,7 @@ Fix what it finds. What this slice can't absorb, name in your return rather than
 - ⚠ `name in your return rather than widening it` — the **escape hatch**, same shape as Block F's and N's, doing double duty as a scope bound: a return pass with no hatch is a licence to keep building past the slice.
 - `costs a fix loop through the lead` — the **price**. Unpriced, skipping reads as momentum; priced, it reads as spending a full round-trip to have someone else find what you were holding.
 - ⚠ `` `Return pass: <what you re-read> · <what it found, or `clean`>` `` + `its absence says it didn't` — the **trace**, and the clause that separates this block from a wish. Block N's hand-roll and Block F's cut path are both checkable from the diff; by the asymmetry above this one isn't, so a skipped pass and a clean pass produce identical output unless the seat says which it was. `clean` is required precisely because it is the case a seat would otherwise leave silent. The token is greppable on purpose: `hooks/log-dispatch.sh` records its presence per dispatch, which is what lets `dispatch-auditor` see a pass that never ran.
+- ⚠ `Never declare the slice accepted, verified, or done for the PM` + `evidence is not acceptance` — the **PM boundary**. Without it a green suite or a `Return pass: clean` line reads as sign-off; acceptance is the PM's after the lead hands the Step 5 package.
 
 **The read side** is one bullet in `code-reviewer` → *What to hunt*, sharing this block's `across the slice` token. Surface half only, per the asymmetry above.
 

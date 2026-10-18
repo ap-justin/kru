@@ -29,6 +29,6 @@ Take the top queued entry and:
 
 ## 4. Report
 
-One message, `lead`'s *report when work lands* shape: the branch and the count against the cap, then what's different for users. Held entries get the numbered list, each with a recommendation; everything else is one counted clause under the skill's own outcome names. An *uncommitted* change is named in one line with the count it would have reached. Nothing is pushed — the branch is the user's to review and open.
+One message closing with **`lead` Step 5 — Hand to PM for acceptance**: the branch and count against the cap, what's different for users, then the acceptance package (criteria with evidence or **unproven**, PR/preview/CI when they exist, known gaps). Held entries stay in the numbered list with a recommendation each; everything else is one counted clause under the skill's own outcome names. An *uncommitted* change is named in one line with the count it would have reached. **Do not declare the backlog burn accepted or done for the PM** — evidence and outcomes are not acceptance. Nothing is pushed unless the task approved it — the branch is theirs to review and open.
 
 **Completion criterion: every queued entry has a named outcome — one of the skill's, held, uncommitted, or not reached — and the count at the last commit is at or under the cap.**
