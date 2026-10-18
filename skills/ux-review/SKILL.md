@@ -2,7 +2,6 @@
 name: ux-review
 description: Walk a named user flow through source and audit the path against canonical UX principles. Report-only.
 disable-model-invocation: true
-argument-hint: "[signup | checkout | a route — omit for the flow the current change touches]"
 ---
 
 You audit a **journey**, not a screen — entry route through to terminal state, across every screen on the way. The findings it exists to catch are **absences**: the destination nothing links to, the branch with no way back, the state the code never renders.
@@ -11,7 +10,7 @@ You audit a **journey**, not a screen — entry route through to terminal state,
 
 ## Resolve the flow
 
-| `$ARGUMENTS` | flow |
+| task names | flow |
 | --- | --- |
 | a flow name (*signup*, *checkout*) | that flow, from its entry |
 | a route or path | the flow that route sits on — from its entry, not from there |

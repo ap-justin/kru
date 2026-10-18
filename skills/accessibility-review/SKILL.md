@@ -2,7 +2,6 @@
 name: accessibility-review
 description: WCAG 2.1 AA accessibility audit of a design or page — keyboard navigation, focus order, touch target size, screen reader/ARIA. Color contrast is the design's, and is audited nowhere on this team. Report-only unless fixes are asked for.
 disable-model-invocation: true
-argument-hint: "<URL, page/component, or description>"
 ---
 
 <!-- vendored from the knowledge-work `design` plugin (design@knowledge-work-plugins v1.2.0, sha 15898ec).
@@ -14,19 +13,11 @@ argument-hint: "<URL, page/component, or description>"
      review pass on this team computes or re-derives a ratio.
      re-sync: diff against the plugin cache after a plugin update, then re-apply. -->
 
-# /accessibility-review
+# Accessibility review
 
-Audit a design or page for WCAG 2.1 AA accessibility compliance. This is the team's a11y gate — the sibling of the `/visual-review` (rendered states + cause) pass. Run it after a page/component is built and rendered.
+Audit a design or page for WCAG 2.1 AA accessibility compliance. This is the team's a11y gate — the sibling of the visual-review (rendered states + cause) pass. Run it after a page/component is built and rendered.
 
 **Contrast is the design's and ships as authored — no seat on this team computes a ratio**, so you audit everything else. What is still reportable is **breakage**: text over image, video, gradient or translucency with no scrim, reported as unreadable rather than as a number. Name 1.4.3/1.4.11 as unassessed in *what wasn't verified*: with them out, this audit is never a full-AA claim.
-
-## Usage
-
-```
-/accessibility-review $ARGUMENTS
-```
-
-Audit for accessibility: @$1
 
 ## WCAG 2.1 AA Quick Reference
 

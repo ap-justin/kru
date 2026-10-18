@@ -1,7 +1,6 @@
 ---
 name: design-system
 description: The shape of a design system before its values exist — seven foundations (color · typography · size · elevation · motion · primitives · shells). `create` writes it at bootstrap with every value `UNSET`; `audit` returns what an existing system is missing. Reach for it on a coverage read.
-argument-hint: "<create|audit> [influence…]"
 ---
 
 # design-system — the shape, before the values
@@ -53,7 +52,7 @@ Those three are also the finding names — `audit.md`.
 
 ## Dispatch
 
-| `$ARGUMENTS` | the branch | read |
+| branch in task | the branch | read |
 |---|---|---|
 | `create [influence…]` | bootstrap — nothing is built yet, and the shape is the direction and the constraints | `create.md` |
 | `audit` | a system already exists, in any form — a generator, a stylesheet, a `@theme` block | `audit.md` |

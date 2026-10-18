@@ -1,8 +1,6 @@
 ---
 name: remember
-description: Capture a preference or a liked pattern into the team's cross-project inbox, to be swept back into the team later. The user-facing write half of the preference loop.
-disable-model-invocation: true
-argument-hint: "<the preference or pattern the user liked>"
+description: Bank a cross-project preference when the task states what to remember about design, code, or workflow — not from inferring approval of a diff.
 ---
 
 Park what the user liked into the team's preference inbox so a later `/roster learn` sweep can promote it back into the team. This is the **explicit** capture channel — the team never infers preferences from approval, so this command is how a preference gets banked. See `${CLAUDE_PLUGIN_ROOT}/PREFERENCES.md` for the whole loop.

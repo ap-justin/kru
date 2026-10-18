@@ -2,7 +2,6 @@
 name: design-gallery
 description: The in-repo component gallery — every component and its states on the app's own dev server, maintained as ordinary app code.
 disable-model-invocation: true
-argument-hint: "[component or area]"
 ---
 
 Every component and every state it has, on one page, out of the repo's real parts — with the loop a builder already has: save the file, see it.

@@ -4,7 +4,7 @@ A first-party library skill is a set of runs on one specific version (`skills/ro
 
 ## Do
 
-1. **Enumerate the pins.** `$ARGUMENTS` names a skill → just that one.
+1. **Enumerate the pins.** task names a skill → just that one.
 
    ```bash
    grep -H -o -m1 'Reproduced on \*\*`[^`]*`\*\*[^.]*\.' skills/*/SKILL.md   # npm pins; companions follow "with"

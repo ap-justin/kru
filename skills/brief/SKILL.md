@@ -2,7 +2,6 @@
 name: brief
 description: Grill a change to the studs, then persist the account of it — what lands, blast radius, ship cadence, decisions, non-goals, done-when — as `plan/<effort>/brief.md` in the plan store. Re-run on an effort to reconcile its brief against what actually shipped.
 disable-model-invocation: true
-argument-hint: "<subject — the change to grill>"
 ---
 
 Grill to exhaustion, then **write it down**, so the shared understanding survives the session, the

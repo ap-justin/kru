@@ -125,30 +125,30 @@ the repo's `.claude/settings.json` `env` so a laptop clone and a cloud clone agr
 preference half at a published artifact's database instead of files, so `/kru:remember` reaches
 your other machines and your cloud sessions. `references/store.md` is the whole map.
 
-## Commands
+## Skills (for PM bots and cloud agents)
+
+Slash commands still work in Claude Code; **the contract is the skill file** under `skills/`. The lead loads `skills/lead/SKILL.md` before building; everything else is a deliberate `Read` when the task calls for it.
+
 **Getting started**
-- `/kru:setup`: set the team up in this repo. Once per repo, again when the repo or the plugin moves.
-- `/kru:propagate` `[vX.Y.Z]`: from the plugin repo, carry a release's setup changes to every set-up repo and push them after one confirm.
-- Then ask: "add feature Y", "fix Z", "build a landing page for X". Or `/kru:lead <task>`.
+- `skills/setup/SKILL.md` — derive the repo sheet (also fires ambiently when there is no `<!-- kru v` stamp or the stamp is behind `VERSION`).
+- `skills/propagate/SKILL.md` — carry a release to set-up repos; push only when the task approves.
+- `skills/lead/SKILL.md` — orchestrate builds from the PM's task.
 
-**Coding sessions**
-- `/kru:brainstorm <idea>`: grill an idea like `/kru:brief`, nothing saved; say go and it becomes the brief.
-- `/kru:brief <subject>`: grill a change and keep the record before building.
-- `/kru:copy-deck` `[<page>]`: write a marketing page's argument and copy before it's designed or built.
-- `/kru:todo <the thing>`, `/kru:issue <what's wrong>`: park a want or a defect without breaking the session.
-- `/kru:remember <what you liked>`: bank a preference for the team to absorb later.
-- `/kru:landed`: after the PR merges, sync back onto the base branch.
-- `/kru:text-fix` `[<path> | <branch> | <pr>]`: every text pass the target earns — comments, rendered copy, doc prose, agent docs — in one go. The three verbs under it run alone too: `/kru:comment-fix`, `/kru:prose-fix`, `/kru:doc-fix`.
-- `/kru:eval-review` `[<eval dir>]`: audit a plugin eval suite for checks that pass or fail for the wrong reason, and fix them.
+**Capture and planning**
+- `skills/brainstorm`, `brief`, `todo`, `issue`, `todos`, `issues`, `briefs` — grill, persist, or reconcile store artifacts; batch skills return picks for the next task.
+- `skills/copy-deck` — marketing page deck via `conversion-copywriter`.
+- `skills/remember` — bank a cross-project preference (ambient when the task states what to remember).
 
-**Backlog and tech debt**
-- `/kru:reflect` `[<pr> | <branch> | <commit> | everything]`: every seat looks back over its own lane, then the fixes get scoped, sliced and landed.
-- `/kru:todos`, `/kru:issues`: work the backlog; each entry landed is deleted.
-- `/kru:issues-loop`, `/kru:todos-loop` `[<max files>]`: fix defects or build wants one commit at a time, without stopping to ask, until the branch reaches the changed-file cap (default 80); product calls wait for the end.
-- `/kru:briefs`: check every brief against what shipped; tick, archive, or resume one.
-- `/kru:design-system audit`: audit the design system.
-- `/kru:seo-review`, `/kru:review-animations`, `/kru:improve-animations`, `/kru:design-gallery`: audits on shipped pages.
-- `/kru:ux-review <flow>`: audit a user flow (signup, checkout) end to end through source.
+**Hygiene and look-back**
+- `skills/text-fix` (+ `comment-fix`, `prose-fix`, `doc-fix`) — text passes on a diff or path the task names.
+- `skills/reflect`, `landed`, `eval-review` — look-back, post-merge sync, eval grader audit (paid eval runs need task approval).
+
+**Backlog loops**
+- `skills/issues-loop`, `todos-loop` — unattended burn when the task names backlog work without a gate (cap default 80 files).
+
+**Screen and growth passes**
+- Dispatch `visual-reviewer` / `accessibility-reviewer` at Step 4; load `seo-review`, `copywriting`, `copy-editing`, `cro`, `ux-review`, or animation skills when the task names that pass.
+- `skills/improve-animations` — motion roadmap (ambient on explicit motion-audit tasks).
 
 ## Stack
 - **UI**: React, Svelte 5, Web Components.

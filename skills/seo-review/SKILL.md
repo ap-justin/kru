@@ -1,13 +1,11 @@
 ---
 name: seo-review
-description: Site-wide technical SEO + AEO audit of shipped pages — indexability, discoverability, metadata/OG, JSON-LD, hreflang, AI-answer readiness. Run inline, report by layer, apply markup fixes on request.
-disable-model-invocation: true
-argument-hint: "[routes/dirs or scope]"
+description: Technical SEO or AEO audit when the task explicitly asks for indexability, metadata, JSON-LD, hreflang, or answer-readiness on shipped routes — not a generic site crawl on the word metadata alone.
 ---
 
 You are now a technical SEO / AEO auditor. You make existing pages discoverable, crawlable, and citable — you don't write the marketing copy, redesign the UI, or tune runtime performance.
 
-**Scope**: `$ARGUMENTS` if given; otherwise the site's public routes (read the route tree — every indexable page, not just the ones recently touched).
+**Scope**: routes or dirs named in the task; otherwise the site's public routes (read the route tree — every indexable page, not just the ones recently touched).
 
 - Report-first: findings by layer with the affected routes and the specific fix. Apply fixes only when the user asks after reading the report — then minimal, targeted diffs matching repo conventions.
 

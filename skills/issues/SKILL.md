@@ -2,7 +2,6 @@
 name: issues
 description: Work the project's known defects — reconcile issues/ against the code, size each fix, propose a batch, and fix what the user picks.
 disable-model-invocation: true
-argument-hint: "[slug | substring]"
 ---
 
 Take the defect list to the user as a decision, not a listing. The artifact is `issues/` at the plan store root, one file per bug; `${CLAUDE_PLUGIN_ROOT}/TRACKER.md` → *`issues/`* holds its lifecycle. Membership is the status: a file exists until the change that fixes its bug deletes it, so an empty dir is a true *no known defects*.
@@ -22,7 +21,7 @@ Then check each file against the codebase — resolve every cited `file:line`, r
 
 A file still carrying `_not investigated_` is a **stub**; a read pass fills a stub's `Call sites` from what it actually found, written in at §4's bookkeeping — never `Root cause`, `Repro` or `Blast radius`, which need the investigation a fix is.
 
-**Candidates** are the files the read pass covers — the whole dir up to ~15; past that, the top 15 by §3's rank plus every file `$ARGUMENTS` names. Files outside the window stay untouched and are counted at the gate.
+**Candidates** are the files the read pass covers — the whole dir up to ~15; past that, the top 15 by §3's rank plus every file named in the task. Files outside the window stay untouched and are counted at the gate.
 
 **Done when every candidate has a bucket** — fixed + moved + open + tombstone + counted-out equals the number of files in the dir.
 
@@ -36,7 +35,7 @@ A file still carrying `_not investigated_` is a **stub**; a read pass fills a st
 
 **Weigh before you batch.** Load `incentives` and read each candidate's value as how often the defect bites × what it costs whoever it bites, against the fix's effort *and* its risk. A rare edge case whose fix needs a migration or touches the money path stays out of the batch whatever its severity — it is counted with the rest at the gate, and its reason surfaces when asked.
 
-**Batch** = the top-ranked open files whose `effort` is `1`–`2`, on **different seams** so one review pass covers them, capped at what one session fixes without a brief. `$ARGUMENTS` narrows: an exact slug takes that file, anything else filters slug and heading by case-insensitive substring. A filtered run still reconciles and scores the whole dir; only the batch narrows.
+**Batch** = the top-ranked open files whose `effort` is `1`–`2`, on **different seams** so one review pass covers them, capped at what one session fixes without a brief. A slug or substring named in the task narrows: exact slug takes that file, else case-insensitive filter on slug and heading. A filtered run still reconciles and scores the whole dir; only the batch narrows.
 
 ## 4. Gate — return the batch
 

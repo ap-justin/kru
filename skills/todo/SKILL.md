@@ -2,7 +2,6 @@
 name: todo
 description: Log something you want but don't want done now, into the project's plan store. Expands it from context already in the session; logs it as-is when there's none.
 disable-model-invocation: true
-argument-hint: "<the thing you want, later>"
 ---
 
 Write the user's deferred want into the project's `TODOS.md` and get out. They want something and don't want it done now. See `${CLAUDE_PLUGIN_ROOT}/TRACKER.md` → *`TODOS.md`* for the artifact's lifecycle — you don't need to read it to run this.

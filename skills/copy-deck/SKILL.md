@@ -2,7 +2,6 @@
 name: copy-deck
 description: Write a marketing page's argument and its copy — the section order, the headline, the proof — as a deck the designer and UI builder mount verbatim.
 disable-model-invocation: true
-argument-hint: "[a route, a page name, or what the page is for — omit for the page the current change touches]"
 ---
 
 You commission the **argument** a marketing page makes: which sections it has, in what order, with what strings in them. The output is a SECTION deck — a closed set a designer draws around and a builder mounts without writing a word of its own.
@@ -11,7 +10,7 @@ You commission the **argument** a marketing page makes: which sections it has, i
 
 ## Resolve the page
 
-| `$ARGUMENTS` | page |
+| task names | page |
 | --- | --- |
 | a route or a page name | that page |
 | what the page is for, with no route | a new page — say which route you're assuming before spawning |

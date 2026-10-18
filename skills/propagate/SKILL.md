@@ -2,7 +2,6 @@
 name: propagate
 description: Carry a plugin change out to every repo it reaches — the files /kru:setup wrote, patched per repo and pushed after one confirm.
 disable-model-invocation: true
-argument-hint: "[vX.Y.Z — the release to carry; omit for the installed one] [repo dir…]"
 ---
 
 Run from the plugin source repo. A repo that ran `/kru:setup` holds a copy of the plugin's guidance in the files setup wrote, and that copy stays at the stamp it was derived under. A release that changes the guidance reaches a repo only when someone carries it there — this skill carries one release to every repo at once.
@@ -11,8 +10,8 @@ Run from the plugin source repo. A repo that ran `/kru:setup` holds a copy of th
 
 ## Do
 
-1. **Name the delta.** The release comes from `$ARGUMENTS`, else `VERSION`. Read `git log` and the diff from the oldest stamp among the repos (step 2) to that release, restricted to `skills/setup/` and the files it points at, and write down each change as *the rule, and the reason it exists*. Completion: every hunk in that range accounted for — a change to what setup writes, or not.
-2. **Find the repos.** The dirs named in `$ARGUMENTS`, else every git repo beside this one (`../*/`), holding a setup stamp — `<!-- kru v` in `.claude/CLAUDE.md` — or a `.claude/cloud-setup.md`. A stamp at or above the release is current; drop it.
+1. **Name the delta.** The release comes from the version named in the task, else `VERSION`. Read `git log` and the diff from the oldest stamp among the repos (step 2) to that release, restricted to `skills/setup/` and the files it points at, and write down each change as *the rule, and the reason it exists*. Completion: every hunk in that range accounted for — a change to what setup writes, or not.
+2. **Find the repos.** Dirs named in the task, else every git repo beside this one (`../*/`), holding a setup stamp — `<!-- kru v` in `.claude/CLAUDE.md` — or a `.claude/cloud-setup.md`. A stamp at or above the release is current; drop it.
 3. **Read each repo's state before its files.** `git fetch`, then:
    - **the working branch** is the checked-out one, and it is not always the default — a repo whose work lives on a long-running branch takes its patch there
    - **a fix already made**: `git log --all -- <file>` for each target file. A cloud session pushes its own `claude/*` branch, and it may have made this exact change against real failure. That commit is the patch — cherry-pick it alone, never the branch's other commits

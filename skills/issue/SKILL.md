@@ -2,7 +2,6 @@
 name: issue
 description: Open a defect file in the project's plan store from what the user just said, un-investigated. The user's front door to issues/, for when no task is running to sweep from.
 disable-model-invocation: true
-argument-hint: "<what's wrong>"
 ---
 
 Write the defect file from what the user just told you and get out. They hit something *wrong* and want it recorded before it evaporates. See `${CLAUDE_PLUGIN_ROOT}/TRACKER.md` → *`issues/`* for the artifact's lifecycle — you don't need to read it to run this.

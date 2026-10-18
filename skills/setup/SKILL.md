@@ -1,8 +1,6 @@
 ---
 name: setup
-description: Set the team up in a repo — derive its standing answers, run the bars over its CLAUDE.md/AGENTS.md, and write the team into it in that file's own voice. A blank repo is grilled first. `prose` runs the pass alone. Re-run to re-derive.
-disable-model-invocation: true
-argument-hint: "[prose | <repo path> — omit for cwd]"
+description: Derive this repo's kru sheet when `.claude/CLAUDE.md` has no `<!-- kru v` stamp, the stamp is behind `VERSION`, or the task is to re-derive or run the `prose` pass alone.
 ---
 
 The plugin is the **fractional CTO**: one practice, carried across every engagement. What it cannot
@@ -22,12 +20,12 @@ already carrying its own sediment does not get better because a good section was
 **The second job runs alone.** A file accretes between setups, and re-deriving a whole sheet to prune
 it is a bigger hammer than the pruning needs.
 
-| argument | run |
+| task scope | run |
 |---|---|
-| *(none)* | this repo, both jobs — every step below |
+| *(none named)* | this repo, both jobs — every step below |
 | a repo path | both jobs, there |
-| `prose` | the pass alone — every step below not marked *full run*. Read the surface, run the bars over every line already in it, propose the cuts. |
-| *(a blank repo)* | no manifest, lockfile or source to derive from — step 1b, then 1c–1e and steps 4–6 |
+| `prose` in the task | the pass alone — every step below not marked *full run*. Read the surface, run the bars over every line already in it, propose the cuts. |
+| blank repo / greenfield | no manifest, lockfile or source to derive from — step 1b, then 1c–1e and steps 4–6 |
 
 ## Do
 

@@ -4,7 +4,7 @@ A vendored skill is a verbatim copy (`skills/roster/author.md` → *Vendored*), 
 
 ## Do
 
-1. **Enumerate the copies.** Every `skills/*/SKILL.md` that opens with a provenance comment, plus the rows in `SOURCES.md` → *Vendored resources* — a copy with no comment (`react-router`) has the row as its only pin. `$ARGUMENTS` names a skill → just that one.
+1. **Enumerate the copies.** Every `skills/*/SKILL.md` that opens with a provenance comment, plus the rows in `SOURCES.md` → *Vendored resources* — a copy with no comment (`react-router`) has the row as its only pin. task names a skill → just that one.
 
    ```bash
    grep -H -o -m1 '<!-- vendored.\{0,400\}' skills/*/SKILL.md

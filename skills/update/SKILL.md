@@ -2,7 +2,6 @@
 name: update
 description: Sweep what moved under the team since it last looked — Claude Code releases, the upstream of vendored skills, the packages first-party skills were reproduced on — and record a verdict per change. Also settles whether a capability you heard about is reachable on this install.
 disable-model-invocation: true
-argument-hint: "[claude [version] | vendored [skill] | libs [skill]] — omit for all three"
 ---
 
 Three grounds move under this plugin, each on its own schedule:
@@ -23,7 +22,7 @@ Each sweep reads what shipped, keeps only what touches a surface the team stands
 
 Read the file for the requested sweep, then run it.
 
-| `$ARGUMENTS` | Do | File |
+| task scope | Do | File |
 |---|---|---|
 | _(none)_ | all three, in table order, one report | — |
 | `claude [version]` | the Claude Code releases above the mark (or back to `version`) | `claude.md` |

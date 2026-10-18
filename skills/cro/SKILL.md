@@ -1,6 +1,6 @@
 ---
 name: cro
-description: "When the user wants to increase conversions on a marketing page or form (homepage, landing, pricing, feature, lead capture, contact), says a page isn't converting, or shares a URL asking for feedback on it."
+description: Conversion audit of a shipped marketing page or form when the task says the page under-converts or asks for CRO on a live URL.
 metadata:
   version: 2.0.3
 ---

@@ -2,7 +2,6 @@
 name: reflect
 description: Every seat on the repo's sheet looks back over a target — working tree, commit, branch, PR, or the code as it stands — then the lead scopes, slices and partitions the fixes and lands them.
 disable-model-invocation: true
-argument-hint: "[<pr number> | <branch> | <commit> | <a>..<b> | everything — omit for the working tree]"
 ---
 
 A review gates a slice about to land. **Reflecting looks back at work that already landed** — and then fixes it. The seat that wrote a lane is the one that knows what it got wrong there: the migration's lock, the session cookie's `sameSite`, the webhook's idempotency key, the loader that fetches on every navigation. A generic reviewer reads that code and sees code. The seat reads it against the official source it was built from.
@@ -15,9 +14,9 @@ What keeps the first phase affordable: **every seat runs in its own context**, s
 
 **Read-only, all of it.** Every seat in this phase, builders included, returns findings and moves nothing. That's this phase's completion criterion: when it ends, `git status` is what it was when you started, and every file in the target is assigned to a seat.
 
-1. **Resolve the target** from `$ARGUMENTS`:
+1. **Resolve the target** from the invoking task:
 
-   | argument | scope |
+   | task names | scope |
    | --- | --- |
    | *(none)* | the working tree — `git diff HEAD`, plus untracked files |
    | a sha | that commit — `git show <sha>` |

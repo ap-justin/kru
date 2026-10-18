@@ -4,7 +4,7 @@ Claude Code ships most weekdays, and a release can change the ground under a plu
 
 ## Do
 
-1. **Find the mark.** `reviewed.md` → *Claude Code* → *Swept through*. `$ARGUMENTS` names a version → sweep back to that one instead.
+1. **Find the mark.** `reviewed.md` → *Claude Code* → *Swept through*. task names a version → sweep back to that one instead.
 2. **Get the releases.**
 
    ```bash

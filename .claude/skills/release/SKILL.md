@@ -2,7 +2,6 @@
 name: release
 description: Release the kru plugin — version bump, commit, tag, push, GitHub release.
 disable-model-invocation: true
-argument-hint: "[patch|minor|major|X.Y.Z]"
 ---
 
 Outward steps below run only when the invoking task explicitly approves the release (tag, push, and GitHub release). Loading this skill or naming a version is not that approval. A security fix (step 1) always returns instead of shipping.
@@ -16,7 +15,7 @@ Outward steps below run only when the invoking task explicitly approves the rele
 
 ## 2. Pick the version
 
-`$ARGUMENTS` is one of `patch`, `minor`, `major` or an explicit `X.Y.Z`. With no argument:
+The task names one of `patch`, `minor`, `major` or an explicit `X.Y.Z`. With none named:
 - if `VERSION` is already above the last tag, use it
 - otherwise bump `minor`, the cadence the tags keep
 

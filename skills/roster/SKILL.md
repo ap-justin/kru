@@ -2,7 +2,6 @@
 name: roster
 description: Roster operations for this team plugin — hire or retire a specialist, author a skill, take a requester's ask for a new seat or skill, sweep learned preferences back into the team, or audit the roster for drift. The versioned "Growing the team" checklist, executed as a tool.
 disable-model-invocation: true
-argument-hint: "<hire|author|learn|retire|audit> [name]"
 ---
 
 You run in the **main thread** (like `lead`) — minting a seat edits the orchestration contract (the `lead` routing table) and bumps + tags a version, which a subagent can't own. This skill operationalizes `ROSTER.md` → *Growing the team* so every seat is wired **identically** and nothing drifts.
@@ -34,7 +33,7 @@ A **skill** touches a smaller map: `skills/<name>/SKILL.md` (+ any disclosed sib
 ## Dispatch
 Read the one file for the requested verb, then execute it against the wiring map above.
 
-| `$ARGUMENTS` | Do | File |
+| task scope | Do | File |
 |---|---|---|
 | `hire [role]` | mint a specialist + wire #1–#9 | `hire.md` |
 | `author [name]` | mint or vendor a skill; an existing name refreshes it from an `/update` verdict | `author.md` |

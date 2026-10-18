@@ -12,15 +12,20 @@ input=$(cat) || exit 0
 transcript=$(printf '%s' "$input" | jq -r '.transcript_path // empty' 2>/dev/null)
 [ -r "$transcript" ] || exit 0
 
-start=0
-while read -r line; do
-  n=${line%%:*}
-  [ "$n" -gt "$start" ] 2>/dev/null && start=$n
-done <<EOF
-$(grep -nE '<command-name>/?kru:brainstorm</command-name>' "$transcript" 2>/dev/null)
-$(grep -nE '"skill":"(kru:)?brainstorm"|skills/brainstorm/SKILL\.md' "$transcript" 2>/dev/null)
-EOF
-[ "$start" -gt 0 ] || exit 0
+start=$(jq -rn --arg re '<command-name>/?kru:brainstorm</command-name>' --arg skill 'skills/brainstorm/SKILL.md' '
+  [inputs] | to_entries
+  | map(select(
+      (.value.type == "user" and (.value.message.content | type) == "string"
+        and (.value.message.content | test($re)))
+      or (.value.type == "assistant" and (.value.message.content | type) == "array"
+        and any(.value.message.content[]?;
+          .type == "tool_use" and (
+            (.name == "Skill" and ((.input.skill? // "") | test("brainstorm")))
+            or (.name == "Read" and ((.input.path? // .input.file_path? // "") | test($skill)))
+          )))
+    ))
+  | last | if . == null then empty else .key + 1 end' "$transcript" 2>/dev/null)
+[ -n "$start" ] || exit 0
 
 # caller asked to persist — any user turn since the lock (tool results excluded)
 if tail -n "+$((start + 1))" "$transcript" |

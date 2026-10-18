@@ -1,8 +1,6 @@
 ---
 name: todos-loop
-description: Build parked wants back to back without a gate — each its own commit — until the branch's changed-file count reaches the cap; product calls are held for the end.
-disable-model-invocation: true
-argument-hint: "[max changed files, default 80]"
+description: Unattended backlog burn on wants — loop `todos` without a per-entry gate until the file cap, when the task names backlog burn or fixing wants without stopping.
 ---
 
 `/kru:todos` with the gate lifted. The loop is `${CLAUDE_PLUGIN_ROOT}/references/backlog-loop.md` — read it first and run it end to end; this file fills in the want half. `${CLAUDE_PLUGIN_ROOT}/skills/todos/SKILL.md` is the procedure it reuses by section; its bucket, score, rank and outcome definitions hold here unchanged.

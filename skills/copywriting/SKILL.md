@@ -1,6 +1,6 @@
 ---
 name: copywriting
-description: When the user wants to write, rewrite, or improve marketing copy for any page (homepage, landing, pricing, feature, about, product), including headlines, CTAs, value propositions and hero copy. For editing existing copy, see copy-editing.
+description: New marketing-page copy — homepage, landing, pricing, feature, or about — when the task asks for a page's argument and strings before design or build.
 metadata:
   version: 2.1.0
 ---

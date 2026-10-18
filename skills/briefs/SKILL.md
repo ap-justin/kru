@@ -2,7 +2,6 @@
 name: briefs
 description: Check every brief against what shipped — tick, archive, or resume the effort the user picks.
 disable-model-invocation: true
-argument-hint: "[effort-slug | substring]"
 ---
 
 Take the efforts to the user as a decision. The artifact is `plan/` at the plan store root, one `<effort>/` dir each; `${CLAUDE_PLUGIN_ROOT}/TRACKER.md` → *The brief* holds its lifecycle.
@@ -33,7 +32,7 @@ Then bucket each effort:
 
 *drifted* stacks on any other bucket; name both. Mark age off `brief.md`'s mtime at 30+ days (`· 47d`).
 
-**Candidates** — every dir up to ~8; past that, the 8 most recently edited plus every effort `$ARGUMENTS` names (exact slug, else case-insensitive substring). The rest are counted at the gate.
+**Candidates** — every dir up to ~8; past that, the 8 most recently edited plus every effort named in the task (exact slug, else case-insensitive substring). The rest are counted at the gate.
 
 **Done when every candidate has a bucket and every bookkeeping line in it has a recorded result.**
 
