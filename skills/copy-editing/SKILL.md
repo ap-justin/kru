@@ -8,7 +8,7 @@ metadata:
 <!-- vendored from `coreyhaines31/marketingskills` (main, sha b7fb899) → `skills/copy-editing`.
      Corey Haines is a recognized SaaS-marketing authority; no first-party source exists for
      conversion copy-editing, so this curated community skill is the backing (same tier as the
-     mattpocock pack). User-invoked line-edit pass (`/copy-editing`, runs inline) — on-page copy
+     mattpocock pack). User-invoked line-edit pass (`skills/copy-editing/SKILL.md` (PM loads when the task names it), runs inline) — on-page copy
      that ships in the build, NOT channels/campaigns. Kept verbatim; cross-skill mentions (marketing-psychology/
      ab-testing) point at unvendored marketing skills and degrade gracefully.
      re-sync: re-download SKILL.md + references/* from the raw source.

@@ -16,7 +16,7 @@ You audit a **journey**, not a screen — entry route through to terminal state,
 | a route or path | the flow that route sits on — from its entry, not from there |
 | *(none)* | the flow the working tree touches — read `git diff HEAD` for the routes it moved, and name the flow you resolved before spawning |
 
-**A wrong entry invalidates the whole walk**, so a flow the diff doesn't name is a question, not a guess. **Multi-screen is the bar**: one screen is `/visual-review`'s and `/accessibility-review`'s, and nothing else on this team walks *between* screens.
+**A wrong entry invalidates the whole walk**, so a flow the diff doesn't name is a question, not a guess. **Multi-screen is the bar**: one screen is `skills/visual-review/SKILL.md`'s and `skills/accessibility-review/SKILL.md`'s, and nothing else on this team walks *between* screens.
 
 ## Dispatch — spawn the walk, never run it inline
 A flow's source is more than the main thread should spend, and the user is still working in that context. Spawn the **`ux-auditor`** agent with: the flow by name, the entry route if the user named one, what the user says the flow is *meant* to do (the seat has only the code), and a report path when the flow is large. The walk is static — no browser, and no dev server to start.
@@ -27,4 +27,4 @@ Translate the return: the user hears each problem as what goes wrong for someone
 - **Fixes only when asked.** The seat has no user channel; you do. An accepted fix routes to the seat that owns the file.
 
 ## Boundary
-The path between screens, read from source. What a screen renders → `/visual-review`; WCAG conformance → `/accessibility-review`; the words → `/ux-copy`; funnel and conversion → `/cro`; correctness → `code-reviewer`. Anything needing pixels or real timing is `RENDERED` — this pass can't see it.
+The path between screens, read from source. What a screen renders → `skills/visual-review/SKILL.md`; WCAG conformance → `skills/accessibility-review/SKILL.md`; the words → the vendored `ux-copy` skill; funnel and conversion → `skills/cro/SKILL.md` (PM loads when the task names it); correctness → `code-reviewer`. Anything needing pixels or real timing is `RENDERED` — this pass can't see it.

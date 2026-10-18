@@ -1,6 +1,6 @@
 # Backlog loop — the shared mechanics
 
-`/kru:issues-loop` and `/kru:todos-loop` run one loop over two artifacts. Each skill owns its artifact's half — what reconciles, what is **eligible**, what an outcome is called, what the branch is named. This file owns the loop: the branch, the **cap**, one entry per pass, the report.
+`skills/issues-loop/SKILL.md` and `skills/todos-loop/SKILL.md` run one loop over two artifacts. Each skill owns its artifact's half — what reconciles, what is **eligible**, what an outcome is called, what the branch is named. This file owns the loop: the branch, the **cap**, one entry per pass, the report.
 
 The invoking task is the pre-approval to burn the backlog without a per-entry gate. A **product call** or a **one-way door** — both defined in `lead` → *Talk to a PM, not to an engineer* — is still the PM's, so it is **held** for the end of the run and the run never stops to ask. The cap is the number named in the task, else `80`: the count of files changed against the default branch's merge-base never passes it at a commit, so the branch the run leaves stays reviewable.
 

@@ -1,8 +1,8 @@
 # Routing — detected stack to seat and skill
 
-The derivation tables, with three callers. **`/kru:setup`** runs them once over a repo and
+The derivation tables, with three callers. **`skills/setup/SKILL.md`** runs them once over a repo and
 writes the answers into that repo's block — that block is then the repo's routing, in prose, and
-re-running the tables is what a block exists to retire. **`/kru:roster`** writes this file when
+re-running the tables is what a block exists to retire. **`skills/roster/SKILL.md/SKILL.md`** writes this file when
 a seat is hired or retired, or a conditional skill authored. **`lead`** runs them where no block has
 resolved them, or where a slice reaches a stack the block never covered. A repo whose block already
 names the seat and its skills has this question answered — take the answer.
@@ -41,7 +41,7 @@ names the seat and its skills has this question answered — take the answer.
 | design/landing/marketing/portfolio UI — **no system yet** | *UI from scratch*, Step 2 — **PM must attach approved design spec** before builders |
 | UI feature or screen — **system exists** | PM's **approved design spec** → UI builder (*UI on an existing system*, Step 2) |
 | a builder returned a **named gap** | the **PM**, with the token name it would need. No seat fills it, and no seat extends the system |
-| correctness/quality review of a diff | `code-reviewer` (or `/code-review` skill inline) |
+| correctness/quality review of a diff | `code-reviewer` (or the built-in code-review skill skill inline) |
 | module/interface design, refactor with fuzzy boundaries, "where's the seam", coupling/testability | `architecture-reviewer` (design mode, before builder) |
 | structural-integrity gate on a change (boundary erosion, coupling drift) | `architecture-reviewer` (review mode, after builder) |
 | coverage sweep or fan-out across many files; repair a red/flaky suite; an exempt seat's logic-dense output; a repo with no testing conventions captured yet | `test-writer` |
@@ -79,7 +79,7 @@ line. What earns deriving is the **library choice inside a lane**, and what thes
 call that *succeeds* and returns wrong data.
 
 **One table, three channels.** The answer reaches a seat in the brief, or on the `skills` line a
-`/kru:setup` sheet writes into the repo's always-loaded docs; a seat that gets neither reads
+`skills/setup/SKILL.md` sheet writes into the repo's always-loaded docs; a seat that gets neither reads
 `package.json` against the table below. Past one conditional, a seat carries a single *libraries*
 section naming those three channels rather than a section per library, and keeps a named section only
 for a library it has something of its own to say about — a seam that library bends

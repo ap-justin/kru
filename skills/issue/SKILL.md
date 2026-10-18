@@ -1,6 +1,6 @@
 ---
 name: issue
-description: Open a defect file in the project's plan store from what the user just said, un-investigated. The user's front door to issues/, for when no task is running to sweep from.
+description: Open a defect file in the project's plan store from what the user just said, un-investigated. PM loads when no task is running to sweep from.
 disable-model-invocation: true
 ---
 
@@ -37,6 +37,6 @@ Write the defect file from what the user just told you and get out. They hit som
 
 ## Don't
 
-- **Don't take a non-defect.** Something merely *wanted* — a feature, a refactor, a cleanup, duplication, misfiled config — is `/kru:todo`'s line, not a defect file. The store's three-way split holds: **wrong → `issues/`, wanted → `TODOS.md`, unformed → `notes/`**. Say in one line which you did.
-- Don't fix it, and don't offer a fix. Filling the file in is a normal `/kru:lead <task>`; fixing it deletes the file in that same change, along with the repro test that replaces it (`lead` Step 4.5).
+- **Don't take a non-defect.** Something merely *wanted* — a feature, a refactor, a cleanup, duplication, misfiled config — is `skills/todo/SKILL.md`'s line, not a defect file. The store's three-way split holds: **wrong → `issues/`, wanted → `TODOS.md`, unformed → `notes/`**. Say in one line which you did.
+- Don't fix it, and don't offer a fix. Filling the file in is a normal `skills/lead/SKILL.md` (scope in the invoking task: <task>); fixing it deletes the file in that same change, along with the repro test that replaces it (`lead` Step 4.5).
 - Write through the resolver, never by hand (`TRACKER.md`, `${CLAUDE_PLUGIN_ROOT}/references/store.md`).

@@ -20,7 +20,7 @@ Every place a **seat (agent)** is registered. `hire` writes all of them, `retire
 | 2 | `ROSTER.md` → *Current specialists* | one role row (agent · role · backing source) |
 | 3 | `ROSTER.md` → *Model tiers* | a **pinned** row (explicit full ID) + one-line why — `inherit` is retired |
 | 4 | `SOURCES.md` | backing-source row (skip only for a genuinely stack-agnostic seat, e.g. a pure reviewer — and say so) |
-| 5 | `${CLAUDE_PLUGIN_ROOT}/references/routing.md` | the `detected/needed → specialist` row — read by `lead` and by `/kru:setup`, which is what puts the seat into a repo's sheet (a review-only seat wires into *Step 4* instead; a **user-invoked** seat — triggered by the user, via a thin invoker skill (`/<name>`) or by spawning the agent — wires via its `ROSTER.md` row marked user-invoked, plus that invoker skill if it has one, and stays out of `lead` entirely; a **hook-invoked** seat — fired by the plugin's own `hooks/hooks.json`, e.g. the Stop nudge — wires via its `ROSTER.md` row marked hook-invoked plus its hook scripts, and likewise stays out of `lead` routing) |
+| 5 | `${CLAUDE_PLUGIN_ROOT}/references/routing.md` | the `detected/needed → specialist` row — read by `lead` and by `skills/setup/SKILL.md`, which is what puts the seat into a repo's sheet (a review-only seat wires into *Step 4* instead; a **user-invoked** seat — PM-loaded via `skills/<name>/SKILL.md` or by spawning the matching seat or by spawning the agent — wires via its `ROSTER.md` row marked user-invoked, plus that invoker skill if it has one, and stays out of `lead` entirely; a **hook-invoked** seat — fired by the plugin's own `hooks/hooks.json`, e.g. the Stop nudge — wires via its `ROSTER.md` row marked hook-invoked plus its hook scripts, and likewise stays out of `lead` routing) |
 | 6 | `.claude-plugin/plugin.json` | `version` bump |
 | 7 | `.claude-plugin/marketplace.json` | the plugin entry's `version`, equal to `VERSION` |
 | 8 | `VERSION` · `ROSTER.md` header | version — minor for a new seat: `VERSION` and the `# Roster — vX.Y.Z` header, equal |
@@ -36,12 +36,12 @@ Read the one file for the requested verb, then execute it against the wiring map
 | task scope | Do | File |
 |---|---|---|
 | `hire [role]` | mint a specialist + wire #1–#9 | `hire.md` |
-| `author [name]` | mint or vendor a skill; an existing name refreshes it from an `/update` verdict | `author.md` |
+| `author [name]` | mint or vendor a skill; an existing name refreshes it from an `skills/update/SKILL.md` verdict | `author.md` |
 | `learn` | sweep the preference inbox back into the team | `learn.md` |
 | `retire <name>` | remove a seat + unwire everywhere | `retire.md` |
 | `audit` | report roster drift (read-only) | `audit.md` |
 
-**A requester asks for a new seat or skill** → [`request.md`](request.md). Restate the ask, choose `hire` or `author`, and ship it. A typed verb in the table still runs its own file.
+**A requester asks for a new seat or skill** → [`request.md`](request.md). Restate the ask, choose `hire` or `author`, and ship it. A deliberate PM load in the table still runs its own file.
 
 Plus one shared reference, read by `hire` and `audit` rather than dispatched to: **`shared-blocks.md`** — the canonical text of the blocks every seat carries (`Context hygiene`, `TypeScript`, the return contract), with its invariant clauses and its per-seat tailored slots marked.
 

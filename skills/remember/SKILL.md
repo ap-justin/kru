@@ -3,7 +3,7 @@ name: remember
 description: Bank a cross-project preference when the task states what to remember about design, code, or workflow — not from inferring approval of a diff.
 ---
 
-Park what the user liked into the team's preference inbox so a later `/roster learn` sweep can promote it back into the team. This is the **explicit** capture channel — the team never infers preferences from approval, so this command is how a preference gets banked. See `${CLAUDE_PLUGIN_ROOT}/PREFERENCES.md` for the whole loop.
+Park what the user liked into the team's preference inbox so a later `skills/roster/SKILL.md/learn.md` (PM or lead loads) sweep can promote it back into the team. This is the **explicit** capture channel — the team never infers preferences from approval, so this command is how a preference gets banked. See `${CLAUDE_PLUGIN_ROOT}/PREFERENCES.md` for the whole loop.
 
 **Zero-derail.** Capture and get back to work — this is a one-line append, not a task. Do it inline; don't spawn anything.
 
@@ -19,7 +19,7 @@ Park what the user liked into the team's preference inbox so a later `/roster le
    ```
 
    Project slug = the current repo's dir name (or `—` if none). Date = today. Source is always `user` for this command (agents append their own lines directly, per the lead's handoff).
-5. **Confirm in one line** — echo the banked line, note it'll land in the team on the next `/roster learn` sweep. Pass through whatever `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" where` prints, which is usually nothing. Then return to whatever was in flight.
+5. **Confirm in one line** — echo the banked line, note it'll land in the team on the next `skills/roster/SKILL.md/learn.md` (PM or lead loads) sweep. Pass through whatever `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" where` prints, which is usually nothing. Then return to whatever was in flight.
 
 ## Don't
 

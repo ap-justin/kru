@@ -1,10 +1,10 @@
 # Curating this corpus
 
-Authoring guidance, not runtime context — `SKILL.md` doesn't point here, so this file costs nothing during a build. Read it when adding or revising a pattern, which in practice means during a `/roster learn` sweep.
+Authoring guidance, not runtime context — `SKILL.md` doesn't point here, so this file costs nothing during a build. Read it when adding or revising a pattern, which in practice means during a `skills/roster/SKILL.md/learn.md` (PM or lead loads) sweep.
 
 ## The entry bar
 
-`skills/roster/author.md` is blunt: a skill that restates what its reader already knows is **worse than none**, because it drifts and outranks its source while stale. Most UI advice fails that bar — a model writing a submit button already knows it needs a disabled state.
+`skills/roster/SKILL.md/author.md` is blunt: a skill that restates what its reader already knows is **worse than none**, because it drifts and outranks its source while stale. Most UI advice fails that bar — a model writing a submit button already knows it needs a disabled state.
 
 So the pattern is **not what an entry contributes**. The **default it corrects** is. An entry earns its place by naming the specific wrong thing that gets written when nobody consults this file, in enough detail that a reader recognizes it as what they were about to do.
 

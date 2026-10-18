@@ -1,7 +1,7 @@
 #!/bin/bash
 # pretooluse on every tool: the mechanized half of the lead contract's own
 # precondition — skills/lead/SKILL.md loaded before building, reviewing or
-# dispatching a seat, which /kru:setup writes into a repo's
+# dispatching a seat, which `skills/setup/SKILL.md` writes into a repo's
 # .claude/CLAUDE.md as a line the model may or may not act on. an instruction is
 # discretionary and a hook is not.
 #
@@ -46,7 +46,7 @@ transcript=$(printf '%s' "$input" | jq -r '.transcript_path // empty' 2>/dev/nul
 [ -r "$transcript" ] || exit 0
 
 # anchored to how a load is recorded: Skill tool, Read of the contract file, or
-# (legacy) a typed /kru:lead — never to prose that merely names the skill.
+# a deliberate load of `skills/lead/SKILL.md` (legacy slash or harness Skill) — never prose that merely names the skill.
 grep -qE '"skill":"(kru:)?lead"|<command-name>/?kru:lead|skills/lead/SKILL\.md' "$transcript" && exit 0
 
 # a /kru:<skill> run is that skill's contract, not the lead's — the ones

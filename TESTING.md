@@ -25,7 +25,7 @@ Copy the closest existing `*.test.sh`. They share one shape:
 
 ## sync-bot-skills
 
-`scripts/sync-bot-skills.sh` runs from `/release` against a library only this user writes to. It assumes no concurrent writer. A process that already has write access to the library can change those files on its own; the script does not try to win a race against one. An exclusive `flock` on `<library>/.sync.lock` keeps two syncs from overlapping. If that lock is held, the script exits non-zero and writes nothing.
+`scripts/sync-bot-skills.sh` runs from the Claude Code `/release` command against a library only this user writes to. It assumes no concurrent writer. A process that already has write access to the library can change those files on its own; the script does not try to win a race against one. An exclusive `flock` on `<library>/.sync.lock` keeps two syncs from overlapping. If that lock is held, the script exits non-zero and writes nothing.
 
 ## Mutation check
 

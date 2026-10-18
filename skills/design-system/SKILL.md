@@ -67,9 +67,9 @@ The **designer** runs `audit` on a coverage read, ahead of the element half of `
 
 ## Owned elsewhere
 
-- **The values and the look** — the designer's approved spec (`/design` + handoff to PM), transcribed once by a builder.
+- **The values and the look** — the designer's approved spec (the bundled Claude Code `design` skill (designer loads) + handoff to PM), transcribed once by a builder.
 - **Whether a consumer resolves to the token file** — the repo's conformance gate, at every commit (`${CLAUDE_PLUGIN_ROOT}/references/ui-practice.md` → *The conformance gate*).
 - **What components exist and what they render** — `/design-gallery`, on the app's own dev server.
-- **The rendered states and widths** — `/visual-review` checks the build against the approved spec at 1440 and 375, plus coverage states mockups omit.
+- **The rendered states and widths** — `skills/visual-review/SKILL.md` checks the build against the approved spec at 1440 and 375, plus coverage states mockups omit.
 - **Flows, IA, the screen × state inventory, the conventions file** — the designer's build spec (`references/design-spec.md`).
 - **How a component behaves** — `ui-patterns`, design-system agnostic by construction.

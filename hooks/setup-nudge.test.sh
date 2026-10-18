@@ -14,7 +14,7 @@ mkdir -p "$home"
 repo() { mkdir -p "$sandbox/$1" && git -C "$sandbox/$1" init -q; }
 repo bare
 repo stamped; mkdir -p "$sandbox/stamped/.claude"
-printf '# notes\n\n<!-- kru v0.141.0 · derived 2026-10-01 · /kru:setup to re-derive -->\n' > "$sandbox/stamped/.claude/CLAUDE.md"
+printf '# notes\n\n<!-- kru v0.141.0 · derived 2026-10-01 · skills/setup/SKILL.md to re-derive -->\n' > "$sandbox/stamped/.claude/CLAUDE.md"
 repo unstamped; mkdir -p "$sandbox/unstamped/.claude"
 printf '# notes\nno team section\n' > "$sandbox/unstamped/.claude/CLAUDE.md"
 repo plugin; mkdir -p "$sandbox/plugin/.claude-plugin"; printf '{}' > "$sandbox/plugin/.claude-plugin/plugin.json"

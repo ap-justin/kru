@@ -60,7 +60,7 @@ Three things a screen gives a component for free, which a preview supplies itsel
 
 ## Owned elsewhere
 
-- **Rendered routes** — the states and widths of the running app, and the `file:line` behind a defect: `/visual-review`.
+- **Rendered routes** — the states and widths of the running app, and the `file:line` behind a defect: `skills/visual-review/SKILL.md`.
 - **Whether a value is on-system** — the repo's conformance gate, at every commit.
 - **Publishing to people who don't write code** — the sync lane for the **designer** (`${CLAUDE_PLUGIN_ROOT}/references/design-sync.md`), not the engineering lead.
 - **Whether the build matches the approved spec** — `visual-reviewer` at 1440 and 375.

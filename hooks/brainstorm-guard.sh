@@ -1,7 +1,7 @@
 #!/bin/bash
 # pretooluse on Write|Edit|NotebookEdit|Bash: the mechanized half of
 # brainstorm's "write nothing". from the latest brainstorm load until the caller
-# asks to persist — go, brief it, persist, or an explicit /kru:brief — every
+# asks to persist — go, brief it, persist, or an explicit `skills/brief/SKILL.md` — every
 # write is refused; read-only bash passes. stateless: the transcript is the state.
 #
 # fail open on anything that isn't a clear lock.

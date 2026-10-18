@@ -1,12 +1,12 @@
 #!/bin/bash
-# sessionstart: a repo that never ran /kru:setup has no sheet, so the lead routes
+# sessionstart: a repo that never ran `skills/setup/SKILL.md` has no sheet, so the lead routes
 # with no answers and the seats work from defaults. the stamp setup writes into
 # .claude/CLAUDE.md is the one proof it ran, and its absence is the only thing
 # this checks — whether the sheet is *behind* is lead Step 0's, read from the
 # stamp itself.
 #
 # an alert, never a block: a greenfield session is often a brainstorm with no
-# stack yet, and /kru:setup's own blank-repo grill is where that stack gets
+# stack yet, and `skills/setup/SKILL.md`'s own blank-repo grill is where that stack gets
 # settled. so the context says name it once and carry on.
 #
 # skipped outside a git work tree (no repo to set up) and in the plugin's own

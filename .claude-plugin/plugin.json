@@ -25,7 +25,7 @@
     "KRU_NO_LEAD_GATE": {
       "type": "boolean",
       "title": "Skip the lead gate",
-      "description": "Stop requiring the lead skill before a session's first tool call, and the startup reminder to run /kru:setup in a repo without one.",
+      "description": "Stop requiring the lead skill before a session's first tool call, and the startup reminder to run `skills/setup/SKILL.md` in a repo without one.",
       "required": false,
       "default": false
     },

@@ -9,7 +9,7 @@ carry is the engagement itself — this stack, this token file, this gate, this 
 again in the routing deliberation it spends reaching a conclusion this repo settled long ago.
 
 This skill runs that derivation once and writes the answers into the repo's `.claude/CLAUDE.md`,
-which loads on every session there with nothing typed. **They arrive as prose in that file's own
+which loads on every session there with no setup stamp. **They arrive as prose in that file's own
 voice** — the file belongs to the repo, and a section that reads as a foreign object is one a human
 skips and a later hand-edit works around.
 
@@ -236,8 +236,8 @@ Plugins install here because a cloud session ignores the repo's `enabledPlugins`
 the user runs locally. The environment cache keeps them at the version the script installed until
 the script changes, its network hosts change, or about seven days pass
 (`code.claude.com/docs/en/cloud-environments` → *Environment caching*) — so the `# kru` line carries
-the installed `VERSION`, and `/kru:propagate` moving it is what rebuilds the cache on a new release. The
-built-in *You should know* mod is enabled the same way: the laptop's `/plugin enable` never reaches
+the installed `VERSION`, and `skills/propagate/SKILL.md` moving it is what rebuilds the cache on a new release. The
+built-in *You should know* mod is enabled the same way: the laptop's the Claude Code plugin enable command` never reaches
 the vm, and where telemetry is off the line is a no-op. The vm has no official marketplace,
 so the base adds it ahead of any `@claude-plugins-official` install. Below them goes what the vm lacks before
 this repo's first run, read off step 1's findings and the repo's own setup doc (`CONTRIBUTING*`,
@@ -288,7 +288,7 @@ to price:
 ```markdown
 ---
 name: verify
-description: Typecheck and lint this repo before a commit. Written by /kru:setup from the sheet's `verify` line.
+description: Typecheck and lint this repo before a commit. Written by `skills/setup/SKILL.md` from the sheet's `verify` line.
 ---
 
 Run from the repo root: `<the sheet's verify commands>`. Red → fix it before the commit; the commit waits.
@@ -411,7 +411,7 @@ commands, a token file beside its gate — which leaves the team section holding
 **The stamp** is one HTML comment directly above that section:
 
 ```
-<!-- kru vX.Y.Z · derived YYYY-MM-DD · /kru:setup to re-derive -->
+<!-- kru vX.Y.Z · derived YYYY-MM-DD · `skills/setup/SKILL.md` to re-derive -->
 ```
 
 It renders as nothing and does two jobs no prose does: it tells a later session the team was set up
@@ -445,11 +445,11 @@ content.
 ## Re-run — the full update path
 The file is a function of *(plugin version × repo state)*, so re-deriving from scratch settles both
 directions it goes stale from. One release's patch to what setup wrote, carried across every repo at
-once, is `/kru:propagate`'s; a change that needs the file re-derived comes here.
+once, is `skills/propagate/SKILL.md`'s; a change that needs the file re-derived comes here.
 
 - **The repo moved** — a dependency swap, a new gate, a design system where there was none. The
   citations are the signal: a derived line that no longer matches disk is a line to re-derive.
-- **The plugin moved** — `/roster learn` promoted a preference, a seat was hired or renamed. The
+- **The plugin moved** — `skills/roster/SKILL.md/learn.md` (PM or lead loads) promoted a preference, a seat was hired or renamed. The
   stamp is the signal: a stamp below the installed `VERSION` is behind.
 
 **The citations are what make a re-run an edit rather than a second copy.** Each derived line carries
@@ -459,7 +459,7 @@ else's words is theirs — cite it and move on.
 
 ## The line between the plugin and the repo
 The repo's file holds the **engagement**; the plugin holds the **practice**. A rule that would still
-be true in the next repo belongs upstream — `/kru:remember` files it and `/roster learn`
+be true in the next repo belongs upstream — `skills/remember/SKILL.md/SKILL.md` files it and `skills/roster/SKILL.md/learn.md` (PM or lead loads)
 gates it (`${CLAUDE_PLUGIN_ROOT}/PREFERENCES.md`). A rule true only here stays in the repo.
 
 The plan store stays outside the working repo, its pointer included

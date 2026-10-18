@@ -1,12 +1,12 @@
 ---
 name: propagate
-description: Carry a plugin change out to every repo it reaches — the files /kru:setup wrote, patched per repo and pushed after one confirm.
+description: Carry a plugin change out to every repo it reaches — the files `skills/setup/SKILL.md` wrote, patched per repo and pushed after one confirm.
 disable-model-invocation: true
 ---
 
-Run from the plugin source repo. A repo that ran `/kru:setup` holds a copy of the plugin's guidance in the files setup wrote, and that copy stays at the stamp it was derived under. A release that changes the guidance reaches a repo only when someone carries it there — this skill carries one release to every repo at once.
+Run from the plugin source repo. A repo that ran `skills/setup/SKILL.md` holds a copy of the plugin's guidance in the files setup wrote, and that copy stays at the stamp it was derived under. A release that changes the guidance reaches a repo only when someone carries it there — this skill carries one release to every repo at once.
 
-**Its reach is what setup writes, and nothing else**: the sheet section in `.claude/CLAUDE.md`, `.claude/cloud-setup.md`, the cloud install hook it registers, and the grants in `.claude/settings.json` (`${CLAUDE_PLUGIN_ROOT}/skills/setup/SKILL.md` names each). A change that needs the whole sheet re-derived — a new seat in the routing table, a rewritten bar — is `/kru:setup`'s re-run in that repo; name it in the plan and patch nothing there.
+**Its reach is what setup writes, and nothing else**: the sheet section in `.claude/CLAUDE.md`, `.claude/cloud-setup.md`, the cloud install hook it registers, and the grants in `.claude/settings.json` (`${CLAUDE_PLUGIN_ROOT}/skills/setup/SKILL.md` names each). A change that needs the whole sheet re-derived — a new seat in the routing table, a rewritten bar — is `skills/setup/SKILL.md`'s re-run in that repo; name it in the plan and patch nothing there.
 
 ## Do
 
@@ -19,7 +19,7 @@ Run from the plugin source repo. A repo that ran `/kru:setup` holds a copy of th
 4. **Check each change's reason against each repo, not its text.** A rule holds where its reason does. `/usr/local/bin` goes behind a pinned dir because the image's node 20 lives there; a repo whose setup script installs its own node into `/usr/local` has that reason gone, and the rule stays out. A reason you can't check from here — an install layout on a version this machine doesn't have, a vm behavior — leaves the repo's line as it is, and the plan says which and why.
 5. **Plan, then return it.** One block per repo: branch, each file and the change in plain words, each change skipped with its reason, each repo that needs `skills/setup/SKILL.md` instead. Pushing to someone's branch is a one-way door — **return the plan as this step's result** and apply only when the invoking task explicitly approves propagation (push included). Invocation alone is not approval.
 6. **Apply per repo.** Edit, then check what you touched parses — `bash -n` on a script, and on a fenced block pulled out of `cloud-setup.md`. Stage the paths you edited by name; commit in the repo's own message style (read its `git log`); push to the working branch. A repo whose check fails is reverted and reported, and the rest go on.
-7. **Bump the stamp on what you carried.** The setup script's `# kru vX.Y.Z` line moves to the release. It does two jobs: it records what the script was carried to, and it changes the script — and a changed setup script is what rebuilds the environment cache, the only way a cloud session loads a newer kru than its last snapshot held. The sheet's stamp moves only where every line under it is current; otherwise it stays and the repo is named for `/kru:setup`.
+7. **Bump the stamp on what you carried.** The setup script's `# kru vX.Y.Z` line moves to the release. It does two jobs: it records what the script was carried to, and it changes the script — and a changed setup script is what rebuilds the environment cache, the only way a cloud session loads a newer kru than its last snapshot held. The sheet's stamp moves only where every line under it is current; otherwise it stays and the repo is named for `skills/setup/SKILL.md`.
 
 ## Report
 Per repo: branch, commit, what landed, what was skipped and why. Then the part only the user can do: **paste each changed `cloud-setup.md` block into that repo's environment dialog** — the dialog holds its own copy, so nothing reaches a cloud session until it is pasted, and the pasted script is what rebuilds the cache.

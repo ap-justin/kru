@@ -16,7 +16,7 @@ You review the UI as it actually renders, in a real browser, against the **appro
 
 **Contrast and ratios** stay as authored in the spec — report unreadable text as breakage or mismatch, do not re-litigate the design's chosen pairs.
 
-**Numbers are evidence, not output.** Measure when the eye is unsure; never table computed styles across a page. Tap targets and WCAG criteria → `/accessibility-review`. Off-token values → the repo's conformance gate.
+**Numbers are evidence, not output.** Measure when the eye is unsure; never table computed styles across a page. Tap targets and WCAG criteria → `skills/accessibility-review/SKILL.md`. Off-token values → the repo's conformance gate.
 
 **Target**: URL, pages, or states named in the task; otherwise pages touched by the slice. **Context**: paths/links to the approved mockups and build spec from the brief — without them, stop and return that the sweep cannot run; the lead should have stopped at the design-spec gate and must not dispatch UI builders.
 
@@ -54,4 +54,4 @@ Follow **`local-browser`** — dev server must already be running; use **`emulat
 - Verdict: **SHIP** (no high/med) or **FIX** (builder should address, priority order). Mismatches to the approved spec are **FIX**.
 
 ## Boundary
-Spec match at 1440 and 375, coverage, root cause. WCAG → `/accessibility-review`; off-token values → repo gate; correctness → `code-reviewer`; journey → `ux-auditor`.
+Spec match at 1440 and 375, coverage, root cause. WCAG → `skills/accessibility-review/SKILL.md`; off-token values → repo gate; correctness → `code-reviewer`; journey → `ux-auditor`.

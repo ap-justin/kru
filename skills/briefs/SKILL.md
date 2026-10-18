@@ -6,13 +6,13 @@ disable-model-invocation: true
 
 Take the efforts to the user as a decision. The artifact is `plan/` at the plan store root, one `<effort>/` dir each; `${CLAUDE_PLUGIN_ROOT}/TRACKER.md` → *The brief* holds its lifecycle.
 
-Two halves of a brief, two owners. The **bookkeeping** — `Landing plan` ticks, `Done when` ticks, `Blast radius` paths, ticket `status` — is this skill's to reconcile. The **account** — `Change`, `Why now`, `Decisions resolved`, `Non-goals` — is read here and re-decided through `/kru:brief <effort>`.
+Two halves of a brief, two owners. The **bookkeeping** — `Landing plan` ticks, `Done when` ticks, `Blast radius` paths, ticket `status` — is this skill's to reconcile. The **account** — `Change`, `Why now`, `Decisions resolved`, `Non-goals` — is read here and re-decided through `skills/brief/SKILL.md` (scope in the invoking task: <effort>).
 
 **The gate is the verb.** §1 computes a proposal; §2 applies the bookkeeping without asking and shows the rest; §3 writes only what the user answered — resume, archive, re-grill.
 
 ## 1. Reconcile — every effort against git
 
-List the dir `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" path plan` names. Missing or empty → *no efforts on file*, name `/kru:brief <subject>`, stop.
+List the dir `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" path plan` names. Missing or empty → *no efforts on file*, name `skills/brief/SKILL.md` (scope in the invoking task: <subject>), stop.
 
 For each `plan/<effort>/`, read `brief.md` and the ticket frontmatter under `tickets/`, then record a result for every bookkeeping line — a read pass per effort:
 

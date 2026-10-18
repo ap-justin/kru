@@ -4,7 +4,7 @@ The skill-specific branch of [`writing-for-agents`](SKILL.md): what changes when
 
 ## Invocation
 
-Two callers reach a skill today: a **PM bot or cloud agent** loads it (`Read` the file, or a harness `Skill` call), and a human on Claude Code can still type `/kru:<name>`. The contract is the file on disk — not a slash menu the lead narrates for someone else to type.
+Two callers reach a skill today: a **PM bot or cloud agent** loads it (`Read` the file, or a harness `Skill` call), and a human on Claude Code may still use the legacy `/kru:<name>` slash. The contract is the file on disk — not a slash menu the lead narrates for someone else to type.
 
 Two choices, trading the two loads:
 

@@ -3,7 +3,7 @@ name: issues-loop
 description: Unattended backlog burn on defects — loop `issues` without a per-entry gate until the file cap, when the task names backlog burn or fixing bugs without stopping.
 ---
 
-`/kru:issues` with the gate lifted. The loop is `${CLAUDE_PLUGIN_ROOT}/references/backlog-loop.md` — read it first and run it end to end; this file fills in the defect half. `${CLAUDE_PLUGIN_ROOT}/skills/issues/SKILL.md` is the procedure it reuses by section; its bucket, rank and outcome definitions hold here unchanged.
+`skills/issues/SKILL.md` with the gate lifted. The loop is `${CLAUDE_PLUGIN_ROOT}/references/backlog-loop.md` — read it first and run it end to end; this file fills in the defect half. `${CLAUDE_PLUGIN_ROOT}/skills/issues/SKILL.md` is the procedure it reuses by section; its bucket, rank and outcome definitions hold here unchanged.
 
 - **Branch**: `fix/issues-loop-<date>`.
 - **Queue**: `issues` §1 and §2 over the whole dir, its §4 bookkeeping, ranked by its §3 order.

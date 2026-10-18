@@ -1,5 +1,5 @@
 #!/bin/bash
-# the mechanical half of skills/roster/audit.md: the assertions a grep settles. the rest of that
+# the mechanical half of skills/roster/SKILL.md/audit.md: the assertions a grep settles. the rest of that
 # file (cohort drift, tailored slots, countable prose, context load) is read, not scripted.
 # exit 0 when clean.
 cd "$(dirname "$0")/.." || exit 2
