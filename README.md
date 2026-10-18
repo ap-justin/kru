@@ -160,7 +160,7 @@ your other machines and your cloud sessions. `references/store.md` is the whole 
 - **Tooling**: pnpm, Turborepo, Biome.
 - **Packages**: Vite plugins, MCP servers, small Node libraries.
 
-Design runs upstream of every build (flows, the canvas, brand identity, marketing copy, assets) and review after it (correctness, structure, rendered UI, accessibility, UX). The seats behind each layer, and how to spawn one directly: `ROSTER.md`.
+Design (flows, mockups, brand, assets) is done by a **separate designer** outside this roster. There are no design seats. Engineering builds from the PM's approved spec and reviews after (correctness, structure, rendered UI, accessibility, UX). The seats behind each layer, and how to spawn one directly: `ROSTER.md`.
 
 A stack with no seat is a question the lead brings to you before it guesses.
 

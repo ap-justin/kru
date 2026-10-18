@@ -77,11 +77,11 @@ Handoff detail: `references/ui-handoff.md` → *Conformance is prevented, not de
 
 Three different things, and collapsing them is what makes this rule look like it forbids the ledger.
 
-- **Settling a pair is the design's**, and that pair ships as authored in the approved spec. No seat re-derives one, overrides one, or argues one under an a11y heading.
-- **Recording what was settled is the system's.** A mature token file has a ledger beside it saying what each token is *for* and which pairs are legible as text, ratio included, because the distinction between a **fill** and an **ink** is the single largest source of drift and no reader can recover it from the values. Those numbers are measurements of decisions already taken, written once. Recording a ratio is not computing a verdict.
-- **Using a pair as authored is conformance**, and the gate's business. A fill token spent as a text colour is a **names/values** finding on the same footing as any other.
+- **Settling a pair is the design's**, and that pair ships as authored in the approved spec. No seat re-derives one, overrides one, or argues one under an a11y heading. Where a conformance *claim* is needed — procurement, public sector — that is a person with a tool, outside this team.
+- **Recording what was settled is the system's.** A mature token file has a ledger beside it saying what each token is *for* and which pairs are legible as text, ratio included, because the distinction between a **fill** and an **ink** is the single largest source of drift and no reader can recover it from the values. Those numbers are measurements of decisions already taken, written once, and they are what the header carries into the next design session. Recording a ratio is not computing a verdict.
+- **Using a pair as authored is conformance**, and the gate's business. A fill token spent as a text colour — a warning fill on a body line, or a tint paired with its own full-strength ink — is not a design decision anyone took; it is a component reaching past the surface-and-ink pair the system authored for exactly that case. That is a **names/values** finding on the same footing as any other. (The token names differ per system; the failure doesn't.)
 
-What stays banned is a **review seat computing a ratio to overturn the spec**: `accessibility-reviewer`, `visual-reviewer`, and `ux-auditor` report structure and name 1.4.3/1.4.11 unassessed so a clean run never reads as full AA.
+What stays banned is a **review seat computing a ratio to overturn the spec**: `accessibility-reviewer`, `visual-reviewer`, and `ux-auditor` report structure — keyboard operability, focus order and visibility, target size, name/role/value, error identification — and name 1.4.3/1.4.11 unassessed so a clean run never reads as full AA.
 
 ## Reviewing the built UI
 

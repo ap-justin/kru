@@ -29,7 +29,7 @@ The vocabulary is **shadcn's semantic set** as plain custom properties — the n
 
 ## Motion rides with the UI builders
 
-There is no motion seat and no motion gate: describe the needed motion in the handoff — what the design settled when a design exists, one plain sentence of intent when not — and the UI component builder implements it in-place (it carries the vendored Emil Kowalski pack: restraint gate + exact curves/durations/origins). Motion in the built UI is checked against the approved spec by `visual-reviewer` at Step 4.
+There is no motion seat and no motion gate: motion intent comes from the approved design spec in the handoff; if the spec does not settle it, the PM gets it from the designer before builders run. The UI component builder implements it in-place (it carries the vendored Emil Kowalski pack: restraint gate + exact curves/durations/origins). Motion in the built UI is checked against the approved spec by `visual-reviewer` at Step 4.
 
 ## UI primitives ride with the UI builders
 

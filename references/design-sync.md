@@ -24,7 +24,7 @@ Two steps wrap steady-state design → PM handoff → engineering land:
 
 The repo is upstream: a deleted component comes off the remote on the next resync.
 
-## The bundle — what the design agent actually gets
+## The bundle — what the designer actually gets
 
 - **Stylesheet is the app's prebuilt CSS, not the token file.** Under JIT, missing utilities fail silently — state this in the header.
 - **Artifact is content-hashed and goes stale** after app builds — refresh `cfg.cssEntry` per repo procedure.

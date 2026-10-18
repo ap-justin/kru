@@ -9,7 +9,7 @@ A token file says which gaps, inks and weights exist. It never says which gap go
 Two kinds of file, and the kind decides who loads it:
 
 - **Relations** hold on any token file, so they bind every screen, every seat that composes one, every turn.
-- **Values** are craft for choosing a palette, a type set or a shadow — a canvas direction at bootstrap, or a system change the user asked to see. Where a system exists, its token file answers every value question and these files stay closed; a value it lacks is a **named gap**, never one picked from here.
+- **Values** are craft for the **designer's** work — choosing a palette, a type set or a shadow when drafting mockups or a system-change preview. Where a settled system exists in the repo, its token file answers every value question in engineering and these files stay closed; a value it lacks is a **named gap**, never one picked from here.
 
 ## The index
 

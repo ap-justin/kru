@@ -30,7 +30,7 @@ Relay the return unedited, then the half a subagent can't do:
 - **Lead with the placement.** The deck derives from an awareness stage. A stage the seat guessed is a one-line correction now and a rewritten page later.
 - **The voice is the user's.** The alternatives in the return exist for them to pick from; don't settle a headline on their behalf.
 
-Then hand the deck on: a page with no design yet goes to the canvas turn, drawn around these strings; a repo whose system already exists goes straight to the UI builder to mount.
+Then hand the deck on: **deck → PM → designer → approved spec → UI builder** — always, including when a design system already exists in the repo. The lead does not run `/design` or dispatch builders until the PM attaches that spec.
 
 ## Boundary
 The argument and the words on a marketing page. The look → the designer's mockups; in-product strings → the design spec; a line edit of existing copy → `/copy-editing`; a shipped page's conversion → `/cro`; technical SEO markup → `/seo-review`.

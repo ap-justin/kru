@@ -62,7 +62,7 @@ The **designer** runs `audit` on a coverage read, ahead of the element half of `
 
 ## The bounds both verbs hold
 
-- **Shape, never value.** A hue, a face, a px or an easing curve in a return is the failure — the look is settled on a canvas in front of the user, and it ships as authored.
+- **Shape, never value.** A hue, a face, a px or an easing curve in a return is the failure — the look is the designer's approved spec, transcribed once by a builder.
 - **Structure, never taste.** What either verb settles or reports is a set, a rule, a step's purpose, or a value off its ladder. Which values were chosen is the design's.
 - **Contrast is recorded, never computed.** Which pairs the system settled as legible belongs in the ledger; a ratio derived here to overturn a design does not, and no seat on this team computes one.
 
