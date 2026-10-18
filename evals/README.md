@@ -13,6 +13,8 @@ request a user would type, and grades three things from the run's trace:
 A graded check reads a `Write`/`Edit` input or a `Skill` call carrying the seat's `subagent_type`, so a
 lead that does the work inline, or loads the skill itself, fails the case.
 
+**Lead Step 4** is builder verification (what a user could not confirm from the product alone) and the lead's Block I comment pass on inline work — not `code-reviewer`, `architecture-reviewer`, or product-visible PM acceptance (`visual-reviewer`, `accessibility-reviewer`, `ux-auditor`, preview/browser/manual product walk) unless the prompt names a pass or seat.
+
 ## Running it
 
 ```sh
@@ -49,7 +51,7 @@ Seats whose source chain starts there are covered on routing only.
 | `turbo-cache-miss` | CI never hits the turbo cache | `toolchain-engineer` | `turborepo` | the build task declares `outputs` |
 | `homepage-copy` | write the homepage copy | `conversion-copywriter`, not `ux-designer` | `landing-page` | |
 | `billing-settings-copy` | billing settings wording confuses people | none: lead tells PM the design spec needs updating | | |
-| `payments-seam-design` | where the boundary goes before PayPal | `architecture-reviewer` | `codebase-design` | |
+| `payments-seam-design` | where the boundary goes before PayPal | none: lead loads `codebase-design` | `codebase-design` | |
 | `flaky-test-suite` | suite fails one run in five | `test-writer` | `testing` | the clock is faked or passed in, not read |
 | `fly-worker-disk` | deploy a worker whose outbox is on disk | `fly-platform-engineer`, not `vercel-platform-engineer` | | `fly.toml` mounts a volume |
 | `readme-typo-inline` | fix a README typo | none: the lead edits it inline | | the fix is an `Edit`, not a rewrite |

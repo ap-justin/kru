@@ -61,7 +61,7 @@ On the user's answer, in this order:
 
 1. **Apply what they answered**: write a confirmed or corrected `value` or `urgency` bare; an unconfirmed one stays `~`.
 2. **Each accepted batch line** → one of three outcomes, named individually:
-   - **built** — `lead` Step 3 routing, Step 4 review, **one commit per line** so a bad one reverts alone; the line is **deleted** at Step 4.5, in the same reconciliation as the commit.
+   - **built** — `lead` Step 3 routing, Step 4 gates (`gates.md`), **one commit per line** so a bad one reverts alone; the line is **deleted** at Step 4.5, in the same reconciliation as the commit.
    - **already done** — turned out moot on contact. Delete the line, build nothing.
    - **bigger than its `effort`** — leaves the batch. Rescore in place, then leave it parked or hand it to `skills/brief/SKILL.md`. Say which, in plain words ("bigger than it looked — parked" / "needs a plan first"); never half-build it to justify the pull.
 3. **Report**: what's now different for someone using the product, one line per built want, in plain words — then one counted clause for the rest ("plus 1 already done, 1 parked as bigger than it looked"). Commits, rescores and entry counts stay in the file and the log, and surface when asked. Lines the batch never reached are exactly as filed, plus the bookkeeping and whatever value or urgency the user confirmed.

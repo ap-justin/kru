@@ -132,7 +132,7 @@ Slash commands still work in Claude Code; **the contract is the skill file** und
 **Getting started**
 - `skills/setup/SKILL.md` — derive the repo sheet when `.claude/CLAUDE.md` has no `<!-- kru v` stamp, or when the task says to derive, re-derive, or run the prose pass alone.
 - `skills/propagate/SKILL.md` — carry a release to set-up repos; push only when the task approves.
-- `skills/lead/SKILL.md` — orchestrate builds from the PM's task.
+- `skills/lead/SKILL.md` — orchestrate builds from the PM's task; finish with **Step 5 — Hand to PM for acceptance** (the PM verifies and accepts; the team reports evidence only).
 
 **Capture and planning**
 - `skills/brainstorm`, `brief`, `todo`, `issue`, `todos`, `issues`, `briefs` — grill, persist, or reconcile store artifacts; batch skills return picks for the next task.
@@ -141,13 +141,13 @@ Slash commands still work in Claude Code; **the contract is the skill file** und
 
 **Hygiene and look-back**
 - `skills/text-fix` (+ `comment-fix`, `prose-fix`, `doc-fix`) — text passes on a diff or path the task names.
-- `skills/reflect`, `landed`, `eval-review` — look-back, post-merge sync, eval grader audit (paid eval runs need task approval).
+- `skills/reflect`, `landed`, `eval-review` — look-back (stack seats re-read their lanes; no separate code-review seats), post-merge sync, eval grader audit (paid eval runs need task approval).
 
 **Backlog loops**
 - `skills/issues-loop`, `todos-loop` — unattended backlog burn only when the task names one (`disable-model-invocation`; cap default 80 files).
 
 **Screen and growth passes**
-- Dispatch `visual-reviewer` / `accessibility-reviewer` at Step 4; load `seo-review`, `copywriting`, `copy-editing`, `cro`, `ux-review`, or animation skills when the task names that pass.
+- In-build Step 4: builder verification (tests, lint, typecheck, edge cases, data/backend — including in-process checks) and the lead's comment pass on inline edits. No `code-reviewer` or `architecture-reviewer` unless the task names them. Product-visible checks are **PM acceptance** in Step 5 unless the task names another pass explicitly.
 - `skills/review-animations`, `improve-animations` — motion craft review and codebase roadmap when the task names that pass (`disable-model-invocation`).
 
 ## Stack
