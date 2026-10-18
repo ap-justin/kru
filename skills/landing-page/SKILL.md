@@ -82,7 +82,7 @@ The output is a **SECTION deck**: an ordered, closed set of sections, each carry
 - **Proof that was not supplied.** A customer quote, a metric, a logo, a rating, a customer count, a case-study result — each either arrived with a source or it is a gap. An unsourced proof point is fabrication, and one of them makes every other claim on the page unverifiable too. The sharpest form of this failure is the plausible placeholder: `Join 10,000+ teams` mounts and reads exactly like a fact.
 - **Voice-of-customer language.** The reader's own words come from supplied research — reviews, tickets, interview transcripts. Where none arrived, the copy uses plain language and the return says which phrases are the writer's guess.
 - **Compliance and legal claims** — certifications, uptime figures, guarantees, regulatory status. Given facts, quoted exactly or named as gaps.
-- **The look.** A section names a job and carries strings. Colour, layout, component names, image direction and length-in-pixels belong to the design agent downstream.
+- **The look.** A section names a job and carries strings. Colour, layout, component names, image direction and length-in-pixels belong to the designer downstream.
 
 **The gap list is the only way a missing fact reaches a human** — the consumer of this skill has no channel to one. What a gap does to the section it sits in: `reference/section-contract.md` → *Naming a gap*.
 

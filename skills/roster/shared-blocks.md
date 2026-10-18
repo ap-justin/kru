@@ -132,7 +132,7 @@ Your context is your own; the lead's is the scarce one, and it pays for every wo
 Required on every seat that implements **executable behavior with a specifiable contract** (21 seats: the four framework builders, `go-fullstack-builder`, `cloudflare-builder`, `hono-builder`, both data architects, `turso-specialist`, `better-auth-specialist`, `stripe-specialist`, `paypal-specialist`, `chariot-specialist`, `nowpayments-specialist`, `quickbooks-specialist`, `zapier-specialist`, `web-components-builder`, `python-developer`, `node-developer`, `extension-builder`).
 
 **Exempt by decision** — record the reason, don't just omit:
-- `react-ui-builder`, `svelte-ui-builder` — you can't go red on a layout or a motion curve; their gate is the user's visual-intent inspection. Logic-dense component internals (a reducer, validation rules) route to `test-writer` after the build.
+- `react-ui-builder`, `svelte-ui-builder` — you can't go red on a layout or a motion curve; rendered conformance is `visual-reviewer`'s spec match at 1440 and 375. Logic-dense component internals (a reducer, validation rules) route to `test-writer` after the build.
 - `web-components-builder` is the **partial**, and it's in rather than out: its element's public API (attribute→property reflection and the pre-upgrade path, emitted events and their `detail`, `ElementInternals` form value/validity, idempotent connect/disconnect) is a specifiable contract other people's pages depend on, and every one of its failures is invisible on screen — so Block D applies to it in full. What it *renders* is covered by the block's existing screen exemption, which the lead names in the brief; it needs no fourth case.
 - `sanity-builder` — its primary artifact is declarative schema; TypeGen is the correctness gate on GROQ.
 - `vercel-perf-optimizer` — already carries the same discipline in a different currency: `## Prove the win` demands a measured before/after.
@@ -192,7 +192,7 @@ Required on the seats whose output **renders** (10 seats: the four framework bui
 ```
 ## Build and return — no self-dispatch
 - Never spawn agents: no self-dispatched reviewers (visual/a11y/code), no delegated sub-builds. You build and return; dispatch and review routing is the lead's alone.
-- Verify with the toolchain, not the app: {the seat's checks}. Never start a dev server or drive a browser to check your own work; the rendered gate is the user's look, with the `visual-reviewer` pass supplying the measurements.
+- Verify with the toolchain, not the app: {the seat's checks}. Never start a dev server or drive a browser to check your own work; rendered conformance is `visual-reviewer`'s — it compares the build to the approved spec at 1440 and 375 and returns mismatches to the builder.
 ```
 
 **Exempt by decision** — record the reason, don't just omit:
@@ -203,7 +203,7 @@ Required on the seats whose output **renders** (10 seats: the four framework bui
 
 **Invariant clauses:**
 - ⚠ the never-boot clause — `drive a browser` is the string to grep (all 10 carry it, in three wordings: `Never start a dev server or drive a browser to check your own work` on six, `Never boot the app, start a dev server, or drive a browser` on the three UI builders, and `Never start a dev server, launch the Studio, or drive a browser` on `sanity-builder`, whose Studio is a second thing it would otherwise open to look). This is the load-bearing half: a seat that boots the app burns the run and still can't judge the render. The bullet's *opener* is a tailored slot, so grep this clause, never the opener.
-- `the rendered gate is the user's look` — names who *does* judge it, so the ban has a positive target.
+- ⚠ `rendered conformance is visual-reviewer's` — names who *does* judge pixels against the approved spec, so the ban has a positive target.
 - the no-spawn bullet is cheap insurance rather than a live risk (a subagent can't spawn subagents), so it may be one line — but it stays paired with `dispatch and review routing is the lead's alone`.
 
 **Tailored slots**: the **opener** — `Verify with the toolchain, not the app:` on the seats that have one (the framework builders, `cloudflare-builder`, `sanity-builder`), `Self-check in isolation:` on the two UI component builders, whose toolchain can't render what they wrote either — and the seat's checks (`autofixer, typecheck/build, existing tests` · `typecheck/lint` · `wrangler deploy --dry-run` + `wrangler types` · TypeGen + typecheck).
@@ -402,7 +402,7 @@ Write to your memory only what the next run in this repo would otherwise pay to 
 
 ## Block R — `## Design for what they'll actually do`
 
-Required on **every seat** (41 — `ls agents/*.md | wc -l`). Config and tooling seats included: an operator, a maintainer or the next builder acts on their output too, and every seat is itself an actor with a payoff. It sits **immediately before the seat's first `## ` section**, after the opening paragraph — it frames how the rest of the prompt is read, so it comes before any of it.
+Required on **every seat** (37 — `ls agents/*.md | wc -l`). Config and tooling seats included: an operator, a maintainer or the next builder acts on their output too, and every seat is itself an actor with a payoff. It sits **immediately before the seat's first `## ` section**, after the opening paragraph — it frames how the rest of the prompt is read, so it comes before any of it.
 
 The block is the principle; the **`incentives`** skill holds the per-domain recipes and the sources. Block F is this principle's scope case and stays as written — Block R grounds it and never restates it, so a copy that adds a scope sentence here is drift.
 

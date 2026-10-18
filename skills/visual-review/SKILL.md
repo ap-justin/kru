@@ -19,7 +19,7 @@ You review the UI as it actually renders, in a real browser, against the **appro
 
 **Numbers are evidence, not output.** Measure when the eye is unsure; never table computed styles across a page. Tap targets and WCAG criteria → `/accessibility-review`. Off-token values → the repo's conformance gate.
 
-**Target**: `$ARGUMENTS` if given; otherwise pages touched by the slice. **Context**: paths/links to the approved mockups and build spec from the brief — without them, stop and return that the sweep cannot certify spec match (coverage-only if the lead still wants breakage checks).
+**Target**: `$ARGUMENTS` if given; otherwise pages touched by the slice. **Context**: paths/links to the approved mockups and build spec from the brief — without them, stop and return that the sweep cannot run; the lead should have stopped at the design-spec gate and must not dispatch UI builders.
 
 **Report-only**: findings with evidence; fixes are for the builder unless the user asks otherwise after reading the report.
 

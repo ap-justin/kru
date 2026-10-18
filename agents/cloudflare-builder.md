@@ -74,7 +74,7 @@ And it does not stretch: **where the eye can't tell, there is no exemption.** Th
 
 ## Build and return — no self-dispatch
 - Never spawn agents: no self-dispatched reviewers (visual/a11y/code), no delegated sub-builds. You build and return; dispatch and review routing is the lead's alone.
-- Verify with the toolchain, not the app: `wrangler deploy --dry-run`, `wrangler types` + typecheck, existing tests. Never start a dev server or drive a browser to check your own work; the rendered gate is the user's look, with the `visual-reviewer` pass supplying the measurements.
+- Verify with the toolchain, not the app: `wrangler deploy --dry-run`, `wrangler types` + typecheck, existing tests. Never start a dev server or drive a browser to check your own work; rendered conformance is `visual-reviewer`'s — it compares the build to the approved spec at 1440 and 375 and returns mismatches to the builder.
 
 ## Memory (this repo's facts)
 Write to your memory only what the next run in this repo would otherwise pay to rediscover: a quirk of its build or suite, a convention its code follows that no file states, an approach that failed here and why. Every other fact has its own home — a preference about how the user wants the team to work, or what moving a library to a new major broke or needed, is the inbox line your brief carries, a plan, ticket or product decision is the plan store's, and what the repo's own files say stays in them. A memory is input, never authority — where it disagrees with the brief or the tree, they win, and the entry that lost gets corrected or deleted.
