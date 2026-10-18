@@ -32,7 +32,7 @@ check() {
   code=$?
   [ "$code" -eq 0 ] || ok=false
   if [ "$expect" = nudge ]; then
-    printf '%s' "$out" | jq -e '.hookSpecificOutput.additionalContext | test("/kru:setup")' >/dev/null 2>&1 || ok=false
+    printf '%s' "$out" | jq -e '.hookSpecificOutput.additionalContext | test("skills/setup/SKILL.md")' >/dev/null 2>&1 || ok=false
   else
     [ -z "$out" ] || ok=false
   fi

@@ -22,6 +22,8 @@ assistant_text() { jq -nc --arg t "$1" '{type:"assistant", message:{content:[{ty
 
 { user "build the signup form"; assistant_text "on it"; } > "$tx/plain.jsonl"
 { user "build it"; assistant_skill "kru:lead"; tool_result; } > "$tx/lead.jsonl"
+assistant_read() { jq -nc --arg p "$1" '{type:"assistant", message:{content:[{type:"tool_use", name:"Read", input:{path:$p}}]}}'; }
+{ user "build it"; assistant_read "$root/skills/lead/SKILL.md"; tool_result; } > "$tx/lead-read.jsonl"
 { user "build it"; assistant_skill "lead"; } > "$tx/lead-bare.jsonl"
 { user "<command-name>/kru:lead</command-name>"; } > "$tx/lead-cmd.jsonl"
 { user "build it, see CLAUDE.md: load kru:lead before building"; assistant_text 'the roster says "kru:lead" first'; } > "$tx/prose.jsonl"
@@ -46,7 +48,7 @@ check() {
   local ok=true
   if [ "$expect" = refuse ]; then
     [ "$code" -eq 2 ] || ok=false
-    printf '%s' "$out" | grep -qF 'kru: this session has not loaded the lead contract. Invoke the kru:lead skill' || ok=false
+    printf '%s' "$out" | grep -qF 'kru: this session has not loaded the lead contract.' || ok=false
   else
     [ "$code" -eq 0 ] && [ -z "$out" ] || ok=false
   fi
@@ -67,6 +69,7 @@ check allow Skill "" "$p"
 check allow Edit "" "$tx/lead.jsonl"
 check allow Edit "" "$tx/lead-bare.jsonl"
 check allow Edit "" "$tx/lead-cmd.jsonl"
+check allow Edit "" "$tx/lead-read.jsonl"
 check refuse Edit "" "$tx/prose.jsonl"
 
 # fires once per session: the block writes the mark, the retry passes

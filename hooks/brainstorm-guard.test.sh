@@ -27,6 +27,9 @@ bs="<command-message>kru:$n</command-message>
 
 { user "build the form"; assistant_text "on it"; } > "$tx/plain.jsonl"
 { user "$bs"; assistant_text "Q1 …"; } > "$tx/open.jsonl"
+assistant_read() { jq -nc --arg p "$1" '{type:"assistant", message:{content:[{type:"tool_use", name:"Read", input:{path:$p}}]}}'; }
+{ assistant_read "$root/skills/brainstorm/SKILL.md"; assistant_text "Q1 …"; } > "$tx/open-read.jsonl"
+{ user "$bs"; assistant_text "Q1 …"; user "please persist the brief"; } > "$tx/persist.jsonl"
 { user "$bs"; assistant_text "Q1 …"; user "1 yes, 2 no"; assistant_text "Q3 …"; } > "$tx/answered.jsonl"
 { user "$bs"; assistant_text "Q1 …"; user "go"; } > "$tx/go.jsonl"
 { user "$bs"; assistant_text "Q1 …"; user_parts "Brief it."; } > "$tx/brief-it.jsonl"
@@ -54,7 +57,7 @@ check() {
   local ok=true
   if [ "$expect" = refuse ]; then
     [ "$code" -eq 2 ] || ok=false
-    printf '%s' "$out" | grep -qF 'kru: /kru:brainstorm writes nothing until the user says go' || ok=false
+    printf '%s' "$out" | grep -qF 'kru: brainstorm writes nothing until the caller asks to persist' || ok=false
   else
     [ "$code" -eq 0 ] && [ -z "$out" ] || ok=false
   fi
@@ -74,6 +77,7 @@ check allow Edit "" "$tx/quoted-assistant.jsonl"
 
 # an open brainstorm refuses every write, however many rounds in
 check refuse Edit "" "$tx/open.jsonl"
+check refuse Edit "" "$tx/open-read.jsonl"
 check refuse Write "" "$tx/open.jsonl"
 check refuse NotebookEdit "" "$tx/open.jsonl"
 check refuse Write "" "$tx/answered.jsonl"
@@ -89,6 +93,7 @@ check allow Bash "grep -rn foo src | head -5" "$tx/open.jsonl"
 check allow Write "" "$tx/go.jsonl"
 check allow Write "" "$tx/brief-it.jsonl"
 check allow Write "" "$tx/brief-cmd.jsonl"
+check allow Write "" "$tx/persist.jsonl"
 check allow Bash "rm -rf build" "$tx/go.jsonl"
 
 # a later brainstorm locks again

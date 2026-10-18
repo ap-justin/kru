@@ -28,7 +28,7 @@ grep -q '<!-- kru v' "$top/.claude/CLAUDE.md" 2>/dev/null && exit 0
 jq -n '{
   hookSpecificOutput: {
     hookEventName: "SessionStart",
-    additionalContext: "kru: this repo has not run /kru:setup — there is no sheet in .claude/CLAUDE.md. Name /kru:setup to the user once this session (it is theirs to type), then carry on: brainstorming, briefs and grilling need no setup, and on a blank repo setup is where the stack gets settled."
+    additionalContext: "kru: this repo has no kru sheet in .claude/CLAUDE.md. Once this session, Read skills/setup/SKILL.md and run it when the task is to derive the sheet — otherwise carry on: brainstorming, briefs and grilling need no setup, and on a blank repo setup is where the stack gets settled."
   }
 }'
 exit 0

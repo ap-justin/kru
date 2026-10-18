@@ -45,10 +45,9 @@ sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
 transcript=$(printf '%s' "$input" | jq -r '.transcript_path // empty' 2>/dev/null)
 [ -r "$transcript" ] || exit 0
 
-# anchored to how an invocation is recorded, never to the bare name: the seat
-# roster and a repo's own CLAUDE.md both spell "kru:lead" as prose, and
-# a session that only read that text is exactly the session this gate is for.
-grep -qE '"skill":"(kru:)?lead"|<command-name>/?kru:lead' "$transcript" && exit 0
+# anchored to how a load is recorded: Skill tool, Read of the contract file, or
+# (legacy) a typed /kru:lead — never to prose that merely names the skill.
+grep -qE '"skill":"(kru:)?lead"|<command-name>/?kru:lead|skills/lead/SKILL\.md' "$transcript" && exit 0
 
 # a /kru:<skill> run is that skill's contract, not the lead's — the ones
 # that dispatch load lead themselves. exempt only while the command is still the
@@ -67,5 +66,5 @@ mark="$mark_dir/$sid"
 [ -e "$mark" ] && exit 0
 mkdir -p "$mark_dir" 2>/dev/null && : > "$mark" 2>/dev/null
 
-printf 'kru: this session has not loaded the lead contract. Invoke the kru:lead skill, then take the action again — nothing else about the request has changed. This fires once per session, from the kru plugin, and read-only commands are exempt. To run without it: touch %s\n' "$(kru_path lead-gate/off)" >&2
+printf 'kru: this session has not loaded the lead contract. Read %s/skills/lead/SKILL.md (or invoke the kru:lead skill), then take the action again — nothing else about the request has changed. This fires once per session, from the kru plugin, and read-only commands are exempt. To run without it: touch %s\n' "$plugin_root" "$(kru_path lead-gate/off)" >&2
 exit 2
