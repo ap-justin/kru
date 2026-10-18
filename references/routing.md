@@ -41,9 +41,12 @@ names the seat and its skills has this question answered — take the answer.
 | design/landing/marketing/portfolio UI — **no system yet** | *UI from scratch*, Step 2 — **PM must attach approved design spec** before builders |
 | UI feature or screen — **system exists** | PM's **approved design spec** → UI builder (*UI on an existing system*, Step 2) |
 | a builder returned a **named gap** | the **PM**, with the token name it would need. No seat fills it, and no seat extends the system |
-| correctness/quality review of a diff | `code-reviewer` (or the built-in code-review skill inline) |
+| correctness/quality review of a diff | `code-reviewer` (or the built-in code-review skill inline) — lead Step 4 when earned |
 | module/interface design, refactor with fuzzy boundaries, "where's the seam", coupling/testability | `architecture-reviewer` (design mode, before builder) |
 | structural-integrity gate on a change (boundary erosion, coupling drift) | `architecture-reviewer` (review mode, after builder) |
+| rendered UI spec match, screen states, 1440/375 | `visual-reviewer` or `skills/visual-review/SKILL.md` — **only when the PM names it in the task**; not lead Step 4 |
+| WCAG structural audit on a built page | `accessibility-reviewer` or `skills/accessibility-review/SKILL.md` — **only when the PM names it** |
+| multi-screen UX flow audit | `ux-auditor` or `skills/ux-review/SKILL.md` — **only when the PM names it** |
 | coverage sweep or fan-out across many files; repair a red/flaky suite; an exempt seat's logic-dense output; a repo with no testing conventions captured yet | `test-writer` |
 | repo tooling: pnpm workspaces/catalogs/lockfile · `turbo.json` monorepo task graph + caching · Biome/ESLint/Prettier lint+format · wiring a new package into the graph | `toolchain-engineer` |
 | repo-wide TypeScript infrastructure: strict migration, monorepo project references, type-perf profiling | a general agent with the `typescript` skill loaded |

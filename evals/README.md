@@ -13,6 +13,8 @@ request a user would type, and grades three things from the run's trace:
 A graded check reads a `Write`/`Edit` input or a `Skill` call carrying the seat's `subagent_type`, so a
 lead that does the work inline, or loads the skill itself, fails the case.
 
+**Lead Step 4** covers source-reading reviewers (`code-reviewer`, `architecture-reviewer` when earned) and test evidence — not `visual-reviewer`, `accessibility-reviewer`, `ux-auditor`, preview opens, or the built-in run skill. No case should grade those unless the prompt explicitly names the pass.
+
 ## Running it
 
 ```sh

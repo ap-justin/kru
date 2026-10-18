@@ -77,7 +77,7 @@ What keeps the first phase affordable: **every seat runs in its own context**, s
 
    **Then the text pass when step 8 committed to it or the task already asked** — once every slice has landed, not between them. Read `${CLAUDE_PLUGIN_ROOT}/skills/text-fix/SKILL.md` and run it. Hand it **what the slices landed on** — the branch where Step 4.5 committed them, or the working tree where they are still uncommitted.
 
-10. **Hand to PM for acceptance.** After slices land, return the **`lead` Step 5** package to the caller: each closed finding's behavior criterion with evidence or **unproven**, PR and preview links and CI status, known gaps and filed items. Do not declare the look-back remediation accepted or done — the PM verifies and accepts. Seats, waves, per-seat counts and slice order stay in the record unless asked.
+10. **Hand to PM for acceptance.** After slices land, return the **`lead` Step 5** package to the caller: each closed finding's behavior criterion with **engineering evidence** (tests, lint, typecheck, CI) or **unproven**; PR and preview links and CI status; **PM acceptance checks** (screens vs the design spec on the preview, flows to walk, live a11y) — the team does not boot the app or dispatch screen/journey reviewers unless the task named them. Do not declare remediation accepted or done. Seats, waves, per-seat counts and slice order stay in the record unless asked.
 
 ## Don't
 

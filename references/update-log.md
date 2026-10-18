@@ -4,7 +4,7 @@
 
 Reflect look-back no longer dispatches `code-reviewer`, `architecture-reviewer`, or the browser review seats. Stack owners re-read their lanes against official sources; remediation builds skip the gates.md review loop.
 
-PM acceptance: the lead ends with Step 5 (criteria with evidence or unproven, PR/preview/CI, known gaps). Builders and the lead never sign off for the product owner; evidence is not acceptance.
+PM acceptance: the lead ends with Step 5 (criteria with engineering evidence or unproven, PR/preview/CI, screens/flows/a11y for the PM on the preview, known gaps). Builders and the lead never sign off; in-build verification is tests, lint, and typecheck only — not preview, browser, or `visual-reviewer` / `accessibility-reviewer` / `ux-auditor` unless the task names them.
 
 ## 0.157.0
 

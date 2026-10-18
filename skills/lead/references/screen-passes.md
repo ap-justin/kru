@@ -1,10 +1,10 @@
 # The screen passes — what they are, how to brief them, and what stays the user's
 
-Detail behind `SKILL.md` → Step 4, *Screen passes*. Reached on UI work; a non-UI change never loads this.
+Detail for **PM-named** screen passes and Step 5 acceptance checks. The lead **does not** dispatch these in Step 4; list screens and flows for the PM on the preview unless the **task names** a pass or seat explicitly.
 
-## The two passes have seats, and you dispatch them
+## The two passes have seats — PM or task invokes them
 
-`visual-reviewer` and `accessibility-reviewer` are review-only agents whose entire body is the corresponding skill file — same rules, same output, same boundaries, read from the one copy. **Two callers, one body:** the user still types `skills/visual-review/SKILL.md` · `skills/accessibility-review/SKILL.md` and gets the pass inline; you spawn the seat and get it in an isolated context, after the source-reading gates and one browser at a time (`gates.md` → the batch).
+`visual-reviewer` and `accessibility-reviewer` are review-only agents whose entire body is the corresponding skill file — same rules, same output, same boundaries, read from the one copy. **Two callers, one body:** the PM types `skills/visual-review/SKILL.md` · `skills/accessibility-review/SKILL.md` for an inline sweep, or names the seat in the task for an isolated run — not an automatic Step 4 batch.
 
 **Conformance is the repo's own gate**, written in Phase 0 and run at every commit (`${CLAUDE_PLUGIN_ROOT}/references/ui-handoff.md` → *Conformance is prevented, not detected*) — so an off-token value is already a failing test by the time a pass could look, and neither seat here is briefed for one.
 
