@@ -4,7 +4,7 @@ Detail behind `SKILL.md` → Step 4, *Screen passes*. Reached on UI work; a non-
 
 ## The two passes have seats, and you dispatch them
 
-`visual-reviewer` and `accessibility-reviewer` are review-only agents whose entire body is the corresponding skill file — same rules, same output, same boundaries, read from the one copy. **Two callers, one body:** the user still types `/visual-review` · `/accessibility-review` and gets the pass inline; you spawn the seat and get it in an isolated context, after the source-reading gates and one browser at a time (`gates.md` → the batch).
+`visual-reviewer` and `accessibility-reviewer` are review-only agents whose entire body is the corresponding skill file — same rules, same output, same boundaries, read from the one copy. **Two callers, one body:** the user still types `skills/visual-review/SKILL.md` · `skills/accessibility-review/SKILL.md` and gets the pass inline; you spawn the seat and get it in an isolated context, after the source-reading gates and one browser at a time (`gates.md` → the batch).
 
 **Conformance is the repo's own gate**, written in Phase 0 and run at every commit (`${CLAUDE_PLUGIN_ROOT}/references/ui-handoff.md` → *Conformance is prevented, not detected*) — so an off-token value is already a failing test by the time a pass could look, and neither seat here is briefed for one.
 
@@ -33,8 +33,8 @@ Three things bound the batch:
 
 These have no seat and you never dispatch them — they run inline when the user names one:
 
-- `/seo-review` — technical SEO/AEO audit, markup fixes on request.
-- `/copywriting` · `/copy-editing` · `/cro` — on copy that already ships. A page not yet written is `conversion-copywriter`'s, routed before design (to the external designer) or build.
-- `/review-animations` · `/improve-animations` — motion craft review · roadmap.
+- `skills/seo-review/SKILL.md` — technical SEO/AEO audit, markup fixes on request.
+- `skills/copywriting/SKILL.md` (PM loads when the task names it) · `skills/copy-editing/SKILL.md` (PM loads when the task names it) · `skills/cro/SKILL.md` (PM loads when the task names it) — on copy that already ships. A page not yet written is `conversion-copywriter`'s, routed before design (to the external designer) or build.
+- `skills/review-animations/SKILL.md` · `skills/improve-animations/SKILL.md` — motion craft review · roadmap (PM or lead `Read` when the task names that pass).
 
-Marketing copy for new pages: `conversion-copywriter` → PM → designer mockups → PM spec → engineering. In-product microcopy and flows: design spec only; technical SEO: `/seo-review`.
+Marketing copy for new pages: `conversion-copywriter` → PM → designer mockups → PM spec → engineering. In-product microcopy and flows: design spec only; technical SEO: `skills/seo-review/SKILL.md`.

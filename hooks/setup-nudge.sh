@@ -1,12 +1,12 @@
 #!/bin/bash
-# sessionstart: a repo that never ran /kru:setup has no sheet, so the lead routes
+# sessionstart: a repo that never ran `skills/setup/SKILL.md` has no sheet, so the lead routes
 # with no answers and the seats work from defaults. the stamp setup writes into
 # .claude/CLAUDE.md is the one proof it ran, and its absence is the only thing
 # this checks — whether the sheet is *behind* is lead Step 0's, read from the
 # stamp itself.
 #
 # an alert, never a block: a greenfield session is often a brainstorm with no
-# stack yet, and /kru:setup's own blank-repo grill is where that stack gets
+# stack yet, and `skills/setup/SKILL.md`'s own blank-repo grill is where that stack gets
 # settled. so the context says name it once and carry on.
 #
 # skipped outside a git work tree (no repo to set up) and in the plugin's own
@@ -25,10 +25,13 @@ top=$(git -C "$cwd" rev-parse --show-toplevel 2>/dev/null) || exit 0
 [ -f "$top/.claude-plugin/plugin.json" ] && exit 0
 grep -q '<!-- kru v' "$top/.claude/CLAUDE.md" 2>/dev/null && exit 0
 
-jq -n '{
+setup_path="${plugin_root}/skills/setup/SKILL.md"
+msg="kru: this repo has no kru sheet in .claude/CLAUDE.md. Once this session, Read \${CLAUDE_PLUGIN_ROOT}/skills/setup/SKILL.md (${setup_path}) and run it when the task is to derive the sheet — otherwise carry on: brainstorming, briefs and grilling need no setup, and on a blank repo setup is where the stack gets settled."
+
+jq -n --arg ctx "$msg" '{
   hookSpecificOutput: {
     hookEventName: "SessionStart",
-    additionalContext: "kru: this repo has not run /kru:setup — there is no sheet in .claude/CLAUDE.md. Name /kru:setup to the user once this session (it is theirs to type), then carry on: brainstorming, briefs and grilling need no setup, and on a blank repo setup is where the stack gets settled."
+    additionalContext: $ctx
   }
 }'
 exit 0
