@@ -1,5 +1,5 @@
 #!/bin/bash
-# Garbled path tokens must fail check-skill-paths.sh
+# Path backticks: glued prose and missing paths must fail with named tokens reported.
 set -euo pipefail
 here=$(cd "$(dirname "$0")" && pwd)
 check="$here/check-skill-paths.sh"
@@ -9,9 +9,10 @@ trap 'rm -rf "$sandbox"' EXIT
 fixture="$sandbox/garbled-fixture.md"
 cat > "$fixture" << 'EOF'
 # fixture — must fail path check
-- `${CLAUDE_PLUGIN_ROOT}/referencesthe-bundled-design-spec.md`
+- `skills/lead/SKILL.md the bundled phrase`
+- `${CLAUDE_PLUGIN_ROOT}/references/design-spec.md extra words`
+- `references/not-a-real-file.md`
 - `skillsthe-vendored-tdd-skill/foo`
-- `scripts/assetthe-built-in-run-skill.sh`
 EOF
 
 if CHECK_SKILL_PATHS_EXTRA="$fixture" bash "$check" >/dev/null 2>&1; then
@@ -19,9 +20,16 @@ if CHECK_SKILL_PATHS_EXTRA="$fixture" bash "$check" >/dev/null 2>&1; then
   exit 1
 fi
 out=$(CHECK_SKILL_PATHS_EXTRA="$fixture" bash "$check" 2>&1 || true)
-echo "$out" | grep -q 'garbled path token' || {
-  echo "FAIL: expected garbled path token errors"
-  echo "$out"
-  exit 1
-}
+for needle in \
+  'skills/lead/SKILL.md the bundled phrase' \
+  '${CLAUDE_PLUGIN_ROOT}/references/design-spec.md extra words' \
+  'references/not-a-real-file.md' \
+  'skillsthe-vendored-tdd-skill/foo'
+do
+  echo "$out" | grep -qF "garbled path token \`$needle\`" || echo "$out" | grep -qF "missing path \`$needle\`" || {
+    echo "FAIL: expected output to name: $needle"
+    echo "$out"
+    exit 1
+  }
+done
 echo "check-skill-paths.test: PASS"

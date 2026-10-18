@@ -14,7 +14,7 @@ Working files (artboards, `canvas.json`, images) stay **local and uncommitted** 
 
 ## Canvas and the bundled Claude Code `design` skill (designer loads)
 
-Invoke the bundled **the bundled Claude Code `design` skill (designer loads) skill** for artboards and publish:
+Invoke the bundled Claude Code `design` skill (designer loads) for artboards and publish:
 
 - Match the existing app from the repo when brownfield — token file, stylesheets, closest screens — and say in one line what you matched.
 - **Directions at bootstrap, screen mockups after** — 2–4 genuinely different directions when the look is unsettled; compose from real parts once a system exists.

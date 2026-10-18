@@ -38,14 +38,11 @@ unlocked=$(jq -rn \
       )));
   def exact_unlock($t):
     ($t | gsub("^\\s+|\\s+$";"") | ascii_downcase) as $n |
-    $n == "go" or $n == "brief it" or $n == "persist the brief" or $n == "write the brief";
-  def brief_write_negated($t):
-    ($t | test("(?i)\\b(?:do not|never|no need to)\\b[^.!?]{0,48}\\b(write|persist)\\s+the\\s+brief\\b")) or
-    ($t | test("(?i)\\bdon.t\\b[^.!?]{0,48}\\b(write|persist)\\s+the\\s+brief\\b")) or
-    ($t | test("(?i)\\bwithout\\s+(?:to\\s+)?(?:write|persist)(?:ing)?\\s+the\\s+brief\\b")) or
-    ($t | test("(?i)\\bnot\\s+(?:to\\s+)?(?:write|persist)\\s+the\\s+brief\\b"));
+    $n == "go" or $n == "brief it" or $n == "persist the brief" or $n == "write the brief"
+    or $n == "please persist the brief" or $n == "please write the brief";
   def invoke_write_brief($t):
-    ($t | test("(?i)\\b(write|persist)\\s+the\\s+brief\\b")) and (brief_write_negated($t) == false);
+    ($t | test("(?i)(^|[.!;:\\n]\\s*)(please\\s+)?(write|persist)\\s+the\\s+brief\\b")) and
+    ($t | test("(?i)(^|[.!;:\\n]\\s*)(please\\s+)?(write|persist)\\s+the\\s+brief\\s*\\?") == false);
   [inputs] | to_entries as $all |
   ($all | map(select(.value | locked)) | last) as $lock |
   if $lock == null then "skip"

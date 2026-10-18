@@ -1,5 +1,5 @@
 #!/bin/bash
-# Every local skills/<name>/... path and every backticked repo path must exist and be whole tokens.
+# Every backticked repo path token must exist; glued prose in path backticks must fail.
 set -euo pipefail
 cd "$(dirname "$0")/.." || exit 2
 root=$PWD
@@ -7,6 +7,7 @@ root=$PWD
 exec python3 - "$root" << 'PY'
 import os
 import re
+import shlex
 import sys
 from pathlib import Path
 
@@ -19,7 +20,7 @@ LOCAL = re.compile(
     r"(skills/[a-z0-9][a-z0-9-]*(?:/[A-Za-z0-9_.-]+)*)"
 )
 
-PREFIXES = (
+PREFIX_STARTS = (
     "${CLAUDE_PLUGIN_ROOT}/",
     "skills/",
     "references/",
@@ -28,11 +29,20 @@ PREFIXES = (
     "hooks/",
 )
 
-GARBLED = re.compile(
-    r"(?i)(?:referencesthe|skillsthe|scripts/assetthe|skills`skills/|bundled the bundled|the built-in run skill\.sh)"
+PATH_MARKERS = (
+    "${CLAUDE_PLUGIN_ROOT}/",
+    "skills/",
+    "references/",
+    "scripts/",
+    "agents/",
+    "hooks/",
 )
 
-BACKTICK = re.compile(r"`([^`]+)`")
+BACKTICK = re.compile(r"`([^`\n]+)`")
+PLACEHOLDER_ANGLE = re.compile(r"<[^>]+>")
+# `{foo}` placeholders only — not `${CLAUDE_PLUGIN_ROOT}` env paths.
+PLACEHOLDER_BRACE = re.compile(r"(?<!\$)\{[^}]+\}")
+HTML_COMMENT = re.compile(r"<!--.*?-->", re.DOTALL)
 
 SCAN_ROOTS = [
     root / "skills",
@@ -84,24 +94,110 @@ def rel_path(f: Path) -> str:
         return str(f)
 
 
-def is_path_like_token(token: str) -> bool:
-    if "/" not in token:
-        return False
-    return any(token.startswith(p) for p in PREFIXES)
-
-
-def is_template(token: str) -> bool:
-    if any(c in token for c in "<>*{|"):
+def is_external_or_non_repo(token: str) -> bool:
+    if token.startswith(("~", "http://", "https://", "raw.", "main:")) or token.startswith("@"):
         return True
-    if token.endswith("/") and token.count("/") <= 2:
+    if "githubusercontent.com" in token or "github.com/" in token:
+        return True
+    if re.match(r"^/agents/", token):
+        return True
+    if re.match(r"^agents/[^/]+$", token) and not (root / token).exists():
+        return True
+    if token.startswith((".claude/", ".agents/")):
+        return not (root / token).exists()
+    if token.startswith(("pstack/", "vercel:")):
+        return True
+    if "references/{" in token:
         return True
     return False
 
 
-def resolve_repo_path(token: str) -> Path:
-    if token.startswith("${CLAUDE_PLUGIN_ROOT}/"):
-        return root / token[len("${CLAUDE_PLUGIN_ROOT}/") :]
-    return root / token
+def is_path_like_token(token: str) -> bool:
+    if is_external_or_non_repo(token):
+        return False
+    if "/" not in token:
+        return False
+    if any(token.startswith(p) for p in PREFIX_STARTS):
+        return True
+    if "${CLAUDE_PLUGIN_ROOT}/" in token:
+        return True
+    if re.search(r"(?:^|/)(?:skills|references|scripts|agents|hooks)/", token):
+        return True
+    return bool(re.match(r"^skills[^/]", token))
+
+
+def is_shell_command_line(token: str) -> bool:
+    first = token.strip().split(None, 1)[0] if token.strip() else ""
+    return first in {"bash", "sh", "env", "sudo"} or (
+        "/" in first
+        and first.endswith((".sh", ".mjs", ".ts", ".js"))
+    )
+
+
+def path_words_from_token(token: str) -> list[str]:
+    if is_shell_command_line(token):
+        try:
+            parts = shlex.split(token)
+        except ValueError:
+            parts = token.split()
+        words = []
+        for w in parts[1:]:
+            ew = expand_plugin_root(w)
+            if "/" in ew and (
+                ew.startswith(str(root))
+                or any(ew.startswith(p) for p in PREFIX_STARTS if p != "${CLAUDE_PLUGIN_ROOT}/")
+                or "${CLAUDE_PLUGIN_ROOT}/" in w
+            ):
+                words.append(w)
+        return words
+    if " " in token:
+        return []
+    return [token]
+
+
+def strip_placeholders(segment: str) -> str:
+    segment = PLACEHOLDER_ANGLE.sub("", segment)
+    return PLACEHOLDER_BRACE.sub("", segment)
+
+
+def expand_plugin_root(path_word: str) -> str:
+    return path_word.replace("${CLAUDE_PLUGIN_ROOT}", str(root))
+
+
+def resolve_repo_path(path_word: str, source: Path) -> Path | None:
+    w = strip_placeholders(expand_plugin_root(path_word.strip())).split("#", 1)[0]
+    if not w or "..." in w or "*" in w:
+        return None
+    if w.startswith(f"{root}/") or w == str(root):
+        return Path(w)
+    if w.startswith(("skills/", "references/", "scripts/", "agents/", "hooks/")):
+        candidates = [root / w]
+        p = source.parent
+        for _ in range(8):
+            candidates.append(p / w)
+            if p == root:
+                break
+            p = p.parent
+        for c in candidates:
+            if c.exists():
+                return c
+        return candidates[0]
+    if w.startswith("./"):
+        return source.parent / w[2:]
+    if w.startswith(".claude/"):
+        return root / w
+    return None
+
+
+def path_exists(path_word: str, source: Path) -> bool:
+    if is_external_or_non_repo(path_word):
+        return True
+    if "*" in path_word or "<" in path_word or "{" in path_word:
+        return True
+    full = resolve_repo_path(path_word, source)
+    if full is None:
+        return False
+    return full.exists()
 
 
 fail = 0
@@ -113,29 +209,25 @@ for f in iter_files():
     except OSError:
         continue
     rel = rel_path(f)
+    text = HTML_COMMENT.sub("", text)
 
     for m in BACKTICK.finditer(text):
         token = m.group(1)
         if not is_path_like_token(token):
             continue
-        if GARBLED.search(token):
-            print(f"garbled path token `{token}` (from {rel})")
-            fail = 1
+
+        if " " in token:
+            if is_shell_command_line(token):
+                for pw in path_words_from_token(token):
+                    if not path_exists(pw, f):
+                        print(f"missing path `{pw}` in `{token}` (from {rel})")
+                        fail = 1
+            else:
+                print(f"garbled path token `{token}` (from {rel})")
+                fail = 1
             continue
-        if is_template(token) or re.search(r"\s", token):
-            continue
-        # Existence: concrete repo paths only (not agents/ metadata stubs).
-        if token.startswith("${CLAUDE_PLUGIN_ROOT}/"):
-            sub = token[len("${CLAUDE_PLUGIN_ROOT}/") :]
-            if not sub.startswith(("skills/", "references/", "scripts/", "hooks/")):
-                continue
-            full = root / sub
-        elif token.startswith("skills/"):
-            full = root / token
-        else:
-            # Skill-local `references/...` backticks are relative to the skill dir — garbled-only here.
-            continue
-        if not full.exists():
+
+        if not path_exists(token, f):
             print(f"missing path `{token}` (from {rel})")
             fail = 1
 

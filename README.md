@@ -130,25 +130,25 @@ your other machines and your cloud sessions. `references/store.md` is the whole 
 Slash commands still work in Claude Code; **the contract is the skill file** under `skills/`. The lead loads `skills/lead/SKILL.md` before building; everything else is a deliberate `Read` when the task calls for it.
 
 **Getting started**
-- `skills/setup/SKILL.md` — derive the repo sheet (also fires ambiently when there is no `<!-- kru v` stamp or the stamp is behind `VERSION`).
+- `skills/setup/SKILL.md` — derive the repo sheet when `.claude/CLAUDE.md` has no `<!-- kru v` stamp, or when the task says to derive, re-derive, or run the prose pass alone.
 - `skills/propagate/SKILL.md` — carry a release to set-up repos; push only when the task approves.
 - `skills/lead/SKILL.md` — orchestrate builds from the PM's task.
 
 **Capture and planning**
 - `skills/brainstorm`, `brief`, `todo`, `issue`, `todos`, `issues`, `briefs` — grill, persist, or reconcile store artifacts; batch skills return picks for the next task.
 - `skills/copy-deck` — marketing page deck via `conversion-copywriter`.
-- `skills/remember/SKILL.md` — bank a cross-project preference (ambient when the task states what to remember).
+- `skills/remember/SKILL.md` — bank a cross-project preference when the task states what to remember.
 
 **Hygiene and look-back**
 - `skills/text-fix` (+ `comment-fix`, `prose-fix`, `doc-fix`) — text passes on a diff or path the task names.
 - `skills/reflect`, `landed`, `eval-review` — look-back, post-merge sync, eval grader audit (paid eval runs need task approval).
 
 **Backlog loops**
-- `skills/issues-loop`, `todos-loop` — unattended burn when the task names backlog work without a gate (cap default 80 files).
+- `skills/issues-loop`, `todos-loop` — unattended backlog burn only when the task names one (`disable-model-invocation`; cap default 80 files).
 
 **Screen and growth passes**
 - Dispatch `visual-reviewer` / `accessibility-reviewer` at Step 4; load `seo-review`, `copywriting`, `copy-editing`, `cro`, `ux-review`, or animation skills when the task names that pass.
-- `skills/improve-animations` — motion roadmap (ambient on explicit motion-audit tasks).
+- `skills/review-animations`, `improve-animations` — motion craft review and codebase roadmap when the task names that pass (`disable-model-invocation`).
 
 ## Stack
 - **UI**: React, Svelte 5, Web Components.
