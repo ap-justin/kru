@@ -30,7 +30,7 @@ A brief pointer into `decisions.md` for a record that isn't there is a **finding
 
 `skills/grilling/SKILL.md` is the engine. What the team adds on top is the **round**, and it is the same procedure whether the record persists or dies with the session (`lead` Step 2.5 runs it in-session):
 
-Work the design tree in **rounds** — ask the whole **frontier** (every decision whose prerequisites are already settled) in one round, numbered, each with your recommended answer, then wait for the answers before recomputing the frontier. Relentless until the frontier is empty and every load-bearing decision is settled; the user can cut it short anytime. A question that depends on another still open in this round belongs to a later round.
+Work the design tree in **rounds** — ask the whole **frontier** (every decision whose prerequisites are already settled) in one round, numbered, each with your recommended answer, then return the round to the caller before recomputing the frontier on the next invocation. Relentless until the frontier is empty and every load-bearing decision is settled; the user can cut it short anytime. A question that depends on another still open in this round belongs to a later round.
 
 **Facts are yours, two-way doors are yours, and what's left is the round.** Anything you could look up, look up — dispatch a subagent if it's slow — instead of asking. Anything you could decide and defend, decide, and enter it in the record as a decision you made rather than a question you asked. What reaches the round is the **product calls** and the **one-way doors** (`${CLAUDE_PLUGIN_ROOT}/skills/lead/SKILL.md` → *Talk to a PM, not to an engineer*, which also governs the words you ask in).
 
