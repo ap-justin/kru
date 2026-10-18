@@ -55,7 +55,7 @@ Only the batch gets a line — numbered, each written as the symptom someone usi
 On the user's answer, in this order:
 
 1. **Each accepted batch file** → one of five outcomes, named individually:
-   - **fixed** — `lead` Step 3 routing, Step 4 review, **one commit per file** with the repro test that replaces the write-up; the file is **deleted** at Step 4.5, in the same change.
+   - **fixed** — `lead` Step 3 routing, Step 4 gates (`gates.md`), **one commit per file** with the repro test that replaces the write-up; the file is **deleted** at Step 4.5, in the same change.
    - **already fixed** — turned out gone on contact. Delete the file, change nothing.
    - **bigger than its `effort`** — leaves the batch. Rescore in place, then leave it or hand it to `skills/brief/SKILL.md`. Say which, in plain words ("bigger than it looked — still known" / "needs a plan first"); never half-fix it to justify the batch.
    - **declined** — the user chose to carry the risk. Move the file to `archive/declined-<date>/` and add it to that dir's `README.md` with the one-line reason they gave; create both on first use.

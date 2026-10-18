@@ -21,7 +21,7 @@ Read each eligible entry's change against the held bar before it enters the queu
 Take the top queued entry and:
 
 1. **Fit.** Estimate the files the change touches, its tests included. Count + estimate over the cap → skip to the next entry; none fits → exit.
-2. **Build.** `lead` Step 3 routing and Step 4 in-build gates (tests/lint/typecheck + source reviewers when earned), one builder at a time. The outcome is one of the skill's, or a product call surfacing mid-build → **held**, the builder's work discarded with `git checkout -- <its paths>`.
+2. **Build.** `lead` Step 3 routing and Step 4 in-build gates (builder verification — tests, lint, typecheck, evidence pairing, lead Block I on inline work), one builder at a time. The outcome is one of the skill's, or a product call surfacing mid-build → **held**, the builder's work discarded with `git checkout -- <its paths>`.
 3. **Measure, then land.** Re-read the count with the change still uncommitted. Within the cap → commit it with its tests and its entry's deletion (`lead` Step 4.5), paths staged by name. Over the cap → leave it uncommitted, record it as *uncommitted*, and exit.
 4. **Say it.** One status line: what's different for users, and the count against the cap.
 

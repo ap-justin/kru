@@ -147,7 +147,7 @@ Slash commands still work in Claude Code; **the contract is the skill file** und
 - `skills/issues-loop`, `todos-loop` — unattended backlog burn only when the task names one (`disable-model-invocation`; cap default 80 files).
 
 **Screen and growth passes**
-- In-build Step 4: builder verification (tests, lint, typecheck, edge cases, data/backend — including in-process checks) plus `code-reviewer` / `architecture-reviewer` when earned. Product-visible checks (screens vs spec, a11y a user hits, flows, running the app) are **PM acceptance** in Step 5 unless the task names a pass explicitly.
+- In-build Step 4: builder verification (tests, lint, typecheck, edge cases, data/backend — including in-process checks) and the lead's comment pass on inline edits. No `code-reviewer` or `architecture-reviewer` unless the task names them. Product-visible checks are **PM acceptance** in Step 5 unless the task names another pass explicitly.
 - `skills/review-animations`, `improve-animations` — motion craft review and codebase roadmap when the task names that pass (`disable-model-invocation`).
 
 ## Stack

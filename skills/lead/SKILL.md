@@ -25,13 +25,13 @@ however small it is; a change fully specified and checkable inline (a reviewer's
 after the loop closed, a version pin) runs inline, on the seat's skills (below). A stack's own config file is that stack (`turbo.json`,
 `wrangler.jsonc`, `fly.toml` go to their seats), and a red or flaky suite no build is running is
 `test-writer`'s, however small the fix looks. A question with no code to write routes too when a
-seat owns the answer: where a seam goes is `architecture-reviewer`'s, even answered in prose.
+seat owns the answer: where a seam goes is settled in the brief or grill before build — load `codebase-design` on the main thread when the task asks, not a standing `architecture-reviewer` dispatch.
 Implement inline for the genuinely stack-agnostic: a typo, a rename, a string the user dictates, a
 comment, docs. Rewording in-product UI copy or flows is not an engineering inline fix — it belongs in the **design spec** from the designer; tell the PM. When in doubt, route.
 
 Inline work runs on the seat's sources: before the edit, load every skill the definition of the seat
 that would have taken the job names (`agents/<seat>.md` lists them), so inline work runs on the
-sources the seat would have. Inline work spawns no reviewer, so you are both halves of the gate.
+sources the seat would have. Inline work spawns no review seat; you run Block I on the diff before Step 5.
 
 ## Official sources first
 No seat answers framework, library or API specifics from training data; each owns its own source
@@ -239,8 +239,8 @@ Ambient binds you too on the edits you make inline (a rename, a copy fix, a conf
 - **The screen exemption is seam tests, not pixels.** Layout and look are **PM acceptance** on the preview against the approved spec; the builder still tests route → data → action behavior. Name the covering tests in the brief and list the screens for the PM in Step 5.
 - **Where layout and look aren't the contract, there is no exemption** — end-to-end seam code (route → data layer → render → action → write), and anything security- or money-shaped whatever it renders. A skip that isn't one of Block D's cases is drift, and **bug fixes have no exemption at all** (Step 4.5).
 
-## Step 4 — in-build review & evidence
-**No gate runs on an unverified return, so that check opens the file: `${CLAUDE_PLUGIN_ROOT}/skills/lead/references/gates.md`** — the `Return pass:` line and how to get one that's absent, then the source-reading review batch (`code-reviewer`, `architecture-reviewer` when earned), test evidence, scaling to live-versus-latent, the report path that keeps an audit record out of your context, and the fix loop. Builder verification in this step is whatever a user could **not** confirm by using the product alone (tests, lint, typecheck, edge cases, data/backend, in-process checks) — not rendered screens, live a11y, journeys, or manual product walk (those are Step 5). These gates are **engineering checks before handoff** — they are not the PM accepting the work.
+## Step 4 — in-build verify & evidence
+**No gate runs on an unverified return, so that check opens the file: `${CLAUDE_PLUGIN_ROOT}/skills/lead/references/gates.md`** — the `Return pass:` line and how to get one that's absent, builder verification (tests, lint, typecheck, edge cases, data/backend, in-process checks), the lead's Block I comment pass on inline work, and sending builders back when evidence fails. **No `code-reviewer`, `architecture-reviewer`, or other review seats in Step 4** — only when the task names them (`references/routing.md`). Product-visible checks are Step 5. These gates are **engineering checks before handoff** — they are not the PM accepting the work.
 
 **In the kru repo itself, run checks before you commit:** `bash scripts/verify.sh` passes before any commit (`TESTING.md` → *Verify before shipping*). A green verify is evidence for Step 5, not acceptance.
 

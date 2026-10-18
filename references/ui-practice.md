@@ -29,7 +29,7 @@ The team's UI doctrine, read by the three UI component builders, `design-system`
 
 1. **PM brings an approved design spec** — mockups + build spec from the designer (`design-spec.md`). Without it, engineering stops and asks the PM to get design first.
 2. **Builder Phase 0** — transcribe token values from the build spec into `design-system.ts`, emit the token file, ship the **conformance gate** in the same slice (see *The conformance gate*). Do **not** invoke `skills/design-system/SKILL.md` (scope in the invoking task: create) to invent values — either the spec supplies the tokens or the builder implements the mapping the spec names. First components; conventions file turns to header era when applicable.
-3. **Feature slices** — builders implement screens to the spec; Step 4 runs `visual-reviewer` against the same mockups.
+3. **Feature slices** — builders implement screens to the spec; **PM acceptance** (Step 5) compares the preview to the same mockups (or a task-named `visual-reviewer` pass).
 
 Greenfield team defaults (`pnpm`, React when unstated) apply when scaffolding; brownfield matches the repo.
 
@@ -37,7 +37,7 @@ Greenfield team defaults (`pnpm`, React when unstated) apply when scaffolding; b
 
 1. **PM attaches the design spec** for the slice (or points at an unchanged spec already on the brief).
 2. **Build** — component + token edits in the repo, to the closed set (`references/ui-handoff.md`).
-3. **Verify** — repo gate every commit; `visual-reviewer` + `accessibility-reviewer` (+ `ux-auditor` on multi-screen flows) at Step 4.
+3. **Verify** — repo gate every commit; lead Step 4 is builder tests and evidence. **PM acceptance** on the preview covers `visual-reviewer` + `accessibility-reviewer` (+ `ux-auditor` on multi-screen flows) unless the task names those passes earlier.
 
 A **named gap** — the spec lacks a value the slice needs — goes to the **PM** with the token name; no seat invents it.
 
@@ -69,7 +69,7 @@ The **names** sweep is the one nothing else catches. A class name borrowed from 
 
 A value the system cannot express is a **named gap** — reported to the **PM**, with the token name it would need. One line, not a round trip.
 
-A gate runs in no context window, at every commit, and can't be skipped because the review batch was busy.
+A gate runs in no context window, at every commit, and can't be skipped because a review pass was deferred.
 
 Handoff detail: `references/ui-handoff.md` → *Conformance is prevented, not detected*.
 
@@ -88,7 +88,7 @@ What stays banned is a **review seat computing a ratio to overturn the spec**: `
 What runs, and when:
 
 - **Every commit, mechanical:** the gate above — whatever the build enforces structurally, plus the sweeps in the suite.
-- **At Step 4, in the parallel batch:** `visual-reviewer` — **spec match at 1440 and 375** plus states nobody opens and defect root cause; `accessibility-reviewer`; `ux-auditor` on a named flow.
+- **At PM acceptance (Step 5), on the preview:** `visual-reviewer` when named — **spec match at 1440 and 375** plus states nobody opens and defect root cause; `accessibility-reviewer`; `ux-auditor` on a named flow.
 - **Outside kru:** the designer bot may compare the finished UI to her mockups after ship.
 
 ## Team defaults (greenfield only)
