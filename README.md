@@ -111,7 +111,7 @@ prints where yours is when it isn't here.
   Beside `~/.claude`, never inside it — that directory is protected, and a store under it makes
   every routine write of the team's a permission prompt no grant can silence. `skills/setup/SKILL.md` grants
   it once, user-wide.
-- `~/.kru/inbox.md`, `patterns/`: preferences you bank with `skills/remember/SKILL.md/SKILL.md`.
+- `~/.kru/inbox.md`, `patterns/`: preferences you bank with `skills/remember/SKILL.md`.
 - `~/.kru/refusals.jsonl`: dispatches the handoff gate refused, capped at 500 lines;
   `skills/roster/SKILL.md/SKILL.md` (scope in the invoking task: learn) reads it for misfires and drains it.
 - `~/.kru/audit/`, `lead-gate/`: per-session bookkeeping for the hooks above; audit
@@ -122,7 +122,7 @@ Four env vars move it: **`KRU_HOME`** relocates everything (default `~/.kru`),
 **`KRU_PROJECT`** names the project's store folder in place of the repo's folder name (set it in
 the repo's `.claude/settings.json` `env` so a laptop clone and a cloud clone agree),
 **`KRU_PROJECT_STORE`** pins one project's plan store, and **`KRU_STORE_URL`** points the
-preference half at a published artifact's database instead of files, so `skills/remember/SKILL.md/SKILL.md` reaches
+preference half at a published artifact's database instead of files, so `skills/remember/SKILL.md` reaches
 your other machines and your cloud sessions. `references/store.md` is the whole map.
 
 ## Skills (for PM bots and cloud agents)
@@ -176,7 +176,7 @@ marketplace install already outranks a synced one, so that line only starts matt
 the local install and let the claude.ai copy sync in. To silence the installed copy here too, add
 `"kru@kru": false` beside it, at the cost of not dogfooding the hooks while you work on them.
 
-If you just want the team to learn your preferences, `skills/remember/SKILL.md/SKILL.md` is the channel that
+If you just want the team to learn your preferences, `skills/remember/SKILL.md` is the channel that
 works on an installed copy: it writes to your home directory, and the edits it feeds survive updates.
 
 How the team is structured and grown: `ROSTER.md`. What each stack's official source is: `SOURCES.md`.

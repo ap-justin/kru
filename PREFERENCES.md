@@ -11,7 +11,7 @@ This file documents the loop that fixes that: **capture → sweep → evolve**. 
 
 ```
 any project (cwd = someone's repo)         the cross-project root
-  `skills/remember/SKILL.md/SKILL.md`  ───────────────▶  inbox.md   ◀─── agents append learnings
+  `skills/remember/SKILL.md`  ───────────────▶  inbox.md   ◀─── agents append learnings
                                               │            (end-of-run, via lead handoff)
                                               │        ◀─── dispatch-auditor files process
                                               │            deviations (hook-fired at turn end)
@@ -34,7 +34,7 @@ any project (cwd = someone's repo)         the cross-project root
 
 Three arrows, one circuit. **Cheap lossless capture**, then a **curated sweep** that edits the team and leaves the commit to the user (mirroring the `TODOS.md` → `skills/brief/SKILL.md` promotion the team already runs), then the **return leg**: a repo picks the evolved practice back up by re-running `skills/setup/SKILL.md`, which re-derives its answers against the newer plugin.
 
-**The plugin holds the practice; a repo's own file holds the engagement.** That split is what the sweep routes on — a preference that would still be true in the next repo goes upstream into a seat or a skill, one true only where it surfaced goes into that repo's sheet (`skills/roster/SKILL.md/learn.md` → step 2). The plugin is the same in every engagement, which is exactly why nothing client-specific may land in it.
+**The plugin holds the practice; a repo's own file holds the engagement.** That split is what the sweep routes on — a preference that would still be true in the next repo goes upstream into a seat or a skill, one true only where it surfaced goes into that repo's sheet (`skills/roster/learn.md` → step 2). The plugin is the same in every engagement, which is exactly why nothing client-specific may land in it.
 
 ## Tier 1 — capture (the inbox)
 
@@ -42,9 +42,9 @@ Three arrows, one circuit. **Cheap lossless capture**, then a **curated sweep** 
 
 It has **three writers**:
 
-1. **The user, explicitly** — `skills/remember/SKILL.md/SKILL.md` (scope in the invoking task: <what they liked>). Never inferred from approval; the team does not guess. A liked *pattern* with concrete code is saved as an artifact under `~/.kru/patterns/<slug>.md` and indexed by an inbox line.
+1. **The user, explicitly** — `skills/remember/SKILL.md` (scope in the invoking task: <what they liked>). Never inferred from approval; the team does not guess. A liked *pattern* with concrete code is saved as an artifact under `~/.kru/patterns/<slug>.md` and indexed by an inbox line.
 2. **Agents, as they work** — a builder/reviewer that discovers a durable preference (the user rejected X twice and chose Y; this repo's approved convention is Z) appends one line at end-of-run. This is journaling a *learning*, not reading approval — the same instinct as `test-writer` capturing a repo's testing conventions. The **lead** hands each dispatched seat the inbox path + this format so the learning lands (Step 3).
-3. **`dispatch-auditor`, on the team's own process** — the plugin's hooks log every team-seat dispatch to a session ledger (`audit/<session>`), and a Stop-hook nudge fires the seat to audit it against the `lead` Step 3 contract, filing `[workflow]` lines for durable deviations (routing misses, incomplete handoffs, restated ambient blocks). This is the loop's autonomous half — the team observes how it was run and proposes its own corrections — and it is autonomy at the **capture** tier only: still never inferred from approval (the ledger holds the lead's dispatch text, not the user's reactions), and still gated at the sweep like every other line. The handoff gate's refusals land in that ledger too, and in `~/.kru/refusals.jsonl` across sessions, which the sweep reads beside the inbox for gate misfires (`skills/roster/SKILL.md/learn.md`).
+3. **`dispatch-auditor`, on the team's own process** — the plugin's hooks log every team-seat dispatch to a session ledger (`audit/<session>`), and a Stop-hook nudge fires the seat to audit it against the `lead` Step 3 contract, filing `[workflow]` lines for durable deviations (routing misses, incomplete handoffs, restated ambient blocks). This is the loop's autonomous half — the team observes how it was run and proposes its own corrections — and it is autonomy at the **capture** tier only: still never inferred from approval (the ledger holds the lead's dispatch text, not the user's reactions), and still gated at the sweep like every other line. The handoff gate's refusals land in that ledger too, and in `~/.kru/refusals.jsonl` across sessions, which the sweep reads beside the inbox for gate misfires (`skills/roster/learn.md`).
 
 Entry format — one line, untriaged, lossless (mirrors the `TODOS.md` line):
 
@@ -57,12 +57,12 @@ Entry format — one line, untriaged, lossless (mirrors the `TODOS.md` line):
 
 - **lane tag** `[design|code|workflow]` — routes the sweep to the right destination.
 - **source** `user`, `agent:<seat-slug>`, or `setup` — who captured it (`setup` files a recipe a repo holds that a plugin skill lacks, found while deriving its sheet).
-- **project** the repo slug it surfaced in, then the date captured. The slug is the **promotion bar**, not just context: the sweep collapses a group to its distinct slugs, and one slug reads as that client where two or more read as the team (`skills/roster/SKILL.md/learn.md` → step 1).
+- **project** the repo slug it surfaced in, then the date captured. The slug is the **promotion bar**, not just context: the sweep collapses a group to its distinct slugs, and one slug reads as that client where two or more read as the team (`skills/roster/learn.md` → step 1).
 - Optional `→ patterns/<slug>.md` when a concrete artifact backs it.
 
 Capture never derails the task — park the line, keep working (`TODOS.md` discipline).
 
-## Tier 2 — sweep (`skills/roster/SKILL.md/learn.md` (PM or lead loads))
+## Tier 2 — sweep (`skills/roster/learn.md` (PM or lead loads))
 
 The **curated** half — it edits the team, so it lives under roster-ops (`skills/roster/SKILL.md/SKILL.md` (scope in the invoking task: learn)), reusing the same version/wiring machinery as `hire`/`author`. Run it **from the plugin source repo** periodically (not from a product repo — it commits the plugin). It:
 
@@ -71,7 +71,7 @@ The **curated** half — it edits the team, so it lives under roster-ops (`skill
    - **seat-specific** (a default only one engineering seat, e.g. the Svelte builder, should carry) → a **targeted prompt edit** to that `agents/<seat>.md`.
    - **cross-seat** (several seats should carry it) → the same targeted edit in each affected seat, or the owning skill (`lead` SKILL.md for orchestration-wide rules).
    - **reusable concrete pattern** → keep the `patterns/<slug>.md` artifact, reference it from the seat/skill that uses it.
-3. **Decides each line** — land, route to a repo's sheet, or drop with a reason — by the bars in `skills/roster/SKILL.md/learn.md` → step 3, and writes the landed edits. Nothing is committed, so the uncommitted diff is the user's review.
+3. **Decides each line** — land, route to a repo's sheet, or drop with a reason — by the bars in `skills/roster/learn.md` → step 3, and writes the landed edits. Nothing is committed, so the uncommitted diff is the user's review.
 4. **Drains** every line it gave a verdict (leaves deferred lines for next time), archiving artifacts it kept.
 5. Version-bumps (minor for new prefs/capability, patch for a tiny tweak), runs `audit`, hands off. Commit/tag left to the user (git rule).
 

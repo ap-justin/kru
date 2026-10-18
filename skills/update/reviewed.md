@@ -88,7 +88,7 @@ Previous: 2.1.288 — 2026-10-03, read back to 2.1.281. 2.1.280 — 2026-09-23, 
 
 - **`turborepo` → bundled-docs pointer** (row above).
 - **cloudflare `basin` · `k2`** (32fcd7b): after the re-sync the `cloudflare` table routes Basin and K2 Streams to skills this team doesn't carry.
-- **mattpocock v1.3 new siblings**: `implement-spec`, `pr`, `retro`; `in-progress/chief-of-staff` on main, untagged. `implement-spec` overlaps the lead's frontier dispatch, `retro` overlaps `skills/roster/SKILL.md/learn.md` (PM or lead loads); `pr` has no counterpart here.
+- **mattpocock v1.3 new siblings**: `implement-spec`, `pr`, `retro`; `in-progress/chief-of-staff` on main, untagged. `implement-spec` overlaps the lead's frontier dispatch, `retro` overlaps `skills/roster/learn.md` (PM or lead loads); `pr` has no counterpart here.
 - **emilkowalski new siblings**: `animate`, `pick-ui-library`, `prototype`, `ask-sonner`, `expo`, `write-swift`, `mobile-native`. `animate` and `pick-ui-library` sit nearest the UI builders' motion and primitive lanes.
 
 ### For PM loads `skills/roster/audit.md`

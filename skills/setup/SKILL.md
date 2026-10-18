@@ -449,7 +449,7 @@ once, is `skills/propagate/SKILL.md`'s; a change that needs the file re-derived 
 
 - **The repo moved** — a dependency swap, a new gate, a design system where there was none. The
   citations are the signal: a derived line that no longer matches disk is a line to re-derive.
-- **The plugin moved** — `skills/roster/SKILL.md/learn.md` (PM or lead loads) promoted a preference, a seat was hired or renamed. The
+- **The plugin moved** — `skills/roster/learn.md` (PM or lead loads) promoted a preference, a seat was hired or renamed. The
   stamp is the signal: a stamp below the installed `VERSION` is behind.
 
 **The citations are what make a re-run an edit rather than a second copy.** Each derived line carries
@@ -459,7 +459,7 @@ else's words is theirs — cite it and move on.
 
 ## The line between the plugin and the repo
 The repo's file holds the **engagement**; the plugin holds the **practice**. A rule that would still
-be true in the next repo belongs upstream — `skills/remember/SKILL.md/SKILL.md` files it and `skills/roster/SKILL.md/learn.md` (PM or lead loads)
+be true in the next repo belongs upstream — `skills/remember/SKILL.md` files it and `skills/roster/learn.md` (PM or lead loads)
 gates it (`${CLAUDE_PLUGIN_ROOT}/PREFERENCES.md`). A rule true only here stays in the repo.
 
 The plan store stays outside the working repo, its pointer included

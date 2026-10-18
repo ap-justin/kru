@@ -381,7 +381,7 @@ Required on the 29 seats that **write code or config into the working repo** —
 **Exempt by decision** — record the reason, don't just omit:
 - reviewers and auditors — `memory` grants `Write`/`Edit`, and *reports; does not edit* is their contract. A recurring finding still reaches the team as an inbox line.
 - the text-producing seats — their input is a brief, not a tree they re-learn each run.
-- **`user` and `project` scopes, on every seat.** `user` is cross-project memory the seat writes and reads back with no gate, which is exactly what the inbox → `skills/roster/SKILL.md/learn.md` (PM or lead loads) sweep exists to gate. `project` is committed into someone else's repo. `local` is the one scope that stays per repo and off the repo's history — the single exception to `TRACKER.md`'s *no management files in it, ever*, taken because the harness offers no out-of-tree path.
+- **`user` and `project` scopes, on every seat.** `user` is cross-project memory the seat writes and reads back with no gate, which is exactly what the inbox → `skills/roster/learn.md` (PM or lead loads) sweep exists to gate. `project` is committed into someone else's repo. `local` is the one scope that stays per repo and off the repo's history — the single exception to `TRACKER.md`'s *no management files in it, ever*, taken because the harness offers no out-of-tree path.
 
 It sits **immediately before `## The return pass`** (before `## Context hygiene (stay lean)` on `test-writer`, which carries no return pass) — the pass is where a run learns what it would have wanted to know at the start.
 
