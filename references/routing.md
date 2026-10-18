@@ -2,7 +2,7 @@
 
 The derivation tables, with three callers. **`skills/setup/SKILL.md`** runs them once over a repo and
 writes the answers into that repo's block — that block is then the repo's routing, in prose, and
-re-running the tables is what a block exists to retire. **`skills/roster/SKILL.md/SKILL.md`** writes this file when
+re-running the tables is what a block exists to retire. **`skills/roster/SKILL.md`** writes this file when
 a seat is hired or retired, or a conditional skill authored. **`lead`** runs them where no block has
 resolved them, or where a slice reaches a stack the block never covered. A repo whose block already
 names the seat and its skills has this question answered — take the answer.

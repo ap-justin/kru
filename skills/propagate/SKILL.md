@@ -1,6 +1,6 @@
 ---
 name: propagate
-description: Carry a plugin change out to every repo it reaches — the files `skills/setup/SKILL.md` wrote, patched per repo and pushed after one confirm.
+description: Carry a plugin change out to every repo it reaches — the files `skills/setup/SKILL.md` wrote, patched per repo and pushed only when the task explicitly approves the push.
 disable-model-invocation: true
 ---
 

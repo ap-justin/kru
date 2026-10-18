@@ -19,7 +19,7 @@ The task names one of `patch`, `minor`, `major` or an explicit `X.Y.Z`. With non
 - if `VERSION` is already above the last tag, use it
 - otherwise bump `minor`, the cadence the tags keep
 
-**Every version stamp agrees on the new version.** The stamps are the ones `skills/roster/SKILL.md/audit.md` → assertion 1 lists. A stamp that was already behind the last tag gets brought up to the new version too.
+**Every version stamp agrees on the new version.** The stamps are the ones `skills/roster/audit.md` → assertion 1 lists. A stamp that was already behind the last tag gets brought up to the new version too.
 
 ## 3. Commit
 

@@ -77,12 +77,13 @@ it and say what's running. Asking for approval of your own recommendation on a t
 same wait, disguised as courtesy.
 
 **A push is a one-way door, and most of the user's repos are public.** Read the repo's visibility
-(`gh repo view --json visibility`) before any push. A security fix stays local
-until the user OKs it, then ships through a GitHub security advisory's temporary private fork,
-published on merge. Its PR body summarizes the fix without exploit detail; the defect write-up stays
-in `issues/`, off the PR. A cloud session pushes branches but gets a 403 on a tag push, so a release
-runs as a `workflow_dispatch` the session starts through the GitHub API, the workflow creating the tag
-on its job token — the release is the session's to run end to end.
+(`gh repo view --json visibility`) before any push. A **security fix** stays local and **returns to the
+caller** — it ships through a GitHub security advisory's temporary private fork, published on merge; the
+lead does not push or run `.claude/skills/release/SKILL.md` for it. Its PR body summarizes the fix without exploit
+detail; the defect write-up stays in `issues/`, off the PR. **A plugin release** runs only when the task
+explicitly approves tag, push, and GitHub release (`.claude/skills/release/SKILL.md`); naming a version or loading
+`release` is not approval. Cloud sessions may get a 403 on tag push; when the task approves a release,
+start `workflow_dispatch` through the GitHub API so the workflow creates the tag on its job token.
 
 1. If it can be said without jargon at no loss of precision, say it that way. Lead with the effect —
    what's different for someone using the thing — not the mechanism.
@@ -153,7 +154,7 @@ A repo that has run **`skills/setup/SKILL.md`** carries its **answers** in `.cla
 
 **The sheet's gate line binds you** — the repo may have grown a stack the sheet predates, and only the user knows.
 
-**A stamp below the installed `VERSION`, or a cited line that no longer matches disk, means the sheet is behind.** Say so in one line and load `skills/setup/SKILL.md` when the task is to re-derive; the current sheet still carries the work meanwhile.
+**A stamp below the installed `VERSION`, or a cited line that no longer matches disk, means the sheet is behind.** Report that in one line to the caller and keep using the current sheet; load `skills/setup/SKILL.md` only when the task says to derive or re-derive — never auto re-derive from a stale stamp alone.
 
 ## Step 1 — the repo answers, or there is no repo
 **A repo owns what it is.** No stamp (Step 0) → once this session, say the sheet is missing and that `skills/setup/SKILL.md` derives it when the task asks — a SessionStart hook says the same. It maps the repo and writes the answers — the `Explore` pass over stack, framework versions, architecture, conventions and test setup. Until setup runs, you carry on and settle what the sheet would have answered with your own `Explore` pass. Either way you reach Step 3 with the stack settled and the conventions named, and you match those over your own defaults — minimal diff, in-style.
@@ -174,7 +175,7 @@ You know the `skills/grilling/SKILL.md` skill and when it earns its cost. For no
 
 **When you do grill, the round is the procedure: `${CLAUDE_PLUGIN_ROOT}/skills/brief/SKILL.md` → *The round*.** The frontier a round at a time, your recommended answer on every question, facts and two-way doors kept off the round entirely. It reads the same there; only the record differs — here it stays **in-session**, feeding Plan and the builders and dying with the session.
 
-**Answers start work; a grill doesn't end in a sign-off.** The grilling skill's closing "confirm shared understanding" doesn't run here: once the answers settle a branch, the work that branch allows is dispatched, and the round carries on over the rest. Only the product calls still open wait on the user.
+**Answers start work; a grill doesn't end in a sign-off.** The grilling skill's closing "confirm shared understanding" doesn't run here: once the answers settle a branch, the work that branch allows is dispatched, and the round carries on over the rest. Only the product calls still open return to the caller.
 
 **Persisting it is `skills/brief/SKILL.md`'s.** Only when the work will span sessions — or `planner` will slice it — ask in outcome terms ("keep this plan past today?"); when the task approves persist, load brief and write. It never blocks building: what the plan can't change is already running.
 
@@ -182,7 +183,7 @@ You know the `skills/grilling/SKILL.md` skill and when it earns its cost. For no
 Most work goes straight from grilling/`Plan` to a builder. But when the change **won't fit one context window** — spans many sessions or parallel agents, or you want a durable plan that survives resets — spawn **`planner`** to write the plan of record into the plan store (`plan/<effort>/` under the project root, via `TRACKER.md`):
 - **Have a discussed feature, no written spec** → `planner` (to-spec mode) writes the PRD (`spec.md`).
 - **Have a plan/spec, need it sliced** → `planner` (to-tickets mode) writes tracer-bullet slices as one file per ticket under `tickets/` (`id`/`status`/`blocked_by` frontmatter, edges by id); you then dispatch the **frontier** (`status != done` tickets whose blockers are all done) to builders one at a time — execution is sequential (one shared store per project, so parallel worktree dispatch would race its state).
-- **Too big/foggy to slice up front** → `planner` (wayfinder mode) charts a map + initial **decision tickets** (questions whose resolution is a decision, not build slices); work it one ticket per session, except the research tickets, which the charting session fires off to built-in `/research` subagents subagents in parallel.
+- **Too big/foggy to slice up front** → `planner` (wayfinder mode) charts a map + initial **decision tickets** (questions whose resolution is a decision, not build slices); work it one ticket per session, except the research tickets, which the charting session fires off to built-in `/research` subagents in parallel.
 
 `planner` is **AFK** — it synthesizes and publishes, but the human loops stay yours: `planner` reads a written `brief.md`, never a spec-less prompt (`hooks/check-handoff.sh` refuses a `planner` brief that names no `brief.md`), so get one by Step 2.5's persist line, dispatching meanwhile whatever doesn't hang on the plan. Slicing — ticket size, blocking edges, merge/split — is the team's: `planner` publishes it, and the user hears of a ticket only when it changes what ships. Run its **open questions** through the bar and take back the product calls and one-way doors, answering the rest yourself before building. It returns drafts (not published) when a decision is unresolved. Skip this step entirely for anything that fits one session — it's overhead you don't need for a normal feature/fix.
 
@@ -246,4 +247,4 @@ Ambient binds you too on the edits you make inline (a rename, a copy fix, a conf
 **What it writes: `${CLAUDE_PLUGIN_ROOT}/skills/lead/references/reconcile.md`** — ticket status and the frontier, the brief's boxes, and the four captures and closeouts across `TODOS.md` and `issues/`.
 
 ## Handling gaps — a slice no seat covers
-A slice reaching a stack no seat covers is a question for the user — hiring is their call on their team — and it parks only that slice: every other slice dispatches meanwhile. The nearby seat is always available, which is why the question goes up first: a React Native screen is `.tsx` and still outside `react-ui-builder`'s lane. Ask it in outcomes — a specialist hired for the phone app, or the team builds it without one this time — and on the answer: mint it (`skills/roster/SKILL.md/SKILL.md` (scope in the invoking task: hire <name>) for a seat, `skills/roster/SKILL.md/SKILL.md` (scope in the invoking task: author <name>) for a skill; roster does the wiring, then route to it), or the general path (Explore conventions + implement, backed by Context7) for this slice, on their say-so.
+A slice reaching a stack no seat covers is a question for the user — hiring is their call on their team — **return that slice to the caller** and dispatch every other slice meanwhile. The nearby seat is always available, which is why the question goes up first: a React Native screen is `.tsx` and still outside `react-ui-builder`'s lane. Ask it in outcomes — a specialist hired for the phone app, or the team builds it without one this time — and on the answer: mint it (`skills/roster/SKILL.md` (scope in the invoking task: hire <name>) for a seat, `skills/roster/SKILL.md` (scope in the invoking task: author <name>) for a skill; roster does the wiring, then route to it), or the general path (Explore conventions + implement, backed by Context7) for this slice, on their say-so.

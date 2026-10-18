@@ -4,7 +4,7 @@ Authoring guidance, not runtime context — `SKILL.md` does not point here, so t
 
 ## The entry bar
 
-`skills/roster/SKILL.md/author.md` is blunt: a skill that restates its sources is **worse than none**, because it drifts and outranks the source while stale. Every principle in here is already in the model's pretraining — Nielsen's ten heuristics are not news to anyone reading this file.
+`skills/roster/author.md` is blunt: a skill that restates its sources is **worse than none**, because it drifts and outranks the source while stale. Every principle in here is already in the model's pretraining — Nielsen's ten heuristics are not news to anyone reading this file.
 
 So the canon is **not what this corpus contributes**. The `Code signal` is. Nobody has written down what Norman's signifiers look like in a `.tsx` file, and that is the entire reason this skill exists.
 

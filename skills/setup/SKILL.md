@@ -1,6 +1,6 @@
 ---
 name: setup
-description: Derive this repo's kru sheet when `.claude/CLAUDE.md` has no `<!-- kru v` stamp, the stamp is behind `VERSION`, or the task is to re-derive or run the `prose` pass alone.
+description: Derive this repo's kru sheet when `.claude/CLAUDE.md` has no `<!-- kru v` stamp, or when the task says to derive, re-derive, or run the `prose` pass alone.
 ---
 
 The plugin is the **fractional CTO**: one practice, carried across every engagement. What it cannot
@@ -237,8 +237,8 @@ the user runs locally. The environment cache keeps them at the version the scrip
 the script changes, its network hosts change, or about seven days pass
 (`code.claude.com/docs/en/cloud-environments` → *Environment caching*) — so the `# kru` line carries
 the installed `VERSION`, and `skills/propagate/SKILL.md` moving it is what rebuilds the cache on a new release. The
-built-in *You should know* mod is enabled the same way: the laptop's the Claude Code plugin enable command` never reaches
-the vm, and where telemetry is off the line is a no-op. The vm has no official marketplace,
+built-in *You should know* mod is enabled the same way: the laptop's `claude plugin enable` command never reaches
+the VM, and where telemetry is off the line is a no-op. The vm has no official marketplace,
 so the base adds it ahead of any `@claude-plugins-official` install. Below them goes what the vm lacks before
 this repo's first run, read off step 1's findings and the repo's own setup doc (`CONTRIBUTING*`,
 `README*`, `DEPLOY*`), each pinned to the version the repo pins: node's `engines` major fetched
@@ -450,7 +450,7 @@ once, is `skills/propagate/SKILL.md`'s; a change that needs the file re-derived 
 - **The repo moved** — a dependency swap, a new gate, a design system where there was none. The
   citations are the signal: a derived line that no longer matches disk is a line to re-derive.
 - **The plugin moved** — `skills/roster/learn.md` (PM or lead loads) promoted a preference, a seat was hired or renamed. The
-  stamp is the signal: a stamp below the installed `VERSION` is behind.
+  stamp is the signal: a stamp below the installed `VERSION` is behind — report that to the caller; re-derive only when the task says to.
 
 **The citations are what make a re-run an edit rather than a second copy.** Each derived line carries
 what it came from, so a re-run reads the file, re-derives, and edits the lines it can account for.

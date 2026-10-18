@@ -17,7 +17,7 @@ any project (cwd = someone's repo)         the cross-project root
                                               │            deviations (hook-fired at turn end)
                                               │        ◀─── /setup files what a repo knows
                                               │            that a plugin skill lacks
-                                     `skills/roster/SKILL.md/SKILL.md` learn
+                                     `skills/roster/SKILL.md` learn
                                               │  (run from the plugin source repo; decides, user reviews the diff)
                                               ▼
                               the plugin, versioned + shared
@@ -64,7 +64,7 @@ Capture never derails the task — park the line, keep working (`TODOS.md` disci
 
 ## Tier 2 — sweep (`skills/roster/learn.md` (PM or lead loads))
 
-The **curated** half — it edits the team, so it lives under roster-ops (`skills/roster/SKILL.md/SKILL.md` (scope in the invoking task: learn)), reusing the same version/wiring machinery as `hire`/`author`. Run it **from the plugin source repo** periodically (not from a product repo — it commits the plugin). It:
+The **curated** half — it edits the team, so it lives under roster-ops (`skills/roster/SKILL.md` (scope in the invoking task: learn)), reusing the same version/wiring machinery as `hire`/`author`. Run it **from the plugin source repo** periodically (not from a product repo — it commits the plugin). It:
 
 1. Reads the `inbox` (+ `patterns/`); groups by lane, dedupes, drops noise.
 2. For each keeper, picks a **destination**:

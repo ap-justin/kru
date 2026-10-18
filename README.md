@@ -56,7 +56,7 @@ Two things about a cloud session worth knowing before the first run:
 
 ## Requirements
 - **Claude Code 2.1.293 or newer.** An older CLI runs the seats but silently drops the newer settings they carry.
-- **Recommended: the built-in *You should know* mod** (the Claude Code plugin enable command cc-plugin-you-should-know@builtin`, Claude Code 2.1.287+). A side agent flags what you or the lead missed while seats are still running; it needs telemetry on. `skills/setup/SKILL.md` enables it on cloud vms too.
+- **Recommended: the built-in *You should know* mod** (`claude plugin enable cc-plugin-you-should-know@builtin`, Claude Code 2.1.287+). A side agent flags what you or the lead missed while seats are still running; it needs telemetry on. `skills/setup/SKILL.md` enables it on cloud VMs too.
 - **`jq`**, for the hooks. Without it every hook fails open and the team still runs, ungated.
 - **The task tools switched on.** Newer models ship with them off, and the lead tracks its work in them.
   A plugin can't turn them on for you, so add this to `~/.claude/settings.json` and restart:
@@ -113,7 +113,7 @@ prints where yours is when it isn't here.
   it once, user-wide.
 - `~/.kru/inbox.md`, `patterns/`: preferences you bank with `skills/remember/SKILL.md`.
 - `~/.kru/refusals.jsonl`: dispatches the handoff gate refused, capped at 500 lines;
-  `skills/roster/SKILL.md/SKILL.md` (scope in the invoking task: learn) reads it for misfires and drains it.
+  `skills/roster/SKILL.md` (scope in the invoking task: learn) reads it for misfires and drains it.
 - `~/.kru/audit/`, `lead-gate/`: per-session bookkeeping for the hooks above; audit
   ledgers self-delete after 7 days.
 - `${TMPDIR}/kru-review/`: review reports, so an audit trail stays out of the conversation.
@@ -165,7 +165,7 @@ Design (flows, mockups, brand, assets) is done by a **separate designer** outsid
 A stack with no seat is a question the lead brings to you before it guesses.
 
 ## Forking the team
-`skills/roster/SKILL.md/SKILL.md` (hire a seat, author a skill, sweep banked preferences into the seats) and
+`skills/roster/SKILL.md` (hire a seat, author a skill, sweep banked preferences into the seats) and
 `skills/update/SKILL.md` (sweep what moved upstream) **edit the plugin's own files**. Run them in a clone
 of this repo, not against an installed copy. The install lives in a cache directory that the next
 plugin update overwrites.

@@ -27,6 +27,8 @@ assistant_read() { jq -nc --arg p "$1" '{type:"assistant", message:{content:[{ty
 { user "build it"; assistant_skill "lead"; } > "$tx/lead-bare.jsonl"
 { user "<command-name>/kru:lead</command-name>"; } > "$tx/lead-cmd.jsonl"
 { user "build it, see CLAUDE.md: load kru:lead before building"; assistant_text 'the roster says "kru:lead" first'; } > "$tx/prose.jsonl"
+{ user "build it"; assistant_text "I will Read $root/skills/lead/SKILL.md next"; tool_result; } > "$tx/prose-read-mention.jsonl"
+{ user "build it"; tool_result "skills/lead/SKILL.md"; } > "$tx/tool-result-path.jsonl"
 { user "hi"; user "<command-name>/kru:roster</command-name>"; assistant_text "running"; tool_result; } > "$tx/cmd-latest.jsonl"
 { user "<command-name>/kru:roster</command-name>"; assistant_text "done"; user "now build the form"; } > "$tx/cmd-then-turn.jsonl"
 
@@ -71,6 +73,8 @@ check allow Edit "" "$tx/lead-bare.jsonl"
 check allow Edit "" "$tx/lead-cmd.jsonl"
 check allow Edit "" "$tx/lead-read.jsonl"
 check refuse Edit "" "$tx/prose.jsonl"
+check refuse Edit "" "$tx/prose-read-mention.jsonl"
+check refuse Edit "" "$tx/tool-result-path.jsonl"
 
 # fires once per session: the block writes the mark, the retry passes
 check refuse Edit "" "$p" once

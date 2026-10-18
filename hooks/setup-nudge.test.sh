@@ -32,7 +32,9 @@ check() {
   code=$?
   [ "$code" -eq 0 ] || ok=false
   if [ "$expect" = nudge ]; then
-    printf '%s' "$out" | jq -e '.hookSpecificOutput.additionalContext | test("skills/setup/SKILL.md")' >/dev/null 2>&1 || ok=false
+    ctx=$(printf '%s' "$out" | jq -r '.hookSpecificOutput.additionalContext // empty' 2>/dev/null)
+    printf '%s' "$ctx" | grep -qF '${CLAUDE_PLUGIN_ROOT}/skills/setup/SKILL.md' || ok=false
+    printf '%s' "$ctx" | grep -qF "$root/skills/setup/SKILL.md" || ok=false
   else
     [ -z "$out" ] || ok=false
   fi

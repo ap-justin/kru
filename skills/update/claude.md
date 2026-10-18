@@ -27,7 +27,7 @@ Claude Code ships most weekdays, and a release can change the ground under a plu
    | tool and permission names a seat lists | every `tools:` / `allowed-tools:` line |
    | MCP config for `chrome-devtools` and `context7` | README → *Requirements*, `SOURCES.md` |
    | model IDs, effort levels, prompt-cache knobs, pricing | `ROSTER.md` → *Model tiers* |
-   | the `claude plugin` CLI (`details` · `validate` · `eval`) | `skills/roster/SKILL.md/audit.md` |
+   | the `claude plugin` CLI (`details` · `validate` · `eval`) | `skills/roster/audit.md` |
 
    Read the kept entries; the rest of the range is done.
 5. **Confirm each candidate is reachable**, before it earns a verdict:

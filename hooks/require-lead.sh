@@ -45,9 +45,23 @@ sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
 transcript=$(printf '%s' "$input" | jq -r '.transcript_path // empty' 2>/dev/null)
 [ -r "$transcript" ] || exit 0
 
-# anchored to how a load is recorded: Skill tool, Read of the contract file, or
-# a deliberate load of `skills/lead/SKILL.md` (legacy slash or harness Skill) — never prose that merely names the skill.
-grep -qE '"skill":"(kru:)?lead"|<command-name>/?kru:lead|skills/lead/SKILL\.md' "$transcript" && exit 0
+# anchored to how a load is recorded: Skill tool, Read whose path ends in
+# skills/lead/SKILL.md, or legacy slash — never prose or a quoted path alone.
+lead_loaded=$(jq -rn --arg lead 'skills/lead/SKILL.md' '
+  def read_lead:
+    .type == "assistant" and (.message.content | type) == "array" and
+    any(.message.content[]?; .type == "tool_use" and .name == "Read" and
+      ((.input.path? // .input.file_path? // "") | test($lead + "$")));
+  [inputs] | any(
+    (.type == "assistant" and (.message.content | type) == "array" and
+      any(.message.content[]?; .type == "tool_use" and .name == "Skill" and
+        ((.input.skill? // "") | test("^(kru:)?lead$"))))
+    or read_lead
+    or (.type == "user" and (.message.content | type) == "string" and
+      (.message.content | test("<command-name>/?kru:lead</command-name>")))
+  )
+' "$transcript" 2>/dev/null)
+[ "$lead_loaded" = "true" ] && exit 0
 
 # a /kru:<skill> run is that skill's contract, not the lead's — the ones
 # that dispatch load lead themselves. exempt only while the command is still the

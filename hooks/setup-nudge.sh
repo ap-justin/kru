@@ -25,10 +25,13 @@ top=$(git -C "$cwd" rev-parse --show-toplevel 2>/dev/null) || exit 0
 [ -f "$top/.claude-plugin/plugin.json" ] && exit 0
 grep -q '<!-- kru v' "$top/.claude/CLAUDE.md" 2>/dev/null && exit 0
 
-jq -n '{
+setup_path="${plugin_root}/skills/setup/SKILL.md"
+msg="kru: this repo has no kru sheet in .claude/CLAUDE.md. Once this session, Read \${CLAUDE_PLUGIN_ROOT}/skills/setup/SKILL.md (${setup_path}) and run it when the task is to derive the sheet — otherwise carry on: brainstorming, briefs and grilling need no setup, and on a blank repo setup is where the stack gets settled."
+
+jq -n --arg ctx "$msg" '{
   hookSpecificOutput: {
     hookEventName: "SessionStart",
-    additionalContext: "kru: this repo has no kru sheet in .claude/CLAUDE.md. Once this session, Read skills/setup/SKILL.md and run it when the task is to derive the sheet — otherwise carry on: brainstorming, briefs and grilling need no setup, and on a blank repo setup is where the stack gets settled."
+    additionalContext: $ctx
   }
 }'
 exit 0

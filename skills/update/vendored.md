@@ -1,6 +1,6 @@
 # vendored — what moved upstream of the copied skills
 
-A vendored skill is a verbatim copy (`skills/roster/SKILL.md/author.md` → *Vendored*), so upstream keeps improving it without us: a corrected claim, a new section, a fixed reference — every one invisible here until someone diffs. The sha in the provenance comment is where the copy stopped; the diff against upstream's head is what counts.
+A vendored skill is a verbatim copy (`skills/roster/author.md` → *Vendored*), so upstream keeps improving it without us: a corrected claim, a new section, a fixed reference — every one invisible here until someone diffs. The sha in the provenance comment is where the copy stopped; the diff against upstream's head is what counts.
 
 ## Do
 

@@ -1,6 +1,6 @@
 # libs — the packages the first-party skills were reproduced on
 
-A first-party library skill is a set of runs on one specific version (`skills/roster/SKILL.md/author.md` → *What earns a skill*): the line beneath its frontmatter says which — *Reproduced on `pkg@x.y.z` (npm `latest`, date) with companions. Re-verify after a major|minor bump.* A release above that pin can turn a reproduced trap into a fixed one, and the skill then teaches a workaround for a bug that no longer exists, outranking the docs while it does. This sweep reads the registries and the release notes for the range, and names the claims a re-verification has to rerun.
+A first-party library skill is a set of runs on one specific version (`skills/roster/author.md` → *What earns a skill*): the line beneath its frontmatter says which — *Reproduced on `pkg@x.y.z` (npm `latest`, date) with companions. Re-verify after a major|minor bump.* A release above that pin can turn a reproduced trap into a fixed one, and the skill then teaches a workaround for a bug that no longer exists, outranking the docs while it does. This sweep reads the registries and the release notes for the range, and names the claims a re-verification has to rerun.
 
 ## Do
 
