@@ -69,9 +69,8 @@ Two things about a cloud session worth knowing before the first run:
   claude mcp add chrome-devtools --scope user -- npx chrome-devtools-mcp@latest --headless=true --screenshotFormat=webp --screenshotMaxWidth=1440
   ```
 - **Optional, for generated image/video assets:** `GOOGLE_API_KEY` (Google AI Studio) and Node.js on PATH;
-  the image deps install themselves into the plugin's data dir on first use. Without them the
-  `graphic-designer` seat reports what's missing and offers a fallback instead of shipping a
-  placeholder. The same deps give `brand-designer` the `sharp` it rasterizes icons with; no key needed.
+  the image deps install themselves into the plugin's data dir on first use. Without them the designer library's gen-asset script reports what's missing instead of shipping a
+  placeholder. The same deps power `sharp` rasters for `brand-marks`; no key needed for cutouts or sharp-only runs.
 
 ## First run: `/kru:setup`
 In the repo you want the team to work on:

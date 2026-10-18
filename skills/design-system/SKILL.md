@@ -72,5 +72,5 @@ The **designer** runs `audit` on a coverage read, ahead of the element half of `
 - **Whether a consumer resolves to the token file** — the repo's conformance gate, at every commit (`${CLAUDE_PLUGIN_ROOT}/references/ui-practice.md` → *The conformance gate*).
 - **What components exist and what they render** — `/design-gallery`, on the app's own dev server.
 - **The rendered states and widths** — `/visual-review`.
-- **Flows, IA, the screen × state inventory, the conventions file** — `ux-designer`.
+- **Flows, IA, the screen × state inventory, the conventions file** — the designer's build spec (`references/design-spec.md`).
 - **How a component behaves** — `ui-patterns`, design-system agnostic by construction.

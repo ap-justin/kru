@@ -7,9 +7,9 @@ Read when a brief touches UI. The engineering lead checks for this **before** di
 An **approved design spec** is two parts the PM received from the designer (a separate bot or human) and attached to the brief:
 
 1. **Mockups** — a link or path the build can open: Figma, PNGs, a published canvas, PDF, or equivalent. Every screen and state named in the build slice appears at **desktop (1440px)** and **mobile (375px)** unless the build spec says a screen is desktop-only.
-2. **Build spec** — prose or structured notes the builder transcribes from, not paraphrase: token values or a pointer to the token file the design settled; component/variant names; required states (empty, loading, error, disabled, focus); motion intent; copy that is part of the design; breakpoints; anything the mockup alone does not pin (spacing steps, type scale, icon set).
+2. **Build spec** — prose or structured notes the builder transcribes from, not paraphrase: **user flows and IA** (screen inventory, entry/exit, critical paths); token values or a pointer to the token file the design settled; component/variant names; required states (empty, loading, error, disabled, focus); motion intent; **in-product and on-screen copy** the design approved; breakpoints; anything the mockup alone does not pin (spacing steps, type scale, icon set); **`design/conventions.md`** in header era when the repo uses it; and **brand/imagery paths** (marks, icons, illustration, generated or cutout assets) the build must wire without hunting.
 
-Optional but useful: screen inventory, `design/conventions.md` in header era, motion dials, asset paths for marks and imagery.
+Optional but useful: motion dials, coverage-ledger gaps handed to the PM as builder slices.
 
 ## What engineering does with it
 

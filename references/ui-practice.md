@@ -1,6 +1,6 @@
 # UI — approved design upstream, system owned by the repo
 
-The team's UI doctrine, read by the three UI component builders, `ux-designer`, `design-system`, `design-gallery`, and `lead`'s from-scratch path. Read when any UI build starts: from scratch at *Bootstrap*, an existing repo at *Steady state*.
+The team's UI doctrine, read by the three UI component builders, `design-system`, `design-gallery`, and `lead`'s from-scratch path. Read when any UI build starts: from scratch at *Bootstrap*, an existing repo at *Steady state*.
 
 **Design is made outside this team.** A designer (separate bot or human) uses the plugin's design skills (`/design`, `composition`, `landing-page`, and the rest — `${CLAUDE_PLUGIN_ROOT}/references/designer-handoff.md`) and hands the **PM** approved mockups plus a build spec. Engineering never runs a mockup or canvas step; it builds only what the PM attaches (`references/design-spec.md`).
 
@@ -14,9 +14,8 @@ The team's UI doctrine, read by the three UI component builders, `ux-designer`, 
 
 | | owns |
 | --- | --- |
-| **Designer** (outside engineering) | mockups, build spec, PM approval — via design skills and `designer-handoff.md` |
+| **Designer** (outside engineering) | mockups, build spec (flows, IA, copy, brand paths, imagery), PM approval — via design skills and `designer-handoff.md` |
 | **PM** | attaches the approved design spec to the brief; product calls on gaps |
-| `ux-designer` | optional flows, IA, copy, conventions file — when engineering needs experience work without replacing the visual spec |
 | `conversion-copywriter` | marketing argument and SECTION deck — often **before** the designer draws |
 | the UI builder | token file, **conformance gate**, components — built to the spec |
 | the lead | routes, dispatches, verifies — **no** design drafting |
@@ -24,15 +23,14 @@ The team's UI doctrine, read by the three UI component builders, `ux-designer`, 
 
 ## The conventions file
 
-`design/conventions.md`, when the repo keeps one: constraints and, once a system exists, the shipped-system header. The designer reads it while drafting; engineering reads it while building. Authored by `ux-designer` when the team needs it — not a substitute for an approved visual spec.
+`design/conventions.md`, when the repo keeps one: constraints and, once a system exists, the shipped-system header. The designer authors it in the build spec when the product needs it; engineering reads it while building. Not a substitute for approved mockups.
 
 ## Bootstrap — no components exist yet
 
 1. **PM brings an approved design spec** — mockups + build spec from the designer (`design-spec.md`). Without it, engineering stops and asks the PM to get design first.
-2. **Optional `ux-designer`** — flows, IA, copy, corpus-era conventions when the product needs them before or alongside the visual spec.
-3. **Foundation shape** — `/kru:design-system create` when the repo has no token architecture yet (influences named; values come from the build spec).
-4. **Builder Phase 0** — transcribe the spec into `design-system.ts`, emit the token file, ship the **conformance gate** in the same slice. First components; conventions file turns to header era when applicable.
-5. **Feature slices** — builders implement screens to the spec; Step 4 runs `visual-reviewer` against the same mockups.
+2. **Foundation shape** — `/kru:design-system create` when the repo has no token architecture yet (influences named; values come from the build spec).
+3. **Builder Phase 0** — transcribe the spec into `design-system.ts`, emit the token file, ship the **conformance gate** in the same slice. First components; conventions file turns to header era when applicable.
+4. **Feature slices** — builders implement screens to the spec; Step 4 runs `visual-reviewer` against the same mockups.
 
 Greenfield team defaults (`pnpm`, React when unstated) apply when scaffolding; brownfield matches the repo.
 
@@ -46,7 +44,7 @@ A **named gap** — the spec lacks a value the slice needs — goes to the **PM*
 
 ## System change — the trip that moves the token file
 
-Same as before: token edit is its own slice; ladder shape changes run `audit` first; gate sweeps the whole tree; conventions header moves with `ux-designer` when the system's vocabulary changes. New visual values arrive through an **updated approved spec** from the designer, not through engineering improvisation.
+Token edit is its own slice; ladder shape changes run `audit` first; gate sweeps the whole tree; conventions header updates arrive in an **updated approved spec** from the designer. New visual values never come from engineering improvisation.
 
 ## The conformance gate — structural first, test for the rest
 

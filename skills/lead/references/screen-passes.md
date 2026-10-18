@@ -37,4 +37,4 @@ These have no seat and you never dispatch them — they run inline when the user
 - `/copywriting` · `/copy-editing` · `/cro` — on copy that already ships. A page not yet written is `conversion-copywriter`'s, routed before design (to the external designer) or build.
 - `/review-animations` · `/improve-animations` — motion craft review · roadmap.
 
-Marketing copy for new pages: `conversion-copywriter` → designer mockups → PM spec → engineering. In-product microcopy: `ux-designer`/`ux-copy`; technical SEO: `/seo-review`.
+Marketing copy for new pages: `conversion-copywriter` → PM → designer mockups → PM spec → engineering. In-product microcopy and flows: design spec only; technical SEO: `/seo-review`.

@@ -2,5 +2,6 @@
 type: tool_used
 tool: Agent
 input_match: '"subagent_type"\s*:\s*"(?:kru:)?ux-designer"'
-weight: 2
+min: 0
+max: 0
 ---
