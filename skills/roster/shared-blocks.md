@@ -150,6 +150,8 @@ The behavior list comes from the **brief the lead handed you**, not from asking 
 Three cases where you build first — do it, then **say so in the return**, naming which: **no harness exists** (nothing to go red with; standing one up is `toolchain-engineer`'s job, don't scaffold a runner mid-feature), **the shape is genuinely unknown** (a spike against an unfamiliar API — let the interface settle, then cover it before you harden it), and **the slice's deliverable is a screen** (layout and look are **PM acceptance** on the preview against the approved spec, not red tests in your run — so the route/action/`load` feeding the screen ships with seam-behavior tests once intent settles). The third is the lead's call and arrives **named in your brief** — never claim it on your own.
 
 And it does not stretch: **where layout and look aren't the contract, there is no exemption.** The end-to-end path that connects route → data layer → render → action → write is precisely what looking at a screen cannot verify — a session that dies on redirect and a write that silently no-ops both render fine — so it goes red-green like anything else, however early it is. "It's the first version" and "tests would slow this down" are not exemptions.
+
+What you verify before return is whatever a user could **not** confirm by using the product: tests, lint, typecheck, edge cases, and data/backend behavior — including in-process checks your stack allows. Rendered screens, accessibility a user hits, multi-screen flows, and running the app to see it behave are the **PM's Step 5** checklist, not yours.
 ```
 
 **Invariant clauses:**
@@ -192,7 +194,7 @@ Required on the seats whose output **renders** (10 seats: the four framework bui
 ```
 ## Build and return — no self-dispatch
 - Never spawn agents: no self-dispatched reviewers (visual/a11y/code), no delegated sub-builds. You build and return; dispatch and review routing is the lead's alone.
-- Verify with the toolchain only: {the seat's checks} — tests, lint, and typecheck (and other non-interactive checks the brief names). Never start a dev server, boot the app, or drive a browser to check your own work; rendered UI, accessibility, and journeys are **PM acceptance** on the preview URL (lead Step 5), not builder verification.
+- Verify what a user could not confirm by using the product alone: {the seat's checks} — tests, lint, typecheck, edge cases, and data/backend behavior, including in-process checks the stack allows (MCP tools from a test, Hono's `app.request()`, migration and DB checks, and the repo's other non-interactive CI). Never start a dev server, boot the app, or drive a browser for product verification; rendered screens against the design spec, accessibility a user hits, multi-screen flows, and running the app to see it behave are **PM acceptance** on the preview URL (lead Step 5).
 ```
 
 **Exempt by decision** — record the reason, don't just omit:
@@ -203,7 +205,7 @@ Required on the seats whose output **renders** (10 seats: the four framework bui
 
 **Invariant clauses:**
 - ⚠ the never-boot clause — `drive a browser` is the string to grep (all 10 carry it, in three wordings: `Never start a dev server or drive a browser to check your own work` on six, `Never boot the app, start a dev server, or drive a browser` on the three UI builders, and `Never start a dev server, launch the Studio, or drive a browser` on `sanity-builder`, whose Studio is a second thing it would otherwise open to look). This is the load-bearing half: a seat that boots the app burns the run and still can't judge the render. The bullet's *opener* is a tailored slot, so grep this clause, never the opener.
-- ⚠ `PM acceptance on the preview URL` — names where rendered UI, a11y, and journeys get judged, so the never-boot ban has a positive target.
+- ⚠ `PM acceptance on the preview URL` — names where product-visible checks land (screens, a11y a user hits, flows, manual product behavior), so the never-boot ban has a positive target; in-process and data/backend checks stay on the opener above.
 - the no-spawn bullet is cheap insurance rather than a live risk (a subagent can't spawn subagents), so it may be one line — but it stays paired with `dispatch and review routing is the lead's alone`.
 
 **Tailored slots**: the **opener** — `Verify with the toolchain, not the app:` on the seats that have one (the framework builders, `cloudflare-builder`, `sanity-builder`), `Self-check in isolation:` on the two UI component builders, whose toolchain can't render what they wrote either — and the seat's checks (`autofixer, typecheck/build, existing tests` · `typecheck/lint` · `wrangler deploy --dry-run` + `wrangler types` · TypeGen + typecheck).
@@ -341,7 +343,7 @@ Believing the work is done is the cue to run this pass — that belief is what i
 - **Did I use what I had?** Every skill above whose trigger this slice hit, loaded — and every pointer those skills point at, followed? What this catches is never a step you didn't know about; it's the one skipped with the finish line in view.
 - **What did I leave across the whole surface?** Read the files as a set: the same thing done twice, a line that changes nothing, a file the slice stopped needing, a comment now heading the wrong code. None of these has an input until every file exists, which is why they land here and nowhere earlier.
 Fix what it finds. What this slice can't absorb, name in your return rather than widening it. Then state the pass itself — `Return pass: <what you re-read> · <what it found, or `clean`>`, one line, always. That line is the only evidence this pass ran, so its absence says it didn't; and skipped, the pass costs a fix loop through the lead for the half a reviewer holding only your diff can still see.
-**Never declare the slice accepted, verified, or done for the PM.** Report tests run, commands, counts, and gaps — evidence is not acceptance.
+**Never declare the slice accepted, verified, or done for the PM.** Report what you verified that a user could not confirm from the product alone (tests, lint, typecheck, edge cases, data/backend, in-process checks) and name product-visible gaps for Step 5 — evidence is not acceptance.
 ```
 
 **No tailored slot** — deliberately, on Block I's precedent. Both questions are seat-independent: the first is self-referential (*this* definition's skills, whatever they are) and the second names defects no stack changes the shape of. Any divergence between seats is drift, which makes the audit a plain string check.

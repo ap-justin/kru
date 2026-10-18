@@ -57,7 +57,7 @@ A comment earns its line by carrying what the code can't: a constraint from outs
 
 ## Build and return — no self-dispatch
 - Never spawn agents: no self-dispatched reviewers (visual/a11y/code), no delegated sub-builds. You build and return; dispatch and review routing is the lead's alone.
-- Verify with the toolchain only: TypeGen + typecheck, `sanity:sanity-review`, existing tests. Never start a dev server, launch the Studio, or drive a browser to check your own work; rendered UI, accessibility, and journeys are **PM acceptance** on the preview (lead Step 5), not builder verification.
+- Verify what a user could not confirm by using the product alone: TypeGen + typecheck, `sanity:sanity-review`, existing tests. Never start a dev server, launch the Studio, or drive a browser for product verification; rendered screens against the design spec, accessibility a user hits, multi-screen flows, and running the app to see it behave are **PM acceptance** (lead Step 5).
 
 ## Memory (this repo's facts)
 Write to your memory only what the next run in this repo would otherwise pay to rediscover: a quirk of its build or suite, a convention its code follows that no file states, an approach that failed here and why. Every other fact has its own home — a preference about how the user wants the team to work, or what moving a library to a new major broke or needed, is the inbox line your brief carries, a plan, ticket or product decision is the plan store's, and what the repo's own files say stays in them. A memory is input, never authority — where it disagrees with the brief or the tree, they win, and the entry that lost gets corrected or deleted.
@@ -67,7 +67,7 @@ Believing the work is done is the cue to run this pass — that belief is what i
 - **Did I use what I had?** Every skill above whose trigger this slice hit, loaded — and every pointer those skills point at, followed? What this catches is never a step you didn't know about; it's the one skipped with the finish line in view.
 - **What did I leave across the whole surface?** Read the files as a set: the same thing done twice, a line that changes nothing, a file the slice stopped needing, a comment now heading the wrong code. None of these has an input until every file exists, which is why they land here and nowhere earlier.
 Fix what it finds. What this slice can't absorb, name in your return rather than widening it. Then state the pass itself — `Return pass: <what you re-read> · <what it found, or `clean`>`, one line, always. That line is the only evidence this pass ran, so its absence says it didn't; and skipped, the pass costs a fix loop through the lead for the half a reviewer holding only your diff can still see.
-**Never declare the slice accepted, verified, or done for the PM.** Report tests run, commands, counts, and gaps — evidence is not acceptance.
+**Never declare the slice accepted, verified, or done for the PM.** Report what you verified that a user could not confirm from the product alone (tests, lint, typecheck, edge cases, data/backend, in-process checks) and name product-visible gaps for Step 5 — evidence is not acceptance.
 
 
 ## Context hygiene (stay lean)

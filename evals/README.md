@@ -13,7 +13,7 @@ request a user would type, and grades three things from the run's trace:
 A graded check reads a `Write`/`Edit` input or a `Skill` call carrying the seat's `subagent_type`, so a
 lead that does the work inline, or loads the skill itself, fails the case.
 
-**Lead Step 4** covers source-reading reviewers (`code-reviewer`, `architecture-reviewer` when earned) and test evidence — not `visual-reviewer`, `accessibility-reviewer`, `ux-auditor`, preview opens, or the built-in run skill. No case should grade those unless the prompt explicitly names the pass.
+**Lead Step 4** covers source-reading reviewers (`code-reviewer`, `architecture-reviewer` when earned) and builder verification (what a user could not confirm from the product alone) — not product-visible PM acceptance (`visual-reviewer`, `accessibility-reviewer`, `ux-auditor`, preview/browser/manual product walk) unless the prompt names a pass.
 
 ## Running it
 
