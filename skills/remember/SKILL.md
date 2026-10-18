@@ -11,7 +11,7 @@ Park what the user liked into the team's preference inbox so a later `/roster le
 
 ## Do
 
-1. **Read `$ARGUMENTS`** — the thing the user wants remembered. If empty, ask one line ("What should I bank — and is it design, code, or workflow?") and stop.
+1. **Read the preference from the invoking task.** If the task names none, return one line asking what to bank and whether it is design, code, or workflow.
 2. **Classify the lane** — `[design]` (visual/UI/motion), `[code]` (API shape, architecture, conventions), or `[workflow]` (how the user wants the team to operate). Infer from context; don't interrogate.
 3. **Concrete pattern with code?** If the user is banking an actual snippet/component/layout (not just a stated preference), save the artifact to the file `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" path patterns/<slug>` names (kebab-case slug from the pattern) and index it with `→ patterns/<slug>.md` on the inbox line. A stated preference with no artifact is just the line.
 4. **Append one line** to the file `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" path inbox` names (create the dir and the file if missing), in the `PREFERENCES.md` format:

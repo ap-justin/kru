@@ -38,4 +38,4 @@ The format is `code.claude.com/docs/en/plugin-evals.md` (fetch it; grader types,
 
 ## Don't
 
-- Don't start a paid run without the user's go. Steps 1 to 4 cost nothing; a full pass of an agent-plugin suite is dozens of real builds, counted against their plan's usage.
+- Don't start a paid run without explicit approval in the invoking task. Steps 1 to 4 cost nothing; return the planned run and stop. A full pass of an agent-plugin suite is dozens of real builds, counted against their plan's usage.

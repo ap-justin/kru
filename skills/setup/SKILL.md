@@ -91,26 +91,16 @@ plugin skill lacks has an inbox line; every package a major behind its skill's p
 every other outdated one is on the catch-up line or its own major's.
 
 ### 1b. Blank repo — grill, then deploy — *full run*
-Nothing on disk answers step 1, so the user does, and the sheet is written from the **decision**. Load
-**`grilling`**; its rounds are these three:
+Nothing on disk answers step 1, so the PM's task carries the subject and stack, or setup grills one
+round and **returns the frontier** for the next invocation. Load **`grilling`**; each round is one
+numbered frontier with recommended answers — do not wait mid-run for replies that are not in the task.
 
-1. **What we are building** — the subject, who it is for, and the one job it has to do. Completion: one
-   paragraph the user has confirmed, in their words.
-2. **Suggest the stack** — one recommendation per lane, chosen from the lanes this team seats
-   (`${CLAUDE_PLUGIN_ROOT}/references/routing.md`) and the from-scratch defaults
-   (`${CLAUDE_PLUGIN_ROOT}/references/ui-practice.md`: `pnpm`, React where a design system will be
-   built), with the reason each fits *this* subject. A lane the subject needs and no seat covers is
-   named as exactly that — the gate line's case, put to the user now. Put each lane to the user in
-   outcome terms — what the choice means for cost, where it can be hosted, what the product can do —
-   with the library in parentheses. A pick with no effect they could feel (a form library, a test
-   runner, a formatter) is the team's: state it as a decision, not a question.
-3. **Finalize the stack** — the user accepts, swaps or strikes each lane put to them; the stack is
-   costly to undo, so it stays their call. Completion: every lane the subject needs has a named
-   library, or is struck.
+When the task already settled all three — **what we are building**, **stack lanes**, **finalize** —
+skip grilling and cite those decisions. Otherwise run **one round** per invocation, then return until
+the task carries the answers.
 
-Then **deploy the team**: 1c–1e and steps 4–6 as on a full run, each line citing the decision it came from
-(shape in `sheet.md`). The scaffold that follows is `lead`'s (its Step 2); the first re-run after it
-lands swaps each decision citation for the manifest that now carries it.
+When grilling is complete, **deploy the team**: 1c–1e and steps 4–6 as on a full run, each line citing
+the decision it came from (shape in `sheet.md`).
 
 Completion: the sheet holds the decided stack with its seats.
 
@@ -433,15 +423,16 @@ rather than a fork.
 Completion: the section reads as though the file's own author wrote it, and the stamp carries the
 installed `VERSION`.
 
-### 5. Write, asking only before a cut of theirs
+### 5. Write, returning product cuts to the PM
 `.claude/CLAUDE.md` is checked in and read by everyone who clones the repo — teammates without this
 plugin included, and the hand that wrote whatever you are proposing to cut. The sheet's lines and the
-pass's edits that cut a copy another file answers are the team's: write them. Ask first only before
-cutting a rule the user (or a teammate) authored whose only copy is here — one question, in their
-words, with what dropping it would cost. Everything the answer can't touch is written already.
+pass's edits that cut a copy another file answers are the team's: write them. Before cutting a rule
+a human authored whose only copy is here, **return one question** — in their words, with what dropping
+it would cost — and apply only when the invoking task approves that cut. Everything else is written
+without waiting.
 
-Completion: the file holds the pass and the sheet, and no rule the user authored left it without
-their yes.
+Completion: the file holds the pass and the sheet, and no human-authored rule left without explicit
+approval in the task.
 
 ### 6. Report
 A short paragraph, in the user's vocabulary: what the team now knows about this project and what it

@@ -13,7 +13,7 @@ Write the defect file from what the user just told you and get out. They hit som
 
 ## Do
 
-1. **Read `$ARGUMENTS`** — what's wrong. If empty, ask one line ("What's wrong?") and stop.
+1. **Read what's wrong from the invoking task** — the symptom the PM wants recorded. If the task names none, return one line asking what's wrong.
 2. **Glance at `issues/`** (`ls`, nothing more). Same defect already has a file → append the user's new detail to it and stop. One directory listing isn't investigation; two files for one bug is drift.
 3. **Write the file `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" path issues/<kebab-slug>` names.** **No precondition**: create the dir if it isn't there.
 

@@ -39,7 +39,7 @@ Same cost rule as expansion — score from what you already hold, never from a f
 
 ## Do
 
-1. **Read `$ARGUMENTS`** — the thing to log. If empty, ask one line ("What do you want logged?") and stop.
+1. **Read the want from the invoking task.** If the task names none, return one line asking what to log.
 2. **Append** to the file `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" path todos` names. **No precondition**: create the dir and the file if they don't exist.
 
    Cold — one line, the standing format:

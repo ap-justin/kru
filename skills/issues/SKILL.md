@@ -38,9 +38,9 @@ A file still carrying `_not investigated_` is a **stub**; a read pass fills a st
 
 **Batch** = the top-ranked open files whose `effort` is `1`–`2`, on **different seams** so one review pass covers them, capped at what one session fixes without a brief. `$ARGUMENTS` narrows: an exact slug takes that file, anything else filters slug and heading by case-insensitive substring. A filtered run still reconciles and scores the whole dir; only the batch narrows.
 
-## 4. Gate — show it, then wait
+## 4. Gate — return the batch
 
-First the bookkeeping, without asking: delete every file §1 verified fixed, re-anchor every *moved* file, write found call sites into stubs, write every `effort` §2 sized or revised. Then one message, and stop:
+First the bookkeeping, without asking: delete every file §1 verified fixed, re-anchor every *moved* file, write found call sites into stubs, write every `effort` §2 sized or revised. Then return one message as this step's result:
 
 ```
 Worth fixing now — pick by number, or strike any:
@@ -49,7 +49,7 @@ Worth fixing now — pick by number, or strike any:
 Plus 2 already fixed and cleared, 4 more known, 12 not looked at yet.
 ```
 
-Only the batch gets a line — numbered, each written as the symptom someone using the product would notice, with its severity and urgency in words (`todos` §4's words; a `~` urgency asked as a question, written bare once they answer). Everything else — cleared files, re-anchors, stub fills, the rest of the ranking, the unread count — is one counted clause. No slugs, `file:line`, effort or scoring notation. A tombstone or a decline is the user's to raise, not a line here. **Nothing past the bookkeeping is written before they answer.** No answer → say so in one line and return to whatever was in flight.
+Only the batch gets a line — numbered, each written as the symptom someone using the product would notice, with its severity and urgency in words (`todos` §4's words; a `~` urgency as a question for the next task to answer). Everything else — cleared files, re-anchors, stub fills, the rest of the ranking, the unread count — is one counted clause. No slugs, `file:line`, effort or scoring notation. A tombstone or a decline is the PM's to raise, not a line here. **Nothing past the bookkeeping is written before the next task carries the pick.** Apply §5 when the invoking task names which numbers to fix.
 
 ## 5. Fix what they picked
 

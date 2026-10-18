@@ -7,7 +7,7 @@ argument-hint: "[a route, a page name, or what the page is for — omit for the 
 
 You commission the **argument** a marketing page makes: which sections it has, in what order, with what strings in them. The output is a SECTION deck — a closed set a designer draws around and a builder mounts without writing a word of its own.
 
-**The writing is `conversion-copywriter`'s body; this file is the caller's half** — resolve the page, spawn the seat, hold the user channel a subagent hasn't got.
+**The writing is `conversion-copywriter`'s body; the lead runs this file** — resolve the page, spawn the seat, return gaps the seat cannot fill.
 
 ## Resolve the page
 
@@ -25,8 +25,8 @@ The seat cannot invent a fact and will return a gap instead, so the facts it has
 ## Dispatch — spawn the write, never run it inline
 Spawn the **`conversion-copywriter`** agent with: the page and its route, the audience and what the page is meant to get someone to do, the facts above, and the repo's `design/conventions.md` if one exists.
 
-Relay the return unedited, then the half a subagent can't do:
-- **Put the gap list to the user as questions.** Each gap is a fact someone has; the deck stays unfinished until it's answered or the claim is cut.
+Relay the return unedited, then:
+- **Return the gap list as questions for the PM.** Each gap is a fact someone has; the deck stays unfinished until the next task answers or the claim is cut.
 - **Lead with the placement.** The deck derives from an awareness stage. A stage the seat guessed is a one-line correction now and a rewritten page later.
 - **The voice is the user's.** The alternatives in the return exist for them to pick from; don't settle a headline on their behalf.
 

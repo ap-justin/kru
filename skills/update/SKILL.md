@@ -36,7 +36,7 @@ A bare version number (`2.1.240`) is `claude 2.1.240`.
 
 Each sweep file names its own **action** verdict (*Adopt* · *Re-sync* · *Re-verify*) and the cases that fall short of it; these three are shared, and every verdict names the file it lands in:
 
-- **Consider** — the only verdict the user is asked about; the action verdicts run through `/roster` without a question. Real value at a cost the user decides: money, a machine constraint the user's `~/.claude/CLAUDE.md` sets, a UX change to a skill they type, a reproduction session.
+- **Consider** — return to the PM as this sweep's result; action verdicts run through `skills/roster/SKILL.md` only after the task approves. Real value at a cost the PM decides: money, a machine constraint, a UX change to a skill, a reproduction session.
 - **Decline** — with the one-line reason, so the next sweep doesn't re-litigate it.
 - **Current** — nothing moved that the copy carries; the mark advances.
 

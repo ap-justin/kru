@@ -83,7 +83,7 @@ Severity: **HIGH** = feel-breaking (wrong easing on UI, animation on keyboard/hi
 
 After the table, list 2–4 **missed opportunities** — places that don't animate but should (a jarring state change, a rare delight moment) — separately, since they're additive rather than corrective.
 
-Then **stop and wait for the user to select** which findings become plans. If running non-interactively, default to the top 3–5 by leverage.
+**Default to the top 3–5 findings by leverage** and write plans for those. When the invoking task names specific numbers or slugs, use that selection instead.
 
 ### Phase 4 — Write plans
 

@@ -43,9 +43,9 @@ Mark age on every line captured 90+ days ago (`· 119d`). Age is a fact off the 
 
 **Batch** = the top **`value × urgency`** open lines whose `effort` is `1`–`2`, on **different seams** so one review pass covers them, capped at what one session lands without a brief. Value × urgency picks and effort only qualifies — a `value ≤ 2` line stays parked however cheap. Asked why a line is in, answer in product terms — what the user gets — and offer to strike it. `$ARGUMENTS` narrows: an integer takes that capture-numbered line (the nth entry in the file — stable across appends), anything else filters headlines by case-insensitive substring. A filtered run still reconciles and scores the whole file; only the batch narrows.
 
-## 4. Gate — show it, then wait
+## 4. Gate — return the batch
 
-First the bookkeeping, without asking: delete every line §1 verified done, and write every `effort` §2 sized or revised. Then one message, and stop:
+First the bookkeeping, without asking: delete every line §1 verified done, and write every `effort` §2 sized or revised. Then return one message as this step's result:
 
 ```
 Ready to build — pick by number, strike any, or correct how much or how soon:
@@ -54,7 +54,7 @@ Ready to build — pick by number, strike any, or correct how much or how soon:
 Plus 3 already done and cleared, 6 more parked, 84 not looked at yet.
 ```
 
-Only the batch gets a line — **numbered by capture position**, each written as what someone using the product would get, with its `value` and `urgency` in words — needed now · soon · within weeks · later · someday for `5`…`1` — each to confirm when it wears a `~` (a bare one is the user's already). Everything else — cleared done lines, the rest of the ranking, archived-plan and aged lines, the unread count — is one counted clause. No `file:line`, no effort, no scoring notation. **Nothing past the bookkeeping is written before they answer.** No answer → say so in one line and return to whatever was in flight.
+Only the batch gets a line — **numbered by capture position**, each written as what someone using the product would get, with its `value` and `urgency` in words — needed now · soon · within weeks · later · someday for `5`…`1` — each `~` is a question for the next task to confirm. Everything else — cleared done lines, the rest of the ranking, archived-plan and aged lines, the unread count — is one counted clause. No `file:line`, no effort, no scoring notation. **Nothing past the bookkeeping is written before the next task carries the pick.** Apply §5 when the invoking task names which numbers to build.
 
 ## 5. Land what they picked
 

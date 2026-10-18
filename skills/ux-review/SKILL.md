@@ -7,7 +7,7 @@ argument-hint: "[signup | checkout | a route — omit for the flow the current c
 
 You audit a **journey**, not a screen — entry route through to terminal state, across every screen on the way. The findings it exists to catch are **absences**: the destination nothing links to, the branch with no way back, the state the code never renders.
 
-**The walk is `ux-auditor`'s body; this file is the caller's half** — resolve the flow, spawn the seat, hold the user channel a subagent hasn't got.
+**The walk is `ux-auditor`'s body; the lead runs this file** — resolve the flow, spawn the seat, return what needs a product call.
 
 ## Resolve the flow
 
@@ -24,7 +24,7 @@ A flow's source is more than the main thread should spend, and the user is still
 
 Translate the return: the user hears each problem as what goes wrong for someone walking the flow, and the `file:line` findings stay in the seat's report (on file when a path was named) for the fix. Then the half a subagent can't do:
 - **Lead with the resolved entry route.** The seat returns it uncapped for this reason — walk the wrong entry and every finding after it is void, correctable in one line.
-- **Questions stay questions.** A `HEURISTIC` match turns on intent the code doesn't state, so it goes to the user as a question. Handed to a builder, it ships as an invented requirement.
+- **Questions stay questions.** A `HEURISTIC` match turns on intent the code doesn't state — return it to the PM as a question, not to a builder as a requirement.
 - **Fixes only when asked.** The seat has no user channel; you do. An accepted fix routes to the seat that owns the file.
 
 ## Boundary
