@@ -255,7 +255,7 @@ if [ -n "$lanes" ] && ! $readonly_seat && printf '%s' "$lanes" | awk -v s="$seat
       { best = ""; bl = 0
         for (i = 1; i <= n; i++) if (($0 == dir[i] || index($0, dir[i] "/") == 1) && length(dir[i]) > bl) { best = own[i]; bl = length(dir[i]) }
         if (best != "" && best != s) { print $0 " is " best "'"'"'s"; exit } }' <(printf '%s' "$lanes") -)
-  [ -n "$misroute" ] && shadow="${shadow}grouping: ${misroute} per the sheet — split it into that seat's brief (step 3). "
+  [ -n "$misroute" ] && reasons="${reasons}grouping: ${misroute} per the sheet — split it into that seat's brief (step 3). "
 fi
 
 # the cross-session log `skills/roster/learn.md` (PM or lead loads) sweeps for misfires, reading each quoted

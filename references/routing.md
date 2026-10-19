@@ -48,6 +48,7 @@ names the seat and its skills has this question answered — take the answer.
 | WCAG structural audit on a built page | `accessibility-reviewer` or `skills/accessibility-review/SKILL.md` — **only when the PM names it** |
 | multi-screen UX flow audit | `ux-auditor` or `skills/ux-review/SKILL.md` — **only when the PM names it** |
 | coverage sweep or fan-out across many files; repair a red/flaky suite; an exempt seat's logic-dense output; a repo with no testing conventions captured yet | `test-writer` |
+| a **test or spec file** the slice edits (`*.test.*`, `*.spec.*`, `*.browser.test.*`, and the repo's other harness paths) — even when the feature code beside it belongs to a UI or route seat | `test-writer` |
 | repo tooling: pnpm workspaces/catalogs/lockfile · `turbo.json` monorepo task graph + caching · Biome/ESLint/Prettier lint+format · wiring a new package into the graph | `toolchain-engineer` |
 | repo-wide TypeScript infrastructure: strict migration, monorepo project references, type-perf profiling | a general agent with the `typescript` skill loaded |
 | a half-formed idea the PM wants grilled without committing to a record | **`skills/brainstorm/SKILL.md`** — grill like `brief`, write nothing until the task approves persist |
