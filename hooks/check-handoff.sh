@@ -247,9 +247,8 @@ grep -m1 '^tools:' "$plugin_root/agents/$seat.md" | grep -qvE '\b(Edit|Write)\b'
 if [ -n "$lanes" ] && ! $readonly_seat && printf '%s' "$lanes" | awk -v s="$seat" '$2 == s { f = 1 } END { exit !f }'; then
   # a scoped package (`@libsql/client`) is a dependency, not a directory; a
   # sentence handing a path to its owner ("the auth seat owns that file") names
-  # it for reading; a sentence that only references another lane's file (`mounted
-  # by` / `leave it`) is not an edit in this brief; a bare directory name logs
-  # as `grouping-mention` (low confidence), not `grouping`.
+  # it for reading. Exempt `mounted by` / `leave it` (reference only). Bare sheet
+  # dirs log as grouping-mention; file paths as grouping (shadow).
   misroute=$(printf '%s\n' "$prompt" | sed 's/\. /\
 /g' | grep -viE "\banother (seat|lane)|\bseat owns\b|\bowns (that|this|the) file\b|\boutside (the|your|its) lane\b|\bmounted by\b|\bleave it\b" |
     grep -oE '(^|[^@A-Za-z0-9_.-])[A-Za-z0-9_.-]+(/[][A-Za-z0-9_.@()+-]+)+' | sed -E 's#^[^A-Za-z0-9_.-]##' | sort -u | head -40 |

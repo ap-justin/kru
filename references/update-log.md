@@ -2,11 +2,11 @@
 
 ## 0.159.0
 
-**Handoff gate — grouping** stays a **shadow** hint (logged to the refusal log, dispatch still allowed). Reasons quote the file path; a bare directory name logs as `grouping-mention` (low confidence). Briefs that only reference another lane's path (`mounted by` / `leave it`) are not flagged.
+**Handoff gate, grouping.** Stays a **shadow** hint (logged to the refusal log, dispatch still allowed). Reasons quote the file path; a bare directory name logs as `grouping-mention` (low confidence). Briefs that only reference another lane's path (`mounted by` / `leave it`) are not flagged.
 
-**Lead** — test and spec files route via `references/routing.md` (Block D red-green tests stay with the behavior seat; standalone sweep/browser/harness tests go to the lane owner or `test-writer`). Handoff item 3 names cross-seat contracts (shared class, prop, or rebind rule) instead of leaving them open.
+**Lead.** Test and spec files route via `references/routing.md` (Block D red-green tests stay with the behavior seat; standalone sweep/browser/harness tests go to the lane owner or `test-writer`). Handoff item 3 names cross-seat contracts (shared class, prop, or rebind rule) instead of leaving them open.
 
-**Skills** — `modern-css` defensive corpus: mix Tailwind v4 `lab()` colour steps `in oklab`. `panda-css`: `@fontsource-variable/*` tokens must use the published `font-family` string, not the npm package name.
+**Skills.** `modern-css` defensive corpus: mix Tailwind v4 `lab()` colour steps `in oklab`. `panda-css`: `@fontsource-variable/*` tokens must use the published `font-family` string, not the npm package name.
 
 ## 0.158.0
 
