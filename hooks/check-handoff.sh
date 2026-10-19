@@ -247,10 +247,12 @@ grep -m1 '^tools:' "$plugin_root/agents/$seat.md" | grep -qvE '\b(Edit|Write)\b'
 if [ -n "$lanes" ] && ! $readonly_seat && printf '%s' "$lanes" | awk -v s="$seat" '$2 == s { f = 1 } END { exit !f }'; then
   # a scoped package (`@libsql/client`) is a dependency, not a directory; a
   # sentence handing a path to its owner ("the auth seat owns that file") names
-  # it for reading.
+  # it for reading; a sentence that only references another lane's file (`mounted
+  # by` / `leave it`) is not an edit in this brief; a bare directory name logs
+  # as `grouping-mention` (low confidence), not `grouping`.
   misroute=$(printf '%s\n' "$prompt" | sed 's/\. /\
 /g' | grep -viE "\banother (seat|lane)|\bseat owns\b|\bowns (that|this|the) file\b|\boutside (the|your|its) lane\b|\bmounted by\b|\bleave it\b" |
-    grep -oE '(^|[^@A-Za-z0-9_.-])[A-Za-z0-9_.-]+(/[][A-Za-z0-9_.@()-]+)+' | sed -E 's#^[^A-Za-z0-9_.-]##' | sort -u | head -40 |
+    grep -oE '(^|[^@A-Za-z0-9_.-])[A-Za-z0-9_.-]+(/[][A-Za-z0-9_.@()+-]+)+' | sed -E 's#^[^A-Za-z0-9_.-]##' | sort -u | head -40 |
     awk -v s="$seat" 'NR == FNR { if (NF == 2) { dir[++n] = $1; own[n] = $2 }; next }
       { best = ""; bl = 0; bare = 0
         for (i = 1; i <= n; i++) if (($0 == dir[i] || index($0, dir[i] "/") == 1) && length(dir[i]) > bl) {

@@ -2,13 +2,11 @@
 
 ## 0.159.0
 
-Roster learn sweep (store c447d82): grouping scan stays **shadow** (logged, never refused) — quoted path in the reason for `log_refusal` spans; bare directory names log as `grouping-mention` (low confidence); briefs that only reference another lane's path (`mounted by` / `leave it`) are not flagged.
+**Handoff gate — grouping** stays a **shadow** hint (logged to the refusal log, dispatch still allowed). Reasons quote the file path; a bare directory name logs as `grouping-mention` (low confidence). Briefs that only reference another lane's path (`mounted by` / `leave it`) are not flagged.
 
-Lead routing: test/spec files follow `references/routing.md` — a file the slice's own red-green build writes stays with the behavior seat (Block D); standalone sweep/browser/harness tests go to the lane owner or `test-writer`. Cross-seat contracts fold into handoff item 3 (name the symbol and what each seat does).
+**Lead** — test and spec files route via `references/routing.md` (Block D red-green tests stay with the behavior seat; standalone sweep/browser/harness tests go to the lane owner or `test-writer`). Handoff item 3 names cross-seat contracts (shared class, prop, or rebind rule) instead of leaving them open.
 
-`skills/panda-css/reference/fonts.md` — `@fontsource-variable/*` family string vs token value. `skills/modern-css/reference/defensive.md` — mix Tailwind v4 `lab()` tokens `in oklab`; PM screen check on notation changes.
-
-Product-hero default and concept-led marketing canvas direction routed off-plugin (designer `kru-design` skill or product sheet), not `references/design-spec.md`.
+**Skills** — `modern-css` defensive corpus: mix Tailwind v4 `lab()` colour steps `in oklab`. `panda-css`: `@fontsource-variable/*` tokens must use the published `font-family` string, not the npm package name.
 
 ## 0.158.0
 

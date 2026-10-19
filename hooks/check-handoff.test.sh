@@ -145,7 +145,8 @@ check allow $ui "Build the form. The field is required."
 mkdir -p "$sandbox/sheet/.claude"
 printf 'ui         kru:react-ui-builder     ← `packages/ui` components\nroutes     kru:react-router-builder ← `apps/console/src/routes`, `apps/console/src/api`\nemails     `packages/emails` templates; schema via kru:drizzle\n' > "$sandbox/sheet/.claude/CLAUDE.md"
 sheet_check() {
-  local seat=$1 prompt=$2 want=$3 b a input out
+  local seat=$1 prompt=$2 want=$3 reason_needle=${4:-'grouping: "'}
+  local b a input out rlog
   b=$(shadow_lines)
   input=$(jq -nc --arg s "$seat" --arg p "$prompt inbox.md" --arg c "$sandbox/sheet" \
     '{session_id:"test", cwd:$c, tool_input:{subagent_type:$s, prompt:$p, description:"t"}}')
@@ -155,7 +156,7 @@ sheet_check() {
     fail=$((fail + 1)); printf 'FAIL (grouping %s): %s -> %s on: %s\n  %s\n' "$want" "$b" "$a" "$prompt" "$out"; fi
   if [ "$want" -eq 1 ]; then
     rlog=$(find "$sandbox/home" -name refusals.jsonl 2>/dev/null | head -1)
-    tail -1 "$rlog" | jq -r '.reasons' | grep -qF 'grouping: "' && pass=$((pass + 1)) || { fail=$((fail + 1)); printf 'FAIL (grouping quote): %s\n' "$prompt"; }
+    tail -1 "$rlog" | jq -r '.reasons' | grep -qF "$reason_needle" && pass=$((pass + 1)) || { fail=$((fail + 1)); printf 'FAIL (grouping reason): %s (want %s)\n' "$prompt" "$reason_needle"; }
   fi
 }
 sheet_check kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\` and wire \`apps/console/src/api/client.ts\`." 1
@@ -181,6 +182,8 @@ sheet_check kru:react-router-builder "Fix the loader in \`apps/console/src/route
 # a path named only as context for another seat's mount is not an edit target
 printf 'pages      kru:sveltekit-builder    ← `src/routes`\n' >> "$sandbox/sheet/.claude/CLAUDE.md"
 sheet_check kru:react-ui-builder "Style the card in \`packages/ui/card.tsx\`; mounted by \`src/routes/+page.svelte\`, leave it." 0
+sheet_check kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\` and wire \`src/routes/+page.svelte\`." 1 'grouping: "src/routes/+page.svelte"'
+sheet_check kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\`; the pages under \`src/routes\` import it." 1 'grouping-mention:'
 # the gate stays out of unknown seats
 check allow general-purpose "Preserve existing comments in the file."
 
