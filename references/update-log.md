@@ -1,5 +1,15 @@
 # kru plugin update log
 
+## 0.159.0
+
+Roster learn sweep (store c447d82): grouping scan stays **shadow** (logged, never refused) — quoted path in the reason for `log_refusal` spans; bare directory names log as `grouping-mention` (low confidence); briefs that only reference another lane's path (`mounted by` / `leave it`) are not flagged.
+
+Lead routing: test/spec files follow `references/routing.md` — a file the slice's own red-green build writes stays with the behavior seat (Block D); standalone sweep/browser/harness tests go to the lane owner or `test-writer`. Cross-seat contracts fold into handoff item 3 (name the symbol and what each seat does).
+
+`skills/panda-css/reference/fonts.md` — `@fontsource-variable/*` family string vs token value. `skills/modern-css/reference/defensive.md` — mix Tailwind v4 `lab()` tokens `in oklab`; PM screen check on notation changes.
+
+Product-hero default and concept-led marketing canvas direction routed off-plugin (designer `kru-design` skill or product sheet), not `references/design-spec.md`.
+
 ## 0.158.0
 
 Reflect look-back no longer dispatches `code-reviewer`, `architecture-reviewer`, or the browser review seats. Stack owners re-read their lanes against official sources; remediation builds skip the gates.md review loop.

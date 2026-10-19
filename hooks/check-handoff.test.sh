@@ -141,42 +141,46 @@ after=$(shadow_lines)
 check allow $ui "Build the form. The field is required."
 [ "$(shadow_lines)" -eq "$after" ] && pass=$((pass + 1)) || { fail=$((fail + 1)); printf 'FAIL (clean): shadow line written\n'; }
 
-# grouping: a file under another seat's sheet directory is refused
+# grouping: a file under another seat's sheet directory logs a shadow line
 mkdir -p "$sandbox/sheet/.claude"
 printf 'ui         kru:react-ui-builder     ← `packages/ui` components\nroutes     kru:react-router-builder ← `apps/console/src/routes`, `apps/console/src/api`\nemails     `packages/emails` templates; schema via kru:drizzle\n' > "$sandbox/sheet/.claude/CLAUDE.md"
 sheet_check() {
-  local expect=$1 seat=$2 prompt=$3 needle=${4:-grouping}
-  local input out code
+  local seat=$1 prompt=$2 want=$3 b a input out
+  b=$(shadow_lines)
   input=$(jq -nc --arg s "$seat" --arg p "$prompt inbox.md" --arg c "$sandbox/sheet" \
     '{session_id:"test", cwd:$c, tool_input:{subagent_type:$s, prompt:$p, description:"t"}}')
   out=$(cd "$sandbox/cwd" && printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_GATE -u CLAUDE_PLUGIN_ROOT HOME="$sandbox/home" bash "$hook" "$root" 2>&1)
-  code=$?
-  if [ "$expect" = refuse ]; then
-    [ "$code" -eq 2 ] && printf '%s' "$out" | grep -qF "$needle" && pass=$((pass + 1)) || { fail=$((fail + 1)); printf 'FAIL (grouping refuse): %s\n  %s\n' "$prompt" "$out"; }
-  else
-    [ "$code" -eq 0 ] && pass=$((pass + 1)) || { fail=$((fail + 1)); printf 'FAIL (grouping allow): %s\n  %s\n' "$prompt" "$out"; }
+  a=$(shadow_lines)
+  if [ "$a" -eq $((b + want)) ]; then pass=$((pass + 1)); else
+    fail=$((fail + 1)); printf 'FAIL (grouping %s): %s -> %s on: %s\n  %s\n' "$want" "$b" "$a" "$prompt" "$out"; fi
+  if [ "$want" -eq 1 ]; then
+    rlog=$(find "$sandbox/home" -name refusals.jsonl 2>/dev/null | head -1)
+    tail -1 "$rlog" | jq -r '.reasons' | grep -qF 'grouping: "' && pass=$((pass + 1)) || { fail=$((fail + 1)); printf 'FAIL (grouping quote): %s\n' "$prompt"; }
   fi
 }
-sheet_check refuse kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\` and wire \`apps/console/src/api/client.ts\`."
-sheet_check allow kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\`."
-sheet_check refuse kru:react-router-builder "Mount it in \`apps/console/src/routes/home.tsx\`, importing \`packages/ui/card.tsx\`."
+sheet_check kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\` and wire \`apps/console/src/api/client.ts\`." 1
+sheet_check kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\`." 0
+sheet_check kru:react-router-builder "Mount it in \`apps/console/src/routes/home.tsx\`, importing \`packages/ui/card.tsx\`." 1
 # a skill named on a sheet line owns no directory
-sheet_check allow kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\` and the note in \`packages/emails/CLAUDE.md\`."
-sheet_check allow kru:code-reviewer "Review \`packages/ui/card.tsx\` and \`apps/console/src/api/client.ts\`. report: /tmp/kru-review/p/code-reviewer-x.md"
+sheet_check kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\` and the note in \`packages/emails/CLAUDE.md\`." 0
+sheet_check kru:code-reviewer "Review \`packages/ui/card.tsx\` and \`apps/console/src/api/client.ts\`. report: /tmp/kru-review/p/code-reviewer-x.md" 0
 # a read-only seat reads every lane, even one the sheet gives it directories in
 printf 'review     kru:code-reviewer        ← `apps/console/src/routes`\n' >> "$sandbox/sheet/.claude/CLAUDE.md"
-sheet_check allow kru:code-reviewer "Review \`apps/console/src/routes/home.tsx\` and \`packages/ui/card.tsx\`. report: /tmp/kru-review/p/code-reviewer-x.md"
+sheet_check kru:code-reviewer "Review \`apps/console/src/routes/home.tsx\` and \`packages/ui/card.tsx\`. report: /tmp/kru-review/p/code-reviewer-x.md" 0
 
 # a scoped package is a dependency, not a directory the sheet hands out
 printf 'data       kru:turso-specialist     ← `src/db`, `@libsql/client`\n' >> "$sandbox/sheet/.claude/CLAUDE.md"
-sheet_check allow kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\`; the store reads through \`@libsql/client\` 0.18.0."
+sheet_check kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\`; the store reads through \`@libsql/client\` 0.18.0." 0
 # a path handed to its owner is named for reading
-sheet_check allow kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\`. Read how \`src/db/store.ts\` loads it (one line in your report if it's off; the data seat owns that file)."
-sheet_check refuse kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\` and the query in \`src/db/store.ts\`."
+sheet_check kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\`. Read how \`src/db/store.ts\` loads it (one line in your report if it's off; the data seat owns that file)." 0
+sheet_check kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\` and the query in \`src/db/store.ts\`." 1
 
-# a version or a passage the brief names is slice content: no grouping refusal
+# a version or a passage the brief names is slice content: no shadow line
 printf 'routes     kru:react-router-builder ← react-router 8.3.0 framework mode\n' >> "$sandbox/sheet/.claude/CLAUDE.md"
-sheet_check allow kru:react-router-builder "Fix the loader in \`apps/console/src/routes/home.tsx\` — it runs on 8.3.0."
+sheet_check kru:react-router-builder "Fix the loader in \`apps/console/src/routes/home.tsx\` — it runs on 8.3.0." 0
+# a path named only as context for another seat's mount is not an edit target
+printf 'pages      kru:sveltekit-builder    ← `src/routes`\n' >> "$sandbox/sheet/.claude/CLAUDE.md"
+sheet_check kru:react-ui-builder "Style the card in \`packages/ui/card.tsx\`; mounted by \`src/routes/+page.svelte\`, leave it." 0
 # the gate stays out of unknown seats
 check allow general-purpose "Preserve existing comments in the file."
 
