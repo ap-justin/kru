@@ -16,7 +16,7 @@
 # a skill directory that is itself a symlink is skipped. a symlink anywhere
 # in the source skill is an error: that skill is not installed. an extra file
 # whose path contains a symlink is not copied and is not followed. the new
-# tree is built in a fresh directory and moved into place with mv -T. if that
+# tree is built in a fresh directory and moved onto a path that must not exist. if that
 # move fails, the parked tree is moved back. it is removed only after the new
 # tree is in place.
 #
@@ -281,13 +281,22 @@ drop_stage() {
   fi
   stage_dir=""
 }
+# mv -T is gnu-only. refuse an existing target so bsd mv never moves into it;
+# the sync lock keeps another run from creating it in between.
+move_onto() {
+  if [ -e "$2" ] || [ -h "$2" ]; then
+    return 1
+  fi
+  mv -- "$1" "$2"
+}
+
 on_exit() {
   local rc=$?
   set +e
   drop_stage
   if [ -n "$parked_dir" ] && { [ -e "$parked_dir" ] || [ -h "$parked_dir" ]; }; then
     if [ -n "$parked_dest" ] && [ ! -e "$parked_dest" ] && [ ! -h "$parked_dest" ]; then
-      if ! mv -T -- "$parked_dir" "$parked_dest"; then
+      if ! move_onto "$parked_dir" "$parked_dest"; then
         echo "parked skill left at $parked_dir" >&2
         rc=1
       fi
@@ -308,11 +317,13 @@ preserve_extras() {
   if [ ! -d "$dest" ] || [ -h "$dest" ] || [ -L "$dest" ]; then
     return 0
   fi
-  list=$(find -P "$dest" -mindepth 1 -printf '%P\n' 2>/dev/null) && status=0 || status=$?
+  # find from inside each tree: -printf '%P' is gnu-only.
+  list=$(cd -- "$dest" && find -P . -mindepth 1 2>/dev/null) && status=0 || status=$?
   [ "$status" -eq 0 ] || return 2
-  find -P "$stage" -mindepth 1 -printf '%P\n' >/dev/null 2>/dev/null && status=0 || status=$?
+  (cd -- "$stage" && find -P . -mindepth 1) >/dev/null 2>/dev/null && status=0 || status=$?
   [ "$status" -eq 0 ] || return 2
   while IFS= read -r rel || [ -n "$rel" ]; do
+    rel=${rel#./}
     [ -n "$rel" ] || continue
     if path_has_symlink "$dest" "$rel" || path_has_symlink "$stage" "$rel"; then
       echo "skipped $name: extra symlink $rel"
@@ -333,7 +344,7 @@ preserve_extras() {
 }
 
 # build the skill in a fresh directory under the library, then move it onto
-# dest with mv -T. never cp into an existing path. the old tree is parked as
+# dest with move_onto. never cp into an existing path. the old tree is parked as
 # .sync-old.* and removed only after the new tree is in place. if the second
 # mv fails, the exit trap moves the parked tree back and never deletes it.
 # returns 1 when the skill is skipped, 2 when the install failed.
@@ -379,7 +390,7 @@ copy_skill() {
       echo "error: $name: could not install" >&2
       return 2
     fi
-    if ! mv -T -- "$dest" "$old_slot"; then
+    if ! move_onto "$dest" "$old_slot"; then
       drop_stage
       echo "error: $name: could not install" >&2
       return 2
@@ -389,7 +400,7 @@ copy_skill() {
     if [ -n "${KRU_SYNC_BEFORE_REPLACE:-}" ]; then
       bash "$KRU_SYNC_BEFORE_REPLACE" "$dest" "$name" "$stage_dir" "$parked_dir" || true
     fi
-    if ! mv -T -- "$stage_dir" "$dest"; then
+    if ! move_onto "$stage_dir" "$dest"; then
       drop_stage
       echo "error: $name: could not install" >&2
       exit 1
@@ -404,7 +415,7 @@ copy_skill() {
     parked_dir=""
     parked_dest=""
   else
-    if ! mv -T -- "$stage_dir" "$dest"; then
+    if ! move_onto "$stage_dir" "$dest"; then
       drop_stage
       echo "error: $name: could not install" >&2
       return 2
