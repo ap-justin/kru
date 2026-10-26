@@ -10,3 +10,5 @@ ux-copy
 diagnosing-bugs
 claude-code-delegation
 reliable-work
+stripe
+vercel
