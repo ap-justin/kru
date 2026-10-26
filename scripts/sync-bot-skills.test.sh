@@ -56,12 +56,14 @@ expected=(
   diagnosing-bugs
   claude-code-delegation
   reliable-work
+  stripe
+  vercel
 )
 
 # --- the default list is the contract ---------------------------------------
 got=$(grep -v '^[[:space:]]*#' "$root/scripts/bot-skills.txt" | grep -v '^[[:space:]]*$')
 want=$(printf '%s\n' "${expected[@]}")
-report "default list is the ten skills" "$([ "$got" = "$want" ] && echo true || echo false)" "got [$got]"
+report "default list is the twelve skills" "$([ "$got" = "$want" ] && echo true || echo false)" "got [$got]"
 
 # --- create: default list into an empty library -----------------------------
 lib=$sandbox/lib
