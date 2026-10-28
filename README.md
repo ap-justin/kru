@@ -87,9 +87,10 @@ with you first.
 Then just ask: *"add feature Y"*, *"fix Z"*, *"build a landing page for X"*. The lead picks the seats.
 
 ## What it does to your machine
-The team is opinionated about process, and it enforces that with five hooks. Each one fails open
-without `jq`, and each interruption below is one you can turn off: by the export shown, or, for the
-lead gate, the handoff check and the audit, by the matching option in `/plugin` → kru → Configure.
+The team is opinionated about process, and it enforces that with six hooks. Each one fails open
+without `jq` except the connector guard, which fails closed, and each interruption below is one you
+can turn off: by the export shown, or, for the lead gate, the handoff check and the audit, by the
+matching option in `/plugin` → kru → Configure.
 
 | When | What happens | Turn it off |
 |---|---|---|
@@ -97,6 +98,7 @@ lead gate, the handoff check and the audit, by the matching option in `/plugin` 
 | First tool call of a session | Blocks once until the lead contract is loaded, so no build starts off-contract | `export KRU_NO_LEAD_GATE=1` |
 | Dispatching a seat | Refuses a handoff that carries stale line numbers, restates a rule the seat already has, or leaves a decision open, and logs the refusal | `export KRU_NO_GATE=1` |
 | End of a turn that dispatched seats | Blocks once to run the dispatch auditor over the session's routing | `export KRU_NO_AUDIT=1` |
+| A connector (MCP) call in a cloud session | Refuses anything but a read, a draft, a tracker issue or the docs and browser servers seats build with, and asks for the call back instead; `export KRU_MCP_GUARD=1` (or the option) turns it on everywhere, for sessions nobody watches | `export KRU_NO_MCP_GUARD=1` |
 | After each dispatch | Appends one line to a session ledger the auditor reads | Always on |
 
 On your own machine it writes outside your repo. Two things land inside it: `skills/setup/SKILL.md`, which edits

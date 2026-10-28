@@ -49,6 +49,13 @@
       "description": "Keep the store repo configured but stop pulling and pushing it.",
       "required": false,
       "default": false
+    },
+    "KRU_MCP_GUARD": {
+      "type": "boolean",
+      "title": "Guard connector calls everywhere",
+      "description": "Refuse every connector (MCP) call that isn't a read or a draft, in every session rather than only cloud ones. For machines that run sessions nobody watches.",
+      "required": false,
+      "default": false
     }
   }
 }
