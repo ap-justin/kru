@@ -16,8 +16,9 @@ Working files (artboards, `canvas.json`, images) stay **local and uncommitted** 
 
 Invoke the bundled Claude Code `design` skill (designer loads) for artboards and publish:
 
-- Match the existing app from the repo when brownfield — token file, stylesheets, closest screens — and say in one line what you matched.
-- **Directions at bootstrap, screen mockups after** — 2–4 genuinely different directions when the look is unsettled; compose from real parts once a system exists.
+- **Match before you invent.** Read the repo before drawing and say in one line what you matched: the token file, the stylesheets, the closest screen, the icon set. Only at bootstrap, with nothing to match but the conventions corpus and what the brief names, is the look yours to propose.
+- **Directions at bootstrap, screen mockups after.** When the look is unsettled, draft **2–4 directions**, each one a reader can name in a phrase, with that one-line thesis in your return. Vary what carries the look: **density**, **type scale and face pairing**, **how much chrome** a surface gets, **depth** from shadow or from line, **how colour is spent** (one accent or a family), and **shape language**. Three palettes over one layout is one direction, and a direction you can't name in a phrase is the one to cut. Once a system exists, compose from its real parts.
+- **Re-draft from the files that are there.** The PM's pick is the base and what they wanted different is the next brief; keep the rejected directions until the pick is transcribed into the token file. Two rounds is normal. A **third** re-draft round means the brief is the problem: say so and hand the question back to the PM.
 - Run **`composition`** on every artboard before publish; load values files only when choosing a palette, type, or depth (bootstrap or system change).
 - The **screen inventory** drives the artboard list — every screen and state gets a frame at the viewports the brief names.
 - Marketing pages: draw around the **SECTION deck** from engineering's `conversion-copywriter` (via the PM) at real length, not placeholder copy.

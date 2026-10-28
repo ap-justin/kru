@@ -33,6 +33,8 @@ A gallery that lists its components in a config has a second place to update, an
 
 ## Stand one up
 
+**Match the repo before you invent one.** A repo with Storybook, Ladle, a `/dev` route or a previews directory already has a gallery: extend it in its own format, and say in one line what you matched. A second gallery splits the answer to *what does this system have* in two.
+
 1. **Put it where the components already live.** Components inside an app get a dev-only route there — `/dev/gallery`, excluded from the production build — inheriting the providers, the stylesheet, the token file, the router and HMR the app already wires, so a preview renders what a screen renders. Components in their own package get a **workspace app** of their own depending on it (`workspace:*`): a package has no dev server, so the gallery is the app that gives it one. The gallery is an app in both branches — the workspace layout picks which branch, not whether.
    A gallery app imports the package's **source** stylesheet entry rather than its built `dist`: under a JIT engine the built sheet holds only the utilities the app already wrote, so a class a preview introduces has no rule and fails silently.
 2. **Glob the previews directory** and render each default export under its filename.
