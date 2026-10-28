@@ -1,5 +1,19 @@
 # kru plugin update log
 
+## 0.162.0
+
+**Lead.** A pull request the lead opens stays its own until it is clean: CI green, every review thread answered, and, where Greptile reviews the repo, no Greptile P0 or P1 open (Step 4.6). An internal API replaced by a new one has its callers migrated and the old one deleted in the same change.
+
+**Test credentials.** `references/test-credentials.md`: secrets from the environment only, the guard and the run in one shell with xtrace off, no part of a secret in output, and any Stripe secret key that isn't `sk_test_` aborts. The lead's scoped runs, `test-writer` and `stripe-specialist` point at it.
+
+**Connector guard.** A new hook refuses connector (MCP) calls that aren't a read, a draft, a tracker issue or a docs/browser server in cloud sessions, or wherever `KRU_MCP_GUARD=1`. It fails closed; `KRU_NO_MCP_GUARD=1` turns it off.
+
+**Brief.** An optional `## Tracker` section lists the effort's issue ids; a re-run checks it against the issues that link back (`scripts/brief-drift.mjs`), read-only.
+
+**Design.** The designer handoff matches the repo before inventing, names 2–4 directions by thesis, and hands a third re-draft round back as a brief problem. `design-gallery` extends a gallery the repo already has.
+
+**Principles from pstack.** `reliable-work` adds subtract before you add, sequence verifiable units, explain the number and safe re-runs; `typescript` adds parse at the boundary, derive from the owning schema and exhaustive variants.
+
 ## 0.160.0
 
 **Composition** takes the measured half of taste-skill v2.1. `layout`: the side margins are one pair with the nav on them; empty space is closed by something or it is a hole (half-width voids, `100vh` footers, blank first paints). `directions`: *A working screen dressed as a template* — colour on data not chrome, KPIs as a label over a number with no icon or sparkline, quiet nav, ruled tables, grey for a zero change, the product named and its main job one click away.
