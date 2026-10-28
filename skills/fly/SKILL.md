@@ -4,7 +4,7 @@ description: Fly.io platform recipes — fly.toml vs the live fleet, secrets and
 user-invocable: false
 ---
 
-Claims checked against `docs.fly.io` (every page has a `.md` twin at its URL plus `.md`; `docs.fly.io/llms-full.txt` is the whole set in one file) on 2026-10-28; a rule with no citation is a recipe, and the reason stands beside it. Numbers (timeouts, rate limits, retention) are today's — re-read the cited page before relying on one past a platform change.
+Claims checked against `docs.fly.io` (its `.md` twin per page) on 2026-10-28; a rule with no citation is a recipe, and the reason stands beside it. Numbers (timeouts, rate limits, retention) are today's — re-read the cited page before relying on one past a platform change.
 
 **Most of these deploy clean and fail later.** A deploy goes green with a Machine fleet `fly.toml` no longer describes, a volume holding the only copy, or a stop signal the app ignores. The failure shows up at the next deploy, the next host failure, or the next idle stop.
 
@@ -49,7 +49,7 @@ An app scaled with `fly scale count --max-per-region 1` drops `canary`/`bluegree
 - **Top-level `[checks]` never affect routing.** They are monitoring only, so a failing Machine keeps receiving traffic.
 - **`machine_checks`** run only during `rolling`/`canary` deploys.
 - Set `grace_period` past the app's real boot time; a shorter one fails early checks and stretches every deploy.
-- Smoke checks stop a deploy with no config at all: a Machine crash-looping in its first ~10 s fails it ([`docs.fly.io/launch/deploy`](https://docs.fly.io/launch/deploy.md) → *Smoke checks*).
+- Smoke checks run with no config: a Machine crash-looping in its first ~10 s fails the deploy ([`docs.fly.io/launch/deploy`](https://docs.fly.io/launch/deploy.md) → *Smoke checks*).
 
 ## Autostop, autostart, and what scale-to-zero costs
 `fly launch` writes scale-to-zero (`auto_stop_machines = "stop"`, `auto_start_machines = true`, `min_machines_running = 0`). An app with **no** autostop keys gets start-on-demand but never stops. ([`docs.fly.io/launch/autostop-autostart`](https://docs.fly.io/launch/autostop-autostart.md))
@@ -64,7 +64,7 @@ An app scaled with `fly scale count --max-per-region 1` drops `canary`/`bluegree
 A volume is a slice of NVMe on **one physical host**. It attaches to one Machine at a time, belongs to one app, and **nothing replicates it**. ([`docs.fly.io/volumes/overview`](https://docs.fly.io/volumes/overview.md))
 - **`fly scale count` attaches unattached volumes, then creates new empty ones. It copies no data.** A copy is `fly volumes fork`.
 - One Machine plus one volume loses data with the host. Fly's own guidance is at least two, with the app or database doing the replication. Daily snapshots (kept 5 days by default, 1–60 configurable) lag a day and are not the backup plan.
-- **The default volume app goes down on every deploy**, not just on host failure: first deploy makes one Machine when a volume is mounted, volumes rule out `canary`/`bluegreen`, and `rolling` has nothing to roll to.
+- **An app on one volume goes down on every deploy**, not just on host failure: it has one Machine (*First deploy*, above) and only `rolling` (the strategy table), which has nothing to roll to.
 - Volumes **grow, never shrink**. `[mounts]` auto-extend needs **both** `auto_extend_size_increment` and `auto_extend_size_limit`; with only the threshold set it does nothing ([`docs.fly.io/reference/configuration`](https://docs.fly.io/reference/configuration.md) → *The `mounts` section*).
 - `fly volumes create` places volumes in separate hardware zones by default. Other creation paths don't guarantee it. Pass `--vm-size` when the Machine is larger than default, or the volume can land on a host with no room for it.
 - `fly deploy` can change a volume's mount **path** but can't swap which volume a Machine has mounted ([`docs.fly.io/launch/deploy`](https://docs.fly.io/launch/deploy.md) → *Volume mounts*).
