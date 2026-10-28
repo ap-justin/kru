@@ -32,4 +32,13 @@ do
     exit 1
   }
 done
+
+cmdline="$sandbox/cmdline-fixture.md"
+printf -- '- `node "${CLAUDE_PLUGIN_ROOT}/scripts/brief-drift.mjs" --path plan/x/brief.md`\n' > "$cmdline"
+out=$(CHECK_SKILL_PATHS_EXTRA="$cmdline" bash "$check" 2>&1 || true)
+if echo "$out" | grep -qF 'garbled path token `node '; then
+  echo "FAIL: a node command line is a command, not a garbled path"
+  echo "$out"
+  exit 1
+fi
 echo "check-skill-paths.test: PASS"

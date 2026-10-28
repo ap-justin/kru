@@ -1,6 +1,6 @@
 ---
 name: brief
-description: Grill a change to the studs, then persist the account of it — what lands, blast radius, ship cadence, decisions, non-goals, done-when — as `plan/<effort>/brief.md` in the plan store. Re-run on an effort to reconcile its brief against what actually shipped.
+description: Grill a change to the studs, then persist the account of it — what lands, blast radius, ship cadence, decisions, non-goals, done-when — as `plan/<effort>/brief.md` in the plan store. Re-run on an effort to reconcile its brief against what actually shipped and against its tracker issues.
 disable-model-invocation: true
 ---
 
@@ -24,6 +24,12 @@ Bring them back to the user during the grill: an old brief's open threads get re
 
 **Re-grilling is reconciling, not re-reading.** Before you trust or tick anything in an old brief, check it against git — `git rev-list --count origin/main..main` plus the actual shas, and `gh pr list` for any PR the `Landing plan` claims landed. A brief claiming one unpushed commit when five are, or ticking a PR nobody opened, is the normal failure, not the odd one.
 
+**A brief with a `## Tracker` gets a drift check on every re-run.** An issue links back with the line `Brief: plan/<effort>/brief.md` in its body, and its state comes from the tracker, never from the brief. The check is read-only: nothing is filed, commented, closed or copied into the brief to clear it.
+
+1. Collect every issue that links here, in any state, as one JSON array of `{id, title, body, url, state}`, `state` being `open`, `done` or `canceled`. GitHub: `gh issue list --state all --limit 1000 --search '"plan/<effort>/brief.md" in:body' --json number,title,body,url,state,stateReason`, with `id` from `number`, closed as `NOT_PLANNED` mapped to `canceled` and any other closed to `done`; then `gh issue view` for each id the brief lists that the search missed. Linear, when its MCP tools are connected: `list_issues` with the path as the query and completed and canceled included, following the cursor to the last page; then `get_issue` for each listed id it missed.
+2. An id the tracker says doesn't exist stays out of the array, and the report calls it missing. Any other failure (auth, network, a rate limit) stops the check: report it rather than run drift on a partial list.
+3. Run `node "${CLAUDE_PLUGIN_ROOT}/scripts/brief-drift.mjs"` with `--path plan/<effort>/brief.md`, `--brief` naming the brief's file, `--issues` the JSON's (`-` for stdin), and `--team` once per Linear team key. It prints `no drift` or up to four lines: (a) listed, missing or not linked · (b) linked, not listed · (c) done, never planned · (d) planned, no issue. Each line enters the grill like a `TODOS.md` line, and the user decides whether the brief or the tracker is right.
+
 A brief pointer into `decisions.md` for a record that isn't there is a **finding, not a broken link** — handle it per `${CLAUDE_PLUGIN_ROOT}/references/lossless-doc-compaction.md` → §4 (reconstruct only what the pointer itself asserts, log the rest as a dated gap), and take anything load-bearing back into the grill as a re-decided `Q → A`. Never backfill a missing decision from memory: an invented rationale reads identical to a recorded one.
 
 ## 2. The round
@@ -40,7 +46,7 @@ Completion: the frontier is empty, and every question you asked was a product ca
 
 ## 3. Write `plan/<effort>/brief.md`
 
-Per `${CLAUDE_PLUGIN_ROOT}/TRACKER.md` — `Change` (one line, what's different for users) · `Why now` · `Blast radius` (files/subsystems touched + risk) · **`Landing plan`** (the cadence — see below) · `Decisions resolved` (the grill record, Q → A) · `Non-goals` · `Done when` (checkboxes) · `Open questions` — only when the user cut the round short with the frontier not empty: each still-open question, numbered, with your recommended answer.
+Per `${CLAUDE_PLUGIN_ROOT}/TRACKER.md` — `Change` (one line, what's different for users) · `Why now` · `Blast radius` (files/subsystems touched + risk) · **`Landing plan`** (the cadence — see below) · `Decisions resolved` (the grill record, Q → A) · `Non-goals` · `Tracker` — only when the effort's work is filed as GitHub or Linear issues: one bullet per planned item, its issue id at the end once one exists (`#12`, `BG-41`), never a status · `Done when` (checkboxes) · `Open questions` — only when the user cut the round short with the frontier not empty: each still-open question, numbered, with your recommended answer.
 
 **Rewrite in place, don't append**: a re-grill reads the old brief as input and replaces it, so the file is always the *current* account of the change, never an archaeology of every discussion. Strip the brief's self-archaeology in the same pass — `(Correction, …)`, `(Amendment, …)`, `(Rewritten <date> — this read…)` — and grepping for those markers is the done-check. The brief states the current shape; the story of how it got there is exactly what `decisions.md` is for.
 

@@ -128,7 +128,7 @@ def is_path_like_token(token: str) -> bool:
 
 def is_shell_command_line(token: str) -> bool:
     first = token.strip().split(None, 1)[0] if token.strip() else ""
-    return first in {"bash", "sh", "env", "sudo"} or (
+    return first in {"bash", "sh", "env", "sudo", "node"} or (
         "/" in first
         and first.endswith((".sh", ".mjs", ".ts", ".js"))
     )
