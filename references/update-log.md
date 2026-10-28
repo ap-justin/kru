@@ -6,7 +6,7 @@
 
 **Test credentials.** `references/test-credentials.md`: secrets from the environment only, the guard and the run in one shell with xtrace off, no part of a secret in output, and any Stripe secret key that isn't `sk_test_` aborts. The lead's scoped runs, `test-writer` and `stripe-specialist` point at it.
 
-**Connector guard.** A new hook refuses connector (MCP) calls that aren't a read, a draft, a tracker issue or a docs/browser server in cloud sessions, or wherever `KRU_MCP_GUARD=1`. It fails closed; `KRU_NO_MCP_GUARD=1` turns it off.
+**Connector guard.** A new hook refuses connector (MCP) calls that aren't a read, a draft, a Linear issue save or a docs/browser server in cloud sessions, or wherever `KRU_MCP_GUARD=1`. It fails closed, a crashed or timed-out hook included; `KRU_NO_MCP_GUARD=1` turns it off.
 
 **Brief.** An optional `## Tracker` section lists the effort's issue ids; a re-run checks it against the issues that link back (`scripts/brief-drift.mjs`), read-only.
 

@@ -22,29 +22,32 @@ function fail(message) {
   process.exit(1)
 }
 
-const teams = []
-function arg(name) {
-  const i = process.argv.indexOf(name)
-  if (i === -1 || process.argv[i + 1] == null || process.argv[i + 1].startsWith("--")) fail(`need ${name}`)
-  return process.argv[i + 1]
+const USAGE =
+  "usage: node scripts/brief-drift.mjs --path plan/<effort>/brief.md --brief <file> --issues <json|-> [--team KEY]...\n"
+if (process.argv.includes("--help")) {
+  process.stdout.write(USAGE)
+  process.exit(0)
 }
 
-const known = new Set(["--path", "--brief", "--issues", "--team"])
+const teams = []
+const args = {}
 for (let i = 2; i < process.argv.length; i++) {
   const a = process.argv[i]
-  if (!a.startsWith("--")) continue
-  if (!known.has(a)) fail(`unknown argument: ${a}`)
-  if (a === "--team") {
-    const key = String(process.argv[i + 1] ?? "").trim()
-    if (!/^[A-Za-z][A-Za-z0-9]*$/.test(key)) fail("--team takes a Linear team key")
-    teams.push(key.toUpperCase())
-  }
+  if (!["--path", "--brief", "--issues", "--team"].includes(a)) fail(`unknown argument: ${a}`)
+  const value = process.argv[i + 1]
+  if (value == null || (value.startsWith("--") && value !== "-")) fail(`need a value after ${a}`)
   i++
+  if (a === "--team") {
+    if (!/^[A-Za-z][A-Za-z0-9]*$/.test(value.trim())) fail("--team takes a Linear team key")
+    teams.push(value.trim().toUpperCase())
+  } else if (a in args) fail(`${a} given twice`)
+  else args[a] = value
 }
+for (const name of ["--path", "--brief", "--issues"]) if (!(name in args)) fail(`need ${name}`)
 
-const briefPath = arg("--path")
-const briefFile = arg("--brief")
-const issuesFile = arg("--issues")
+const briefPath = args["--path"]
+const briefFile = args["--brief"]
+const issuesFile = args["--issues"]
 if (!PATH_RE.test(briefPath)) fail("a brief path is plan/<effort>/brief.md")
 
 let brief
@@ -124,7 +127,7 @@ function trackerItems(markdown, prefixes) {
   const items = []
   let inSection = false
   let fence = false
-  for (const rawLine of String(markdown).replace(/\r\n/g, "\n").split("\n")) {
+  for (const rawLine of String(markdown).split("\n")) {
     const line = rawLine.replace(/\r$/, "")
     if (/^```/.test(line)) {
       fence = !fence

@@ -5,7 +5,7 @@
 set -u
 here=$(cd "$(dirname "$0")" && pwd)
 drift="$here/brief-drift.mjs"
-command -v node >/dev/null 2>&1 || { echo "brief-drift: skipped, no node"; exit 0; }
+command -v node >/dev/null 2>&1 || { echo "FAIL: brief-drift needs node"; exit 1; }
 t=$(mktemp -d)
 trap 'rm -rf "$t"' EXIT
 pass=0 fail=0
@@ -237,10 +237,64 @@ err_out=$(cat "$t/err")
 ok "issues JSON that is not an array is an error" 1
 report "…without echoing the payload" "$(case "$err_out" in *'not json'*) echo false ;; *) echo true ;; esac)" "err [$err_out]"
 
-printf '%s\n' '[]' > "$t/issues.json"
-out=$(node "$drift" --path "$path" --brief "$t/brief.md" --issues "$t/issues.json" --team 'B G' 2>"$t/err")
+run '# Onboarding
+' '[
+  {"id":"20","body":"Brief: plan/onboarding/brief.md","state":"completed"},
+  {"id":"21","body":"Brief: plan/onboarding/brief.md","state":"closed"},
+  {"id":"22","body":"Brief: plan/onboarding/brief.md","state":"Done"},
+  {"id":"23","body":"Brief: plan/onboarding/brief.md","state":"cancelled"},
+  {"id":"24","body":"Brief: plan/onboarding/brief.md","state":"canceled"},
+  {"id":"25","body":"Brief: plan/onboarding/brief.md","state":"in progress"}
+]'
+is "completed, closed and done count as done; either spelling of canceled and any other state do not" $'plan/onboarding/brief.md\n(b) linked, not listed: #20, #21, #22, #23, #24, #25\n(c) done, never planned: #20, #21, #22'
+unchanged "…and a drift run leaves the brief as it was"
+
+run '# Onboarding
+' '[{"id":"10","body":"Brief: plan/onboarding/brief.md","state":"done"},{"id":"9","body":"Brief: plan/onboarding/brief.md","state":"done"}]'
+is "github ids sort by number, not as text" $'plan/onboarding/brief.md\n(b) linked, not listed: #9, #10\n(c) done, never planned: #9, #10'
+
+run '# Onboarding
+
+## Tracker
+```
+- an example inside a fence — #77
+```
+- ship — #12
+' '[{"id":"12","body":"Brief: plan/onboarding/brief.md","state":"open"}]'
+is "a bullet inside a code fence is not a tracker item" $'plan/onboarding/brief.md\nno drift'
+
+run "$(printf '# Onboarding\r\n\r\n## Tracker\r\n- ship — #12\r\n- export the log\r\n')" '[{"id":"12","body":"Brief: plan/onboarding/brief.md","state":"open"}]'
+is "a CRLF brief reads like an LF one" $'plan/onboarding/brief.md\n(d) planned, no issue: export the log'
+
+printf '%s\n' '# Onboarding' '' '## Tracker' '- ship — #12' > "$t/brief.md"
+out=$(printf '%s' '[{"id":"12","body":"Brief: plan/onboarding/brief.md","state":"open"}]' | node "$drift" --path "$path" --brief "$t/brief.md" --issues - 2>"$t/err")
 code=$?
-ok "a --team value that is not a team key is an error" 1
+is "--issues - reads stdin" $'plan/onboarding/brief.md\nno drift'
+
+out=$(node "$drift" --help 2>"$t/err")
+code=$?
+report "--help prints usage and exits 0" "$( [ "$code" = 0 ] && case "$out" in usage:*) echo true ;; *) echo false ;; esac || echo false )" "exit $code; out [$out]"
+
+printf '%s\n' '[]' > "$t/issues.json"
+# refuses <name> <stderr text> <args...>: exit 1, the message on stderr, nothing on stdout
+refuses() {
+  local name=$1 want=$2; shift 2
+  out=$(node "$drift" "$@" 2>"$t/err")
+  code=$?
+  err_out=$(cat "$t/err")
+  report "$name" "$( [ "$code" = 1 ] && [ -z "$out" ] && case "$err_out" in *"brief drift: $want"*) echo true ;; *) echo false ;; esac || echo false )" "exit $code; out [$out]; err [$err_out]"
+}
+refuses "an unknown flag is refused" "unknown argument: --pth" --pth "$path" --brief "$t/brief.md" --issues "$t/issues.json"
+refuses "a stray positional argument is refused" "unknown argument: extra" --path "$path" --brief "$t/brief.md" --issues "$t/issues.json" extra
+refuses "a missing flag is named" "need --issues" --path "$path" --brief "$t/brief.md"
+refuses "a flag with no value is named" "need a value after --issues" --path "$path" --brief "$t/brief.md" --issues
+refuses "a flag given twice is refused" "--path given twice" --path "$path" --path "$path" --brief "$t/brief.md" --issues "$t/issues.json"
+refuses "--team with no value is refused" "need a value after --team" --path "$path" --brief "$t/brief.md" --issues "$t/issues.json" --team
+refuses "a --team value that is not a team key is refused" "--team takes a Linear team key" --path "$path" --brief "$t/brief.md" --issues "$t/issues.json" --team 'B G'
+refuses "an unreadable issues file is an error" "could not read the issues" --path "$path" --brief "$t/brief.md" --issues "$t/nope.json"
+refuses "a missing brief is an error, by message" "could not read the brief" --path "$path" --brief "$t/missing.md" --issues "$t/issues.json"
+printf '%s\n' '{}' > "$t/issues.json"
+refuses "issues JSON that is an object, not an array, is an error" "issues JSON must be an array" --path "$path" --brief "$t/brief.md" --issues "$t/issues.json"
 
 printf '%d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]
