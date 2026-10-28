@@ -4,7 +4,7 @@ description: Fly.io platform recipes — fly.toml vs the live fleet, secrets and
 user-invocable: false
 ---
 
-Claims checked against `docs.fly.io` (each page has a `.md` twin; `docs.fly.io/llms.txt` indexes them) on 2026-10-28; a rule with no citation is a recipe, and the reason stands beside it. Numbers (timeouts, rate limits, retention) are today's — re-read the cited page before relying on one past a platform change.
+Claims checked against `docs.fly.io` (every page has a `.md` twin at its URL plus `.md`; `docs.fly.io/llms-full.txt` is the whole set in one file) on 2026-10-28; a rule with no citation is a recipe, and the reason stands beside it. Numbers (timeouts, rate limits, retention) are today's — re-read the cited page before relying on one past a platform change.
 
 **Most of these deploy clean and fail later.** A deploy goes green with a Machine fleet `fly.toml` no longer describes, a volume holding the only copy, or a stop signal the app ignores. The failure shows up at the next deploy, the next host failure, or the next idle stop.
 
@@ -20,7 +20,7 @@ What a deploy enforces and what it leaves alone:
 ## Secrets, `[env]`, and tokens
 **`fly secrets set` restarts every Machine and wipes its ephemeral root filesystem.** Batch the changes, or `--stage` them and ship with the next `fly deploy` (or `fly secrets deploy`, which redeploys the current release without a rebuild). A staged secret reaches only Machines started or updated after it was set. ([`docs.fly.io/apps/secrets`](https://docs.fly.io/apps/secrets.md))
 - Secrets exist **only at runtime**. A value the image build needs goes through `RUN --mount=type=secret,id=X` in the Dockerfile plus `fly deploy --build-secret X=…`; an `ARG` or `ENV` bakes it into image history. ([`docs.fly.io/apps/build-secrets`](https://docs.fly.io/apps/build-secrets.md))
-- A secret overrides an `[env]` var of the same name. `[env]` names can't start with `FLY_`, and `primary_region` overrides any `PRIMARY_REGION` set there. `[env]` is committed config, so credentials go in `fly secrets`.
+- A secret overrides an `[env]` var of the same name. `[env]` names can't start with `FLY_`, and `primary_region` overrides any `PRIMARY_REGION` set there. `[env]` is committed config, so credentials go in `fly secrets`. ([`docs.fly.io/reference/configuration`](https://docs.fly.io/reference/configuration.md) → *The `env` variables section*)
 - A secret mounted as a file through `[[files]] secret_name` must be stored **base64-encoded** (`fly secrets set KEY=$(base64 < key.pem)`); Fly writes the decoded value to `guest_path` at boot.
 - **Anyone with deploy access can read every secret** by deploying code that prints it. Treat the deploy credential as equal to the secrets themselves.
 
@@ -39,15 +39,16 @@ An app scaled with `fly scale count --max-per-region 1` drops `canary`/`bluegree
 **`release_command`** runs once per deploy in a temporary Machine built from the new image, before any Machine updates:
 - it **replaces `CMD` but not `ENTRYPOINT`**, so an entrypoint script that starts the server itself starts it here too, and the release hangs to its timeout. Branch on `RELEASE_COMMAND=1`, which is set only on that Machine.
 - **no volumes are mounted**, at release or at build. Migrating a SQLite file on a volume belongs in the app's start path.
-- it inherits secrets and env. Non-zero exit fails the deploy. Default timeout is 5 min (`release_command_timeout`).
+- it inherits secrets and env, and is sized like the largest Machine in the default process group unless `[deploy.release_command_vm]` says otherwise. Non-zero exit fails the deploy. Default timeout is 5 min (`release_command_timeout`).
 
-**Shutdown** (deploy, `fly machine stop`, autostop) sends `kill_signal`, which **defaults to `SIGINT`**, then waits `kill_timeout` (default **5 s**, max 300 s, best-effort). A Node or Go server that drains on `SIGTERM` gets cut off mid-request every deploy until `kill_signal = "SIGTERM"` and a `kill_timeout` long enough to drain are set. ([`docs.fly.io/reference/configuration`](https://docs.fly.io/reference/configuration.md) → *`kill_signal`*)
+**Shutdown** (deploy, `fly machine stop`, autostop) sends `kill_signal`, which **defaults to `SIGINT`**, waits `kill_timeout` (default **5 s**, max 300 s, best-effort), then sends `SIGTERM`. A Node or Go server that drains on `SIGTERM` but has no `SIGINT` handler dies on the first signal, cut off mid-request every deploy, until `kill_signal = "SIGTERM"` and a `kill_timeout` long enough to drain are set. ([`docs.fly.io/reference/configuration`](https://docs.fly.io/reference/configuration.md) → *`kill_signal`*)
 
 **Which checks do what** ([`docs.fly.io/reference/health-checks`](https://docs.fly.io/reference/health-checks.md)):
 - **Service-level** checks (`[[http_service.checks]]`, `[[services.http_checks]]`/`tcp_checks`) gate routing and deploys.
+- **No check restarts or stops a Machine.** A failing service check only takes it out of routing; a hung process stays up, unrouted, until someone restarts it.
 - **Top-level `[checks]` never affect routing.** They are monitoring only, so a failing Machine keeps receiving traffic.
 - **`machine_checks`** run only during `rolling`/`canary` deploys.
-- Set `grace_period` past the app's real boot time, or a slow start fails the deploy.
+- Set `grace_period` past the app's real boot time; a shorter one fails early checks and stretches every deploy.
 - Smoke checks stop a deploy with no config at all: a Machine crash-looping in its first ~10 s fails it ([`docs.fly.io/launch/deploy`](https://docs.fly.io/launch/deploy.md) → *Smoke checks*).
 
 ## Autostop, autostart, and what scale-to-zero costs
@@ -55,7 +56,7 @@ An app scaled with `fly scale count --max-per-region 1` drops `canary`/`bluegree
 - **`min_machines_running` counts the primary region only.** Every other region can drop to zero whatever it says.
 - **Autostop never creates Machines.** The ceiling is however many exist, so peak capacity comes from `fly scale count`.
 - Set both flags on or both off, unless the app exits by itself when idle (then `auto_start_machines = true`, `auto_stop_machines = "off"`). Stop-without-start strands the app with every Machine stopped.
-- The stop loop runs every few minutes and stops **at most one Machine per region per pass**, measuring excess against each Machine's `soft_limit`. A `soft_limit` that doesn't match the app's real concurrency makes it stop too eagerly or never.
+- The stop loop runs every few minutes and stops **at most one Machine per region per pass**, measuring excess against each Machine's `soft_limit`, which defaults to 20 when unset ([`docs.fly.io/apps/concurrency`](https://docs.fly.io/apps/concurrency.md)). Set it to what one Machine really handles, or autostop sizes the fleet for a different app.
 - A stopped Machine's **volume still bills at full size**. On a mostly idle app the volume is often the largest line, so keep files in object storage (Tigris) when no local disk is needed.
 - A cold start is about 2 s. `"suspend"` resumes in hundreds of ms but has its own requirements ([`docs.fly.io/reference/suspend-resume`](https://docs.fly.io/reference/suspend-resume.md)).
 
@@ -64,12 +65,12 @@ A volume is a slice of NVMe on **one physical host**. It attaches to one Machine
 - **`fly scale count` attaches unattached volumes, then creates new empty ones. It copies no data.** A copy is `fly volumes fork`.
 - One Machine plus one volume loses data with the host. Fly's own guidance is at least two, with the app or database doing the replication. Daily snapshots (kept 5 days by default, 1–60 configurable) lag a day and are not the backup plan.
 - **The default volume app goes down on every deploy**, not just on host failure: first deploy makes one Machine when a volume is mounted, volumes rule out `canary`/`bluegreen`, and `rolling` has nothing to roll to.
-- Volumes **grow, never shrink**. `[mounts]` auto-extend needs **both** `auto_extend_size_increment` and `auto_extend_size_limit`; with only the threshold set it does nothing.
+- Volumes **grow, never shrink**. `[mounts]` auto-extend needs **both** `auto_extend_size_increment` and `auto_extend_size_limit`; with only the threshold set it does nothing ([`docs.fly.io/reference/configuration`](https://docs.fly.io/reference/configuration.md) → *The `mounts` section*).
 - `fly volumes create` places volumes in separate hardware zones by default. Other creation paths don't guarantee it. Pass `--vm-size` when the Machine is larger than default, or the volume can land on a host with no room for it.
 - `fly deploy` can change a volume's mount **path** but can't swap which volume a Machine has mounted ([`docs.fly.io/launch/deploy`](https://docs.fly.io/launch/deploy.md) → *Volume mounts*).
 
 ## Private networking and certs
-Fly Proxy serves every `[http_service]`/`[[services]]` port on whatever public IPs the app holds, and the first deploy of an HTTP service **allocates a public IPv6 and a shared IPv4 by itself**. An "internal" service is private only after `fly ips list` shows no public address (`fly ips release` the rest). ([`docs.fly.io/networking/flycast`](https://docs.fly.io/networking/flycast.md))
+Fly Proxy serves every `[http_service]`/`[[services]]` port on whatever public IPs the app holds, and the first deploy of an HTTP service **allocates a public IPv6 and a shared IPv4 by itself** ([`docs.fly.io/launch/deploy`](https://docs.fly.io/launch/deploy.md) → *IP addresses*). An "internal" service is private only after `fly ips list` shows no public address (`fly ips release` the rest). ([`docs.fly.io/networking/flycast`](https://docs.fly.io/networking/flycast.md))
 
 Two private paths, each with its own bind address:
 
@@ -83,12 +84,12 @@ Two private paths, each with its own bind address:
 A service reached both through the proxy and over `.internal` binds both addresses. `[::]:<port>` also takes 6PN traffic, but whether it accepts IPv4 too depends on the runtime, so check the proxy path rather than assuming it. A server bound only to `0.0.0.0` works publicly and refuses every `.internal` caller. ([`docs.fly.io/networking/private-networking`](https://docs.fly.io/networking/private-networking.md), [`docs.fly.io/networking/app-services`](https://docs.fly.io/networking/app-services.md))
 
 **Certs** (`fly certs add <host>`, then `fly certs check`) ([`docs.fly.io/networking/custom-domain`](https://docs.fly.io/networking/custom-domain.md)):
-- Issuance needs one of an **AAAA** record to the app, an `_acme-challenge` CNAME, or a `_fly-ownership` TXT. An apex with only an A record on the shared IPv4 doesn't validate.
+- Issuance needs one of an **AAAA** record to the app, an `_acme-challenge` CNAME, or a `_fly-ownership` TXT. An A record alone, on any IPv4, doesn't validate.
 - A wildcard needs DNS-01 (the `_acme-challenge` CNAME).
-- **Behind Cloudflare's proxy** (orange cloud), add the `_fly-ownership` TXT and set SSL mode to Full or Full (Strict). Flexible causes redirect loops.
+- **Behind Cloudflare's proxy** (orange cloud), add the `_fly-ownership` TXT and set SSL mode to Full or Full (Strict). Flexible causes redirect loops. Where Cloudflare still blocks HTTP-01, import a Cloudflare Origin Certificate instead of ACME.
 
 ## Machines API: whole configs, per-action limits, leases
-- **Update replaces the whole config; there are no partial updates.** GET the Machine, edit its `config`, and POST all of it back. A hand-built partial body silently drops services, mounts and env. A running Machine reboots on update unless `skip_launch` is set. ([`docs.fly.io/machines/api/machines-resource`](https://docs.fly.io/machines/api/machines-resource.md))
+- **Update replaces the whole config; there are no partial updates.** GET the Machine, edit its `config`, and POST all of it back with the GET's `version` as `current_version`: if anything changed the Machine in between, the update is rejected with `409 Conflict` and nothing changes. A hand-built body sets only what it names. A running Machine reboots on update unless `skip_launch` is set. ([`docs.fly.io/machines/api/machines-resource`](https://docs.fly.io/machines/api/machines-resource.md))
 - **Rate limits are per action, per Machine (or app)**: 1 req/s, burst 3; Get Machine 5 req/s, burst 10. A loop that creates or updates a fleet paces itself or gets throttled. ([`docs.fly.io/machines/api/working-with-machines-api`](https://docs.fly.io/machines/api/working-with-machines-api.md))
 - **Leases are the lock.** A mutating call on a Machine someone else holds the lease on fails with `409 Conflict`; the holder sends the `fly-machine-lease-nonce` header on every call ([`docs.fly.io/api/machines/machines/destroy-machine`](https://docs.fly.io/api/machines/machines/destroy-machine.md)). Create with `lease_ttl` to hold a new Machine until it passes health checks.
 - Waiting for `state=stopped` requires the `instance_id` you're waiting on. Every update can change that id.

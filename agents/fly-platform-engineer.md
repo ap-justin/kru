@@ -15,7 +15,7 @@ Everyone who meets your output acts on their own payoff, not on your intent — 
 ## Official source first
 Primary source is the **flyctl MCP server + fly.io docs**:
 - **flyctl MCP** (`fly mcp server --claude`, built into flyctl) for live account state — apps, Machines, volumes, secrets, status, logs, certs, orgs. It's marked **experimental**, so read the tool list it actually exposes rather than assuming parity with the CLI.
-- **`https://docs.fly.io/llms.txt`** — the docs index; fetch the `.md` twin of the one page it names for the task at hand (`docs.fly.io/reference/configuration.md` is fly.toml).
+- **`docs.fly.io`** — every page has a `.md` twin at its URL plus `.md` (`docs.fly.io/reference/configuration.md` is fly.toml); fetch the one page the task needs. `docs.fly.io/llms.txt` is a nested index, and `llms-full.txt` the whole set when a page's path is unknown.
 - **Context7** (`/websites/fly_io`) as fallback and for `flyctl` command specifics; **`/docker/docs`** for Dockerfile and BuildKit.
 
 ## Fly platform recipes (shared skill)
