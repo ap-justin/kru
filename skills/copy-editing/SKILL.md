@@ -2,10 +2,10 @@
 name: copy-editing
 description: Line-edit existing marketing copy when the task asks to tighten, proofread, or refresh shipped page copy — not a new page from scratch.
 metadata:
-  version: 2.1.1
+  version: 2.2.1
 ---
 
-<!-- vendored from `coreyhaines31/marketingskills` (main, sha b7fb899) → `skills/copy-editing`.
+<!-- vendored from `coreyhaines31/marketingskills` (main, sha 15b38b5) → `skills/copy-editing`.
      Corey Haines is a recognized SaaS-marketing authority; no first-party source exists for
      conversion copy-editing, so this curated community skill is the backing (same tier as the
      mattpocock pack). User-invoked line-edit pass (`skills/copy-editing/SKILL.md` (PM loads when the task names it), runs inline) — on-page copy
@@ -30,6 +30,8 @@ Good copy editing improves what's already there. Each pass focuses on one dimens
 - Multiple focused passes beat one unfocused review
 - Each edit should have a clear reason
 - Preserve the author's voice while improving clarity
+
+**Pick the mode before editing.** Diagnose the input: A, blank or slop (rebuild from the facts); B, a real voice (restore it, keep their argument and words); C, a point edit (one line, word, or section). **A point edit skips the Seven Sweeps**: change only what was asked plus the minimum around it, return just the changed lines with a reason, and leave everything else as written. Run the full sweeps for A and B. See [references/checklist.md](references/checklist.md#pick-the-edit-mode).
 
 ---
 
@@ -105,7 +107,7 @@ For every statement, ask "Okay, so what?" If the copy doesn't answer that questi
 
 ❌ "Our platform uses AI-powered analytics"
 *So what?*
-✅ "Our AI-powered analytics surface insights you'd miss manually—so you can make better decisions in half the time"
+✅ "Our AI-powered analytics surface insights you'd miss manually, so you can make better decisions in half the time"
 
 **Common So What failures:**
 - Feature lists without benefit connections

@@ -6,7 +6,8 @@ user-invocable: false
 
 **Conform's parse deletes; it never invents.** Every empty string becomes `undefined` before the schema sees it, so a blank field fails the *type* check rather than the rule you wrote for it — and any wrapper that tolerates `undefined` (`.optional()`, `.default()`) turns *the user cleared this* into a quiet success. Two consequences drive the rest: the message the user reads is Zod's unless yours sits on the **type constructor** · the server's reply is the **payload echoed back**, and it replaces the form's initial value wholesale — carrying what was typed, including what you'd rather not send back.
 
-Reproduced on **`@conform-to/react@1.21.1`** + **`@conform-to/zod@1.21.1`** (npm `latest`, 2026-08-18) with `zod@4.4.3`, `react@19.2.8`. Re-verify after a minor bump — the `future` half of this package breaks on those by policy.
+Reproduced on **`@conform-to/react@1.21.1`** + **`@conform-to/zod@1.21.1`** (2026-08-18) with `zod@4.4.3`, `react@19.2.8`.
+The `getZodConstraint` claims re-run on **`@conform-to/react@1.21.2`** + **`@conform-to/zod@1.21.2`** (npm `latest`, 2026-10-24) with `zod@4.6.7`. Re-verify after a minor bump — the `future` half of this package breaks on those by policy.
 
 ## Two APIs ship in one package, and the docs teach both
 | | classic — `@conform-to/react` | preview — `@conform-to/react/future` |
@@ -75,7 +76,7 @@ Conform focuses the first invalid **input element** when a submit fails — it r
 - **No `onValidate` → conform never validates on the client.** It hands the submit straight through, so every message costs a round trip. Wire it: `onValidate({ formData }) { return parseWithZod(formData, { schema }) }`.
 - `shouldValidate` defaults to **`'onSubmit'`**, and `shouldRevalidate` mirrors whatever it is. `{ shouldValidate: 'onBlur', shouldRevalidate: 'onInput' }` is the pairing that reports late and clears early.
 - **`noValidate` is rendered on the server by default**, so the browser's own constraint validation is off even before hydration. `defaultNoValidate: false` keeps native validation for the pre-JS window and flips it off once conform takes over. Without that, the `required`/`minLength`/`pattern` attributes `getZodConstraint` produces are decoration.
-- `getZodConstraint` reads types, not rules: a `.refine()` contributes **nothing**, and every branch of a union comes out `required: false`.
+- `getZodConstraint` reads types, not rules: a `.refine()` contributes **nothing**, and every branch of a union comes out `required: false`. On `zod@4.6` it needs **`@conform-to/zod@1.21.2`** or later: 1.21.1 silently drops `minLength`/`maxLength`/`pattern`/`min`/`max`/`accept`, leaving `required` and an enum's `pattern`.
 
 ## `key` is typed on the helpers and deleted before they return
 `getInputProps` declares `key: string | undefined`, then sets it to `undefined` — which the helper's own `simplify()` strips — so the spread never carries one. Pass **`key={fields.x.key}`** yourself on any field that can be reset, updated, or list-mutated: conform regenerates that key at exactly those moments, and an uncontrolled input only picks up a new `defaultValue` when React remounts it. Without it the input keeps the value the user typed after a reset.

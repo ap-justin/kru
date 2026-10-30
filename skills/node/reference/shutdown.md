@@ -1,6 +1,6 @@
 # Shutting down a service
 
-A long-running Node process stops cleanly only if it drains in-flight work, then lets the event loop empty. Reproduced on **Node v24.20.0** (`darwin/arm64`, 2026-10-05). Docs: `process.html#signal-events`, `http.html#serverclosecallback`, `http.html#servercloseallconnections`.
+A long-running Node process stops cleanly only if it drains in-flight work, then lets the event loop empty. Reproduced on **Node v24.20.0** (`darwin/arm64`, 2026-10-05); *The pattern*'s run (143, 130, the 500 ms deadline) also on **Node v26.13.0** (2026-10-29). Docs: `process.html#signal-events`, `http.html#serverclosecallback`, `http.html#servercloseallconnections`.
 
 ## The pattern
 

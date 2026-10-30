@@ -6,7 +6,7 @@ user-invocable: false
 
 **Vitest fails quietly.** The runner is Vite-native and fast, and every trap below is a run that reports what you did not ask: a test that was never collected, a log that was never printed, state that walked from one test into the next, a timer that never fired, an element left over from the previous render. Read the run you got, not the run you expected.
 
-Reproduced on **`vitest@5.0.0`** with `vite@8.2.2`, `jsdom@30.0.1`, `@testing-library/react@16.3.3`, `@testing-library/user-event@14.6.7`, `react@19.2.8`, Node 24. Vitest 5 needs **Node ≥ 22.12** and **Vite ≥ 6.4**. Check the installed major in `package.json` first — the rows marked *v4* below behave differently there.
+Reproduced on **`vitest@5.0.0`** with `vite@8.2.2`, `jsdom@30.0.1`, `@testing-library/react@16.3.3`, `@testing-library/user-event@14.6.7`, `react@19.2.8`, Node 24; the `--changed --bail 1` line re-run on `vitest@5.0.5`, 2026-10-24. Vitest 5 needs **Node ≥ 22.12** and **Vite ≥ 6.4**. Check the installed major in `package.json` first — the rows marked *v4* below behave differently there.
 
 | | v4 | v5 |
 |---|---|---|

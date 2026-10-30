@@ -36,6 +36,8 @@ A TUI's output is a string, which makes it more testable than most UI. This is t
 
 **Golden frames.** Render the view at a fixed size against fixed state and assert the whole string. Each framework has the seam: Bubble Tea's `View()` returns one, Ratatui has `TestBackend` with a `Buffer` to compare, Textual has `Pilot` plus snapshot testing, Ink has `ink-testing-library`. Pin the size in the test — a golden that reads the real terminal is flaky by construction.
 
+**Pin `TERM` too.** `huh` switches a form to its accessible mode when `TERM=dumb` (`form.go`: width reset, `WithAccessible(true)`), so a keystroke-driven test walks a different code path — and panics there — on a cloud shell that sets `dumb` while CI doesn't. Set `TERM=xterm-256color` in the test (`t.Setenv`) rather than inheriting it.
+
 Three things make the suite catch the failures above rather than decorate them:
 
 - **Widths, plural** — the minimum, one wide, and an awkward middle where truncation actually fires. A single happy width proves nothing about the layout math.

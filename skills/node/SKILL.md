@@ -1,12 +1,12 @@
 ---
 name: node
-description: "Node runtime recipes. Use when writing or reviewing code `node` runs — a CLI, a script, or a long-running service, as `.js`/`.mjs` or `node file.ts`: exit, signals, `fetch`, `--env-file`, streams, rejections, shutdown. Node 24 LTS; tsconfig and ESM/CJS config are `typescript`'s."
+description: "Node runtime recipes. Use when writing or reviewing code `node` runs — a CLI, a script, or a long-running service, as `.js`/`.mjs` or `node file.ts`: exit, signals, `fetch`, `--env-file`, streams, rejections, shutdown. Node 24 and 26 LTS; tsconfig and ESM/CJS config are `typescript`'s."
 user-invocable: false
 ---
 
 **Node's dangerous failure is the one the process never reports.** Output lost after the last line ran, a socket held after the code moved on, a crash quietly turned into exit 0. Three consequences drive the file: a listener *replaces* a default (signals, `unhandledRejection`, stream `'error'`) · exit is not synchronized with I/O (stdout, sockets and child buffers drain after your last statement) · a resource you didn't finish (a body, a stream, a connection) is held, not freed.
 
-Reproduced on **Node v24.20.0** (`darwin/arm64`, 2026-10-05). Each behavior is documented under nodejs.org/api; the page is named per section.
+Reproduced on **Node v24.20.0** (`darwin/arm64`, 2026-10-05) and **Node v26.13.0** (2026-10-29); the 300 s headers timeout and `import.meta.main`'s stability were not rerun on 26. Each behavior is documented under nodejs.org/api; the page is named per section.
 
 ## Environment — `--env-file` (`cli.html#--env-filefile`)
 - **The shell wins.** A variable already in the environment beats the file, for `--env-file` and `process.loadEnvFile()` alike — `FOO=shell node --env-file=.env` reads `shell`. A stale `export` in the terminal makes an edit to `.env` look like it did nothing; `env | grep` before debugging the file. Among several `--env-file` flags, the later file wins.

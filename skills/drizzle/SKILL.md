@@ -7,12 +7,12 @@ user-invocable: false
 **Drizzle is a typed SQL builder with a migration generator attached — not a database, and not a safety net.** Three consequences drive everything below: the SQL in `drizzle/` is a *draft the generator wrote*, not a reviewed migration · Drizzle owns neither the connection nor its settings · the types prove a query compiles, never that it is correct against the rows already in the table.
 
 ## First: check the installed version — the docs are ahead of npm
-As of 2026-07-29, `npm i drizzle-orm` does **not** install what orm.drizzle.team shows you by default.
+As of 2026-10-24, `npm i drizzle-orm` does **not** install what orm.drizzle.team shows you by default.
 
 | | installed by `latest` | documented on the site |
 |---|---|---|
-| `drizzle-orm` | **0.45.2** (2026-03-27) | **1.0** (`1.0.0-rc.4`, 2026-06-27) |
-| `drizzle-kit` | **0.31.10** | 1.0 rc |
+| `drizzle-orm` | **0.45.4** (2026-10-08) | **1.0** (`1.0.0-rc.5`, 2026-10-21) |
+| `drizzle-kit` | **0.31.11** | 1.0 rc |
 
 Read `package.json` before writing a line. On 0.45.x, these v1 APIs **do not exist** — verified against the shipped package, not release notes:
 

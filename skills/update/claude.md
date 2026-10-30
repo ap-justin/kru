@@ -37,7 +37,7 @@ Claude Code ships most weekdays, and a release can change the ground under a plu
      R=$(readlink -f "$(which claude)"); grep -ao '.\{300\}<key>:.\{200\}' "$R" | head -1
      ```
 
-     This is what separates `experimental:\n  cacheTtl: "1h"` from a key that parses and does nothing — `claude plugin validate` passes on any unknown agent key, so it answers a different question.
+     This is what separates `experimental:\n  cacheTtl: "1h"` from a key that parses and does nothing — `claude plugin validate` passes on any unknown agent key, even with `--strict`, so it answers a different question. The loader's `--debug` log names an unrecognized agent key (`skills/roster/audit.md` → *Floor*), which says a key is misspelled, not that a real one does anything.
    - a **CLI subcommand** — run its `--help`. Early access replies `<feature> is currently in early access` and that is the verdict for this install.
    - a **built-in's behavior** — check what the team's own text claims about it, and correct the claim.
 6. **Give every kept entry one verdict** (`SKILL.md` → *The verdicts*). The action verdict here is **Adopt** — the change is small, reversible, and the team's existing doctrine already argues for it. Say which line moves.

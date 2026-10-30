@@ -4,9 +4,11 @@ description: Cloudflare Workers best practices for production applications. Use 
 user-invocable: false
 ---
 
-<!-- vendored verbatim from `cloudflare/skills` main:skills/workers-best-practices @ 41e0d19 (Apache-2.0; LICENSE kept).
+<!-- vendored verbatim from `cloudflare/skills` main:skills/workers-best-practices @ 49a31e0 (Apache-2.0; LICENSE kept).
      production Workers practice — handler shape, config, runtime limits; the `cloudflare` skill routes here.
-     re-sync: re-download skills/workers-best-practices/ from the cloudflare/skills repo. -->
+     re-sync: re-download skills/workers-best-practices/ from the cloudflare/skills repo.
+     two deviations, re-applied on re-sync: the Wrangler-only CLI line under *References* kept (standing `cf` Decline);
+     upstream's `## Skill feedback` section and `references/skill-feedback.md` left out. -->
 
 Your knowledge of Cloudflare Workers APIs, types, and configuration may be outdated. **Prefer retrieval over pre-training** when writing or reviewing Workers code.
 
@@ -31,6 +33,10 @@ Use today's date for new Workers. Encourage periodic updates for existing Worker
 ## Enable Observability
 
 Enable [Workers Logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/index.md) and [Traces](https://developers.cloudflare.com/workers/observability/traces/index.md) when creating or preparing a Worker for production. Set `observability.enabled` and `observability.traces.enabled` to `true`; the top-level setting alone does not enable traces. Use structured JSON logging and configure sampling for the workload. During reviews, flag missing logs or traces. See the [configuration example](references/configuration.md#enable-workers-logs-and-traces).
+
+## Place Compute Near Regional Databases
+
+For Workers that make multiple sequential queries to one regional database, configure explicit placement matching the database's provider and region before deployment. Ask for missing location information, preserve existing placement choices, and verify handler eligibility and deployed request duration. See [database placement](references/configuration.md#place-compute-near-regional-databases).
 
 ## Anti-Patterns to Flag
 

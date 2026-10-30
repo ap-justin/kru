@@ -6,7 +6,7 @@ user-invocable: false
 
 **RHF keeps the form outside React, and everything it does for you is an opt-in.** A `formState` property re-renders only if render *read* it — the Proxy tracks what it saw. A field arrives as the string the DOM held unless the registration asked for a conversion. And the values RHF holds are not the values the browser posts, so `FormData`, `getValues()` and the object your handler receives are three different objects. Every failure below is one missed opt-in, and none of them throw.
 
-Reproduced on **`react-hook-form@7.89.0`** + **`@hookform/resolvers@5.9.1`** (npm `latest`, 2026-10-10) with `zod@4.6.5`, `react@19.3.0`: the Proxy and `isValid` counts, `setValue`, `reset()`/`values`, and `reference/fields.md`'s `useFieldArray` and `fieldState`.
+Reproduced on **`react-hook-form@7.91.0`** (npm `latest`) + **`@hookform/resolvers@5.9.1`** (2026-10-24) with `zod@4.6.5`, `react@19.3.0`: the Proxy and `isValid` counts, `setValue`, `reset()`/`values`, `reference/wiring.md`'s submit ladder and `setError`, and `reference/fields.md`'s re-render table, `useFieldArray` and `fieldState`.
 Everything else reproduced on **`react-hook-form@7.88.0`** + **`@hookform/resolvers@5.9.1`** (2026-09-23), same `zod` and `react`. Re-verify after a minor bump.
 
 ## The Proxy tracks only what render read

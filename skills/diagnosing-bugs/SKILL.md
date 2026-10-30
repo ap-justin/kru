@@ -4,7 +4,7 @@ description: Diagnosis loop for hard bugs and performance regressions. Use when 
 user-invocable: false
 ---
 
-<!-- vendored from `mattpocock/skills` (v1.3.1, sha 24fe0ef) → `skills/diagnosing-bugs`. Hard-bug + perf-regression diagnosis loop backing the `vercel-perf-optimizer` seat. Kept verbatim minus the Codex `agents/openai.yaml` metadata (unused here), plus `user-invocable: false` in frontmatter and the *Two fixes failed — attack the premise* subsection closing Phase 5 (adapted from `cursor/plugins` `pstack/skills/principle-attack-the-premise`), both re-applied after any re-sync; re-sync: re-download from https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/diagnosing-bugs/. -->
+<!-- vendored from `mattpocock/skills` (v1.3.2, sha d1478fc) → `skills/diagnosing-bugs`. Hard-bug + perf-regression diagnosis loop backing the `vercel-perf-optimizer` seat. Kept verbatim minus the Codex `agents/openai.yaml` metadata (unused here), plus `user-invocable: false` in frontmatter and the *Two fixes failed — attack the premise* subsection closing Phase 5 (adapted from `cursor/plugins` `pstack/skills/principle-attack-the-premise`), both re-applied after any re-sync; re-sync: re-download from https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/diagnosing-bugs/. -->
 
 # Diagnosing Bugs
 
@@ -125,7 +125,7 @@ A correct seam is one where the test exercises the **real bug pattern** as it oc
 If a correct seam exists:
 
 1. Turn the minimised repro into a failing test at that seam.
-2. Watch it fail.
+2. Watch it fail. If you forced the red by mutating code or a fixture, `diff` against a pristine copy to prove the mutation landed before you trust it.
 3. Apply the fix.
 4. Watch it pass.
 5. Re-run the Phase 1 feedback loop against the original (un-minimised) scenario.

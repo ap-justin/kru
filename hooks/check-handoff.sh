@@ -146,7 +146,7 @@ fi
 # the return-pass line is Block O's, already in every code-writing seat's prompt — a
 # brief asking for it is a second source of that block (scan 2).
 retpass=$(printf '%s' "$prompt" | grep -oiE 'return pass:?[^.]{0,40}' | head -1)
-[ -n "$retpass" ] && reasons="${reasons}restates Block O: \"${retpass}\" — the seat prompt carries the return pass; cut the clause (scan 2). "
+[ -n "$retpass" ] && reasons="${reasons}restates Block O: \"${retpass}\" — the seat prompt carries the return pass; cut that mention and keep the slice's own return items (item 7, scan 2). "
 [ -n "$comments" ] && reasons="${reasons}paraphrases the comment standard: \"${comments}\" — Block I rides in the seat prompt; cut that clause, keep the rest of the sentence (scan 2). "
 
 # a review seat writes its report where the brief says and returns a pointer —
@@ -247,10 +247,12 @@ grep -m1 '^tools:' "$plugin_root/agents/$seat.md" | grep -qvE '\b(Edit|Write)\b'
 if [ -n "$lanes" ] && ! $readonly_seat && printf '%s' "$lanes" | awk -v s="$seat" '$2 == s { f = 1 } END { exit !f }'; then
   # a scoped package (`@libsql/client`) is a dependency, not a directory; a
   # sentence handing a path to its owner ("the auth seat owns that file") names
-  # it for reading. Exempt `mounted by` / `leave it` (reference only). Bare sheet
-  # dirs log as grouping-mention; file paths as grouping (shadow).
+  # it for reading. Exempt `mounted by` / `leave it` (reference only), and a
+  # fence around a parallel builder's files ("another builder edits x — don't
+  # touch those"), which names them so this seat stays out. Bare sheet dirs log
+  # as grouping-mention; file paths as grouping (shadow).
   misroute=$(printf '%s\n' "$prompt" | sed 's/\. /\
-/g' | grep -viE "\banother (seat|lane)|\bseat owns\b|\bowns (that|this|the) file\b|\boutside (the|your|its) lane\b|\bmounted by\b|\bleave it\b" |
+/g' | grep -viE "\banother (seat|lane|builder)|\bseat owns\b|\bowns (that|this|the) file\b|\boutside (the|your|its) lane\b|\bmounted by\b|\bleave it\b|\bdo(n'?t| not) touch\b|\btouch only\b|\bbelongs to\b|\bin parallel\b|\bat the same time\b|\bconcurrently\b" |
     grep -oE '(^|[^@A-Za-z0-9_.-])[A-Za-z0-9_.-]+(/[][A-Za-z0-9_.@()+-]+)+' | sed -E 's#^[^A-Za-z0-9_.-]##' | sort -u | head -40 |
     awk -v s="$seat" 'NR == FNR { if (NF == 2) { dir[++n] = $1; own[n] = $2 }; next }
       { best = ""; bl = 0; bare = 0
