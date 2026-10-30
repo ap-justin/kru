@@ -59,6 +59,7 @@ expected=(
   stripe
   vercel
   fly
+  sky
 )
 
 # --- the default list is the contract ---------------------------------------
