@@ -1,6 +1,6 @@
 ---
 name: claude-code-delegation
-description: "Delegating work to Claude Code. Use when handing off a build, fix, refactor or review, when choosing cloud or local headless, or before a merge that needs an independent review. Work that stays in this session is out."
+description: "Delegating work to Claude Code. Use when handing off a build, fix, refactor or review, when choosing cloud or local headless, or before a merge that needs an independent review. A Sky run: sky. Work that stays in this session is out."
 user-invocable: false
 ---
 
@@ -12,6 +12,7 @@ Claude Code (`claude`) runs the work. Choose where that run happens, and hand it
 
 - **Cloud** (`claude --cloud "<task>"`) for a long or heavy build, a large refactor, a full test suite, or anything that can work from a pushed branch. Attach later with `claude --cloud <session_id or claude.ai/code URL>`, or resume with `--teleport`.
 - **Local headless** (`claude -p "<task>"`) for a quick task, or work that needs files only on this machine, a login, a running local app, or a read of a local clone.
+- **Sky**, when the repo has a Sky environment: a sandboxed run that holds for answers and approvals and opens its own pull request. Running it is [`sky`](../sky/SKILL.md).
 
 When the cloud reports an auth or plan error, run the work locally and review it locally, and report that the cloud needs a claude.ai login.
 
