@@ -190,8 +190,12 @@ repo the user owns, which `hooks/store-sync.sh` keeps the home synced to. Check
 when the user attaches it to the session: the setup script runs with no git credentials, so its
 clone of a private store fails, and store-sync clones it at session start instead.
 
-**The cloud environment is a record in the repo.** The environment dialog is the only runtime for
-what the user pastes there, so the repo carries the record and the user's part is copying. Write `.claude/cloud-setup.md` as three copy blocks and nothing
+**Opt-in: the cloud environment is a record in the repo.** This step runs only when the user's task
+says the repo uses Claude Code on the web, or the repo already carries a `.claude/cloud-setup.md`.
+Otherwise it is off: write no `.claude/cloud-setup.md`, no `.claude/cloud-install.sh`, no install
+hook, and ask nothing about it; the report names the skip in one clause and that the task can opt in.
+The environment dialog is the only runtime for what the user pastes there, so the repo carries the
+record and the user's part is copying. Write `.claude/cloud-setup.md` as three copy blocks and nothing
 else, each under its dialog field's name:
 
 1. **Environment variables** — `KRU_STORE_REPO=<owner>/<store-repo>`.
@@ -304,9 +308,9 @@ per-machine and kept out of version control, and the repo's `.gitignore` is what
 .claude/agent-memory-local/x` answers that), so the first `git add -A` after a build leaves it behind.
 
 Completion: every grant traces to evidence the derivation already produced, the `verify` skill
-matches the sheet's line or is the repo's own, the memory path is ignored, `.claude/cloud-setup.md`
-and `.claude/cloud-install.sh` (passing `bash -n`) exist with the hook registered — on every full
-run, whether or not the user names cloud sessions — and the report names what the team may now do unasked (step 6).
+matches the sheet's line or is the repo's own, the memory path is ignored, and the report names what
+the team may now do unasked (step 6). On an opted-in repo, `.claude/cloud-setup.md` and
+`.claude/cloud-install.sh` (passing `bash -n`) exist with the hook registered; otherwise neither exists.
 
 ### 1e. Encode what the seats would otherwise be told — *full run*
 **`${CLAUDE_PLUGIN_ROOT}/references/lint-rules.md`** is the catalog of seat rules a check can hold. Take the rows whose stack
