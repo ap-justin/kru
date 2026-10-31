@@ -35,8 +35,8 @@ claude plugin marketplace add ap-justin/kru
 claude plugin install kru@kru --scope user
 ```
 When the task says the repo uses Claude Code on the web, `skills/setup/SKILL.md` writes that script,
-with the rest of the environment, into the repo's `.claude/cloud-setup.md` for you to paste; a run
-that doesn't say so writes none of it. The **task tools** switch reaches a session only from the
+with the rest of the environment, into the repo's `.claude/cloud-setup.md` for you to paste. The
+**task tools** switch reaches a session only from the
 repo's `.claude/settings.json` (`"env": { "CLAUDE_CODE_ENABLE_TODO_TOOLS": "1" }`) or the cloud
 environment's variables. User settings never reach it.
 

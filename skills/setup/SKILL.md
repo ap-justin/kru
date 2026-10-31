@@ -192,8 +192,8 @@ clone of a private store fails, and store-sync clones it at session start instea
 
 **Opt-in: the cloud environment is a record in the repo.** This step runs only when the user's task
 says the repo uses Claude Code on the web, or the repo already carries a `.claude/cloud-setup.md`.
-Otherwise it is off: write no `.claude/cloud-setup.md`, no `.claude/cloud-install.sh`, no install
-hook, and ask nothing about it; the report names the skip in one clause and that the task can opt in.
+Otherwise it is off: the repo gets no `.claude/cloud-setup.md`, `.claude/cloud-install.sh` or install
+hook, and the report names the skip in one clause, adding that the task can opt in.
 The environment dialog is the only runtime for what the user pastes there, so the repo carries the
 record and the user's part is copying. Write `.claude/cloud-setup.md` as three copy blocks and nothing
 else, each under its dialog field's name:
