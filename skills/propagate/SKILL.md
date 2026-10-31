@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 Run from the plugin source repo. A repo that ran `skills/setup/SKILL.md` holds a copy of the plugin's guidance in the files setup wrote, and that copy stays at the stamp it was derived under. A release that changes the guidance reaches a repo only when someone carries it there — this skill carries one release to every repo at once.
 
-**Its reach is what setup writes, and nothing else**: the sheet section in `.claude/CLAUDE.md`, `.claude/cloud-setup.md`, the cloud install hook it registers, and the grants in `.claude/settings.json` (`${CLAUDE_PLUGIN_ROOT}/skills/setup/SKILL.md` names each). A change that needs the whole sheet re-derived — a new seat in the routing table, a rewritten bar — is `skills/setup/SKILL.md`'s re-run in that repo; name it in the plan and patch nothing there.
+**Its reach is what setup writes, and nothing else**: the sheet section in `.claude/CLAUDE.md`, `.claude/cloud-setup.md` and the cloud install hook (only on a repo that opted into Claude Code on the web), and the grants in `.claude/settings.json` (`${CLAUDE_PLUGIN_ROOT}/skills/setup/SKILL.md` names each). A change that needs the whole sheet re-derived — a new seat in the routing table, a rewritten bar — is `skills/setup/SKILL.md`'s re-run in that repo; name it in the plan and patch nothing there.
 
 ## Do
 

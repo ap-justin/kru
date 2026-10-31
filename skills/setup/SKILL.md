@@ -190,8 +190,11 @@ repo the user owns, which `hooks/store-sync.sh` keeps the home synced to. Check
 when the user attaches it to the session: the setup script runs with no git credentials, so its
 clone of a private store fails, and store-sync clones it at session start instead.
 
-**The cloud environment is a record in the repo.** The environment dialog is the only runtime for
-what the user pastes there, so the repo carries the record and the user's part is copying. Write `.claude/cloud-setup.md` as three copy blocks and nothing
+**Opt-in: the cloud environment is a record in the repo.** This step runs only when the user's task
+says the repo uses Claude Code on the web, or the repo already carries a `.claude/cloud-setup.md`;
+otherwise skip it, and step 6 names the skip.
+The environment dialog is the only runtime for what the user pastes there, so the repo carries the
+record and the user's part is copying. Write `.claude/cloud-setup.md` as three copy blocks and nothing
 else, each under its dialog field's name:
 
 1. **Environment variables** — `KRU_STORE_REPO=<owner>/<store-repo>`.
@@ -304,9 +307,9 @@ per-machine and kept out of version control, and the repo's `.gitignore` is what
 .claude/agent-memory-local/x` answers that), so the first `git add -A` after a build leaves it behind.
 
 Completion: every grant traces to evidence the derivation already produced, the `verify` skill
-matches the sheet's line or is the repo's own, the memory path is ignored, `.claude/cloud-setup.md`
-and `.claude/cloud-install.sh` (passing `bash -n`) exist with the hook registered — on every full
-run, whether or not the user names cloud sessions — and the report names what the team may now do unasked (step 6).
+matches the sheet's line or is the repo's own, the memory path is ignored, and the report names what
+the team may now do unasked (step 6). On an opted-in repo, `.claude/cloud-setup.md` and
+`.claude/cloud-install.sh` (passing `bash -n`) exist with the hook registered; otherwise neither exists.
 
 ### 1e. Encode what the seats would otherwise be told — *full run*
 **`${CLAUDE_PLUGIN_ROOT}/references/lint-rules.md`** is the catalog of seat rules a check can hold. Take the rows whose stack
@@ -435,7 +438,8 @@ approval in the task.
 ### 6. Report
 A short paragraph, in the user's vocabulary: what the team now knows about this project and what it
 will do differently for it — the seats this repo runs, anything the derivation turned up that the
-repo had never written down, what the team may now do without asking (step 1d) in one line. The pass's edits, filed lint slices and inbox lines ride as one counted
+repo had never written down, what the team may now do without asking (step 1d) in one line, and — on a repo that didn't opt into
+Claude Code on the web — the one clause saying the cloud environment was skipped and the task can opt in. The pass's edits, filed lint slices and inbox lines ride as one counted
 clause ("plus 6 cleanups to the project notes"); the diff is there if asked.
 
 Completion: before you send it, check yourself — every line that went in traces to a derivation, and

@@ -10,17 +10,45 @@ Sky runs each agent in its own Claude Code session, git branch and worktree insi
 
 Install the CLI from the Sky you run; it needs Node 24 or later: `mkdir -p ~/.local/bin && curl -fsSL https://sky-justin.fly.dev/cli/sky.mjs -o ~/.local/bin/sky && chmod +x ~/.local/bin/sky` (`~/.local/bin` on `PATH`; another deploy swaps in its own host), then check it with `sky --version`. Rerun the `curl` to update; the file matches the API it came from. Every `sky` command reads the config `sky apply` reads (`SKY_URL`, `SKY_API_KEY` or the config file) and takes `--json` to print the API's object instead of a line. The MCP server (`POST /mcp`) has matching tools: `launch`, `wait_for_events`, `status`, `answer`, `approve` (which also denies, with `decision: "deny"`), `followup`, `archive`.
 
+## Once per agent: get connected
+
+A coordinating agent new to Sky gets three values once, from whoever runs your Sky deploy and whoever holds your team's secrets: `SKY_URL`, a Sky API key (the one set when Sky was deployed), and the GitHub connector's connection id. Keep the key outside every repo: `SKY_URL` and `SKY_API_KEY` as environment variables, or `{"url": "…", "apiKey": "…"}` in `~/.config/sky/config.json` (`$XDG_CONFIG_HOME/sky/config.json` when set). A flag beats the environment, and the environment beats the file.
+
+Check them: `curl -fsS -H "Authorization: Bearer $SKY_API_KEY" "$SKY_URL/v1/environments"`. A list means the URL and key work; `401` means the key is wrong. From there the agent writes its own `env.yaml`, runs `sky apply` and sets its own secrets, below.
+
 ## Once per repo: the environment and its secrets
 
-1. Write `env.yaml` (`name`, `repo`, `setup`, `concurrency`, `approvalPolicy`, optionally `autoApprove`) and run `sky apply env.yaml`. It creates the environment, waits until the sprite is provisioned, and writes `sky-lock.json` beside the yaml; keep the two files together.
+1. Write `env.yaml` and run `sky apply env.yaml`. `sky apply` rejects any field outside this template (`unknown field`):
+
+   ```yaml
+   name: my-app
+   repo: my-org/my-app
+   setup: pnpm install --frozen-lockfile
+   concurrency: 2
+   approvalPolicy:
+     - Bash
+   autoApprove:
+     defaults: true
+     commands:
+       - pnpm build
+   # base: kru
+   ```
+
+   `base: kru` selects the Kru base profile once your deploy supports it; until then `sky apply` refuses it as an unknown field, so it stays commented.
+
+   `sky apply` creates the environment, waits until the sprite is provisioned, and writes `sky-lock.json` beside the yaml; keep the two files together.
 2. `concurrency` caps the runs active at once in the environment's sprite; past it a launch fails with `concurrency_cap`. No environment field changes while a run is active (`run_active`). A run waiting on an answer or approval is still active: it holds its slot until it is answered or stopped.
 3. Changing `repo` or `setup` rebuilds the sprite, removing the repo and every worktree, so Sky refuses it until every agent is archived (`agents_exist`).
 4. `approvalPolicy` lists the tools whose calls wait for a decision. `Bash(<prefix>:*)` holds every command starting with that prefix. A bare `Bash` holds every Bash call except one on the auto-approve list, which runs at once. The built-ins are a short list of readers (`ls`, `cat`, `grep`, `rg`, `find`, `git status`, `git diff`, `git log` and a few more) plus `pnpm test`, `pnpm typecheck` and `pnpm lint`, and a command skips approval only when it is one simple command with no pipe, redirect, glob or `$`, every path inside the agent's worktree and none that looks like a secret or `.claude`. `grep -r`, `cat .claude/CLAUDE.md` and `rg token src` still wait. `autoApprove: { defaults, commands }` adds entries to that list, and `defaults: false` replaces the built-ins with `commands`. An entry is a prefix, so `git` alone approves `git push`; an entry the checks would always refuse is rejected at `sky apply`. The full list and its checks: Sky's `README.md` → *Approvals*.
-5. Each secret: `sky secret set <env> <NAME>`, with the value on stdin. The person who owns that platform's credentials supplies it. A value never goes into the repo, `env.yaml`, a commit or a brief.
+5. Secrets, the checklist:
+   - [ ] `GITHUB_CONNECTOR`, with step 7's `--connector` command.
+   - [ ] Every other secret the build reads: `sky secret set <env> <NAME>`, with the value on stdin. Whoever holds that platform's credentials supplies it.
+
+   A value never goes into the repo, `env.yaml`, a commit or a brief.
 6. The Kru checks below need the repo's `.claude/settings.json` to enable the kru plugin (`enabledPlugins`, with its marketplace in `extraKnownMarketplaces`). Sky installs those plugins only while it provisions the sprite, so a repo that enables kru later needs the sprite rebuilt (archive every agent, then change `setup`).
 7. Publishing: the sandbox holds no GitHub token, so `git push` and `gh` fail there. In the Sprites org whose token Sky runs with, connect GitHub with a connector policy of `name_prefix: sky-`, then run `sky secret set <env> GITHUB_CONNECTOR --connector=<connection id>`. Agents in that environment publish with `node /opt/sky/runner.mjs publish --title … --body …`, which opens a pull request into the default branch or updates the open one. The same connector syncs the Kru store: provisioning pulls `ap-justin/kru-store` into `~/.kru`, and every run pulls before the session and pushes after it, so the inbox, refusal log and plan files sandbox agents write land in the store. Kru's own sync hook is off in the session, so Claude's per-repo agent memory from a sandbox run doesn't reach the store. `sky secret set <env> KRU_NO_STORE_SYNC` with a value such as `1` turns the store sync off for that environment. A failed sync is logged and never fails the run.
 
-Done when `sky apply` exits 0, every secret the build reads is set, and the repo enables the kru plugin.
+Done when `sky apply` exits 0, every box in step 5's checklist is checked, and the repo enables the kru plugin.
 
 ## Starting a run
 
