@@ -53,6 +53,10 @@ bs="<command-message>kru:$n</command-message>
 { user "build the form"; tool_result "$bs"; } > "$tx/quoted-result.jsonl"
 { user "build the form"; assistant_text "$bs"; } > "$tx/quoted-assistant.jsonl"
 { user "the docs mention kru:brainstorm"; assistant_text "/kru:brainstorm is a skill"; } > "$tx/prose.jsonl"
+trunc='{"type":"assistant","message":{"content":[{"type":"te'
+{ user "$bs"; assistant_text "Q1 …"; printf '%s\n' "$trunc"; user "go"; } > "$tx/truncated-go.jsonl"
+{ user "$bs"; printf '%s\n' "$trunc"; assistant_text "Q1 …"; } > "$tx/truncated-open.jsonl"
+{ printf '%s\n' "$trunc"; } > "$tx/truncated-only.jsonl"
 
 pass=0 fail=0
 REFUSE_MSG='kru: brainstorm writes nothing until the caller unlocks'
@@ -120,6 +124,12 @@ check refuse Write "" "$tx/write-briefly.jsonl"
 check refuse Write "" "$tx/negate-do-not-write.jsonl"
 check refuse Write "" "$tx/negate-never-write.jsonl"
 check refuse Write "" "$tx/negate-without-write.jsonl"
+
+check allow Bash "rm -rf build" "$tx/truncated-go.jsonl"
+check allow Write "" "$tx/truncated-go.jsonl"
+check refuse Write "" "$tx/truncated-open.jsonl"
+check allow Bash "git log --oneline -5" "$tx/truncated-open.jsonl"
+check allow Write "" "$tx/truncated-only.jsonl"
 
 printf '%s passed, %s failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]
