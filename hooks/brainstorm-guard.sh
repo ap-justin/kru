@@ -16,7 +16,8 @@ input=$(cat) || exit 0
 transcript=$(printf '%s' "$input" | jq -r '.transcript_path // empty' 2>/dev/null)
 [ -r "$transcript" ] || exit 0
 
-unlocked=$(jq -rn \
+# parse line by line: one truncated or corrupt jsonl line is skipped, not fatal.
+unlocked=$(jq -Rrn \
   --arg brief 'skills/brief/SKILL.md' \
   --arg brainstorm 'skills/brainstorm/SKILL.md' \
   --arg re_cmd '<command-name>/?kru:brainstorm</command-name>' '
@@ -43,7 +44,7 @@ unlocked=$(jq -rn \
   def invoke_write_brief($t):
     ($t | test("(?i)(^|[.!;:\\n]\\s*)(please\\s+)?(write|persist)\\s+the\\s+brief\\b")) and
     ($t | test("(?i)(^|[.!;:\\n]\\s*)(please\\s+)?(write|persist)\\s+the\\s+brief\\s*\\?") == false);
-  [inputs] | to_entries as $all |
+  [inputs | fromjson? | objects] | to_entries as $all |
   ($all | map(select(.value | locked)) | last) as $lock |
   if $lock == null then "skip"
   else
@@ -55,8 +56,8 @@ unlocked=$(jq -rn \
   end
 ' "$transcript" 2>/dev/null)
 
-[ "$unlocked" = "skip" ] && exit 0
-[ "$unlocked" = "yes" ] && exit 0
+# only an exact "no" locks; yes, skip, empty or any jq failure fails open.
+[ "$unlocked" = "no" ] || exit 0
 
 tool=$(printf '%s' "$input" | jq -r '.tool_name // empty' 2>/dev/null)
 if [ "$tool" = "Bash" ]; then
