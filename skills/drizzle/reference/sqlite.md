@@ -3,9 +3,9 @@
 Read `SKILL.md` first; the generated table rebuild and its child-row deletion live there and are not repeated here.
 
 ## Drivers
-0.45.2 ships these sqlite-dialect entry points: `better-sqlite3` · `bun-sqlite` · `libsql` (+ `/http`, `/node`, `/sqlite3`, `/wasm`, `/web`, `/ws`) · `d1` · `durable-sqlite` · `expo-sqlite` · `op-sqlite` · `sqlite-proxy`.
+0.45.4 ships these sqlite-dialect entry points: `better-sqlite3` · `bun-sqlite` · `libsql` (+ `/http`, `/node`, `/sqlite3`, `/wasm`, `/web`, `/ws`) · `d1` · `durable-sqlite` · `expo-sqlite` · `op-sqlite` · `sqlite-proxy`.
 
-**There is no `drizzle-orm/node-sqlite` in 0.45.2** — `node:sqlite` support is v1-era. A project on stable that wants the Node built-in driver either waits, or uses `sqlite-proxy` and hands Drizzle its own executor. For an embedded `.db` in node, `better-sqlite3` remains the default choice.
+**There is no `drizzle-orm/node-sqlite` in 0.45.4** — `node:sqlite` support is v1-era. A project on stable that wants the Node built-in driver either waits, or uses `sqlite-proxy` and hands Drizzle its own executor. For an embedded `.db` in node, `better-sqlite3` remains the default choice.
 
 ## Set the pragmas yourself — construct the driver, don't let Drizzle do it
 `drizzle('./app.db')` builds the driver internally and hands you no handle to configure. Measured defaults on that path: `journal_mode=delete`, `synchronous=FULL` — **no WAL**. Always build the driver first:

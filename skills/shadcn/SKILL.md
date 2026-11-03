@@ -5,7 +5,7 @@ user-invocable: false
 allowed-tools: Bash(npx shadcn@latest *), Bash(pnpm dlx shadcn@latest *), Bash(bunx --bun shadcn@latest *)
 ---
 
-<!-- vendored from `shadcn-ui/ui` (main @ 2d3f1cd, the `skills/shadcn` path head) → `skills/shadcn`. shadcn's own first-party skill, MIT. Body verbatim minus `agents/openai.yml` (Codex metadata), `evals/` (fixtures) and `assets/*.png` (branding) — none referenced by the prose. Frontmatter needs no port: `user-invocable: false`, `allowed-tools`, and the `!`cmd`` injection under *Current Project Context* are all native Claude Code fields, so `npx shadcn@latest info --json` really does run before the body is read. Two deviations, both re-applied after any re-sync: (1) the `description`, rewritten to one trigger per branch; (2) **blocks** named as a capability in *Workflow* step 3, plus the `--chart-*` tokens on the *Charts* row. `SOURCES.md` carries the reasoning for both — this comment loads on every invocation, so it holds only what a re-sync has to re-apply. Re-sync: re-download `SKILL.md` + `cli.md` + `customization.md` + `design-system.md` + `design-system-page.md` + `mcp.md` + `registry.md` + `rules/*.md` + `scripts/*` + `assets/showcase/*` from https://github.com/shadcn-ui/ui/tree/main/skills/shadcn. -->
+<!-- vendored from `shadcn-ui/ui` (main @ 4233ed1, the `skills/shadcn` path head) → `skills/shadcn`. shadcn's own first-party skill, MIT. Body verbatim minus `agents/openai.yml` (Codex metadata), `evals/` (fixtures) and `assets/*.png` (branding) — none referenced by the prose. Frontmatter needs no port: `user-invocable: false`, `allowed-tools`, and the `!`cmd`` injection under *Current Project Context* are all native Claude Code fields, so `npx shadcn@latest info --json` really does run before the body is read. Two deviations, both re-applied after any re-sync: (1) the `description`, rewritten to one trigger per branch; (2) **blocks** named as a capability in *Workflow* step 3, plus the `--chart-*` tokens on the *Charts* row. `SOURCES.md` carries the reasoning for both — this comment loads on every invocation, so it holds only what a re-sync has to re-apply. Re-sync: re-download `SKILL.md` + `cli.md` + `customization.md` + `design-system.md` + `design-system-page.md` + `mcp.md` + `registry.md` + `rules/*.md` + `scripts/*` + `assets/showcase/*` from https://github.com/shadcn-ui/ui/tree/main/skills/shadcn. -->
 
 # shadcn/ui
 
@@ -84,6 +84,7 @@ These rules are **always enforced**. Each links to a file with Incorrect/Correct
 - **Chat UI composes the chat primitives.** Conversations use `MessageScroller`, rows use `Message`, surfaces use `Bubble`. Never hand-rolled bubble `div`s or a raw scroll container.
 - **`MessageScroller` owns scroll behavior.** Streaming follow, anchoring, and jump-to-latest (`MessageScrollerButton`) are built in. Don't write a `useStickToBottom`/`ResizeObserver` hook.
 - **Attachments use `Attachment`; system notes and dividers use `Marker`.** Not `Item` cards or `Separator` + a label.
+- **Assistant activity uses `Trace`.** Reasoning, tool calls, sources and steps are `TraceLine`s in a `Trace`, one `Trace` per run of message parts. Behavior wraps the line: `TraceCollapsible`, a sheet trigger or a link. Not a hand-rolled `Collapsible` or a `Marker`.
 
 ### CLI
 
@@ -146,7 +147,7 @@ These are the most common patterns that differentiate correct shadcn/ui code. Fo
 | Empty states               | `Empty`                                                                                             |
 | Menus                      | `DropdownMenu`, `ContextMenu`, `Menubar`                                                            |
 | Tooltips/info              | `Tooltip`, `HoverCard`, `Popover`                                                                   |
-| Chat / conversation UI     | `MessageScroller`, `Message`, `Bubble`, `Attachment`, `Marker`                                      |
+| Chat / conversation UI     | `MessageScroller`, `Message`, `Bubble`, `Attachment`, `Marker`, `Trace`                             |
 
 ## Key Fields
 
@@ -286,7 +287,7 @@ npx shadcn@latest view owner/repo/item
 
 - [rules/forms.md](./rules/forms.md) — FieldGroup, Field, InputGroup, ToggleGroup, FieldSet, validation states
 - [rules/composition.md](./rules/composition.md) — Groups, overlays, Card, Tabs, Avatar, Alert, Empty, Toast, Separator, Skeleton, Badge, Button loading
-- [rules/chat.md](./rules/chat.md) — MessageScroller, Message, Bubble, Attachment, Marker; streaming, anchoring, jump-to-latest
+- [rules/chat.md](./rules/chat.md) — MessageScroller, Message, Bubble, Attachment, Marker, Trace; streaming, anchoring, jump-to-latest, assistant activity rows
 - [rules/icons.md](./rules/icons.md) — data-icon, icon sizing, passing icons as objects
 - [rules/styling.md](./rules/styling.md) — Semantic colors, variants, className, spacing, size, truncate, dark mode, cn(), z-index
 - [rules/base-vs-radix.md](./rules/base-vs-radix.md) — asChild vs render, Select, ToggleGroup, Slider, Accordion

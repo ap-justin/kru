@@ -51,7 +51,7 @@ for f in $(grep -l 'Never re-read a file you just edited' agents/*.md); do
 done
 # Block O has no tailored slot: every copy byte-identical
 blocks=$(for f in $(grep -l '^## The return pass' agents/*.md); do
-  sed -n '/^## The return pass/,/^## /{/^## /!p}' "$f" | md5sum; done | sort -u | wc -l)
+  sed -n '/^## The return pass/,/^## /{/^## /!p;}' "$f" | md5sum; done | sort -u | wc -l)
 [ "$blocks" -le 1 ] || bad "## The return pass differs across seats ($blocks variants)"
 
 # skills and hooks wiring

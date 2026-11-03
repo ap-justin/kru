@@ -184,6 +184,10 @@ printf 'pages      kru:sveltekit-builder    ← `src/routes`\n' >> "$sandbox/she
 sheet_check kru:react-ui-builder "Style the card in \`packages/ui/card.tsx\`; mounted by \`src/routes/+page.svelte\`, leave it." 0
 sheet_check kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\` and wire \`src/routes/+page.svelte\`." 1 'grouping: "src/routes/+page.svelte"'
 sheet_check kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\`; the pages under \`src/routes\` import it." 1 'grouping-mention:'
+# a fence around a parallel builder's files names them so this seat stays out
+sheet_check kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\`. Another builder concurrently edits \`src/routes/+page.svelte\` — don't touch those." 0
+sheet_check kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\` (a route builder is wiring \`src/routes/+page.svelte\` in parallel)." 0
+sheet_check kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\`; read \`src/db/store.ts\` as it calls into your lane; that file belongs to the data seat." 0
 # the gate stays out of unknown seats
 check allow general-purpose "Preserve existing comments in the file."
 

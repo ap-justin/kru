@@ -1,6 +1,6 @@
 # The action half
 
-Everything the server does with a Conform submission. Classic API (`@conform-to/react` + `@conform-to/zod/v4`); the future shape is the last section. Values below are reproduced on 1.21.1.
+Everything the server does with a Conform submission. Classic API (`@conform-to/react` + `@conform-to/zod/v4`); the future shape is the last section. Values below are reproduced on 1.21.1; *Constraints* on 1.21.2 with `zod@4.6.7`.
 
 ## The action, and its guard ladder
 ```ts

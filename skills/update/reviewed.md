@@ -4,9 +4,9 @@
 
 ### Swept through
 
-**2.1.295** — 2026-10-10, read back to 2.1.289. Installed: 2.1.295.
+**2.1.312** — 2026-10-29, read back to 2.1.311. Installed: 2.1.312.
 
-Previous: 2.1.288 — 2026-10-03, read back to 2.1.281. 2.1.280 — 2026-09-23, read back to 2.1.251. Before that: 2.1.250 — 2026-08-28, first sweep, read back to 2.1.200.
+Previous: 2.1.310 — 2026-10-24, read back to 2.1.296. 2.1.295 — 2026-10-10, read back to 2.1.289. 2.1.288 — 2026-10-03, read back to 2.1.281. 2.1.280 — 2026-09-23, read back to 2.1.251. Before that: 2.1.250 — 2026-08-28, first sweep, read back to 2.1.200.
 
 ### Adopted
 
@@ -27,6 +27,8 @@ Previous: 2.1.288 — 2026-10-03, read back to 2.1.281. 2.1.280 — 2026-09-23, 
 | — | `userConfig` (values reach hooks as `CLAUDE_PLUGIN_OPTION_<KEY>`; `claude plugin configure` 2.1.286) | `plugin.json` → `KRU_STORE_REPO` + four `KRU_NO_*` switches; `scripts/kru-store.sh` maps each onto its unset env var |
 | 2.1.290 | Correction: the built-in code-review skill at `medium` on Opus 5.5 / Sonnet 5.5 also reports cleanup and CLAUDE.md-convention findings — not correctness only | `skills/lead/references/gates.md` → *Correctness*; the comment pass stays the lead's (Block I isn't in CLAUDE.md) |
 | 2.1.293 | Claude Haiku 5.5 (`claude-haiku-5-5`) — $0.10/$0.50 per Mtok to 100k-token prompts, $0.50/$2.50 above; 1M context; retires no sooner than 2027-10-07 | `dispatch-auditor`'s `model:` moved down from sonnet, the one haiku seat; `ROSTER.md` → *Model tiers*; `scripts/audit.sh` pin regex; `roster/hire.md` + `audit.md` pin text; README → *Requirements* |
+| 2.1.296 | `--debug` names an unrecognized frontmatter key in a plugin agent file, with a did-you-mean (`validate --strict` still passes it; checked on a fixture). kru: 0 hits on 2.1.310 | `skills/roster/audit.md` → *Floor*, as the load-time key read; `skills/update/claude.md` Step 5 note |
+| 2.1.311 | `SubagentStop` fires once when a subagent finishes — below it, about twice a minute per running subagent, so `log-return.sh` blocked a seat mid-work for a missing `Return pass:` line | README → *Requirements*, floor ≥ 2.1.311 |
 | — | Correction: `brainstorm-guard.sh` read any transcript line carrying an invocation, tool output included, and locked a session that never brainstormed | the anchor now matches only a string-content user turn; fixtures splice the name |
 
 ### Considered — the user's call
@@ -54,48 +56,51 @@ Previous: 2.1.288 — 2026-10-03, read back to 2.1.281. 2.1.280 — 2026-09-23, 
 - **Agent tool `effort` parameter** (2.1.292) — seat effort is policy in frontmatter (`ROSTER.md` → *Model tiers*); no routing rule asks for a per-dispatch override.
 - **`claude plugin install --marketplace`** (2.1.292) — not in this install's `--help`; the two-line add + install works on every CLI above the floor.
 - **Current, no line moves:** subagents preload ≤32 `skills:` (2.1.295; no seat uses the field). `<system-reminder>` escaped in hook output (2.1.292; no hook emits one). `prompt`/`agent` hook judging (2.1.294; plugin ships command hooks only). `claude plugin validate` README install-line advice and the marketplace-manifest fix (2.1.289/2.1.295; validate passes clean). Skill `allowed-tools`/`effort` drop fixes, mod API additions (`$.ui.notify`, `isDeferred`, `agent.spawn`, `tool.check` `agentId`; `kru-board` isn't shipped), `subagentStatusLine` `agentType`.
+- **`autoCompactWindow` in agent frontmatter** (2.1.296; in the binary's schema) — a seat compacting early drops the context a one-shot build or review needs; no seat runs long enough to hit the main window.
+- **`CLAUDE_CODE_WORKFLOW_SUBAGENT_MODEL`, `CLAUDE_CODE_AUTO_MODE_MODEL`, `/advisor`, idle compaction, `/usage` warnings, `/effort`/`/fast` in agent view** (2.1.296–2.1.310) — user env or session UX, outside a plugin's reach.
+- **Current, no line moves (2.1.296–2.1.310):** agent `tools:` MCP wildcards take only the named server (2.1.299; every `mcp__…__*` here names a server with no `__` inside). `updatedInput` validated, unknown keys dropped (2.1.300; `check-handoff.sh` rewrites only `tool_input.prompt`, its test 74/74). `UserPromptSubmit` before skill expansion (plugin ships none). Prompt/agent hooks capped at 12 per event, agent-hook `model` fix, mod hook changes (plugin ships command hooks only; `kru-board` mod still off-repo). Fork subagents on by default off-terminal and told their own launch; desktop/VS Code always background subagents; subagents keep their latest work on resume; `SendMessage` by name after restart (`lead` Steps 3–4 already assume background returns). Compaction re-sends the skill list; per-source skill hook cap 1,024. `/verify` + `/code-review` find a nested package's skill (`setup` 1d unchanged). `claude plugin eval` `--disallow-tools` + API-error runs score 0 (eval stays banked). Worktree fixes (no seat uses `isolation`). `claude plugin details <name>@builtin` hint.
+- **`autoCompactWindow` in agent frontmatter, again** (2.1.312 makes it lower `CLAUDE_CODE_AUTO_COMPACT_WINDOW`) — now it does something, and the 2.1.296 reason still holds: no seat should compact early.
+- **Current, no line moves (2.1.311–2.1.312):** prompt/agent hooks 24 at a time (plugin ships command hooks only). `paths:` skills found after `cd`; an invalid command name no longer blanks every command (`claude plugin validate` passes). `/verify` short description (`setup` 1d unchanged). `/code-review` puts the effort level first, max only when asked (`gates.md` names no level). Subagents see late-connecting MCP servers; a sub-agent skill doesn't rerun on restart; worktree-removal fix (no seat uses `isolation`). `[1m]` suffix dropped where it does nothing (no team file names it). `ultrathink` → xhigh, Bedrock/Vertex prompt and catalog changes, cloud/VS Code/Claude Tag/Remote Control entries — session UX or provider plumbing.
 - **Plan mode under `skills/brainstorm/SKILL.md`** — the user rejects it: every piece of feedback re-raises the plan-approval prompt. `brainstorm-guard.sh` stays, its anchor fixed.
 
 ## Vendored skills
 
 ### Swept through
 
-**2026-10-10**. Previous: 2026-10-05 (mattpocock only, v1.3.1); 2026-09-23, first sweep. Tag-pinned copies are compared tag to tag. Copies with no recorded sha were diffed file by file against the upstream head.
+**2026-10-29**. Previous: 2026-10-24; 2026-10-10; 2026-10-05 (mattpocock only, v1.3.1); 2026-09-23, first sweep. Tag-pinned copies are compared tag to tag. Copies with no recorded sha were diffed file by file against the upstream head.
 
 | Skill | Recorded | Upstream head | Verdict |
 |---|---|---|---|
-| `codebase-design` · `tdd` · `diagnosing-bugs` · `domain-modeling` · `to-spec` · `to-tickets` · `wayfinder` · `grilling` · `writing-for-agents` | mattpocock v1.3.1 · 24fe0ef | v1.3.1 (main 49dd158, untagged) | **Current.** No tag above v1.3.1. Changesets queued on main touch `diagnosing-bugs`, `tdd`, `to-tickets`, `wayfinder`, `grilling`: expect a re-sync at the next tag. |
-| `accessibility-review` · `user-research` · `research-synthesis` · `ux-copy` | knowledge-work design v1.2.0 · 15898ec | 2d6f7e2 / 4fa3cb9 (2026-03) | **Current.** |
-| `copywriting` | marketingskills · 5b2c000 | 12188f1 | **Re-sync.** `SKILL.md` 2.1.0 adds *No AI Tells* (never-write list, swap test, `[NEED: …]`, self-check); new `skills/copywriting/references/ai-tells.md`; `copy-frameworks.md` drops "Everything you need to"; em-dash purge elsewhere. Re-apply provenance comment + trimmed description; `evals/` stays out. The unsourced "+81%" stats remain flagged. |
-| `copy-editing` | marketingskills · 286d371 | b7fb899 | **Re-sync**, with `copywriting` (points at its `ai-tells.md`). `SKILL.md` 2.1.1: "replace with the fact", *AI-Tell Check* pass; `skills/copy-editing/references/checklist.md` *AI Tells*; `content-refresh.md` SERP gap analysis. Re-apply provenance comment + trimmed description. |
-| `cro` | marketingskills · 286d371 | e88ace7 | **Re-sync.** `SKILL.md` 2.0.3 *Reference Routing* table; `skills/cro/references/form.md` enrichment examples Clearbit → HubSpot Breeze/Clay/Apollo. Re-apply provenance comment + trimmed description. |
-| `emil-design-eng` · `animation-vocabulary` · `find-animation-opportunities` · `review-animations` · `improve-animations` | mark 85e8e23 (Decline) | 85e8e23 | **Current.** The Decline stands. |
-| `cloudflare` | cloudflare/skills · 320fbbc | a18ffe2 | **Re-sync + re-adapt.** Upstream: `/index.md` suffix on every docs link (41e0d19), `llms.txt` as docs entry, Pipelines/R2 Data Catalog/R2 SQL → Basin Pipelines/Catalog/SQL pointing at `basin`, new K2 Streams row → `k2`, twelve reference dirs deleted for docs links (f39e641/3055be5/02552fd), moved `containers/*` + `tunnel/*` URLs. Local: strip the declined `cf`-first section, re-apply provenance, `user-invocable: false`, `LICENSE`; delete the twelve local dirs. |
-| `wrangler` · `durable-objects` · `nextjs-on-cloudflare` | 320fbbc / b052c32 | 41e0d19 | **Re-sync** (link suffix only), to keep the group on one pin. `wrangler`'s `cf` gate line stays stripped; `nextjs-on-cloudflare` keeps its trimmed description. |
-| `workers-best-practices` | b052c32 | 41e0d19 | **Re-sync.** Link suffix in `SKILL.md` + three references; DO KV anchor `#put-1` → `#do-kv-async-put`. |
-| `agents-sdk` | b052c32 | 41e0d19 | **Re-sync.** Agents docs restructured: every `/agents/api-reference/*` link in `SKILL.md` and 11 references moves to `/agents/runtime/…`, `/agents/communication-channels/`, `/agents/tools/`, `/agents/harnesses/think/`. Local fetch targets were stale. |
-| `cloudflare` · `wrangler` `cf` gate | gate b90d284 · 5929c29 | cf 1.0.0-beta.14 | **Decline holds, re-check each sweep.** cloudflare/cf #197 #199 #200 #68 open; #198 moved to workers-sdk#16126, open. React Router `--mode` not re-checked. |
-| `hono` | honojs/skills · 8b1938b | 5becff4 | **Re-sync + re-adapt.** 5becff4 rewrites the CLI section for `@hono/cli` 1.0.0-rc.0: `npx hono agent-context` is gone from `@next` (the copy was broken), verify with `--help`, app file passed to every command, `--runtime workerd` takes no file; type notes for `c.req.query()`/`c.req.json<T>()`. Taken verbatim: upstream's `@hono/cloudflare-workers` import works on today's `latest` (adapter 1.0.1 peers `hono >=4.13.9 \|\| ^5`), so no re-adapt. |
-| `turso-db` · `turso-cloud` | tursodatabase/agent-skills · 34ced52 | 34ced52 | **Current.** |
-| `turborepo` | vercel/turborepo · 53629a0 (2.11.3) | b19f6a5 | **Consider.** b19f6a5 cuts the skill to a 26-line pointer at `node_modules/turbo/docs/README.md` (bundled from turbo 2.11.5) and deletes `command/` + `references/`. Taking it drops the offline playbook for repos on turbo < 2.11.5 or before install. |
-| `shadcn` | shadcn-ui/ui path · c257f68 | 2d3f1cd | **Re-sync.** *Design Systems from DESIGN.md* section; new `design-system.md`, `design-system-page.md`, `skills/shadcn/scripts/showcase-coverage.mjs`, `assets/showcase/{color-pair.tsx,state-matrix.tsx,preview-states.css}` (code, taken); `customization.md` pinned-radius line. `evals/` and `assets/*.png` stay out. |
-| `webgpu-threejs-tsl` | dgreenheck · af2319b | af2319b | **Current.** |
-| `algorithmic-art` | anthropics/skills · b9e19e6 | b9e19e6 | **Current.** |
-| `react-router` | remix-run · 8f364c8 | 8f364c8 | **Current.** |
+| `codebase-design` · `tdd` · `diagnosing-bugs` · `domain-modeling` · `to-spec` · `to-tickets` · `wayfinder` · `grilling` · `writing-for-agents` | mattpocock v1.3.1 · 24fe0ef | v1.3.2 · d1478fc | **Re-synced 2026-10-29** (upstream's own v1.3.1→v1.3.2 hunks patched onto the copies). `DESIGN-IT-TWICE.md` fresh-context sub-agents; `diagnosing-bugs` diff a forced red against a pristine copy; `tdd` each seam notes what it catches and misses; `to-tickets` sub-issues of a source issue, *Blocked by* omitted for native edges; `wayfinder` only `wayfinder:` labels, real ids in cross-refs, research branch pushed with no PR, resolve by the label's type. Re-adapted: `to-tickets`/`wayfinder` keep the `TRACKER.md` lines; `grilling` takes *Word each question so "yes" accepts…* and the fresh-context sub-agent in its PM wording. Other three: no hunk. |
+| `emil-design-eng` · `animation-vocabulary` · `find-animation-opportunities` · `review-animations` · `improve-animations` | 6bf2443 (Decline mark 2d22863) | a81dbca | **Current; Decline holds.** a81dbca adds a `remove-animations` skill + a root `ui-cheatsheet.md` only. Mark → a81dbca. |
+| `accessibility-review` · `user-research` · `research-synthesis` · `ux-copy` | knowledge-work design v1.2.0 · 15898ec | c71b6f3 | **Current.** No commit under `design/` since c71b6f3. |
+| `copywriting` | e6fb742 | 15b38b5 | **Re-synced 2026-10-29** (→ 2.3.2). The +81% clarity figures now cite *Founding Marketing* Ch. 3 (`SKILL.md`, `skills/copywriting/references/copy-frameworks.md`). Provenance + trimmed description kept. |
+| `copy-editing` | 158bd3a | 15b38b5 | **Re-synced 2026-10-29** (→ 2.2.1). One example's em dash → comma. Provenance + trimmed description kept. |
+| `cro` | e88ace7 | e88ace7 | **Current.** |
+| `cloudflare` | be9f5e1 | 49a31e0 | **Re-synced + re-adapted 2026-10-29.** Placement: the latency row → *Workers placement* (region hints for a known regional DB, else Smart Placement); `references/hyperdrive/*` + `skills/cloudflare/references/smart-placement/README.md` verbatim. Kept out: *Choose the CLI*, the `cf` CLI row (`cf` Decline), and new **`## Skill feedback` + its `skill-feedback.md` reference** — a public-issue flow a seat can't get the user's approval for; now a named deviation. |
+| `workers-best-practices` | cf56dd4 | 49a31e0 | **Re-synced + re-adapted 2026-10-29.** *Place Compute Near Regional Databases* section; `skills/workers-best-practices/references/configuration.md` + `runtime-patterns.md` verbatim (placement, CPU limits no longer quote retired plan names). Kept out: the `cf-cli` line, *Skill feedback*; both now named deviations in the provenance comment. |
+| `wrangler` | cf56dd4 | 29de2b2 | **Decline.** `cf` gate (description, scope line) + *Skill feedback* only. Mark → 29de2b2. |
+| `agents-sdk` · `durable-objects` · `nextjs-on-cloudflare` | 41e0d19 | 29de2b2 | **Decline.** *Skill feedback* section + reference only; `nextjs-on-cloudflare` adds an `npx skills add` line to the description it trims locally. Mark → 29de2b2. |
+| `cloudflare` · `wrangler` · `workers-best-practices` · `hono` `cf` gate | gate b90d284 · 5929c29 | cf 1.0.0-beta.25 | **Decline holds, re-check each sweep.** cloudflare/cf #197 #199 #68 and workers-sdk#16126 still open. |
+| `hono` | f8ecd01 | f8ecd01 | **Current.** |
+| `turso-db` · `turso-cloud` | 34ced52 | 34ced52 (path heads b6fc4c4 / 95577ab are its ancestors) | **Current.** |
+| `turborepo` | vercel/turborepo · 53629a0 (2.11.3) | b19f6a5 | **Decline.** b19f6a5 cuts the skill to a pointer at `node_modules/turbo/docs/README.md` (turbo ≥ 2.11.5) and deletes `command/` + `references/`. The pointer reads only after install on turbo ≥ 2.11.5; `toolchain-engineer` sets monorepos up before install and on older turbo, so the offline guide stays. Mark → b19f6a5. |
+| `shadcn` | shadcn-ui/ui path · 4233ed1 | 4233ed1 | **Current.** Last re-synced 2026-10-24: `SKILL.md` *Assistant activity uses `Trace`* rule, `Trace` in the Chat row and `rules/chat.md` index line; `rules/chat.md` *Assistant activity uses Trace* + *Code and tool output use CodeBlock*, install line gains `trace code-block`. Re-applied: provenance, description, Workflow step 3 blocks line, `--chart-*` Charts row. |
+| `webgpu-threejs-tsl` · `algorithmic-art` · `react-router` | af2319b · b9e19e6 · 8f364c8 | same | **Current.** |
 | `local-browser` | locally authored | — | Not applicable. |
 
-### Considered — the user's call
+### Declined — siblings not carried (2026-10-25; 2026-10-29 additions marked)
 
-- **`turborepo` → bundled-docs pointer** (row above).
-- **cloudflare `basin` · `k2`** (32fcd7b): after the re-sync the `cloudflare` table routes Basin and K2 Streams to skills this team doesn't carry.
-- **mattpocock v1.3 new siblings**: `implement-spec`, `pr`, `retro`; `in-progress/chief-of-staff` on main, untagged. `implement-spec` overlaps the lead's frontier dispatch, `retro` overlaps `skills/roster/learn.md` (PM or lead loads); `pr` has no counterpart here.
-- **emilkowalski new siblings**: `animate`, `pick-ui-library`, `prototype`, `ask-sonner`, `expo`, `write-swift`, `mobile-native`. `animate` and `pick-ui-library` sit nearest the UI builders' motion and primitive lanes.
+Each costs always-on context on every session; none fills a lane a seat lacks.
+
+- **cloudflare siblings the router now links**: `basin`, `k2`, `cloudflare-email-service`, `gateway-workers`, `workers-profiling`. Niche products; the router's links dangle by design and the Cloudflare MCP + docs cover them on demand. `cf-cli` falls under the `cf` Decline.
+- **mattpocock v1.3 new siblings**: `implement-spec`, `pr`, `retro`; `in-progress/chief-of-staff` untagged. v1.3.2 (2026-10-29) touches `implement`, `handoff`, `ask-matt`, `teach`, `setup-matt-pocock-skills` and the chief-of-staff draft — none carried, same reasons. `implement-spec` duplicates the lead's frontier dispatch, `retro` duplicates `skills/roster/learn.md`, and `pr` is a commit/PR flow the user runs by hand.
+- **emilkowalski siblings**: `remove-animations` (2026-10-29; the inverse of `improve-animations`' cut list, which already removes motion that earns nothing), `animate`, `animation-performance`, `pick-ui-library`, `break-ui`, `prototype`, `ask-sonner`, `animate-expo`, `write-swift`, `mobile-native`, `apple-design`. `animate` and `animation-performance` overlap `emil-design-eng` + `improve-animations`; `pick-ui-library` overlaps the `ark-ui`/`shadcn` choice the UI builders already make; the rest are off-stack (Swift, Expo, native) or one-off.
 
 ### For PM loads `skills/roster/audit.md`
 
-- `SOURCES.md` Hono row names `npx hono agent-context`, gone from `@hono/cli@next`.
 - `shadcn`'s exclusion stays `assets/*.png` only; `assets/showcase/` is code.
-- `agents-sdk`, `workers-best-practices`, `nextjs-on-cloudflare` provenance comments carry no sha; b052c32 is only in `SOURCES.md`.
+- `agents-sdk`, `workers-best-practices`, `nextjs-on-cloudflare` provenance comments name no re-apply deviations; b052c32 history is only in `SOURCES.md`.
 - `user-invocable: false` (and `disable-model-invocation: true` on `improve-animations`) isn't listed as a re-apply deviation in most comments.
 - `turborepo`, `algorithmic-art` and `react-router` have no sha in their comments.
 
@@ -103,37 +108,45 @@ Previous: 2.1.288 — 2026-10-03, read back to 2.1.281. 2.1.280 — 2026-09-23, 
 
 ### Swept through
 
-**2026-10-10**. Previous: 2026-09-23, first sweep. Sources: registries, release notes for each range above its pin. Nothing installed.
+**2026-10-29**. Previous: 2026-10-24; 2026-10-10; 2026-09-23, first sweep. Sources: registries, release notes for each range above its pin. Rows that didn't move since 10-24 keep that sweep's text. The 10-10 *Latest* column missed releases dated 10-09/10-10 (Python 3.15.0, ruff 0.17.0, Panda 2.2.0, RHF 7.90.0, msw 3.0.3); a same-day boundary counts as unswept.
 
 | Skill | Pin | Latest (date) | Delta | Verdict · claims to re-verify |
 |---|---|---|---|---|
-| `superforms` | 2.30.2 + kit 2.70.2, svelte 5.56.8, zod 4.4.3 | **3.0.0** (10-04) · kit **3.0.1** (10-06) | **major**; kit **major** | **Re-verified 2026-10-10 on 3.0.0 + kit 3.0.1** (svelte 5.57.2, zod 4.6.5); premise moved to Superforms 3 on SvelteKit 3. ~40 claims: 31 held, 7 rewritten (all already wrong on 2.30.2, checked against a Kit 2 baseline): `invalidateAll: false` belongs on the submitting form; Superforms 3 still calls the deprecated `invalidateAll()`, wiping `page.state`; a shared id lands the response on the first-constructed form; bare `curl -X POST` gets 415; Node 24's body-consumed message; URL-sourced forms show errors; `resetForm` reverts to the construction value. New `reference/migration.md`: bump Superforms before Kit, enhanced submits now carry the action's HTTP status, `$lib` → `#lib`, cross-origin POST needs a `Content-Type`. Not rerun: password-manager taint, snapshot across back/forward. |
-| `react-hook-form` | 7.88.0 + resolvers 5.9.1 | 7.89.0 (09-26) | minor (threshold: minor) | **Re-verified 2026-10-10 on 7.89.0** (split pin). Every named claim held: Proxy short-circuit, `isValid` resolver counts (0 / 3), `setValue` silence, `reset()`/`values`, `useFieldArray` ids and snapshot, `fieldState`. The rest stays on 7.88.0. |
-| `react-email` | 6.9.5 + render 2.1.0 | 6.11.1 (10-06) | 2 minors (threshold: minor) | **Re-verified 2026-10-10 on 6.11.1** (+ `@react-email/ui`, react 19.3.0, resend 6.32.1). 13 claims held. Changed: `sm:` under `pixelBasedPreset` now converts sizes to px (breakpoint stays rem) and `render()` throws without `<Head />` inside `<Tailwind>`; the preview shows the plain-text part in its code panel's `md` tab. Nodemailer/SES lines not rerun (outside the library). |
-| `neon` | serverless 1.1.0 + drizzle-orm 0.45.2 | 1.2.0 (10-01) · 0.45.4 | minor; patch | **Re-verified 2026-10-10 on 1.2.0** (stubbed `fetchFunction`, no live endpoint; split pin). All three claims hold; `neon()` keeps port/params, only `pool.query` drops them. New trap: a function `password` is never called on the `pool.query` HTTP path (its source text is sent as the password). WebSocket half and Drizzle leak stay on the 1.1.0/0.45.2 pin. |
-| `tui-design` | docs-verified 2026-09-11; Ink 7.1.1, Bubble Tea v2.0.9 | Ink **8.0.0** (10-03) · bubbletea v2.1.0 | Ink **major** | **Re-verified 2026-10-10, Ink half, on 8.0.0** (react 19.3.0, ink-testing-library 4.0.0; split pin). Wrong and rewritten: capping `<Static>` items (`slice(-100)`) silently stops printing. Changed: `useWindowSize()` is the resize gate (`stdout.columns` no longer types); `alternateScreen` drops the last frame and teardown output and is ignored when piped. Held: raw mode, `isRawModeSupported`, `<Static>` render-once. Added: React ≥19.3, Node ≥22 floor. Bubble Tea: no hits. |
-| `ark-ui` | `@ark-ui/react@5.37.2` (inline) | 5.39.3 (10-05) | 2 minors | **Re-verified 2026-10-10 on 5.39.3** (Browser Mode, react 19.3.0). Both pinned traps gone: Escape closes on the first keydown (zag registers it synchronously on layer mount), and a click inside an open modal passes the `Dialog.Backdrop` in all three layouts. Section *Under a browser-mode test* deleted with them; the skill now carries no pin. |
-| `panda-css` | 2.1.0 + vite plugin 2.1.0 | 2.1.2 (10-06) | patch | **Current.** a63cb20, b220f62, 24718f4 read; none contradict. |
-| `msw` | 3.0.1 | 3.0.2 (10-03) | patch | **Current.** |
-| `vitest` | 5.0.0 | 5.0.3 (09-30) | patch | **Current.** 5.0.2 `agent` respects `--silent`, adjacent to `SKILL.md:26`, not contradicting. |
-| `testing-library` | RTL 16.3.3 | 16.3.3 | none | **Current.** |
-| `conform` | 1.21.1 | 1.21.1 | none | **Current.** |
-| `zod` · `valibot` · `xstate` · `xstate-react` | 4.6.5 · 1.5.0 · 5.33.2 · 6.1.0 | same | none | **Current.** |
-| `drizzle` | As of 2026-07-29: `latest` 0.45.2, site documents 1.0 rc.4 | `latest` 0.45.4 (10-08) · `rc` 1.0.0-rc.4 | patch, premise holds | **Current.** Next Refresh: table 0.45.2/0.31.10 → 0.45.4/0.31.11; `reference/postgres.md` driver list (0.45.3 Netlify DB); `.prepare(name)` on `postgres-js` fixed 0.45.4. |
-| `tailwind` | 4.3.3 | 4.3.3 | none | **Current.** `v3-lts` claim holds. |
-| `node` | v24.20.0 | v24.21.0 (09-07) | minor | **Current.** Undici 7.29.1 not checked line by line against the fetch-timeout claims. Node 26 enters Active LTS this month: premise check at next Refresh. |
-| `cli` | Node 24.20.0 · 3.14.3 · go1.26.1 · commander 15.0.0 · typer 0.27.2 · cobra v1.10.2 | 24.21.0 · 3.14.8 · go1.27.2 · 15.0.0 · 0.27.3 · v1.10.2 | minor / feature / patch | **Current.** go1.27 doesn't touch `flag`/`os/signal`. |
-| `go` | go1.27.1 | go1.27.2 (10-08) | patch | **Current.** |
-| `python` | 3.14.3 · ruff 0.16.5 · mcp 2.1.1 | 3.14.8 · 0.16.10 · mcp 2.3.0 | patch · patch · 2 minors | **Current.** mcp 2.3.0 changes hit no skill line. |
-| `postgres` · `sql` | PostgreSQL 18.3 (+ SQLite 3.43.2) | 18.6 · 3.54.0 | patch | **Current.** |
+| `react-hook-form` | 7.89.0 + resolvers 5.9.1 | 7.91.0 (10-23) · resolvers 6.0.2 (10-28) | 2 minors (threshold: minor); resolvers major | **Re-verified 2026-10-24 on 7.91.0** (resolvers 5.9.1, zod 4.6.5, react 19.3.0; split pin, the rest on 7.88.0). Every named claim held: Proxy short-circuit and `isValid` resolver counts (0 / 3), `setValue` silence, `reset()`/`values`, submit ladder and a throw out of `onValid`, `setError`, `useFieldArray` ids and snapshot, re-render table, `fieldState`. #13905 is a resolver throw, #13842 (`setValue('rows')` updates `fields`) contradicts no line. Resolvers 6.0.0 breaks only effect-ts: Decline. |
+| `panda-css` | 2.1.0 + vite plugin 2.1.0 | 2.4.0 (10-22) | 3 minors | **Re-verified 2026-10-24 on 2.4.0** (+ vite plugin 2.4.0, vite 8.3.5; split pin, 2.1.0 baseline run beside it). Held: config-recipe trap and `transform: true` (`:41`; bcc43e1/5616e53 change only the JS bundle), sheet order (`:47-53`; 36b18da/587fa95 recipe-only), dark `conditions` (`:98`), extraction table (`:21-30`), `staticCss` + `removeUnusedTokens` (`:43,75`). Deleted (fixed): the two expected `panda_call_unextractable` warnings at `cva.js`/`sva.js` under `transform: true` (`:65`). New, both versions: `jsxFramework: 'react'` silences every `panda_call_unextractable` warning — see *Decided 2026-10-25*. |
+| `conform` | 1.21.1 (zod 4.4.3) | 1.21.2 (10-11) · zod 4.6.7 | patch; zod 2 minors | **Re-verified 2026-10-24, `getZodConstraint` half, on 1.21.2 + zod 4.6.7** (split pin). `client.md:13`, `server.md:78`, `SKILL.md:78` held. Trap confirmed on 1.21.1 + zod 4.6.7 (only `required` and an enum's `pattern` survive), fixed on 1.21.2: `SKILL.md:78` now says zod 4.6 needs `@conform-to/zod` ≥ 1.21.2. Future-half changes (#1334/#1349): Decline, out of scope (`SKILL.md:97`). |
+| `vitest` | 5.0.0 | 5.0.5 (10-15) · beta 5.1.0-beta.1 | patch | **Re-verified 2026-10-24 on 5.0.5** (split pin). Changed: `fsModuleCache` is on by default since 5.0.4 (`speed.md:12` now says leave it on, `false` discards the cache; `speed.md:7` doctor tries it only when a project set it `false`). Added: under Browser Mode `maxWorkers` is one budget across all browser instances (`speed.md`, after the `maxWorkers` row). Held: `--changed --bail 1` (`SKILL.md:25`). |
+| `python` | 3.15.1 + ruff 0.17.2 (re-verified 10-24) | 3.15.2 · ruff 0.17.3 · mcp 2.3.0 | patch | **Current.** |
+| `drizzle` | As of 2026-07-29: `latest` 0.45.2, site documents 1.0 rc.4 → As of 2026-10-24 | `latest` 0.45.4 · `rc` 1.0.0-rc.5 (10-21) · kit 0.31.11 | patch; premise holds | **Re-verified 2026-10-24 on 0.45.4 + rc.5** (kit 0.31.11 / rc.5, better-sqlite3; inline 0.45.2/0.31.10 pins at `SKILL.md:56`, `sqlite.md:35,64` not rerun). Changed: rc.5 `DrizzleQueryError` carries no params unless `paramsInErrors: true` (`queries.md:70-73`); version table → 0.45.4/0.31.11, rc.5 (10-21); `postgres.md:6` adds `netlify-db` (0.45.4). Held: 0.45 error shape, migration folder without `_journal.json`, v1 APIs absent on 0.45.4, `sqlite.md` entry points. `.prepare(name)` bug never claimed. `As of` → 2026-10-24. |
+| `node` | v24.20.0 | v26.13.0 Active LTS (10-28) · v24.22.2 | major (LTS line moved) | **Re-verified 2026-10-29 on v26.13.0** (the standing *Decided 2026-10-25* rerun; split pin). Changed: `--experimental-transform-types` is gone on 26 (`bad option`; `type-stripping.md`); description → *Node 24 and 26 LTS*. Held: every `--env-file` line, unread-body sockets (20 vs reused), `TimeoutError` incl. body read, `fetch failed` + `cause.code`, `.pipe()` leaves dest open, backpressure 20.2 MB vs 16 KB, EPIPE exit 1 vs `console.log`, `process.exit` truncation (65,536 B) vs `exitCode`, repeated `SIGINT` handlers, early-reject crash and listener exit 0/1, `maxBuffer` 1 MiB + `ENOBUFS`, ESM globals, `require(esm)`, `ERR_REQUIRE_ASYNC_MODULE`, specifier errors, every strip-only rejection, shutdown 143/130 at the deadline. Not rerun on 26: the 300 s headers timeout, `import.meta.main` stability, `shutdown.md`'s *What holds `close()` open* timings. |
+| `superforms` | 3.0.0 + kit 3.0.1 (svelte 5.57.2, zod 4.6.5) | 3.1.0 (10-29) · kit 3.1.0 · svelte 5.57.3 | minor (threshold: major) | **Current.** 3.1.0: direct adapter imports, `FormPath` stops at recursive types (#703) — `SKILL.md:75`'s `FormPathLeaves<T>` field name still stands. |
+| `zod` | 4.6.5 | 4.6.7 (10-12) | patch | **Current.** #6645 types-only; `SKILL.md:72-75` stands. |
+| `xstate` | 5.33.2 | 5.33.3 (10-17) | patch | **Current.** |
+| `react-email` | 6.11.1 + render 2.1.0 | 6.11.6 (10-29) · render 2.2.0 (10-28) | render minor (threshold: minor) | **Re-verified 2026-10-29, plain-text block, on 6.11.6 + render 2.2.0** (`html-to-text` 10; split pin). `SKILL.md:33-38` held byte for byte: Preview absent, `QtyPrice`, `Reset https://…?t=abcHelp https://…`. 6.11.6 `<Button>` padding-0 longhand touches no line. |
+| `msw` | 3.0.1 | 3.0.3 (10-10) | patch | **Current.** |
+| `testing-library` | RTL 16.3.3 | 16.3.3 · user-event 14.6.8 | companion patch | **Current.** |
+| `cli` | Node 24.20.0 · 3.14.3 · go1.26.1 · commander 15.0.0 · typer 0.27.2 · cobra v1.10.2 | 24.22.1 · 3.15.1 · go1.27.3 · same · 0.27.3 · same | minor / feature | **Current.** 3.15 argparse `suggest_on_error` default True changes usage text, exit 2 unchanged; `reference/python.md:18` is 3.14-scoped. |
+| `go` | go1.27.1 | go1.27.3 (10-19) | patch | **Current.** |
+| `postgres` · `sql` | PostgreSQL 18.3 (+ SQLite 3.43.2) | 18.6 · 3.54.1 | patch | **Current.** |
+| `neon` · `tui-design` · `ark-ui` · `valibot` · `xstate-react` · `tailwind` | as 2026-10-10 | no move | none | **Current.** |
+
+### Decided 2026-10-25
+
+- **`panda-css` gate blind under `jsxFramework`** → **authored.** Reproduced on 2.1.0 and 2.4.0: with `jsxFramework: 'react'`, `cssgen` reports `diagnostics: 0` and `panda --max-warnings 0` exits 0; a spread config with `jsxFramework: undefined` run through `panda cssgen -c … -o <tmp> --max-warnings 0` reports the 10 warnings and exits 1. `SKILL.md` gate block now carries it.
+- **Node 26 premise** (`node`, and the Node pins in `cli`, `panda-css`, `msw`) → **Decline until 2026-10-28**, then `node` re-verified 2026-10-29 (row above). The companion Node pins in `cli`, `panda-css`, `msw` are **Consider** below.
+
+### Considered — the user's call (2026-10-29)
+
+- **Node 26 under `cli`, `panda-css`, `msw`** — each pins Node 24.20.0 as a companion, and Node 26 is a major on it. Three reproduction sessions (each skill's own claims on 26.13.0). Node 24 is Maintenance LTS to 2028-04-30, so nothing they claim is wrong today; what's missing is proof on 26.
+- **Prerelease majors** (RHF 8.0.0-beta.5, `@ark-ui/react` 6.0.0-next.0, vitest 5.1.0-beta.1, TypeScript 7.1 beta) → **Decline.** Skills track `latest`; each re-earns a read when `latest` moves to it.
 
 ### For PM loads `skills/roster/audit.md`
 
 - No threshold on the pin line: `panda-css`, `msw`, `vitest`, `node`, `cli`, `tailwind`, `go`, `python`, `postgres`, `sql`.
-- Pin lines step 1's greps miss: `tailwind` ("All claims below reproduced on…"), `sql` ("Claims marked *reproduced* ran on…"), `cli` (non-bold). `panda-css` has no `^As of` line.
-- No pin: `sqlite`, `typescript`, `python`'s hatchling, `ark-ui` (its only pinned claims were removed 2026-10-10; the anatomy claim that a dialog missing `Backdrop`/`Positioner`/`CloseTrigger` loses focus-trap and Escape was never reproduced).
-- Library traps in seat files sit outside this sweep: `cloudflare-builder` (`@cloudflare/vitest-pool-workers`), `sveltekit-builder` (kit 3, `$app/stores` removed in kit 3.0.0), `vercel-platform-engineer` (TS 7 under `@vercel/node`).
-- `cli` pins go1.26.1 while `go` pins go1.27.1.
+- Pin lines step 1's greps miss: `tailwind`, `sql`, `cli` (non-bold), `tui-design` ("Ink claims reproduced on…"). `panda-css` has no `^As of` line.
+- No pin: `sqlite`, `typescript`, `python`'s hatchling, `ark-ui`.
+- Library traps in seat files sit outside this sweep: `cloudflare-builder` (`@cloudflare/vitest-pool-workers`), `sveltekit-builder` (kit 3), `vercel-platform-engineer` (TS 7 under `@vercel/node`).
+- `cli` pins go1.26.1 while `go` pins go1.27.1 (latest go1.27.3).
 
 ## Plugin-installed skills
 

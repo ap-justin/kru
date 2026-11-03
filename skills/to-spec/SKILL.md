@@ -5,7 +5,7 @@ disable-model-invocation: true
 user-invocable: false
 ---
 
-<!-- vendored from `mattpocock/skills` (v1.3.1, sha 24fe0ef) → `skills/to-spec`. Spec/PRD synthesis backing the `planner` seat. Kept verbatim minus the Codex `agents/openai.yaml` metadata (unused here); re-sync: re-download from https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/to-spec/. -->
+<!-- vendored from `mattpocock/skills` (v1.3.2, sha d1478fc) → `skills/to-spec`. Spec/PRD synthesis backing the `planner` seat. Kept verbatim minus the Codex `agents/openai.yaml` metadata (unused here); re-sync: re-download from https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/to-spec/. -->
 
 This skill takes the current conversation context and codebase understanding and produces a spec. Do NOT interview the user; just synthesize what you already know.
 

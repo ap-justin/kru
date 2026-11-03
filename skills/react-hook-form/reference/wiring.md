@@ -1,6 +1,6 @@
 # Wiring — the submit boundary
 
-The action/server half of `react-hook-form`. Reproduced on the versions pinned in `SKILL.md`.
+The action/server half of `react-hook-form`. Reproduced on the versions pinned in `SKILL.md` — the submit ladder and `setError` on 7.91.0, the rest on 7.88.0.
 
 ## The submit ladder
 ```jsx

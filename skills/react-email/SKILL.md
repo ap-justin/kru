@@ -6,7 +6,7 @@ user-invocable: false
 
 **An email renders once, on the server, into a client you don't control — and React Email's own Tailwind decides what reaches it.** Its `<Tailwind>` is a second Tailwind that compiles at render time against the `config` prop and nothing else; a class it can't resolve stays in the markup as a bare `class=` that no inbox will ever style, and nothing fails. The preview server is the one place that hides the rest: it serves `static/`, and what it draws is the HTML part; the plain-text part your recipients' clients may fall back to sits only in its code panel's `md` tab. So check the output of `render()`, not the preview.
 
-Reproduced on **`react-email@6.11.1`** (`@react-email/render@2.1.0`, `@react-email/ui@6.11.1`) with `react@19.3.0` and `resend@6.32.1`, 2026-10-10. Re-verify after a minor bump.
+Reproduced on **`react-email@6.11.1`** (`@react-email/render@2.1.0`, `@react-email/ui@6.11.1`) with `react@19.3.0` and `resend@6.32.1`, 2026-10-10; the plain-text block also on `react-email@6.11.6` + `@react-email/render@2.2.0` (`html-to-text@10`), 2026-10-29. Re-verify after a minor bump.
 
 ## Import from `react-email`
 Components, `render`, `pixelBasedPreset` and `toPlainText` all export from **`react-email`**. **`@react-email/components`** — what most examples online, and older Context7 snippets, import from — is deprecated on npm at 1.0.12. In a repo still on it, keep its imports consistent within a file and move a file whole.

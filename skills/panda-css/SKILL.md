@@ -6,16 +6,27 @@ user-invocable: false
 
 **Panda folds what it can at build time and warns about most of what it can't; the failures left are the ones nothing reports.** The engine resolves a style value across imports down to a literal. A `css()` argument it can't fold prints `warning panda_call_unextractable … no static CSS was generated for this call` and emits nothing. The traps below are the paths that warning misses. In each, a class reaches the DOM with no rule behind it, or with a rule that does the wrong thing, and the build exits 0. Make the warnings fail the build first (the gate below), then check the silent paths by hand.
 
-Reproduced on **`@pandacss/dev@2.1.0`** (npm `latest`, 2026-10-02) with `@pandacss/vite@2.1.0` on `vite@8.3.2`, TypeScript 7.0.2, Node 24.20.0, through the `panda` CLI and `vite build` only. Cascade claims, which need a browser, are source-verified and marked. Panda 2 is ESM-only and needs Node ≥ 22.
+Reproduced on **`@pandacss/dev@2.4.0`** (npm `latest`, 2026-10-24) with `@pandacss/vite@2.4.0` on `vite@8.3.5`, Node 24.20.0, through `panda codegen` / `panda cssgen` and `vite build`: the extraction table, the config-recipe trap, sheet order, `transform: true`, `staticCss`, `optimize.removeUnusedTokens`, the dark condition and the `jsxFramework` gate. Everything else on **`@pandacss/dev@2.1.0`** (2026-10-02) with `@pandacss/vite@2.1.0` on `vite@8.3.2`, TypeScript 7.0.2, Node 24.20.0, through the `panda` CLI and `vite build` only. Cascade claims, which need a browser, are source-verified and marked. Panda 2 is ESM-only and needs Node ≥ 22.
 
 ## The gate: warnings and stale artifacts exit 0 unless you ask
 ```sh
-panda --max-warnings 0     # codegen + CSS; exits 1 on any panda_call_unextractable / unknown_condition warning
+panda --max-warnings 0     # codegen + CSS; exits 1 on any panda_call_unextractable / unknown_condition warning, unless jsxFramework is set (below)
 panda check                # exits 1 when styled-system/ is stale against the config ("missing 0, stale 3")
 panda analyze              # "analyze: scanned N files" is the only file count the CLI prints
 tsc --noEmit               # after `panda`: styled-system/ is gitignored, so typecheck needs it generated first
 ```
 `panda doctor` validates setup, not extraction. It prints `doctor: ok (0 diagnostics)` while the build warns, and its `sources` / `sourceCount` is the number of `include` globs, not files (it reported 1 for a glob matching 10 files). Its `utilities` and `conditions` counts are still worth reading (the `presets` trap below). `panda` writes both outputs: `panda codegen` writes only `styled-system/` and `panda cssgen` only the CSS.
+
+**With `jsxFramework` set, that gate checks nothing.** Under `jsxFramework: 'react'` Panda reports no `panda_call_unextractable` at all: files that warn 10 times without it give `diagnostics: 0` and exit 0, on 2.1.0 and 2.4.0. Gate on a copy of the config without it, writing the CSS to a throwaway file (`cssgen` leaves `styled-system/` alone):
+```ts
+// panda.gate.config.ts
+import config from './panda.config'
+export default { ...config, jsxFramework: undefined }
+```
+```sh
+panda cssgen -c panda.gate.config.ts -o "$TMPDIR/panda-gate.css" --max-warnings 0
+```
+It covers `css()` calls only: with `jsxFramework` unset, Panda doesn't parse JSX style props.
 
 ## What resolves, what warns, what drops in silence
 | Becomes CSS | Warns, emits nothing | Emits nothing, no warning |
@@ -62,7 +73,7 @@ cx(css({ color: 'green.500' }), css({ color: 'red.500' }))    // red wins again
 /* src/index.css, imported by the entry */
 @layer reset, base, tokens, recipes, utilities;
 ```
-`@pandacss/vite` appends the generated CSS only to a `.css` module that declares Panda's layers. A Vitest config kept separate from `vite.config.ts` inherits none of its plugins or `css.postcss`: re-add Panda's (`@pandacss/vite`, or `css.postcss.plugins: [pandacss()]` under the PostCSS integration), or Browser Mode renders raw UA styles and nothing errors. Leave the line out and `vite build` ships the file without any Panda CSS, and prints nothing. With `transform: true`, static `css()`, pattern, recipe and `styled` calls compile to class strings (`el.title = "m_0 mt_4"`), and two `panda_call_unextractable` warnings point at `styled-system/css/cva.js` and `sva.js` themselves. Those two are expected. A warning that points at your own file is a real drop.
+`@pandacss/vite` appends the generated CSS only to a `.css` module that declares Panda's layers. A Vitest config kept separate from `vite.config.ts` inherits none of its plugins or `css.postcss`: re-add Panda's (`@pandacss/vite`, or `css.postcss.plugins: [pandacss()]` under the PostCSS integration), or Browser Mode renders raw UA styles and nothing errors. Leave the line out and `vite build` ships the file without any Panda CSS, and prints nothing. With `transform: true`, static `css()`, pattern, recipe and `styled` calls compile to class strings (`el.title = "m_0 mt_4"`).
 
 ## `optimize.removeUnusedTokens` deletes variables that plain CSS reads
 ```ts

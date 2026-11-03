@@ -67,10 +67,10 @@ Use `tx`, never the outer `db`, inside the callback — a stray `db` call runs o
 
 The error is the driver's, and 0.45 and 1.0 hand it over in different shapes (better-sqlite3 13, one FK violation):
 
-| | 0.45.2 | 1.0.0-rc.4 |
+| | 0.45.4 | 1.0.0-rc.5 |
 |---|---|---|
 | thrown | the driver's `SqliteError`, unwrapped | `DrizzleQueryError` |
-| `.message` | `FOREIGN KEY constraint failed` | `Failed query: insert into "p" … \nparams: 2,99` |
+| `.message` | `FOREIGN KEY constraint failed` | `Failed query: insert into "p" …` — the bound values only with `drizzle({ …, paramsInErrors: true })` (`\nparams: 2,99`) |
 | `.code` | `SQLITE_CONSTRAINT_FOREIGNKEY` | `undefined` |
 | `.cause` | absent | the driver's `SqliteError`, carrying `.code` |
 

@@ -1,6 +1,6 @@
 # Running `.ts` with `node`
 
-`node file.ts` erases type annotations and runs what's left — no flag on Node 24, no warning printed, no type check, and no `tsconfig.json` read (so no `paths`, no `target`). Anything that needs *code generated* rather than erased is a `SyntaxError` at load. Reproduced on **Node v24.20.0** and **tsc 6.0.3** (`darwin/arm64`, 2026-10-05). Docs: `typescript.html#type-stripping`.
+`node file.ts` erases type annotations and runs what's left — no flag on Node 24 or 26, no warning printed, no type check, and no `tsconfig.json` read (so no `paths`, no `target`). Anything that needs *code generated* rather than erased is a `SyntaxError` at load. Reproduced on **Node v24.20.0** and **tsc 6.0.3** (`darwin/arm64`, 2026-10-05); both *Rejected* sections and the flag's removal also on **Node v26.13.0** (2026-10-29). Docs: `typescript.html#type-stripping`.
 
 ## Rejected at load
 | Source | Error |
@@ -11,7 +11,7 @@
 | `c.tsx` | `SyntaxError: Unexpected token '<'` — no JSX |
 | a `.ts` file under `node_modules` | `ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING` — a workspace package consumed as raw `.ts` needs a build step |
 
-`--experimental-transform-types` accepts enums and the rest, with an `ExperimentalWarning`; replacing the enum with an `as const` object keeps the file strip-only.
+`--experimental-transform-types` accepts enums and the rest on Node 24, with an `ExperimentalWarning`; Node 26 removed it (`bad option`), so a file that needs it doesn't run there at all. Replacing the enum with an `as const` object keeps the file strip-only on both.
 
 ## Rejected at link
 - **A type imported without `type` is a missing export.** `import { User, make } from './types.ts'` where `User` is an interface: `SyntaxError: The requested module './types.ts' does not provide an export named 'User'`. `import { type User, make }` runs.

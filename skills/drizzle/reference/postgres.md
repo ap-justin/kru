@@ -3,7 +3,7 @@
 Read `SKILL.md` first. The lock impact of DDL, index builds and enums are the `postgres` skill's — this file is only what the ORM layer changes about them.
 
 ## Drivers
-0.45.2 ships: `node-postgres` · `postgres-js` · `neon-http` · `neon-serverless` · `vercel-postgres` · `pglite` · `aws-data-api/pg` · `xata-http` · `pg-proxy`.
+0.45.4 ships: `node-postgres` · `postgres-js` · `neon-http` · `neon-serverless` · `netlify-db` · `vercel-postgres` · `pglite` · `aws-data-api/pg` · `xata-http` · `pg-proxy`.
 
 Long-lived server → `node-postgres` or `postgres-js` over a pool. Serverless/edge with a per-request lifetime → the HTTP driver for that provider (`neon-http`), because a TCP pool that doesn't outlive the invocation is a connection leak, not a pool.
 
