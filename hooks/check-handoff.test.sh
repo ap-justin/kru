@@ -43,6 +43,11 @@ check() {
 
 ui=kru:react-ui-builder
 
+# planner — a brief naming no written brief.md is refused, and the reason
+# carries the pointer to the brief skill intact
+check refuse kru:planner "Plan the checkout rewrite." "SKILL.md\` first and point"
+check allow kru:planner "Read the brief at plan/checkout/brief.md and write the spec."
+
 # comment standard — the paraphrase is refused
 check refuse $ui "Build the form. Preserve existing comments in the file." "comment standard"
 check refuse $ui "Build the form. Comments already in the file survive your edit." "comment standard"
