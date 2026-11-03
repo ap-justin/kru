@@ -1,5 +1,6 @@
 {
-  "enabledPlugins": {
-    "kru@synced": false
-  }
+  "extraKnownMarketplaces": {
+    "kru": { "source": { "source": "github", "repo": "ap-justin/kru" } }
+  },
+  "enabledPlugins": { "kru@kru": true }
 }

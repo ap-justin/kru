@@ -219,7 +219,8 @@ fi
 
 # planner reads a written brief.md (lead step 2.6)
 if [ "$seat" = "planner" ] && ! printf '%s' "$prompt" | grep -q 'brief\.md'; then
-  reasons="${reasons}planner brief names no brief.md: run `skills/brief/SKILL.md` first and point the seat at the written file (step 2.6). "
+  # single-quoted: in double quotes the backticks run as command substitution and the path drops out of the reason
+  reasons="${reasons}"'planner brief names no brief.md: run `skills/brief/SKILL.md` first and point the seat at the written file (step 2.6). '
 fi
 
 # shadow scans — logged, never refused.
