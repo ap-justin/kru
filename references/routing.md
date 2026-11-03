@@ -109,6 +109,7 @@ TanStack Table). So adding a skill here is a row plus the skill, and the seat fi
 | `panda.config.*` or a `styled-system/` directory | `panda-css` |
 | `tailwindcss` | `tailwind` — v4, and `v3-lts` is a different product rather than a version behind, so the brief names the installed major |
 | `components.json` | `shadcn` — the repo has settled its primitive library, and `ark-ui`'s reach-for section is where that rule lives |
+| `@base-ui/react` | `base-ui` — a shadcn repo on `base: "base-ui"` answers yes twice, and the brief names both |
 | `@tanstack/react-table` | **no kru skill** — the playbook ships in the installed `react-table` and `table-core` packages, and the brief names both `skills/` directories |
 | `charmbracelet/bubbletea` (`go.mod`) · `ratatui` (`Cargo.toml`) · `textual` (`pyproject.toml`) · `ink` (`package.json`) | `tui-design` — the repo draws a terminal screen rather than printing to one |
 | a surface code the repo doesn't own calls — a versioned `/api/v<n>` route, an `openapi.*` document, API keys the app mints, or webhooks the app sends | `api-design` — a surface rather than a library, so the brief names it for a slice that builds the first one, before any of these exists to detect |
