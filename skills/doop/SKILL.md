@@ -1,9 +1,9 @@
 ---
 name: doop
-description: A doop design canvas as the approved mockups (a `/c/<id>` link, doop MCP tools). Use when a build reads frames from one, a visual review compares the built UI to frame screenshots, or a designer hands one over. Not the tool guide — doop's `get_guide` serves that.
+description: A doop design canvas as the approved mockups (a `/c/<id>` link, doop MCP tools). Use when a build reads frames from one, a visual review compares the built UI to frame screenshots, or a designer hands one over.
 ---
 
-Doop's MCP server teaches its own tools through `get_guide({ topic: "doop-instructions" })`; load that guide first, and this skill never restates it. It adds what changes when the canvas is the mockups of a kru build (`references/design-spec.md`). Read against doop `aa5a395`; the `server/…` cites are that tree.
+Load doop's own tool guide first: `get_guide({ topic: "doop-instructions" })`. Read against doop `aa5a395`; the `server/…` cites are that tree.
 
 ## A `/c/<id>` link is read through the MCP tools
 Canvases are private. With no signed-in user there is no role on a canvas, even through a view, comment or edit share link (`server/access.ts:33-35`), and every `/api` call without a session is a 401 (`server/index.ts:684-688`). A fetch of the link carries no session, so it cannot return frames; treat nothing it returns as the design. Take the id from the link and read it with the doop MCP tools this session already has: `get_canvas`, then `get_frame` per frame. With no doop tools, see *When doop isn't reachable*.
@@ -20,7 +20,7 @@ A frame is a fixed-size document, and its screenshot is rendered at the frame's 
 - When no frame is drawn at 1440 or at 375, the mockups omit that width: report it as a gap, as `design-spec.md` has it, and leave the frames at their drawn size (a resize voids sign-off).
 
 ## Designing on a canvas
-The designer's session runs on the server's guide. Two kru additions:
+Two additions to the server's guide for the designer:
 - Size the frames 1440 and 375 wide (`references/design-spec.md`), over the guide's defaults.
 - Hand the PM the `/c/<id>` link as the mockups, with the build spec beside it (`references/designer-handoff.md`). The build spec writes out the tokens, states and copy rules; the frame HTML does not stand in for it.
 
