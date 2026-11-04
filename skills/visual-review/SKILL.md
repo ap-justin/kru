@@ -18,7 +18,7 @@ You review the UI as it actually renders, in a real browser, against the **appro
 
 **Numbers are evidence, not output.** Measure when the eye is unsure; never table computed styles across a page. Tap targets and WCAG criteria → `skills/accessibility-review/SKILL.md`. Off-token values → the repo's conformance gate.
 
-**Mockups on a doop canvas** (a `/c/<id>` link): `skills/doop/SKILL.md`.
+**Mockups on a doop canvas** (a `/c/<id>` link): `skills/doop/SKILL.md`. `visual-reviewer` has no doop tools, so the dispatching thread reads the frames before the spawn and hands over each frame's screenshot as a file path, its drawn width, and that width as a spec viewport when it is not 1440 or 375. A frame it can't hand over that way is a named gap in the brief.
 
 **Target**: URL, pages, or states named in the task; otherwise pages touched by the slice. **Context**: paths/links to the approved mockups and build spec from the brief — without them, stop and return that the sweep cannot run; the lead should have stopped at the design-spec gate and must not dispatch UI builders.
 

@@ -1,6 +1,7 @@
 ---
 name: doop
-description: A doop design canvas as the approved mockups (a `/c/<id>` link, doop MCP tools). Use when a build reads frames from one, a visual review compares the built UI to frame screenshots, or a designer hands one over.
+description: A doop design canvas as the approved mockups (a `/c/<id>` link, doop MCP tools). Use when a build reads frames from one, a visual review compares the built UI to frame screenshots, or a designer draws mockups on one.
+user-invocable: false
 ---
 
 Load doop's own tool guide first: `get_guide({ topic: "doop-instructions" })`. Read against doop `aa5a395`; the `server/…` cites are that tree.
@@ -16,13 +17,13 @@ Canvases are private. With no signed-in user there is no role on a canvas, even 
 
 ## A frame has one width
 A frame is a fixed-size document, and its screenshot is rendered at the frame's own width and height (`server/screenshot.ts:389-394`); `get_frame_screenshot` takes no viewport (`server/mcp.ts:1788-1800`). Doop's suggested frame sizes are 1280×800 desktop and 390×844 mobile (`server/guide.ts:231`), not 1440 and 375.
-- Read each frame's `width` and `height` from `get_frame`, and compare the built UI at the width the frame is drawn at: a 1440 frame against the build at 1440, a 1280 frame against the build at 1280 (`skills/visual-review/SKILL.md` runs that comparison).
-- When no frame is drawn at 1440 or at 375, the mockups omit that width: report it as a gap, as `design-spec.md` has it, and leave the frames at their drawn size (a resize voids sign-off).
+- Read each frame's `width` and `height` from `get_frame`, and compare the built UI at the width the frame is drawn at: a 1440 frame against the build at 1440, a 1280 frame against the build at 1280. `skills/visual-review/SKILL.md` sweeps 1440 and 375, so a frame drawn at any other width goes in its brief as an extra spec viewport.
+- When no frame is drawn at 1440 or at 375, the mockups omit that width: report it as a gap, as `references/design-spec.md` has it, and leave the frames at their drawn size (a resize voids sign-off).
 
 ## Designing on a canvas
 Two additions to the server's guide for the designer:
 - Size the frames 1440 and 375 wide (`references/design-spec.md`), over the guide's defaults.
-- Hand the PM the `/c/<id>` link as the mockups, with the build spec beside it (`references/designer-handoff.md`). The build spec writes out the tokens, states and copy rules; the frame HTML does not stand in for it.
+- Hand the PM the `/c/<id>` link as the mockups, with the build spec beside it (`references/designer-handoff.md`). The build spec writes out the tokens, states and copy rules; the frame HTML does not stand in for it. Share the canvas with the account the build's doop MCP connects as before handing it over, since canvases are private.
 
 ## When doop isn't reachable
 Doop takes an OAuth browser sign-in or an agent key in the client's MCP config (`server/mcp.ts:2076-2121`); a revoked key is a bare 401. When the doop tools are missing, the sign-in fails, or a read answers `no canvas … accessible to this account` (the connected account has no access to that canvas), report the gap to the PM, naming the MCP server to enable, the sign-in to finish, or the canvas to share with that account. Never ask for a key or token in chat, and never rebuild the screen from the URL or from memory. The slice that needs those frames waits as a named gap; the others proceed.
