@@ -1,8 +1,9 @@
 #!/bin/bash
 # sessionstart (startup): tell the session to load its entry contract — the lead's
-# to build, the designer's to design — before its first tool call, so `require-lead.sh` rarely has to block. the block is the
-# backstop and costs a round trip: under Sky the runner's own approval hook has
-# already held the blocked call for a human, so the retry asks a second time.
+# to build, the designer's to design — before its first tool call, so
+# `require-lead.sh` rarely has to block. the block is the backstop and costs a
+# round trip: under Sky the runner's own approval hook has already held the
+# blocked call for a human, so the retry asks a second time.
 #
 # its own hook rather than a line in setup-nudge.sh, which exits early in the
 # plugin's repo and in a repo that already has a sheet — this must reach both.
