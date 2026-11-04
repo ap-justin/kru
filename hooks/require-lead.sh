@@ -46,9 +46,10 @@ transcript=$(printf '%s' "$input" | jq -r '.transcript_path // empty' 2>/dev/nul
 [ -r "$transcript" ] || exit 0
 
 # anchored to how a load is recorded: Skill tool, Read whose path ends in
-# skills/lead/SKILL.md, or legacy slash — never prose or a quoted path alone.
-# the designer contract (skills/designer/SKILL.md) passes the same way: a design
-# session never builds, so the lead's contract is not its precondition.
+# skills/lead/SKILL.md, or a /kru:lead slash command — never prose or a quoted
+# path alone. the designer contract (skills/designer/SKILL.md, /kru:designer)
+# passes each of the same ways: a design session never builds, so the lead's
+# contract is not its precondition.
 lead_loaded=$(jq -rn --arg lead 'skills/(lead|designer)/SKILL.md' '
   def read_lead:
     .type == "assistant" and (.message.content | type) == "array" and
@@ -60,7 +61,7 @@ lead_loaded=$(jq -rn --arg lead 'skills/(lead|designer)/SKILL.md' '
         ((.input.skill? // "") | test("^(kru:)?(lead|designer)$"))))
     or read_lead
     or (.type == "user" and (.message.content | type) == "string" and
-      (.message.content | test("<command-name>/?kru:lead</command-name>")))
+      (.message.content | test("<command-name>/?kru:(lead|designer)</command-name>")))
   )
 ' "$transcript" 2>/dev/null)
 [ "$lead_loaded" = "true" ] && exit 0
@@ -82,5 +83,5 @@ mark="$mark_dir/$sid"
 [ -e "$mark" ] && exit 0
 mkdir -p "$mark_dir" 2>/dev/null && : > "$mark" 2>/dev/null
 
-printf 'kru: this session has not loaded the lead contract. Read %s/skills/lead/SKILL.md (or invoke the kru:lead skill; a session whose task is to design invokes kru:designer instead), then take the action again — nothing else about the request has changed. This fires once per session, from the kru plugin, and read-only commands are exempt. To run without it: touch %s\n' "$plugin_root" "$(kru_path lead-gate/off)" >&2
+printf 'kru: this session has not loaded the lead contract. Read %s/skills/lead/SKILL.md (or invoke the kru:lead skill; a session whose task is to design invokes kru:designer instead), then take the action again — nothing else about the request has changed. This fires once per session, from the kru plugin, and only read-only Bash commands are exempt (Read, Grep and Glob are not). To run without it: touch %s\n' "$plugin_root" "$(kru_path lead-gate/off)" >&2
 exit 2
