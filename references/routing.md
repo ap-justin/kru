@@ -107,6 +107,7 @@ TanStack Table). So adding a skill here is a row plus the skill, and the seat fi
 | `msw` | `msw` — carried by the same discovery step |
 | `sveltekit-superforms` | `superforms` |
 | `panda.config.*` or a `styled-system/` directory | `panda-css` |
+| `lism-css` (or a `lism-css` stylesheet link) | `lism-css` |
 | `tailwindcss` | `tailwind` — v4, and `v3-lts` is a different product rather than a version behind, so the brief names the installed major |
 | `components.json` | `shadcn` — the repo has settled its primitive library, and `ark-ui`'s reach-for section is where that rule lives |
 | `@base-ui/react` | `base-ui` — a shadcn repo on `base: "base-ui"` answers yes twice, and the brief names both |
