@@ -22,9 +22,14 @@ assistant_text() { jq -nc --arg t "$1" '{type:"assistant", message:{content:[{ty
 
 { user "build the signup form"; assistant_text "on it"; } > "$tx/plain.jsonl"
 { user "build it"; assistant_skill "kru:lead"; tool_result; } > "$tx/lead.jsonl"
-assistant_read() { jq -nc --arg p "$1" '{type:"assistant", message:{content:[{type:"tool_use", name:"Read", input:{path:$p}}]}}'; }
+assistant_read() { jq -nc --arg p "$1" '{type:"assistant", message:{content:[{type:"tool_use", name:"Read", input:{file_path:$p}}]}}'; }
+# the hook still takes a bare `path` on purpose, for tools that send one
+assistant_read_path() { jq -nc --arg p "$1" '{type:"assistant", message:{content:[{type:"tool_use", name:"Read", input:{path:$p}}]}}'; }
 { user "build it"; assistant_read "$root/skills/lead/SKILL.md"; tool_result; } > "$tx/lead-read.jsonl"
+{ user "build it"; assistant_read_path "$root/skills/lead/SKILL.md"; tool_result; } > "$tx/lead-read-path.jsonl"
 { user "build it"; assistant_skill "lead"; } > "$tx/lead-bare.jsonl"
+{ user "<command-name>/kru:designer</command-name>"; } > "$tx/designer-cmd.jsonl"
+{ user "<command-name>/kru:designer</command-name>"; assistant_text "drawing"; user "now add a pricing frame"; } > "$tx/designer-cmd-then-turn.jsonl"
 { user "design it"; assistant_skill "kru:designer"; tool_result; } > "$tx/designer.jsonl"
 { user "design it"; assistant_skill "designer"; } > "$tx/designer-bare.jsonl"
 { user "design it"; assistant_read "$root/skills/designer/SKILL.md"; tool_result; } > "$tx/designer-read.jsonl"
@@ -77,15 +82,24 @@ check allow Edit "" "$tx/lead.jsonl"
 check allow Edit "" "$tx/lead-bare.jsonl"
 check allow Edit "" "$tx/lead-cmd.jsonl"
 check allow Edit "" "$tx/lead-read.jsonl"
+check allow Edit "" "$tx/lead-read-path.jsonl"
 check allow Edit "" "$tx/designer.jsonl"
 check allow Edit "" "$tx/designer-bare.jsonl"
 check allow Bash "touch x" "$tx/designer.jsonl"
 check allow Edit "" "$tx/designer-read.jsonl"
+check allow Edit "" "$tx/designer-cmd.jsonl"
+# a designer command counts as a load, so a plain turn after it is not blocked
+check allow Edit "" "$tx/designer-cmd-then-turn.jsonl"
 check refuse Edit "" "$tx/other-skill.jsonl"
 check refuse Edit "" "$tx/other-read.jsonl"
 check refuse Edit "" "$tx/prose.jsonl"
 check refuse Edit "" "$tx/prose-read-mention.jsonl"
 check refuse Edit "" "$tx/tool-result-path.jsonl"
+
+# the block message points at both entries
+msg=$(jq -nc --arg p "$p" '{session_id:"msg", transcript_path:$p, tool_name:"Edit", tool_input:{}}' |
+  env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_LEAD_GATE HOME="$home" bash "$hook" "$root" 2>&1)
+if printf '%s' "$msg" | grep -qF 'kru:designer'; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL: block message does not name kru:designer\n  %s\n' "$msg"; fi
 
 # fires once per session: the block writes the mark, the retry passes
 check refuse Edit "" "$p" once
@@ -146,9 +160,12 @@ check allow Edit "" "$sandbox/missing.jsonl"
 input=$(jq -nc --arg p "$p" '{transcript_path:$p, tool_name:"Edit", tool_input:{}}')
 out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_LEAD_GATE HOME="$home" bash "$hook" "$root" 2>&1); code=$?
 if [ "$code" -eq 0 ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (allow, exit %s): missing session_id\n  %s\n' "$code" "$out"; fi
+# a root with the store resolver but no lead skill: the plain transcript would be
+# gated, so a pass here is the skill check's
+bare="$sandbox/bareroot"; mkdir -p "$bare" && ln -s "$root/scripts" "$bare/scripts"
 input=$(jq -nc --arg p "$p" '{session_id:"noroot", transcript_path:$p, tool_name:"Edit", tool_input:{}}')
-out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_ROOT HOME="$home" bash "$hook" "$sandbox" 2>&1); code=$?
-if [ "$code" -eq 0 ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (allow, exit %s): root without lead skill\n  %s\n' "$code" "$out"; fi
+out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_ROOT HOME="$home" bash "$hook" "$bare" 2>&1); code=$?
+if [ "$code" -eq 0 ] && [ -z "$out" ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (allow, exit %s): root without lead skill\n  %s\n' "$code" "$out"; fi
 
 printf '%d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]

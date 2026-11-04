@@ -52,9 +52,15 @@ for c in dirname cat env; do ln -s "$(command -v "$c")" "$bin/$c"; done
 out=$(printf '{}' | env -u KRU_HOME -u KRU_NO_LEAD_GATE HOME="$home" PATH="$bin" "$(command -v bash)" "$hook" "$root" 2>&1); code=$?
 if [ "$code" -eq 0 ] && [ -z "$out" ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (silent, exit %s): no jq\n  %s\n' "$code" "$out"; fi
 
-# fail open: a root without the lead skill
-out=$(printf '{}' | env -u KRU_HOME -u KRU_NO_LEAD_GATE HOME="$home" bash "$hook" "$sandbox" 2>&1); code=$?
+# fail open: a root with the store resolver but no lead skill. the same call
+# against the real root speaks, so the silence is the skill check's
+bare="$sandbox/bareroot"; mkdir -p "$bare" && ln -s "$root/scripts" "$bare/scripts"
+out=$(printf '{}' | env -u KRU_HOME -u KRU_NO_LEAD_GATE HOME="$home" bash "$hook" "$bare" 2>&1); code=$?
 if [ "$code" -eq 0 ] && [ -z "$out" ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (silent, exit %s): root without lead skill\n  %s\n' "$code" "$out"; fi
+
+# registered under a matcher that includes startup (it is "startup|clear" today)
+if jq -e '[.hooks.SessionStart[] | select((.matcher // "") | split("|") | index("startup")) | .hooks[].command | select(contains("lead-first.sh"))] | length == 1' "$root/hooks/hooks.json" >/dev/null 2>&1; then
+  pass=$((pass + 1)); else fail=$((fail + 1)); echo "FAIL: hooks.json does not register lead-first.sh under startup"; fi
 
 printf '%d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]
