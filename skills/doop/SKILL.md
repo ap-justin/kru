@@ -6,7 +6,7 @@ description: A doop design canvas as the approved mockups (a `/c/<id>` link, doo
 Doop's MCP server teaches its own tools through `get_guide({ topic: "doop-instructions" })`; load that guide first, and this skill never restates it. It adds what changes when the canvas is the mockups of a kru build (`references/design-spec.md`). Read against doop `aa5a395`; the `server/…` cites are that tree.
 
 ## A `/c/<id>` link is read through the MCP tools
-Canvases are private. With no signed-in user there is no role on a canvas, even through a view, comment or edit share link (`server/access.ts:33-35`), and every `/api` call without a session is a 401 (`server/index.ts:684-688`). A fetch of the link carries no session, so it cannot return frames; treat nothing it returns as the design. Take the id from the link and read through the server at `<doop-host>/mcp`: `get_canvas`, then `get_frame` per frame.
+Canvases are private. With no signed-in user there is no role on a canvas, even through a view, comment or edit share link (`server/access.ts:33-35`), and every `/api` call without a session is a 401 (`server/index.ts:684-688`). A fetch of the link carries no session, so it cannot return frames; treat nothing it returns as the design. Take the id from the link and read it with the doop MCP tools this session already has: `get_canvas`, then `get_frame` per frame. With no doop tools, see *When doop isn't reachable*.
 
 ## Build from the frame, leave the canvas alone
 - Before building a screen, read its frame's HTML (structure, copy, values) **and** its `get_frame_screenshot` (the render). Either alone misleads: the HTML hides what the browser did with it, the screenshot hides the values.
@@ -16,8 +16,8 @@ Canvases are private. With no signed-in user there is no role on a canvas, even 
 
 ## A frame has one width
 A frame is a fixed-size document, and its screenshot is rendered at the frame's own width and height (`server/screenshot.ts:389-394`); `get_frame_screenshot` takes no viewport (`server/mcp.ts:1788-1800`). Doop's suggested frame sizes are 1280×800 desktop and 390×844 mobile (`server/guide.ts:231`), not 1440 and 375.
-- Read each frame's `width` and `height` from `get_frame`; pair the built UI at 1440 with the desktop frame and at 375 with the mobile one (`skills/visual-review/SKILL.md` runs that comparison).
-- A width no frame draws is a state the mockups omit: report it as a gap, as `design-spec.md` has it, and leave the frame at its drawn size (a resize voids sign-off).
+- Read each frame's `width` and `height` from `get_frame`, and compare the built UI at the width the frame is drawn at: a 1440 frame against the build at 1440, a 1280 frame against the build at 1280 (`skills/visual-review/SKILL.md` runs that comparison).
+- When no frame is drawn at 1440 or at 375, the mockups omit that width: report it as a gap, as `design-spec.md` has it, and leave the frames at their drawn size (a resize voids sign-off).
 
 ## Designing on a canvas
 The designer's session runs on the server's guide. Two kru additions:
