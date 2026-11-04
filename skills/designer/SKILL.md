@@ -1,6 +1,6 @@
 ---
 name: designer
-description: Design session entry — load first when the task is to design, not build: screens and flows as mockups plus a build spec for the PM. Building, reviewing and dispatching are kru:lead's.
+description: "Design session entry — load first when the task is to design, not build: screens and flows as mockups plus a build spec for the PM. Building, reviewing and dispatching are kru:lead's."
 ---
 
 `${CLAUDE_PLUGIN_ROOT}` below is the plugin's install dir: the directory two levels above this file, when you `Read` it rather than invoke it.
