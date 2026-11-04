@@ -17,12 +17,12 @@ Canvases are private. With no signed-in user there is no role on a canvas, even 
 ## A frame has one width
 A frame is a fixed-size document, and its screenshot is rendered at the frame's own width and height (`server/screenshot.ts:389-394`); `get_frame_screenshot` takes no viewport (`server/mcp.ts:1788-1800`). Doop's suggested frame sizes are 1280×800 desktop and 390×844 mobile (`server/guide.ts:231`), not 1440 and 375.
 - Read each frame's `width` and `height` from `get_frame`; pair the built UI at 1440 with the desktop frame and at 375 with the mobile one (`skills/visual-review/SKILL.md` runs that comparison).
-- A width no frame draws is a state the mockups omit: report it as a gap, as `design-spec.md` has it. Never resize a frame to 1440 or 375 to make it match, since that voids sign-off.
+- A width no frame draws is a state the mockups omit: report it as a gap, as `design-spec.md` has it, and leave the frame at its drawn size (a resize voids sign-off).
 
 ## Designing on a canvas
 The designer's session runs on the server's guide. Two kru additions:
 - Size the frames 1440 and 375 wide (`references/design-spec.md`), over the guide's defaults.
-- Hand the PM the `/c/<id>` link as the mockups, with the build spec beside it (`references/designer-handoff.md`). The frame HTML is not the build spec: tokens, states and copy rules are written out in it.
+- Hand the PM the `/c/<id>` link as the mockups, with the build spec beside it (`references/designer-handoff.md`). The build spec writes out the tokens, states and copy rules; the frame HTML does not stand in for it.
 
 ## When doop isn't reachable
 Doop takes an OAuth browser sign-in or an agent key in the client's MCP config (`server/mcp.ts:2076-2121`); a revoked key is a bare 401. When the doop tools are missing, the sign-in fails, or a read answers `no canvas … accessible to this account` (the connected account has no access to that canvas), report the gap to the PM, naming the MCP server to enable, the sign-in to finish, or the canvas to share with that account. Never ask for a key or token in chat, and never rebuild the screen from the URL or from memory. The slice that needs those frames waits as a named gap; the others proceed.

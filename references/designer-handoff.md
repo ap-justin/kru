@@ -25,7 +25,7 @@ Invoke the bundled Claude Code `design` skill (designer loads) for artboards and
 - **Marks and imagery:** `brand-marks` for SVG marks and rasters; `scripts/asset/run.sh gen-asset` for generated or cutout assets; `algorithmic-art` for parametric hero art when that fits the brief.
 - **Coverage ledger** (`design-system.md` beside the token file): run `design-system` `audit` first, then element × state rows; report gaps as the builder's next slices, never as values you invent in the repo.
 
-A doop canvas as the mockups: `skills/doop/SKILL.md`.
+Mockups on a doop canvas (a `/c/<id>` link): `skills/doop/SKILL.md`.
 
 ## Questions and approval
 
