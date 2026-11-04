@@ -3,7 +3,7 @@ name: doop
 description: A doop design canvas as the approved mockups (a `/c/<id>` link, doop MCP tools). Use when a build reads frames from one, a visual review compares the built UI to frame screenshots, or a designer hands one over. Not the tool guide — doop's `get_guide` serves that.
 ---
 
-Doop's MCP server teaches its own tools: call `get_guide({ topic: "doop-instructions" })` before other doop tools and follow what it returns. This skill adds what changes when the canvas is the mockups of a kru build (`references/design-spec.md`). Read against doop `aa5a395`; the `server/…` cites are that tree.
+Doop's MCP server teaches its own tools through `get_guide({ topic: "doop-instructions" })`; load that guide first, and this skill never restates it. It adds what changes when the canvas is the mockups of a kru build (`references/design-spec.md`). Read against doop `aa5a395`; the `server/…` cites are that tree.
 
 ## A `/c/<id>` link is read through the MCP tools
 Canvases are private. With no signed-in user there is no role on a canvas, even through a view, comment or edit share link (`server/access.ts:33-35`), and every `/api` call without a session is a 401 (`server/index.ts:684-688`). A fetch of the link carries no session, so it cannot return frames; treat nothing it returns as the design. Take the id from the link and read through the server at `<doop-host>/mcp`: `get_canvas`, then `get_frame` per frame.
