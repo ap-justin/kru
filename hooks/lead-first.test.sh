@@ -25,6 +25,7 @@ check() {
     printf '%s' "$out" | jq -e '.hookSpecificOutput.hookEventName == "SessionStart"' >/dev/null 2>&1 || ok=false
     ctx=$(printf '%s' "$out" | jq -r '.hookSpecificOutput.additionalContext // empty' 2>/dev/null)
     printf '%s' "$ctx" | grep -qF 'kru:lead' || ok=false
+    printf '%s' "$ctx" | grep -qF 'kru:designer' || ok=false
     printf '%s' "$ctx" | grep -qF "$root/skills/lead/SKILL.md" || ok=false
   else
     [ -z "$out" ] || ok=false

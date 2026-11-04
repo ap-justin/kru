@@ -47,7 +47,9 @@ transcript=$(printf '%s' "$input" | jq -r '.transcript_path // empty' 2>/dev/nul
 
 # anchored to how a load is recorded: Skill tool, Read whose path ends in
 # skills/lead/SKILL.md, or legacy slash — never prose or a quoted path alone.
-lead_loaded=$(jq -rn --arg lead 'skills/lead/SKILL.md' '
+# the designer contract (skills/designer/SKILL.md) passes the same way: a design
+# session never builds, so the lead's contract is not its precondition.
+lead_loaded=$(jq -rn --arg lead 'skills/(lead|designer)/SKILL.md' '
   def read_lead:
     .type == "assistant" and (.message.content | type) == "array" and
     any(.message.content[]?; .type == "tool_use" and .name == "Read" and
@@ -55,7 +57,7 @@ lead_loaded=$(jq -rn --arg lead 'skills/lead/SKILL.md' '
   [inputs] | any(
     (.type == "assistant" and (.message.content | type) == "array" and
       any(.message.content[]?; .type == "tool_use" and .name == "Skill" and
-        ((.input.skill? // "") | test("^(kru:)?lead$"))))
+        ((.input.skill? // "") | test("^(kru:)?(lead|designer)$"))))
     or read_lead
     or (.type == "user" and (.message.content | type) == "string" and
       (.message.content | test("<command-name>/?kru:lead</command-name>")))
