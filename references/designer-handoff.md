@@ -25,6 +25,8 @@ Invoke the bundled Claude Code `design` skill (designer loads) for artboards and
 - **Marks and imagery:** `brand-marks` for SVG marks and rasters; `scripts/asset/run.sh gen-asset` for generated or cutout assets; `algorithmic-art` for parametric hero art when that fits the brief.
 - **Coverage ledger** (`design-system.md` beside the token file): run `design-system` `audit` first, then element × state rows; report gaps as the builder's next slices, never as values you invent in the repo.
 
+A doop canvas as the mockups: `skills/doop/SKILL.md`.
+
 ## Questions and approval
 
 You talk to the **PM**, not the engineering lead. Design questions (static mockups vs working controls, direction picks, copy gaps) go to the PM in your return; the PM approves before the spec ships to engineering.
