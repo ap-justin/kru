@@ -8,8 +8,8 @@
 # its own hook rather than a line in setup-nudge.sh, which exits early in the
 # plugin's repo and in a repo that already has a sheet — this must reach both.
 #
-# silent under the gate's own switches (KRU_NO_LEAD_GATE, `lead-gate/off`), when
-# the lead skill is absent from the root, and when jq is missing.
+# silent under the gate's own switches, so it never asks for a load the gate
+# won't enforce.
 command -v jq >/dev/null 2>&1 || exit 0
 plugin_root="${1:-$CLAUDE_PLUGIN_ROOT}"
 . "$plugin_root/scripts/kru-store.sh" 2>/dev/null || exit 0

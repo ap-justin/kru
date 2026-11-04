@@ -82,5 +82,5 @@ mark="$mark_dir/$sid"
 [ -e "$mark" ] && exit 0
 mkdir -p "$mark_dir" 2>/dev/null && : > "$mark" 2>/dev/null
 
-printf 'kru: this session has not loaded the lead contract. Read %s/skills/lead/SKILL.md (or invoke the kru:lead skill), then take the action again — nothing else about the request has changed. This fires once per session, from the kru plugin, and read-only commands are exempt. To run without it: touch %s\n' "$plugin_root" "$(kru_path lead-gate/off)" >&2
+printf 'kru: this session has not loaded the lead contract. Read %s/skills/lead/SKILL.md (or invoke the kru:lead skill; a session whose task is to design invokes kru:designer instead), then take the action again — nothing else about the request has changed. This fires once per session, from the kru plugin, and read-only commands are exempt. To run without it: touch %s\n' "$plugin_root" "$(kru_path lead-gate/off)" >&2
 exit 2
