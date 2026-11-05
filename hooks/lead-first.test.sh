@@ -40,6 +40,9 @@ check line "startup"
 
 # the gate's switches silence it
 check silent "KRU_NO_LEAD_GATE" KRU_NO_LEAD_GATE=1
+# the plugin option arrives as a string, and only "true" lifts the gate
+check silent "CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE=true" CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE=true
+check line "CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE=false" CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE=false
 mkdir -p "$home/.kru/lead-gate" && : > "$home/.kru/lead-gate/off"
 check silent "lead-gate/off"
 rm -f "$home/.kru/lead-gate/off"
@@ -57,6 +60,15 @@ if [ "$code" -eq 0 ] && [ -z "$out" ]; then pass=$((pass + 1)); else fail=$((fai
 bare="$sandbox/bareroot"; mkdir -p "$bare" && ln -s "$root/scripts" "$bare/scripts"
 out=$(printf '{}' | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE HOME="$home" bash "$hook" "$bare" 2>&1); code=$?
 if [ "$code" -eq 0 ] && [ -z "$out" ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (silent, exit %s): root without lead skill\n  %s\n' "$code" "$out"; fi
+
+# fail open: a root with the lead skill but no store resolver. linking the
+# resolver in makes the same root speak, so the silence is the resolver check's
+noscripts="$sandbox/noscriptsroot"; mkdir -p "$noscripts/skills/lead" && : > "$noscripts/skills/lead/SKILL.md"
+out=$(printf '{}' | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE HOME="$home" bash "$hook" "$noscripts" 2>&1); code=$?
+if [ "$code" -eq 0 ] && [ -z "$out" ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (silent, exit %s): root without store resolver\n  %s\n' "$code" "$out"; fi
+ln -s "$root/scripts" "$noscripts/scripts"
+out=$(printf '{}' | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE HOME="$home" bash "$hook" "$noscripts" 2>&1); code=$?
+if [ "$code" -eq 0 ] && printf '%s' "$out" | grep -qF 'kru:lead'; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (line, exit %s): root with resolver and lead skill\n  %s\n' "$code" "$out"; fi
 
 # registered under a matcher that includes startup and clear (the hook ignores
 # .source, so the matcher is the only place either is decided)

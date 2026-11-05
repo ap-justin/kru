@@ -16,7 +16,7 @@ mkdir -p "$home" "$tx"
 
 # transcript fixtures, in the jsonl shape the hook greps (jq -c: no spaces)
 user() { jq -nc --arg t "$1" '{type:"user", message:{role:"user", content:$t}}'; }
-tool_result() { jq -nc '{type:"user", message:{role:"user", content:[{type:"tool_result", tool_use_id:"t1", content:"ok"}]}}'; }
+tool_result() { jq -nc --arg c "${1:-ok}" '{type:"user", message:{role:"user", content:[{type:"tool_result", tool_use_id:"t1", content:$c}]}}'; }
 assistant_skill() { jq -nc --arg s "$1" '{type:"assistant", message:{content:[{type:"tool_use", name:"Skill", input:{skill:$s}}]}}'; }
 assistant_text() { jq -nc --arg t "$1" '{type:"assistant", message:{content:[{type:"text", text:$t}]}}'; }
 
@@ -38,6 +38,15 @@ assistant_read_path() { jq -nc --arg p "$1" '{type:"assistant", message:{content
 { user "design it"; assistant_read "/repo/.claude/skills/designer/SKILL.md"; tool_result; } > "$tx/project-designer-read.jsonl"
 { user "design it"; assistant_read "$root/skills/designer-x/SKILL.md"; tool_result; } > "$tx/designer-x-read.jsonl"
 { user "design it"; assistant_read "$root/myskills/lead/SKILL.md"; tool_result; } > "$tx/prefix-read.jsonl"
+{ user "design it"; assistant_read "/repo/.claude/skills/lead/SKILL.md"; tool_result; } > "$tx/project-lead-read.jsonl"
+# touching the file is not loading it: only a Read counts
+assistant_tool() { jq -nc --arg n "$1" --arg p "$2" '{type:"assistant", message:{content:[{type:"tool_use", name:$n, input:{file_path:$p}}]}}'; }
+{ user "build it"; assistant_tool Write "$root/skills/lead/SKILL.md"; tool_result; } > "$tx/lead-write.jsonl"
+{ user "build it"; assistant_tool Edit "$root/skills/lead/SKILL.md"; tool_result; } > "$tx/lead-edit.jsonl"
+# Skill names that share a prefix, a suffix or a namespace with a contract
+for s in kru:designer-x kru:leader x-lead other:kru:designer; do
+  { user "build it"; assistant_skill "$s"; tool_result; } > "$tx/skill-near-${s//:/_}.jsonl"
+done
 { user "design it"; assistant_read "$root/skills/lead/SKILL.md.bak"; tool_result; } > "$tx/suffix-read.jsonl"
 { user "design it"; assistant_read "$root/skills/lead/SKILLxmd"; tool_result; } > "$tx/nodot-read.jsonl"
 { user "<command-name>/kru:lead</command-name>"; assistant_text "loaded"; user "now build the form"; } > "$tx/lead-cmd-then-turn.jsonl"
@@ -46,7 +55,11 @@ assistant_read_path() { jq -nc --arg p "$1" '{type:"assistant", message:{content
 { user "<command-name>/kru:lead</command-name>"; } > "$tx/lead-cmd.jsonl"
 { user "build it, see CLAUDE.md: load kru:lead before building"; assistant_text 'the roster says "kru:lead" first'; } > "$tx/prose.jsonl"
 { user "build it"; assistant_text "I will Read $root/skills/lead/SKILL.md next"; tool_result; } > "$tx/prose-read-mention.jsonl"
-{ user "build it"; tool_result "skills/lead/SKILL.md"; } > "$tx/tool-result-path.jsonl"
+{ user "build it"; tool_result "$root/skills/lead/SKILL.md"; } > "$tx/tool-result-path.jsonl"
+# a command whose name only starts like a contract's, then a plain turn: not a load,
+# and past the lone-command exemption
+{ user "<command-name>/kru:designer-x</command-name>"; assistant_text "running"; user "now build the form"; } > "$tx/designer-x-cmd-then-turn.jsonl"
+{ user "<command-name>/kru:leader</command-name>"; assistant_text "running"; user "now build the form"; } > "$tx/leader-cmd-then-turn.jsonl"
 { user "hi"; user "<command-name>/kru:roster</command-name>"; assistant_text "running"; tool_result; } > "$tx/cmd-latest.jsonl"
 { user "<command-name>/kru:roster</command-name>"; assistant_text "done"; user "now build the form"; } > "$tx/cmd-then-turn.jsonl"
 # the fixtures above model a command as one line, but this is how the harness
@@ -119,6 +132,14 @@ check refuse Edit "" "$tx/other-read.jsonl"
 check refuse Edit "" "$tx/prose.jsonl"
 check refuse Edit "" "$tx/prose-read-mention.jsonl"
 check refuse Edit "" "$tx/tool-result-path.jsonl"
+check refuse Edit "" "$tx/project-lead-read.jsonl"
+check refuse Edit "" "$tx/lead-write.jsonl"
+check refuse Edit "" "$tx/lead-edit.jsonl"
+for s in kru:designer-x kru:leader x-lead other:kru:designer; do
+  check refuse Edit "" "$tx/skill-near-${s//:/_}.jsonl"
+done
+check refuse Edit "" "$tx/designer-x-cmd-then-turn.jsonl"
+check refuse Edit "" "$tx/leader-cmd-then-turn.jsonl"
 
 # the block message points at both entries
 msg=$(jq -nc --arg p "$p" '{session_id:"msg", transcript_path:$p, tool_name:"Edit", tool_input:{}}' |
@@ -172,6 +193,9 @@ mkdir -p "$home/.kru/lead-gate" && : > "$home/.kru/lead-gate/off"
 check allow Edit "" "$p"
 rm -f "$home/.kru/lead-gate/off"
 check allow Edit "" "$p" "" KRU_NO_LEAD_GATE=1
+# the plugin option arrives as a string, and only "true" lifts the gate
+check allow Edit "" "$p" "" CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE=true
+check refuse Edit "" "$p" "" CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE=false
 # and with both lifted the same call is gated, so the passes above are the switches'
 check refuse Edit "" "$p"
 
@@ -192,6 +216,19 @@ bare="$sandbox/bareroot"; mkdir -p "$bare" && ln -s "$root/scripts" "$bare/scrip
 input=$(jq -nc --arg p "$p" '{session_id:"noroot", transcript_path:$p, tool_name:"Edit", tool_input:{}}')
 out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_ROOT HOME="$home" bash "$hook" "$bare" 2>&1); code=$?
 if [ "$code" -eq 0 ] && [ -z "$out" ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (allow, exit %s): root without lead skill\n  %s\n' "$code" "$out"; fi
+
+
+# a root with the lead skill but no store resolver: sourcing it fails and the hook
+# lets everything through. linking the resolver in makes the same call gated, so the
+# silence is the resolver check's and not the skill check's
+noscripts="$sandbox/noscriptsroot"; mkdir -p "$noscripts/skills/lead" && : > "$noscripts/skills/lead/SKILL.md"
+input=$(jq -nc --arg p "$p" '{session_id:"noscripts", transcript_path:$p, tool_name:"Edit", tool_input:{}}')
+out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_ROOT HOME="$home" bash "$hook" "$noscripts" 2>&1); code=$?
+if [ "$code" -eq 0 ] && [ -z "$out" ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (allow, exit %s): root without store resolver\n  %s\n' "$code" "$out"; fi
+ln -s "$root/scripts" "$noscripts/scripts"
+input=$(jq -nc --arg p "$p" '{session_id:"noscripts-linked", transcript_path:$p, tool_name:"Edit", tool_input:{}}')
+out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_ROOT HOME="$home" bash "$hook" "$noscripts" 2>&1); code=$?
+if [ "$code" -eq 2 ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (refuse, exit %s): root with resolver and lead skill\n  %s\n' "$code" "$out"; fi
 
 printf '%d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]
