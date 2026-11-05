@@ -45,14 +45,14 @@ sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
 transcript=$(printf '%s' "$input" | jq -r '.transcript_path // empty' 2>/dev/null)
 [ -r "$transcript" ] || exit 0
 
-# anchored to how a load is recorded: Skill tool, Read whose path ends in
+# anchored to how a load is recorded: a Skill call, a Read of
 # skills/lead/SKILL.md, or a /kru:lead slash command — never prose or a quoted
 # path alone. the designer contract (skills/designer/SKILL.md, /kru:designer)
 # passes the same three ways: a design session never builds, so the lead's
 # contract is not its precondition. a read matches whole path segments and never
-# a .claude/skills/ dir, and a Skill load of the designer needs the kru: prefix:
-# "designer" is a common name for a repo's or user's own skill, and loading that
-# one is not loading this contract. bare "lead" stays accepted.
+# a .claude/skills/ dir. a Skill load takes bare "lead", but the designer needs
+# the kru: prefix: "designer" is a common name for a repo's or user's own skill,
+# and loading that one is not loading this contract.
 lead_loaded=$(jq -rn --arg lead '(^|/)skills/(lead|designer)/SKILL\.md$' '
   def read_lead:
     .type == "assistant" and (.message.content | type) == "array" and

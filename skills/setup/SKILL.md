@@ -459,7 +459,7 @@ once, is `skills/propagate/SKILL.md`'s; a change that needs the file re-derived 
 **The citations are what make a re-run an edit rather than a second copy.** Each derived line carries
 what it came from, so a re-run reads the file, re-derives, and edits the lines it can account for.
 Everything else in the file is the repo's, whoever wrote it: an answer already stated in someone
-else's words is theirs — cite it and move on.
+else's words is theirs — cite it and move on. That includes a `## Design system` section a product wrote, such as a registry or reference-canvas pointer: a re-run keeps its lines.
 
 ## The line between the plugin and the repo
 The repo's file holds the **engagement**; the plugin holds the **practice**. A rule that would still
