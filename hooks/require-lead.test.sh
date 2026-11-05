@@ -23,7 +23,7 @@ assistant_text() { jq -nc --arg t "$1" '{type:"assistant", message:{content:[{ty
 { user "build the signup form"; assistant_text "on it"; } > "$tx/plain.jsonl"
 { user "build it"; assistant_skill "kru:lead"; tool_result; } > "$tx/lead.jsonl"
 assistant_read() { jq -nc --arg p "$1" '{type:"assistant", message:{content:[{type:"tool_use", name:"Read", input:{file_path:$p}}]}}'; }
-# the hook still takes a bare `path` on purpose, for tools that send one
+# the hook also takes a bare `path`, for tools that send one
 assistant_read_path() { jq -nc --arg p "$1" '{type:"assistant", message:{content:[{type:"tool_use", name:"Read", input:{path:$p}}]}}'; }
 { user "build it"; assistant_read "$root/skills/lead/SKILL.md"; tool_result; } > "$tx/lead-read.jsonl"
 { user "build it"; assistant_read_path "$root/skills/lead/SKILL.md"; tool_result; } > "$tx/lead-read-path.jsonl"
