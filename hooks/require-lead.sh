@@ -72,11 +72,15 @@ lead_loaded=$(jq -rn --arg lead '(^|/)skills/(lead|designer)/SKILL\.md$' '
 
 # a /kru:<skill> run is that skill's contract, not the lead's — the ones
 # that dispatch load lead themselves. exempt only while the command is still the
-# session's latest word: a plain turn after it is an ordinary session again.
+# session's latest word: a plain turn after it is an ordinary session again. the
+# harness follows a command with an isMeta user line holding the skill body, and
+# that is not the user speaking. a user who types "isMeta":true gets it escaped
+# in the compact json, so the unescaped match only hits the harness's field.
 cmd_line=$(grep -nE '<command-name>/?kru:' "$transcript" | tail -1 | cut -d: -f1)
 if [ -n "$cmd_line" ]; then
   say_line=$(grep -n '"type":"user"' "$transcript" |
     grep -v 'tool_use_id' | grep -v '<command-name>' | grep -v 'local-command' |
+    grep -v '"isMeta":true' |
     tail -1 | cut -d: -f1)
   case "$say_line" in ''|*[!0-9]*) say_line=0 ;; esac
   [ "$say_line" -le "$cmd_line" ] && exit 0
@@ -87,5 +91,5 @@ mark="$mark_dir/$sid"
 [ -e "$mark" ] && exit 0
 mkdir -p "$mark_dir" 2>/dev/null && : > "$mark" 2>/dev/null
 
-printf 'kru: this session has not loaded the lead contract. Read %s/skills/lead/SKILL.md (or invoke the kru:lead skill; to design rather than build, invoke kru:designer instead), then take the action again — nothing else about the request has changed. This fires once per session, from the kru plugin, and only read-only Bash commands are exempt; Read, Grep and Glob need the load too. To run without it: touch %s\n' "$plugin_root" "$(kru_path lead-gate/off)" >&2
+printf 'kru: this session has not loaded the lead contract. Read %s/skills/lead/SKILL.md (or invoke the kru:lead skill; to design rather than build, invoke kru:designer instead), then take the action again — nothing else about the request has changed. This fires once per session, from the kru plugin, and only plain read-only Bash commands are exempt (a short list: ls, cat, grep, git status/log/diff/show and a few more; no redirect, $( or cd); Read, Grep and Glob need the load too. To run without it: touch %s\n' "$plugin_root" "$(kru_path lead-gate/off)" >&2
 exit 2

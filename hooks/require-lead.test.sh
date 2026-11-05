@@ -49,6 +49,12 @@ assistant_read_path() { jq -nc --arg p "$1" '{type:"assistant", message:{content
 { user "build it"; tool_result "skills/lead/SKILL.md"; } > "$tx/tool-result-path.jsonl"
 { user "hi"; user "<command-name>/kru:roster</command-name>"; assistant_text "running"; tool_result; } > "$tx/cmd-latest.jsonl"
 { user "<command-name>/kru:roster</command-name>"; assistant_text "done"; user "now build the form"; } > "$tx/cmd-then-turn.jsonl"
+# the fixtures above model a command as one line, but this is how the harness
+# records a slash command: the command line, then at once an isMeta user line
+# carrying the skill body, which the user never typed
+meta_body() { jq -nc --arg t "$1" '{type:"user", isMeta:true, message:{role:"user", content:[{type:"text", text:$t}]}}'; }
+{ user "<command-name>/kru:roster</command-name>"; meta_body "the roster skill body"; } > "$tx/cmd-meta.jsonl"
+{ user "<command-name>/kru:roster</command-name>"; meta_body "the roster skill body"; assistant_text "done"; user "now build the form"; } > "$tx/cmd-meta-then-turn.jsonl"
 
 pass=0 fail=0
 n=0
@@ -172,6 +178,8 @@ check refuse Edit "" "$p"
 # a /kru: command exempts while it is the latest user word, tool results aside
 check allow Edit "" "$tx/cmd-latest.jsonl"
 check refuse Edit "" "$tx/cmd-then-turn.jsonl"
+check allow Edit "" "$tx/cmd-meta.jsonl"
+check refuse Edit "" "$tx/cmd-meta-then-turn.jsonl"
 
 # fail open: no transcript, no session, no lead skill under the root
 check allow Edit "" "$sandbox/missing.jsonl"
