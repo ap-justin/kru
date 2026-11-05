@@ -8,15 +8,19 @@ When the design is ready for build, hand the PM a single package they can attach
 
 1. **Approved mockups** — link or export path at the viewports engineering will check (**1440** and **375** minimum).
 2. **Build spec** — everything a builder needs without guessing: **flows and IA** (screen inventory, journeys, conventions corpus / `design/conventions.md` when the repo uses it), tokens (or explicit mapping into the repo's token file), components and variants, states per screen, motion notes, final in-product copy on the design, breakpoints, and **asset paths** (marks, icons, imagery, video or generative art exports).
-3. **Approval line** — state that the PM (or owner) signed off; engineering treats the spec as authoritative.
+3. **Part map** — each drawn element tied to its ledger row or class, each icon to a glyph on the repo's list, additions listed with reasons.
+4. **Approval line** — state that the PM (or owner) signed off; engineering treats the spec as authoritative.
 
 Working files (artboards, `canvas.json`, images) stay **local and uncommitted** beside `.design-work/` in the repo or in the designer's store — they are inputs to the mockups, not something the lead serves or commits. Only the approved exports and build spec cross to the PM.
+
+## Match the existing app
+
+On any canvas, in a brownfield repo, draw from the repo's design system: token file, ledger, components, closest screens, closed lists. Say in one line what you matched. The package carries the **part map** (`skills/designer/SKILL.md`) beside the build spec.
 
 ## Canvas and the bundled Claude Code `design` skill (designer loads)
 
 Invoke the bundled Claude Code `design` skill (designer loads) for artboards and publish:
 
-- Match the existing app from the repo when brownfield — token file, stylesheets, closest screens — and say in one line what you matched.
 - **Directions at bootstrap, screen mockups after** — 2–4 genuinely different directions when the look is unsettled; compose from real parts once a system exists.
 - Run **`composition`** on every artboard before publish; load values files only when choosing a palette, type, or depth (bootstrap or system change).
 - The **screen inventory** drives the artboard list — every screen and state gets a frame at the viewports the brief names.

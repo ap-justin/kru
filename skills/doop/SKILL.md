@@ -21,9 +21,12 @@ A frame is a fixed-size document, and its screenshot is rendered at the frame's 
 - When no frame is drawn at 1440 or at 375, the mockups omit that width: report it as a gap, as `references/design-spec.md` has it, and leave the frames at their drawn size (a resize voids sign-off). A screen the build spec marks desktop-only has no 375 frame by design, so that one is no gap.
 
 ## Designing on a canvas
-Three additions to the server's guide for the designer:
+Additions to the server's guide for the designer:
 - Size the frames 1440 and 375 wide (`references/design-spec.md`), over the guide's defaults.
 - Hand the PM the `/c/<id>` link as the mockups, with the build spec beside it (`references/designer-handoff.md`). The build spec writes out the tokens, states and copy rules; the frame HTML does not stand in for it.
+- A frame can't load the repo's CSS or self-hosted fonts, so it inlines the repo's real tokens and the real rules of the classes it uses, copied from the files rather than retyped, and its elements carry those real class names. Inline only what the frame uses; a block shared by every frame can live in `set_guidelines` (24,000 characters at most).
+- Fonts come from a Google Fonts `<link>` or fonts already on the canvas. Check the screenshot shows the repo's faces, not fallbacks.
+- An icon's SVG path is copied from the repo's icon library for a glyph on its list, never drawn by hand.
 - Your final message tells the PM to give the build's doop account access to the canvas before the build. This run can't: the MCP has no sharing tool, link access is session-gated REST (`server/index.ts:1298-1304`), and the run doesn't know the build's account. For the PM: a view-level link gives any signed-in account access (`server/access.ts:36-38`), and only the canvas owner can set a link or invite an account (`server/index.ts:1301`, `server/index.ts:1351`). A canvas this run created is owned by the account `get_profile` returns (`server/mcp.ts:496`); name that account in the message.
 
 ## When doop isn't reachable
