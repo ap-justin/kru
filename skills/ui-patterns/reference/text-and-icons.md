@@ -121,7 +121,7 @@
 ## A control shows only where its promise is true
 
 **Trigger:** a control or instruction that depends on the device or setting — "Save QR to your phone", a tap or swipe hint, a link that opens an app.
-**Pattern:** render it only where the person can do it, decided by a capability or viewport check; elsewhere it is absent, not disabled.
+**Pattern:** render it only where the person can do it, decided by a capability or a media query, so server and client render alike; elsewhere it is absent, not disabled.
 **Default it corrects:** the phone's control shown on a desktop, because the screen was drawn once.
 **Why:** a control that cannot work there is a promise broken at the moment of the press.
 **Applies when:** the environment decides whether the act is possible. Name each such condition in the build spec's render conditions (`references/design-spec.md`).
