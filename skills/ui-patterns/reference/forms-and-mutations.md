@@ -181,14 +181,14 @@ The held state is `aria-disabled` and the handler ignores the press. `disabled` 
 ## A choice of real options is a select whose options carry their own mark
 
 **Trigger:** a list of options that each have a logo or icon of their own — payment methods, providers, carriers.
-**Pattern:** a select that draws each option's mark beside its name. In a repo on Ark UI that is the Ark UI Select, which keeps the select accessible through Ark's own primitive (`ark-ui`); any other repo uses its own select or combobox component (`ark-ui` → brownfield).
+**Pattern:** a select that draws each option's mark beside its name. In a repo on Ark UI that is the Ark UI Select, with the accessibility Ark's primitive ships (`ark-ui`); any other repo uses its own select or combobox component (`ark-ui` → brownfield).
 **Default it corrects:** a native `<select>` of bare names, or a plain radio list, for options people recognise by their mark.
 **Why:** a mark is read before the word, and a native `<option>` cannot draw one.
 **Applies when:** the options have real marks to show. A list of plain words keeps the native select.
 
 ## Two actions are two buttons, and the done one goes
 
-**Trigger:** a step that ends in one of two outcomes — Mark paid (the usual one, so the primary) or Skip payment — drawn as tabs or a segmented control.
+**Trigger:** a step that ends in one of two outcomes — Mark paid or Skip payment — drawn as tabs or a segmented control.
 **Pattern:** show both as buttons side by side, one primary and one secondary: the primary is the action the person most often takes there (entry below). Once one has been done, the button that no longer applies is removed.
 **Default it corrects:** tabs that switch a panel, then a third press to confirm the choice made there.
 **Why:** a tab says "view", a button says "act", and the person came to act.

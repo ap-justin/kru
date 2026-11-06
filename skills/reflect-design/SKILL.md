@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 `${CLAUDE_PLUGIN_ROOT}` below is the plugin's install dir: the directory two levels above this file, when you `Read` it rather than invoke it.
 
-**A look-back over mockups not yet built from.** The designer who drew a frame knows which corner it cut. Most of what a PM sends back is a rule already written down, and a pass against those rules catches it first. The target is the canvas the run drew, or the link or frames the invoking task names. Code that landed is `kru:reflect`'s; built UI is the PM's to send to `skills/ux-review/SKILL.md`, `skills/visual-review/SKILL.md` or `skills/accessibility-review/SKILL.md`, which this pass leaves to them.
+**A look-back over mockups not yet built from.** The designer who drew a frame knows which corner it cut. Most of what a PM sends back is a rule already written down, and a pass against those rules catches it first. The target is the canvas the run drew, or the link or frames the invoking task names. Code that landed is `kru:reflect`'s; built UI is the PM's to send to `skills/ux-review/SKILL.md`, `skills/visual-review/SKILL.md` or `skills/accessibility-review/SKILL.md`.
 
 ## The homes
 
