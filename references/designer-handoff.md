@@ -8,7 +8,7 @@ When the design is ready for build, hand the PM a single package they can attach
 
 1. **Approved mockups** — link or export path at the viewports engineering will check (**1440** and **375** minimum).
 2. **Build spec** — everything a builder needs without guessing: **flows and IA** (screen inventory, journeys, conventions corpus / `design/conventions.md` when the repo uses it), tokens (or explicit mapping into the repo's token file), components and variants, states per screen, motion notes, final in-product copy on the design, breakpoints, and **asset paths** (marks, icons, imagery, video or generative art exports).
-3. **Part map** (`skills/designer/SKILL.md`, step 2) — each drawn element tied to its ledger row or class, each icon to a glyph on the repo's list, additions listed with reasons.
+3. **Part map** (`skills/designer/SKILL.md`, step 2) — each drawn element tied to its ledger row or class, each icon to a glyph on the repo's list, additions listed with reasons; then the **reflect-design list** (`skills/reflect-design/SKILL.md`) of what the designer's own look-back fixed.
 4. **Approval line** — state that the PM (or owner) signed off; engineering treats the spec as authoritative.
 
 Working files (artboards, `canvas.json`, images) stay **local and uncommitted** beside `.design-work/` in the repo or in the designer's store — they are inputs to the mockups, not something the lead serves or commits. Only the approved exports and build spec cross to the PM.
