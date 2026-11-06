@@ -122,12 +122,12 @@ The focus ring moves to the card, since the link's own box is just the title.
 <dl class="ledger"><dt>Location</dt><dd>Riverside, CA</dd><dt>EIN</dt><dd>12-3456789</dd></dl>
 <span class="status">Active</span>
 ```
-**Applies when:** the facts are different kinds. A breadcrumb or a list of like items ("Tags: a, b, c") is a sequence, and its separator carries order or membership.
+**Applies when:** the facts are different kinds. A breadcrumb or a list of like items ("Tags: a, b, c") is a sequence, and its separator carries order or membership. A design system that settles label styling in writing wins over how a label is set apart.
 
 ## A table's filter is a bare icon button in its column header
 
 **Trigger:** filtering a data table by status, date, assignee or type.
-**Pattern:** one table. Each filterable column carries its filter as an icon-only button beside the header label, Excel-style: bare, no fill and no border, so it never outranks the rows.
+**Pattern:** one table. Each filterable column carries its filter as an icon-only button beside the header label, Excel-style: bare, no fill and no border, so it never outranks the rows, and named for its column to assistive tech.
 **Default it corrects:** a filter bar above the table, or one table per status, or a filled, bordered filter button that catches the eye before the data does.
 **Why:** a filter beside its column says what it filters with no extra label, and one table keeps count, sort and scroll in one place. "Why so many tables, filters should be next to the table header"; "just a bare icon button, it's too prominent".
 **Applies when:** the filter acts on one column. A search across columns sits above the table. A design system that settles the button's look in writing wins; the placement stays.
@@ -135,9 +135,9 @@ The focus ring moves to the card, since the link's own box is just the title.
 ## A tab strip is one rounded container with square joins
 
 **Trigger:** a strip of tabs that switch between views of one thing.
-**Pattern:** the active tab is tinted; the container is rounded on all its outer corners; the joins between tabs are square, a `divide-x` rule and nothing else.
+**Pattern:** the active tab is tinted; the container is rounded on all its outer corners; the joins between tabs are square, a single rule between tabs and nothing else.
 **Default it corrects:** every tab its own rounded pill, so the strip reads as separate buttons with notches at each join.
-**Why:** one outer shape reads as one control. "Make the border of this container rounded on all corners, make sure joins are not rounded, just a divide-x." The tint carries the state; the weight stays put (entry above).
+**Why:** one outer shape reads as one control. "Make the border of this container rounded on all corners, make sure joins are not rounded." The tint carries the state; the weight stays put (entry above).
 **Applies when:** the tabs are views. A choice between two outcomes is two buttons (`forms-and-mutations.md`). A design system that settles the strip's look in writing wins.
 
 ## A control sits next to what it acts on, and siblings share one gap

@@ -168,7 +168,7 @@ The held state is `aria-disabled` and the handler ignores the press. `disabled` 
 **Pattern:** the column reads as one sentence — label, box, predicate. The predicate stands alone, as an instruction, in the operator's own figures, lowercase with no full stop: `required`, `between $5 and $50,000`, `required, or untick to skip`. It is plain text, no icon, in the error colour, directly under its own control.
 **Default it corrects:** `Email is required` / `Required.` / `The email you entered is invalid` / `above the largest gift of $20.00` — the label restated, the value echoed under the box still showing it, a report of what went wrong where an instruction was owed, a clause capitalised and stopped as a sentence of its own, `$20.00` from an operator who typed `20`, and an icon in front of it. "Remove icons in error messages, consistent with the admin UIs."
 **Why:** the label and the box are already on screen; a message repeating either is read twice and trusted less. An instruction is the fix; a report leaves the operator to derive it. A figure in a form they never typed is a second value to reconcile. Consequence prose belongs to the confirm dialog, on the one press where it changes a decision.
-**Applies when:** the message sits under its own field. A summary that folds fields into one string has left the box, so it names the field — and that is where a secret gets masked, because the control showing it is out of view. Folded into one live-region line, the predicates join on commas: each is a clause, and the line reads as one. Repair before you refuse: what the parse can normalise — surrounding whitespace, a missing scheme — it accepts, and only what survives that earns a predicate. A refusal the system could have repaired itself sends the operator back to retype a value it already understood.
+**Applies when:** the message sits under its own field. A design system that settles error marks in writing wins. A summary that folds fields into one string has left the box, so it names the field — and that is where a secret gets masked, because the control showing it is out of view. Folded into one live-region line, the predicates join on commas: each is a clause, and the line reads as one. Repair before you refuse: what the parse can normalise — surrounding whitespace, a missing scheme — it accepts, and only what survives that earns a predicate. A refusal the system could have repaired itself sends the operator back to retype a value it already understood.
 
 ## A field reads label, hint, control, error
 
@@ -189,7 +189,7 @@ The held state is `aria-disabled` and the handler ignores the press. `disabled` 
 ## Two actions are two buttons, and the done one goes
 
 **Trigger:** a step that ends in one of two outcomes — Mark paid or Skip payment — drawn as tabs or a segmented control.
-**Pattern:** show both as buttons side by side. Once one has been done, the button that no longer applies is removed.
+**Pattern:** show both as buttons side by side, one primary and one secondary (entry below). Once one has been done, the button that no longer applies is removed.
 **Default it corrects:** tabs that switch a panel, then a third press to confirm the choice made there.
 **Why:** a tab says "view", a button says "act", and the person came to act. "There shouldn't be tabs here, instead Mark paid and Skip payment alongside; when marked paid the skip button disappears."
 **Applies when:** each side is an act. Tabs that show views of one thing are `lists-and-rows.md`.
