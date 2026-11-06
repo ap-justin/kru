@@ -166,7 +166,7 @@ The held state is `aria-disabled` and the handler ignores the press. `disabled` 
 
 **Trigger:** the message under an invalid field — required, out of range, malformed, a cross-field bound.
 **Pattern:** the column reads as one sentence — label, box, predicate. The predicate stands alone, as an instruction, in the operator's own figures, lowercase with no full stop: `required`, `between $5 and $50,000`, `required, or untick to skip`. It is plain text, no icon, in the error colour, directly under its own control.
-**Default it corrects:** `Email is required` / `Required.` / `The email you entered is invalid` / `above the largest gift of $20.00` — the label restated, the value echoed under the box still showing it, a report of what went wrong where an instruction was owed, a clause capitalised and stopped as a sentence of its own, and `$20.00` from an operator who typed `20`, or an icon in front of it. "Remove icons in error messages, consistent with the admin UIs."
+**Default it corrects:** `Email is required` / `Required.` / `The email you entered is invalid` / `above the largest gift of $20.00` — the label restated, the value echoed under the box still showing it, a report of what went wrong where an instruction was owed, a clause capitalised and stopped as a sentence of its own, and `$20.00` from an operator who typed `20`, and an icon in front of it. "Remove icons in error messages, consistent with the admin UIs."
 **Why:** the label and the box are already on screen; a message repeating either is read twice and trusted less. An instruction is the fix; a report leaves the operator to derive it. A figure in a form they never typed is a second value to reconcile. Consequence prose belongs to the confirm dialog, on the one press where it changes a decision.
 **Applies when:** the message sits under its own field. A summary that folds fields into one string has left the box, so it names the field — and that is where a secret gets masked, because the control showing it is out of view. Folded into one live-region line, the predicates join on commas: each is a clause, and the line reads as one. Repair before you refuse: what the parse can normalise — surrounding whitespace, a missing scheme — it accepts, and only what survives that earns a predicate. A refusal the system could have repaired itself sends the operator back to retype a value it already understood.
 
@@ -197,7 +197,7 @@ The held state is `aria-disabled` and the handler ignores the press. `disabled` 
 ## A panel holds one primary press, its secondary beside it
 
 **Trigger:** a panel, stage or dialog with more than one button.
-**Pattern:** one primary per panel, with the secondary beside it. The primary is named for what the person just did, not the next state (`ux-copy`).
+**Pattern:** one primary per panel, with the secondary beside it. The primary's name follows `ux-copy`'s errand-button rule.
 **Default it corrects:** two equal buttons side by side, or a primary labelled with the state it leads to.
 **Why:** the person is finishing one errand; one obvious press answers "what now". "Revert to previous `I've messaged them` instead of next."
 **Applies when:** the buttons answer one question. A panel with two independent tasks is two panels. A design system that settles button rank in writing wins.
