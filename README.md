@@ -142,7 +142,7 @@ Slash commands still work in Claude Code; **the contract is the skill file** und
 
 **Hygiene and look-back**
 - `skills/text-fix` (+ `comment-fix`, `prose-fix`, `doc-fix`) — text passes on a diff or path the task names.
-- `skills/reflect`, `landed`, `eval-review` — look-back (stack seats re-read their lanes; no separate code-review seats), post-merge sync, eval grader audit (paid eval runs need task approval).
+- `skills/reflect`, `reflect-design`, `landed`, `eval-review`: look-back (stack seats re-read their lanes; no separate code-review seats), a designer's look-back over its own mockups, post-merge sync, eval grader audit (paid eval runs need task approval).
 
 **Backlog loops**
 - `skills/issues-loop`, `todos-loop` — unattended backlog burn only when the task names one (`disable-model-invocation`; cap default 80 files).

@@ -1,6 +1,6 @@
 ---
 name: ui-patterns
-description: "House rules for how a built surface behaves — form validation and focus, mutation outcomes, per-row control labels, an icon beside a wrapping label, prose to cut, actionable CLI output spans. Behavior, semantics and grouping only, never appearance. Load the one group matching your build target."
+description: "House rules for how a built surface behaves and is put together — form validation and focus, field order, mutation outcomes, per-row control labels, table filters and tabs, statuses, an icon beside a wrapping label, prose to cut, actionable CLI output spans. Behavior, semantics and grouping, plus a few owner's looks a design system can overrule in writing. Load the one group matching your build target."
 user-invocable: false
 ---
 
@@ -12,15 +12,15 @@ Each entry states the pattern, then the **default it corrects** — the thing th
 
 | About to build | Load |
 |---|---|
-| a form · a submit button · validation · the message under an invalid field · a checkbox, radio or switch and the words beside it · a compact field stack · a field seeded with a stored value · a confirm dialog · anything that mutates and has to report back | `reference/forms-and-mutations.md` |
-| a control that repeats per row — Remove, Edit, a per-row menu · a row that renders differently for the viewer who owns it · a data table · a nav item, tab or row with an active/open state · a clickable row that also names an entity · a card or tile whose whole surface opens its item · a column of figures · a label/value ledger · a meta line, subtitle or header carrying several facts about one item | `reference/lists-and-rows.md` |
-| an icon beside a label · an icon-only button in a row of text · helper text under a control · a caption · prose introducing a section · a claim about a fee, a date or a rate · a stored name or a status word the UI renders · a glyph, arrow or brand mark · a figure with a caveat or fixed period · a page heading under a breadcrumb · a target inside a line of text · a QR code | `reference/text-and-icons.md` |
+| a form · a submit button · validation · the message under an invalid field · a checkbox, radio or switch and the words beside it · a compact field stack · a field seeded with a stored value · a confirm dialog · anything that mutates and has to report back · a field's hint and error line · a choice list whose options have logos · two outcomes of one step · a panel's buttons | `reference/forms-and-mutations.md` |
+| a control that repeats per row — Remove, Edit, a per-row menu · a row that renders differently for the viewer who owns it · a data table · a nav item, tab or row with an active/open state · a clickable row that also names an entity · a card or tile whose whole surface opens its item · a column of figures · a label/value ledger · a meta line, subtitle or header carrying several facts about one item · a table's filter · a tab strip · an action for a group of items · a divider or hairline · a panel, card or callout · reading text · a word that labels a value | `reference/lists-and-rows.md` |
+| an icon beside a label · an icon-only button in a row of text · helper text under a control · a caption · prose introducing a section · a claim about a fee, a date or a rate · a stored name or a status word the UI renders · a glyph, arrow or brand mark · a figure with a caveat or fixed period · a page heading under a breadcrumb · a target inside a line of text · a QR code · a copy button · a control tied to a device · links in a footer · a status | `reference/text-and-icons.md` |
 | what a CLI prints for someone watching — a status line, an error, a run summary, a next-step hint | `reference/terminal-output.md` |
 
 One file is the normal load for a slice, two where it spans a form and the list it sits in. Nothing matched? `grep -ril "<term>" reference/`, then build it your way and name the gap in your return — silence here is an unwritten pattern, not a ruling.
 
 ## Applying one
-- **Every entry here decides what a component does; the design system decides how it looks.** Sequence, semantics, grouping, where focus lands, where feedback reports — that's this corpus, and all of it holds whatever the project's system says. Appearance is the token file's alone (below). A pattern here that reads like a look is a pattern to raise in your return.
+- **Every entry here decides what a component does; the design system decides how it looks.** Sequence, semantics, grouping, where focus lands, where feedback reports — that's this corpus, and all of it holds whatever the project's system says. Appearance is the token file's (below), with one exception: an entry whose **Applies when** carries *A design system that settles it in writing wins* is an owner's house look. It names a mark (an edge, an icon, an underline, a chip), never a value, and holds until the repo's design system, ledger or `## Design system` section says otherwise in writing; the divergence goes in your return. Any other pattern that reads like a look is one to raise in your return.
 - **A pattern decides what the repo hasn't settled.** Where the repo has settled it — a written note (a comment above the code, `CLAUDE.md`, the plan the lead handed down) or consistent practice across its neighbours — match the repo and name the divergence in your return, so one component never reads unlike the rest. Where you disagree with a pattern the repo hasn't settled, follow it and raise it in your return.
 
 ## Owned elsewhere

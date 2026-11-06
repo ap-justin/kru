@@ -8,7 +8,7 @@ When the design is ready for build, hand the PM a single package they can attach
 
 1. **Approved mockups** — link or export path at the viewports engineering will check (**1440** and **375** minimum).
 2. **Build spec** — everything a builder needs without guessing: **flows and IA** (screen inventory, journeys, conventions corpus / `design/conventions.md` when the repo uses it), tokens (or explicit mapping into the repo's token file), components and variants, states per screen, motion notes, final in-product copy on the design, breakpoints, and **asset paths** (marks, icons, imagery, video or generative art exports).
-3. **Part map** (`skills/designer/SKILL.md`, step 2) — each drawn element tied to its ledger row or class, each icon to a glyph on the repo's list, additions listed with reasons.
+3. **Part map** (`skills/designer/SKILL.md`, step 2) — each drawn element tied to its ledger row or class, each icon to a glyph on the repo's list, additions listed with reasons; then the **reflect-design list** (`skills/reflect-design/SKILL.md`) of what the designer's own look-back fixed.
 4. **Approval line** — state that the PM (or owner) signed off; engineering treats the spec as authoritative.
 
 Working files (artboards, `canvas.json`, images) stay **local and uncommitted** beside `.design-work/` in the repo or in the designer's store — they are inputs to the mockups, not something the lead serves or commits. Only the approved exports and build spec cross to the PM.
@@ -16,6 +16,14 @@ Working files (artboards, `canvas.json`, images) stay **local and uncommitted** 
 ## Match the existing app
 
 On any canvas, in a brownfield repo, draw from the repo's design system: token file, ledger, components, closest screens, closed lists. Say in one line what you matched.
+
+## Draw it right
+
+Sweep every frame for these before the final message:
+
+- **Slop** — a label that repeats what the control or picture already says, duplicated information, decoration that carries nothing, a span drawn as a control, a stray or empty element, invented placeholder wording.
+- **The parts people notice** — stats, footers, graphics — get the best reference you can find and the real thing built: grouped, complete, illustrated.
+- **Only what the product renders** — a frame shows an element only in the state where the product renders it; each element's condition and the per-state tests go in the build spec (`references/design-spec.md`).
 
 ## Canvas and the bundled Claude Code `design` skill (designer loads)
 
@@ -27,13 +35,14 @@ Invoke the bundled Claude Code `design` skill (designer loads) for artboards and
 - Marketing pages: draw around the **SECTION deck** from engineering's `conversion-copywriter` (via the PM) at real length, not placeholder copy.
 - **Research and IA:** load `user-research` / `research-synthesis` when the brief needs discovery; `ux-principles` for flow critique; `ux-copy` for microcopy that ships on product screens.
 - **Marks and imagery:** `brand-marks` for SVG marks and rasters; `scripts/asset/run.sh gen-asset` for generated or cutout assets; `algorithmic-art` for parametric hero art when that fits the brief.
+- **Motion:** check every row of a motion spec against `${CLAUDE_PLUGIN_ROOT}/skills/emil-design-eng/SKILL.md` (`Read` it), and name the principle each row follows; reduced motion gets its own version of each row.
 - **Coverage ledger** (`design-system.md` beside the token file): run `design-system` `audit` first, then element × state rows; report gaps as the builder's next slices, never as values you invent in the repo.
 
 Mockups on a doop canvas (a `/c/<id>` link): `skills/doop/SKILL.md`.
 
 ## Questions and approval
 
-You talk to the **PM**, not the engineering lead. Design questions (static mockups vs working controls, direction picks, copy gaps) go to the PM in your return; the PM approves before the spec ships to engineering.
+You talk to the **PM**, not the engineering lead. Decide what you can answer yourself, and say the choice in the spec. Only a question the PM alone can answer (a direction pick between real options, a copy gap nobody has the facts for) goes to the PM in your return; the PM approves before the spec ships to engineering.
 
 ## Sync lane (optional)
 

@@ -114,12 +114,52 @@ The focus ring moves to the card, since the link's own box is just the title.
 ## Each fact about an item gets its own place
 
 **Trigger:** a row, card subtitle, header or meta line carrying several facts about one item — location, an ID, a type, a status, a date.
-**Pattern:** give each fact a place that says what it is: a column in a table, a label/value pair in a ledger (`<dl>`), a status as its own badge, a secondary fact on its own line. Where the facts truly are one phrase, write the phrase ("Riverside, CA, since 2019"), not a list.
-**Default it corrects:** `Riverside, CA · EIN 12-3456789 · Active` — facts strung together with middle dots (or `|`, `•`, `/`) into one line of text.
-**Why:** the dot hides what each fact is: the reader has to recognise an EIN by its shape, a status by its word, and the order differs row to row. A dot-joined string can't align down a list, sort, truncate one fact without cutting another, or carry a label for assistive tech, which reads it as one run-on sentence. Each fact in its own place is scannable in a column and readable by name.
+**Pattern:** give each fact a place that says what it is: a column in a table, a label/value pair in a ledger (`<dl>`), a status as bare text in its own ink (`text-and-icons.md`), a secondary fact on its own line. A word that names a fact (`Status`, `To`) is drawn as a label — above its control, or in its own weight — never inline in the run of its value. Where the facts truly are one phrase, write the phrase ("Riverside, CA, since 2019"), not a list.
+**Default it corrects:** `Riverside, CA · EIN 12-3456789 · Active` — facts strung together with middle dots (or `|`, `•`, `/`) into one line of text — or a `To` set in the same weight as the name after it.
+**Why:** the dot hides what each fact is: the reader has to recognise an EIN by its shape, a status by its word, and the order differs row to row. A dot-joined string can't align down a list, sort, truncate one fact without cutting another, or carry a label for assistive tech, which reads it as one run-on sentence. Each fact in its own place is scannable in a column and readable by name. A label drawn like its value can't be told from part of it.
 **Shape:**
 ```html
 <dl class="ledger"><dt>Location</dt><dd>Riverside, CA</dd><dt>EIN</dt><dd>12-3456789</dd></dl>
-<span class="badge">Active</span>
+<span class="status">Active</span>
 ```
-**Applies when:** the facts are different kinds. A breadcrumb or a list of like items ("Tags: a, b, c") is a sequence, and its separator carries order or membership.
+**Applies when:** the facts are different kinds. A breadcrumb or a list of like items ("Tags: a, b, c") is a sequence, and its separator carries order or membership. A design system that settles label styling in writing wins over how a label is set apart.
+
+## A table's filter is a bare icon button in its column header
+
+**Trigger:** filtering a data table by status, date, assignee or type.
+**Pattern:** one table. Each filterable column carries its filter as an icon-only button beside the header label, Excel-style: bare, no fill and no border, so it never outranks the rows, and named for its column to assistive tech.
+**Default it corrects:** a filter bar above the table, or one table per status, or a filled, bordered filter button that catches the eye before the data does.
+**Why:** a filter beside its column says what it filters with no extra label, and one table keeps count, sort and scroll in one place.
+**Applies when:** the filter acts on one column. A search across columns sits above the table. A design system that settles the button's look in writing wins; the placement stays.
+
+## A tab strip is one rounded container with square joins
+
+**Trigger:** a strip of tabs that switch between views of one thing.
+**Pattern:** the active tab is tinted; the container is rounded on all its outer corners; the joins between tabs are square, a single rule between tabs and nothing else.
+**Default it corrects:** every tab its own rounded pill, so the strip reads as separate buttons with notches at each join.
+**Why:** one outer shape reads as one control. The tint carries the state; the weight stays put (*A row's active or open state never changes the label's width*).
+**Applies when:** the tabs are views. A choice between two outcomes is two buttons (`forms-and-mutations.md`). A design system that settles the strip's look in writing wins.
+
+## A control sits next to what it acts on, and siblings share one gap
+
+**Trigger:** an action for a group of items (Download all, Select all), or a row of sibling controls — an icon button and a link-out beside a number.
+**Pattern:** set the control against the group or value it acts on: beneath the group, or inline with the value it opens. Siblings in one row share a single gap token.
+**Default it corrects:** the action parked in a card corner far from its target, and a row whose gaps differ by control — one button tight to its neighbour, the next loose.
+**Why:** nearness says what acts on what. Unequal gaps read as unequal relationships.
+**Applies when:** always. Which step the gap takes is the token file's.
+
+## A rule between neighbours needs a reason spacing can't give
+
+**Trigger:** adding a divider, border or hairline between sections, rows, fields or the parts of a card.
+**Pattern:** group by space first. Draw a rule only where space leaves two things reading as one, and be able to say which two.
+**Default it corrects:** a hairline between every section and row by reflex, so the page reads as boxes inside boxes.
+**Why:** grouping and spacing already do the job. Each line is another edge to parse, and equal lines flatten a hierarchy the spacing had already ranked.
+**Applies when:** always. A tab strip's joins and a table's row rules have a reason of their own. A design system that settles dividers in writing wins.
+
+## A box is a plain panel
+
+**Trigger:** a panel, card, callout or note, and any reading text — terms, policy, a long explanation.
+**Pattern:** a panel is a surface with an even edge: no left border, accent bar or coloured edge. Reading text sits on the page.
+**Default it corrects:** a `border-left` in an accent colour on every callout, or the terms boxed in a card because they run long.
+**Why:** one coloured edge ranks nothing; it is decoration that reads as a template. A card around reading text turns a document into a widget.
+**Applies when:** always. A state a panel carries goes in its text (`text-and-icons.md`, status entry). A design system that settles panels in writing wins.
