@@ -9,7 +9,8 @@ user-invocable: false
      (slack, figma, linear, asana, atlassian, notion, intercom, google calendar, gmail) loaded.
      upstream ships this as the namespaced `design:ux-copy`; this is the plain vendored copy.
      TEAM-ADAPTED: dead CONNECTORS.md pointer dropped, connector block rewritten as team equivalents
-     (repo strings for voice, the design spec's screen inventory for context); error messages split field-level vs system-level, where upstream gives every error the what+why+how structure. re-sync: diff, then re-apply. -->
+     (repo strings for voice, the design spec's screen inventory for context); error messages split field-level vs system-level, where upstream gives every error the what+why+how structure.
+     DISCLOSED DEVIATION (house rules): three owner rules added to the body, each marked *house rule* where it sits — labels name what is needed in a newcomer's words (Principles 1), no prose where the flow already says it (Principles 2), and a button confirming an errand is named for what the person just did, where upstream's CTA rule names the outcome (CTAs). re-sync: diff, then re-apply. -->
 
 # UX copy
 
@@ -24,8 +25,8 @@ Write or review UX copy for any interface context.
 
 ## Principles
 
-1. **Clear**: Say exactly what you mean. No jargon, no ambiguity.
-2. **Concise**: Use the fewest words that convey the full meaning.
+1. **Clear**: Say exactly what you mean. No jargon, no ambiguity. *House rule:* a label says what is needed or what the thing is, in words a newcomer already knows — "I don't know what `look for` means"; "`finalize your order` doesn't really tell what's needed from the donor".
+2. **Concise**: Use the fewest words that convey the full meaning. *House rule:* no prose where the flow already says it — "this should just be implicit in the donation flow, no need for prose".
 3. **Consistent**: Same terms for the same things everywhere.
 4. **Useful**: Every word should help the user accomplish their goal.
 5. **Human**: Write like a helpful person, not a robot.
@@ -36,6 +37,7 @@ Write or review UX copy for any interface context.
 - Start with a verb: "Start free trial", "Save changes", "Download report"
 - Be specific: "Create account" not "Submit"
 - Match the outcome to the label
+- *House rule:* a button that confirms an errand the person did is named for what they just did ("I've messaged them"), not for the next state
 
 ### Error Messages
 **A field error is read with its label, so it carries the fault alone**: `EIN` / `required`. The label already names the field, and the requirement is not what the operator is deciding at that moment.

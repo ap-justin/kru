@@ -17,6 +17,14 @@ Working files (artboards, `canvas.json`, images) stay **local and uncommitted** 
 
 On any canvas, in a brownfield repo, draw from the repo's design system: token file, ledger, components, closest screens, closed lists. Say in one line what you matched.
 
+## Draw it right
+
+Sweep every frame for these before the final message:
+
+- **Slop** — a label that repeats what the control or picture already says, duplicated information, decoration that carries nothing, a span drawn as a control, a stray or empty element, invented placeholder wording. "Remove AI slop"; "dog already in the picture, no need to duplicate"; "every editable field already indicates which ones can be edited, no additional prose".
+- **The parts people notice** — stats, footers, graphics — get the best reference you can find and the real thing built: grouped, complete, illustrated. "Don't be lazy presenting these stats."
+- **Only what the product renders** — a frame shows an element only in the state where the product renders it; each element's condition and the per-state tests go in the build spec (`references/design-spec.md`). "Make sure the screen is correct all the time as the builder might introduce regression."
+
 ## Canvas and the bundled Claude Code `design` skill (designer loads)
 
 Invoke the bundled Claude Code `design` skill (designer loads) for artboards and publish:
@@ -27,13 +35,14 @@ Invoke the bundled Claude Code `design` skill (designer loads) for artboards and
 - Marketing pages: draw around the **SECTION deck** from engineering's `conversion-copywriter` (via the PM) at real length, not placeholder copy.
 - **Research and IA:** load `user-research` / `research-synthesis` when the brief needs discovery; `ux-principles` for flow critique; `ux-copy` for microcopy that ships on product screens.
 - **Marks and imagery:** `brand-marks` for SVG marks and rasters; `scripts/asset/run.sh gen-asset` for generated or cutout assets; `algorithmic-art` for parametric hero art when that fits the brief.
+- **Motion:** check every row of a motion spec against `kru:emil-design-eng`, and name the principle each row follows; reduced motion gets its own version of each row. The skill stays as vendored; the check is required.
 - **Coverage ledger** (`design-system.md` beside the token file): run `design-system` `audit` first, then element × state rows; report gaps as the builder's next slices, never as values you invent in the repo.
 
 Mockups on a doop canvas (a `/c/<id>` link): `skills/doop/SKILL.md`.
 
 ## Questions and approval
 
-You talk to the **PM**, not the engineering lead. Design questions (static mockups vs working controls, direction picks, copy gaps) go to the PM in your return; the PM approves before the spec ships to engineering.
+You talk to the **PM**, not the engineering lead. Decide what you can answer yourself, and say the choice in the spec. Only a question the PM alone can answer (a direction pick between real options, a copy gap nobody has the facts for) goes to the PM in your return; the PM approves before the spec ships to engineering.
 
 ## Sync lane (optional)
 
