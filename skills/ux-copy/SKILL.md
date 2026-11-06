@@ -37,7 +37,7 @@ Write or review UX copy for any interface context.
 - Start with a verb: "Start free trial", "Save changes", "Download report"
 - Be specific: "Create account" not "Submit"
 - Match the outcome to the label
-- *House rule:* a button that confirms an errand the person did is named for what they just did ("I've messaged them"), not for the next state
+- *House rule:* a button that confirms an errand the person did is named for what they just did ("I've messaged them"), not for the next state (the exception to the verb-first and match-the-outcome lines above)
 
 ### Error Messages
 **A field error is read with its label, so it carries the fault alone**: `EIN` / `required`. The label already names the field, and the requirement is not what the operator is deciding at that moment.
