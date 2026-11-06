@@ -131,7 +131,7 @@
 **Trigger:** a footer, a sitemap column or any list made only of links.
 **Pattern:** no underline at rest; hover and `:focus-visible` still show one.
 **Default it corrects:** the browser's underline on every item, so a column of links reads as noise.
-**Why:** a list of links is already read as links; the underline adds a line under each item and nothing to the meaning. Hover and focus-visible keep the state a pointer or keyboard user needs.
+**Why:** a list of links is already read as links; the underline adds a line under each item and nothing to the meaning.
 **Applies when:** the links stand alone as a list. A link inside a sentence keeps its non-colour cue (WCAG 1.4.1). A design system that settles link styling in writing wins.
 
 ## A status is bare text in its own ink, never a chip
