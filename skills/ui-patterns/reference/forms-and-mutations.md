@@ -181,7 +181,7 @@ The held state is `aria-disabled` and the handler ignores the press. `disabled` 
 ## A choice of real options is a select whose options carry their own mark
 
 **Trigger:** a list of options that each have a logo or icon of their own — payment methods, providers, carriers.
-**Pattern:** a select that draws each option's mark beside its name. In a repo on Ark UI that is the Ark UI Select, with the accessibility Ark's primitive ships (`ark-ui`); any other repo uses its own select or combobox component (`ark-ui` → brownfield).
+**Pattern:** a select that draws each option's mark beside its name. In a repo on Ark UI that is the Ark UI Select, with the accessibility the primitive ships (`ark-ui`); any other repo uses its own select or combobox component (`ark-ui` → brownfield).
 **Default it corrects:** a native `<select>` of bare names, or a plain radio list, for options people recognise by their mark.
 **Why:** a mark is read before the word, and a native `<option>` cannot draw one.
 **Applies when:** the options have real marks to show. A list of plain words keeps the native select.
