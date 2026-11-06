@@ -183,7 +183,7 @@ The held state is `aria-disabled` and the handler ignores the press. `disabled` 
 **Trigger:** a list of options that each have a logo or icon of their own — payment methods, providers, carriers.
 **Pattern:** a select that draws each option's mark beside its name. In a repo on Ark UI that is the Ark UI Select (`ark-ui`); a brownfield repo uses the library it already has (`ark-ui` → brownfield).
 **Default it corrects:** a native `<select>` of bare names, or a plain radio list, for options people recognise by their mark.
-**Why:** a mark is read before the word, and a native `<option>` cannot draw one. "Use ark ui for this dropdown and add icons on the payment method"; "add logo?".
+**Why:** a mark is read before the word, and a native `<option>` cannot draw one. "Use ark ui for this dropdown and add icons on the payment method".
 **Applies when:** the options have real marks to show. A list of plain words keeps the native select.
 
 ## Two actions are two buttons, and the done one goes
