@@ -189,7 +189,7 @@ The held state is `aria-disabled` and the handler ignores the press. `disabled` 
 ## Two actions are two buttons, and the done one goes
 
 **Trigger:** a step that ends in one of two outcomes — Mark paid or Skip payment — drawn as tabs or a segmented control.
-**Pattern:** show both as buttons side by side, one primary and one secondary: the primary is the action the person most often takes there (entry below). Once one has been done, the button that no longer applies is removed.
+**Pattern:** show both as buttons side by side, one primary and one secondary: the primary is the action the person most often takes there, here Mark paid (entry below). Once one has been done, the button that no longer applies is removed.
 **Default it corrects:** tabs that switch a panel, then a third press to confirm the choice made there.
 **Why:** a tab says "view", a button says "act", and the person came to act.
 **Applies when:** each side is an act. Tabs that show views of one thing are `lists-and-rows.md`.
