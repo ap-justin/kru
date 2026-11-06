@@ -159,7 +159,7 @@ The focus ring moves to the card, since the link's own box is just the title.
 ## A box is a plain panel
 
 **Trigger:** a panel, card, callout or note, and any reading text — terms, policy, a long explanation.
-**Pattern:** a panel is a surface with an even edge: no left border, accent bar or coloured edge. Reading text sits on the page, never wrapped in a card.
+**Pattern:** a panel is a surface with an even edge: no left border, accent bar or coloured edge. Reading text sits on the page.
 **Default it corrects:** a `border-left` in an accent colour on every callout, or the terms boxed in a card because they run long.
 **Why:** one coloured edge ranks nothing; it is decoration that reads as a template. A card around reading text turns a document into a widget.
 **Applies when:** always. A state a panel carries goes in its text (`text-and-icons.md`, status entry). A design system that settles panels in writing wins.
