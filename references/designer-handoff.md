@@ -21,9 +21,9 @@ On any canvas, in a brownfield repo, draw from the repo's design system: token f
 
 Sweep every frame for these before the final message:
 
-- **Slop** — a label that repeats what the control or picture already says, duplicated information, decoration that carries nothing, a span drawn as a control, a stray or empty element, invented placeholder wording. "Remove AI slop"; "dog already in the picture, no need to duplicate"; "every editable field already indicates which ones can be edited, no additional prose".
-- **The parts people notice** — stats, footers, graphics — get the best reference you can find and the real thing built: grouped, complete, illustrated. "Don't be lazy presenting these stats."
-- **Only what the product renders** — a frame shows an element only in the state where the product renders it; each element's condition and the per-state tests go in the build spec (`references/design-spec.md`). "Make sure the screen is correct all the time as the builder might introduce regression."
+- **Slop** — a label that repeats what the control or picture already says, duplicated information, decoration that carries nothing, a span drawn as a control, a stray or empty element, invented placeholder wording.
+- **The parts people notice** — stats, footers, graphics — get the best reference you can find and the real thing built: grouped, complete, illustrated.
+- **Only what the product renders** — a frame shows an element only in the state where the product renders it; each element's condition and the per-state tests go in the build spec (`references/design-spec.md`).
 
 ## Canvas and the bundled Claude Code `design` skill (designer loads)
 

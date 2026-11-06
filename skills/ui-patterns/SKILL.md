@@ -24,7 +24,7 @@ One file is the normal load for a slice, two where it spans a form and the list 
 - **A pattern decides what the repo hasn't settled.** Where the repo has settled it — a written note (a comment above the code, `CLAUDE.md`, the plan the lead handed down) or consistent practice across its neighbours — match the repo and name the divergence in your return, so one component never reads unlike the rest. Where you disagree with a pattern the repo hasn't settled, follow it and raise it in your return.
 
 ## Owned elsewhere
-- **Appearance** — color, spacing, type, radius, elevation, duration, the rank a control takes, what a focus indicator or a selected row looks like: the project's token file, via the `## Design system` pointer. A house look here gives way to it.
+- **Appearance** — color, spacing, type, radius, elevation, duration, the rank a control takes, what a focus indicator or a selected row looks like: the project's token file, via the `## Design system` pointer.
 - **Whether a CSS feature is safe here** — `modern-css` owns Baseline status and fallbacks.
 - **An accessible primitive's anatomy** — dialogs, comboboxes, date pickers: `ark-ui`, or the repo's existing library.
 - **Whether the journey works** — `ux-principles`, audited by `ux-auditor`. This corpus is the component in front of you, not the path through the product.

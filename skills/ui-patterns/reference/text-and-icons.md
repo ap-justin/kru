@@ -115,7 +115,7 @@
 **Trigger:** a copy-to-clipboard control for a message, a code block, an address or a single value.
 **Pattern:** for a block, an icon-only button in its top-right corner, inside the block's edge; for one value, an icon-only button directly after it. The same placement on every screen.
 **Default it corrects:** a text "Copy" button under the block, and a different spot on each screen, because each screen decided afresh.
-**Why:** a button inside the block shows what it copies, and one place becomes a habit. "The decision about where copy buttons should be is not carried over"; "put inside the container just like the message".
+**Why:** a button inside the block shows what it copies, and one place becomes a habit.
 **Applies when:** always. The press reports its outcome on the button itself (`forms-and-mutations.md`), and its name states the target (`lists-and-rows.md`, per-row labels).
 
 ## A control shows only where its promise is true
@@ -123,7 +123,7 @@
 **Trigger:** a control or instruction that depends on the device or setting — "Save QR to your phone", a tap or swipe hint, a link that opens an app.
 **Pattern:** render it only where the person can do it, decided by a capability or viewport check; elsewhere it is absent, not disabled.
 **Default it corrects:** the phone's control shown on a desktop, because the screen was drawn once.
-**Why:** a control that cannot work there is a promise broken at the moment of the press. "This won't be true if use is on desktop."
+**Why:** a control that cannot work there is a promise broken at the moment of the press.
 **Applies when:** the environment decides whether the act is possible. Name each such condition in the build spec's render conditions (`references/design-spec.md`).
 
 ## Links in a footer or a list of links carry no underline
@@ -139,5 +139,5 @@
 **Trigger:** drawing a status — paid, sent, skipped, pending — in a row, a detail or the dropdown that sets it.
 **Pattern:** the glyph and the word carry the status in its text colour: no border, no background. Each status differs from every other in hue and in glyph. It names the bare status the record holds, never an interpretation of it. The control that holds the status shows the same ink.
 **Default it corrects:** a filled pill per status, two statuses in near-identical greys, a status word that claims more than the record knows ("Done" for a handed-off job), and a dropdown that shows its value in the default ink.
-**Why:** a chip reads as a selected value inside a control — "this looks like a chip on a multiselect box". Statuses alike in hue and glyph merge in a scan. A reader acts on what the word says: "don't tell volunteers something is done". Colour alone fails a colour-blind reader, so the glyph and the word carry it too.
+**Why:** a chip reads as a selected value inside a control. Statuses alike in hue and glyph merge in a scan. Colour alone fails a colour-blind reader, so the glyph and the word carry it too.
 **Applies when:** always. A badge is for a count or a tag, never a status. A section's summary word is the entry *A section's status word reads standalone*, above. A design system that settles status styling in writing wins.
