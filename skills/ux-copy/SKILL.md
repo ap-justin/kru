@@ -25,8 +25,8 @@ Write or review UX copy for any interface context.
 
 ## Principles
 
-1. **Clear**: Say exactly what you mean. No jargon, no ambiguity. *House rule:* a label says what is needed or what the thing is, in words a newcomer already knows — "I don't know what `look for` means"; "`finalize your order` doesn't really tell what's needed from the donor".
-2. **Concise**: Use the fewest words that convey the full meaning. *House rule:* no prose where the flow already says it — "this should just be implicit in the donation flow, no need for prose".
+1. **Clear**: Say exactly what you mean. No jargon, no ambiguity. *House rule:* a label says what is needed or what the thing is, in words a newcomer already knows (not `look for`, not `finalize your order`).
+2. **Concise**: Use the fewest words that convey the full meaning. *House rule:* no prose where the flow already says it.
 3. **Consistent**: Same terms for the same things everywhere.
 4. **Useful**: Every word should help the user accomplish their goal.
 5. **Human**: Write like a helpful person, not a robot.

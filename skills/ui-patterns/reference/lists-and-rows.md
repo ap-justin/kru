@@ -137,7 +137,7 @@ The focus ring moves to the card, since the link's own box is just the title.
 **Trigger:** a strip of tabs that switch between views of one thing.
 **Pattern:** the active tab is tinted; the container is rounded on all its outer corners; the joins between tabs are square, a single rule between tabs and nothing else.
 **Default it corrects:** every tab its own rounded pill, so the strip reads as separate buttons with notches at each join.
-**Why:** one outer shape reads as one control. The tint carries the state; the weight stays put (entry above).
+**Why:** one outer shape reads as one control. The tint carries the state; the weight stays put (*A row's active or open state never changes the label's width*).
 **Applies when:** the tabs are views. A choice between two outcomes is two buttons (`forms-and-mutations.md`). A design system that settles the strip's look in writing wins.
 
 ## A control sits next to what it acts on, and siblings share one gap
