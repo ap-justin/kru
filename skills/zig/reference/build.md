@@ -1,6 +1,6 @@
 # `build.zig` and `build.zig.zon`
 
-The build graph is Zig code that declares steps; `zig build` runs them. Reproduced on **Zig 0.17.1** (`x86_64-linux`, 2026-11-07) from a `zig init` project; the field list of `build.zig.zon` is the commented template `zig init` writes, which is the schema's own documentation.
+Reproduced on **Zig 0.17.1** (`x86_64-linux`, 2026-11-07) from a `zig init` project; the field list of `build.zig.zon` is the commented template `zig init` writes, which is the schema's own documentation.
 
 ## Wire `optimize` into every module that has tests
 `zig init` writes the library module with `b.addModule("name", .{ .root_source_file, .target })` and the executable's root module with `.target` **and** `.optimize`. A module with no `.optimize` compiles in Debug whatever you pass: under `zig build test -Doptimize=ReleaseSafe`, the library's `test` blocks printed `optimize=debug` and the executable's `optimize=safe`. Add `.optimize = optimize` to `addModule` and both print `safe`. A suite meant to run in the shipped mode checks `@import("builtin").optimize` once in a test to prove it did.
