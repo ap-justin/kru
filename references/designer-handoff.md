@@ -42,7 +42,7 @@ Mockups on a doop canvas (a `/c/<id>` link): `skills/doop/SKILL.md`.
 
 ## Revising from comments
 
-A run briefed to revise from comments on a doop canvas follows this. The PM resolves comments and checks the round on the server, so `resolve_comment` stays with the PM.
+A run briefed to revise from a doop canvas's comments leaves `resolve_comment` to the PM, who checks the round on the server.
 
 - Read every comment on the canvas with `get_comments`, open and resolved. A resolved comment is a standing rule for this canvas.
 - Apply each comment's intent to every frame where the same part or pattern appears: both widths, every tab and state, and shared parts such as headers, tabs, cards and borders. The frame the pin sits on is only where it was noticed.
