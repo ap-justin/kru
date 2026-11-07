@@ -6,7 +6,7 @@ user-invocable: false
 
 **Zig's dangerous failure is the one the compiler accepts.** A deprecated declaration still compiles, a leaking test still prints `OK`, an unflushed writer still exits 0, and a module the build graph never told about `-Doptimize` still compiles in Debug. Three consequences drive the file: the std library moved faster than its tutorials (code written from memory of 0.14 fails or rots) · a check only runs in the optimize mode that enables it · the build graph is code, and an option you did not wire through reaches nothing.
 
-Reproduced on **Zig 0.17.1** (`x86_64-linux`, 2026-11-07), against the 0.17.0 release notes (`ziglang.org/download/0.17.0/release-notes.html`) and the installed std source. The `aarch64-macos` and `x86_64-windows` cross builds were built from Linux, not run. A repo's `build.zig.zon` `.minimum_zig_version` is the floor a feature must clear.
+Reproduced on **Zig 0.17.1** (`x86_64-linux`, 2026-11-07), against the 0.17.0 release notes (`ziglang.org/download/0.17.0/release-notes.html`) and the installed std source. The `aarch64-macos` and `x86_64-windows` cross builds were built from Linux, not run. A repo's `build.zig.zon` `.minimum_zig_version` is the floor a feature must clear, even when it builds on your machine.
 
 ## Read the install, not a tutorial
 - **`zig version`, then the std source.** `zig env` prints `lib_dir` (relative to the directory you ran it in); `<lib_dir>/std` is the authority for what 0.17 has. A signature, a `///` doc comment and a `test` block there answer faster than a search.
