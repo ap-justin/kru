@@ -1,0 +1,15 @@
+# OAuth for a remote MCP server (client side)
+
+Read against the MCP specification **2026-07-28**, `basic/authorization/` (`index`, `authorization-server-discovery`, `client-registration`), on 2026-11-07; nothing was run against a live authorization server. `2025-11-25` already prefers Client ID Metadata Documents over Dynamic Client Registration; 2026-07-28 deprecates Dynamic Client Registration and adds the `iss` check in step 6.
+
+## The sequence
+1. **Send the MCP request with no token.** A `401` is the signal. Its `WWW-Authenticate: Bearer resource_metadata="…", scope="…"` header names the protected-resource metadata URL and, when present, the scopes.
+2. **Fetch the protected-resource metadata (RFC 9728).** Use `resource_metadata` from the header; with none, try `/.well-known/oauth-protected-resource/<mcp path>` then `/.well-known/oauth-protected-resource`. Its `authorization_servers` lists one or more; the client chooses. Credentials and tokens are kept **per authorization server**, keyed by its `issuer`, and are never reused with another.
+3. **Fetch the authorization-server metadata.** An issuer with a path (`https://auth.example.com/tenant1`) is tried at `/.well-known/oauth-authorization-server/tenant1`, then `/.well-known/openid-configuration/tenant1`, then `/tenant1/.well-known/openid-configuration`. An issuer without a path tries the first two root URLs. The `issuer` in the document must equal the issuer used to build the URL; a mismatch ends the attempt.
+4. **Get a `client_id`, in this order:** pre-registered credentials for the server; a Client ID Metadata Document when the metadata sets `client_id_metadata_document_supported` (the `client_id` is an HTTPS URL with a path whose JSON holds `client_id`, `client_name`, `redirect_uris`); Dynamic Client Registration when it has a `registration_endpoint` (deprecated; send an `application_type`); otherwise ask the user.
+5. **Authorize with PKCE** and the **`resource` parameter** (the MCP server's canonical URI, e.g. `https://mcp.example.com/mcp`, no fragment, no trailing slash by convention) on **both** the authorization request and the token request, whether or not the authorization server advertises support. Record the issuer and the PKCE verifier before opening the browser.
+6. **Validate the redirect.** Compare a present `iss` to the recorded issuer as a plain string — no case folding, no port or slash normalization — before sending the code to the token endpoint. `authorization_response_iss_parameter_supported: true` with no `iss` is a rejection. On a mismatch, drop `error` and `error_description` unread.
+7. **Call with the bearer token on every request:** `Authorization: Bearer <token>`, never in the query string. Treat a refresh token as optional.
+
+## Scopes and step-up
+Request the `scope` from the first `WWW-Authenticate` header, and with none, `scopes_supported` from the resource metadata (omit `scope` when that is also undefined). A later `403` with `error="insufficient_scope"` and a `scope` names what the call needs: re-authorize with those scopes **plus** the ones already granted, so a step-up does not drop earlier permissions.
