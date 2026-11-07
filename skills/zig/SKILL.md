@@ -31,5 +31,5 @@ Reproduced on **Zig 0.17.1** (`x86_64-linux`, 2026-11-07), against the 0.17.0 re
 - **Run the suite in the mode you ship.** The checks fire only in the modes that keep them: a Debug suite proves the code passes Debug's checks, and a ReleaseFast binary has none left to fire. CI runs `zig build test -Doptimize=ReleaseSafe` beside the Debug edit loop, and the build file says which release mode the repo ships.
 
 ## Disclosed
-- `reference/build.md` — `build.zig` and `build.zig.zon`: the module that stays Debug under `-Doptimize`, the fingerprint, `zig fetch --save` and `zig build --fetch`, passthrough args, cross-compiling, `zig fmt --check`.
-- `reference/io-concurrency.md` — `Io.async` vs `Io.concurrent`, `Group`, the single-threaded `Io`, `Io.Mutex`, `std.Thread`.
+- Read `reference/build.md` when the task touches `build.zig` or `build.zig.zon`: the module that stays Debug under `-Doptimize`, the fingerprint, `zig fetch --save` and `zig build --fetch`, passthrough args, cross-compiling, `zig fmt --check`.
+- Read `reference/io-concurrency.md` when the task spawns work, locks or waits: `Io.async` vs `Io.concurrent`, `Group`, the single-threaded `Io`, `Io.Mutex`, `std.Thread`.

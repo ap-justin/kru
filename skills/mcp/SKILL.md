@@ -29,4 +29,4 @@ Read against the MCP specification **2026-07-28** (current at the read; `modelco
 - **The human stays in the loop.** The spec says a client should show a tool's inputs before the call, confirm sensitive operations, set a timeout on every call, and treat results as untrusted input to the model.
 
 ## Remote servers need OAuth
-`reference/oauth.md` — the 401 → protected-resource metadata → authorization-server metadata → registration → PKCE, with `resource` on both requests, `iss` validation, and step-up on `403`.
+Read `reference/oauth.md` before connecting to any HTTP server: the 401 → protected-resource metadata → authorization-server metadata → registration → PKCE, with `resource` on both requests, `iss` validation, and step-up on `403`.

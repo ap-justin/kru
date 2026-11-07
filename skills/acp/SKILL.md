@@ -9,7 +9,7 @@ user-invocable: false
 Read against ACP **v1** (`agentclientprotocol.com/protocol/v1/*`, 2026-11-07) and the registry's checker source (`agentclientprotocol/registry` `main`: `AUTHENTICATION.md`, `CONTRIBUTING.md`, `.github/workflows/client.py`, 2026-11-07). Nothing here was run against a live client or the registry CI; the checker's behavior is read from its source. v2 is a separate, draft protocol (last section).
 
 ## The wire
-- **stdio, one JSON-RPC message per line.** The client launches the agent; stdout carries only ACP messages (no embedded newlines), and logs go to stderr. A debug `print` on stdout breaks the framing: the spec forbids anything on stdout that is not a valid ACP message. Both sides number their own requests, so one id can be live in both directions.
+- **stdio, one JSON-RPC message per line.** The client launches the agent; stdout carries only ACP messages (no embedded newlines), and logs go to stderr. A debug `print` on stdout breaks the framing. Both sides number their own requests, so one id can be live in both directions.
 - **Order:** `initialize` → (auth) → `session/new` → `session/prompt` … with `session/update` notifications and `session/request_permission` / `fs/*` / `terminal/*` requests *from the agent* in between. Any request before `initialize` is `-32600`. The baseline an agent implements: `initialize`, `session/new`, `session/prompt`, `session/cancel` (a notification), and sending `session/update`. Everything else is a capability.
 
 ## `initialize`: capabilities gate behavior in both directions
