@@ -11,7 +11,7 @@ prose in its seat.
 
 ## Wiring a row
 - **The owner by tool**: Biome, ESLint (brownfield), GritQL plugins, `tsconfig` flags and the
-  script rows → `toolchain-engineer`; `ruff`/`mypy` → `python-developer`; `go vet`/`golangci-lint`
+  script rows → `toolchain-engineer`; `ruff`/`mypy` → `python-developer`; `zig fmt` → `zig-developer`; `go vet`/`golangci-lint`
   → `go-fullstack-builder`; `sveltekit({...})` in `vite.config.ts` → `sveltekit-builder`.
 - **Strongest first.** A compiler or config flag, then a built-in rule, then a GritQL plugin, then a
   script. Take the first the repo's tool can express.
