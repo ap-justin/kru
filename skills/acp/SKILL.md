@@ -6,7 +6,7 @@ user-invocable: false
 
 **ACP's dangerous failure is the agent that works against its author's test client and fails against everyone else's.** The handshake is small; what breaks is the part each real client checks differently: a capability the client never sent, a cancel that returns an error, a login that needs credentials before `initialize` can answer, a byte on stdout that is not a message. Three consequences drive the file: an omitted capability means *unsupported* · the prompt request's response is what ends a turn · the registry's auth check runs `initialize` with no credentials and reads only the result.
 
-Read against ACP **v1** (`agentclientprotocol.com/protocol/v1/*`, 2026-11-07) and the registry's checker source (`agentclientprotocol/registry` `main`: `AUTHENTICATION.md`, `CONTRIBUTING.md`, `.github/workflows/client.py`, 2026-11-07). Nothing here was run against a live client or the registry CI; the checker's behavior is read from its source. v2 is a separate, draft protocol (last section).
+Read against ACP **v1** (`agentclientprotocol.com/protocol/v1/*`, 2026-11-07) and the registry's checker source (`agentclientprotocol/registry` `main`: `AUTHENTICATION.md`, `CONTRIBUTING.md`, `.github/workflows/client.py`, 2026-11-07). Nothing here was run against a live client or the registry CI. v2 is a separate, draft protocol (last section).
 
 ## The wire
 - **stdio, one JSON-RPC message per line.** The client launches the agent; stdout carries only ACP messages (no embedded newlines), and logs go to stderr. A debug `print` on stdout breaks the framing. Both sides number their own requests, so one id can be live in both directions.

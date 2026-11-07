@@ -26,7 +26,7 @@ Reaching to hand-write something — a string search or split, a JSON encoder, a
 
 ## Where Zig's shape differs from a garbage-collected prior
 - **Every allocation has an owner and a function signature says so.** `defer` / `errdefer` sit on the line after the allocation they undo. Request- or command-scoped work takes an `ArenaAllocator` and frees once. A struct that stores a slice it was handed stores that the caller keeps it alive, or copies it.
-- **Errors are values in the return type.** `!T` is an error union; `try` propagates, `catch` handles, and a function's inferred error set grows with what it calls. `@panic` and `unreachable` are for a programmer's bug, never for input, a missing file or a closed pipe. Name the errors a caller can act on; let the rest propagate.
+- **Errors are values in the return type.** `@panic` and `unreachable` are for a programmer's bug, never for input, a missing file or a closed pipe. Name the errors a caller can act on; let the rest propagate.
 - **Nothing happens at the call site you cannot see.** No hidden allocation, no hidden control flow, no destructor: a resource opened is a resource with a `defer close` beside it.
 - **Comptime is a tool for one job at a time.** Reach for it to generate a type or table the code would otherwise repeat; a `comptime` parameter that makes every call a new instantiation is code size and compile time spent, and the readable version is often a runtime value.
 

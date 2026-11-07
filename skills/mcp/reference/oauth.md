@@ -1,6 +1,6 @@
 # OAuth for a remote MCP server (client side)
 
-HTTP transports only: a stdio server takes its credentials from the environment. Read against the MCP specification **2026-07-28**, `basic/authorization/` (`index`, `authorization-server-discovery`, `client-registration`), on 2026-11-07; nothing was run against a live authorization server. `2025-11-25` already prefers Client ID Metadata Documents over Dynamic Client Registration; 2026-07-28 deprecates Dynamic Client Registration, requires the `application_type` in it, and adds the `iss` check in step 6, which the `2025-11-25` page does not contain.
+Read against the MCP specification **2026-07-28**, `basic/authorization/` (`index`, `authorization-server-discovery`, `client-registration`), on 2026-11-07; nothing was run against a live authorization server. `2025-11-25` already prefers Client ID Metadata Documents over Dynamic Client Registration; 2026-07-28 deprecates Dynamic Client Registration and adds the `iss` check in step 6.
 
 ## The sequence
 1. **Send the MCP request with no token.** A `401` is the signal. Its `WWW-Authenticate: Bearer resource_metadata="…", scope="…"` header names the protected-resource metadata URL and, when present, the scopes.

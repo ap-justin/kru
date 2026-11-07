@@ -16,7 +16,7 @@ Reproduced on **Zig 0.17.1** (`x86_64-linux`, 2026-11-07), against the 0.17.0 re
 - **`@hasDecl` answers `true` only for `pub` declarations**, in every file. A duck-typed probe on a private `const` is `false`.
 
 ## `main`, output, input
-- **`pub fn main(init: std.process.Init) !void`.** `init.gpa` (leak-checked in Debug and ReleaseSafe), `init.arena` (process lifetime, freed at exit; allocate and never free), `init.io`, `init.minimal.args.toSlice(arena)`, `init.environ_map`. There is no `std.os.argv`.
+- **`pub fn main(init: std.process.Init) !void`.** `init.gpa` (leak-checked in Debug and ReleaseSafe), `init.arena` (process lifetime, freed at exit; allocate and never free), `init.io`, `init.minimal.args.toSlice(arena)`, `init.environ_map`.
 - **Output is a buffered writer you flush.** `var w: Io.File.Writer = .init(.stdout(), io, &buf); try w.interface.print(…); try w.interface.flush();`. Without the `flush`, a 64-byte buffer program wrote **0 bytes** to a pipe and exited 0. A reader that leaves early (`| head -1`) shows up as `error.WriteFailed` from the writer; returned out of `main` it is a stack trace on stderr and exit status 1. Diagnostics go through `std.debug.print` (stderr, unbuffered). Input mirrors it: `Io.File.Reader = .init(.stdin(), io, &buf)` and `interface.takeDelimiter('\n')`.
 - **File and process calls take `io`.** `dir.createFile(io, …)`, `file.close(io)`, `std.process.run(gpa, io, …)`. A function that touches the OS takes an `Io` parameter the way one that allocates takes an `Allocator`; tests pass `std.testing.io`.
 
@@ -28,7 +28,7 @@ Reproduced on **Zig 0.17.1** (`x86_64-linux`, 2026-11-07), against the 0.17.0 re
 
 ## Optimize modes
 - **Debug and ReleaseSafe keep the checks; ReleaseFast and ReleaseSmall delete them.** `x += n` past a `u8`'s max: Debug and ReleaseSafe `panic: integer overflow` (exit 134); ReleaseFast and ReleaseSmall wrap to 4 and exit 0. An out-of-range `@intCast` panics in the first two and is undefined behavior in ReleaseFast (a segfault, exit 139, in the run), and a `switch` arm that is `unreachable` panics in the first two and carries on with an arbitrary value in ReleaseFast (it returned 2 in the run). `builtin.optimize.runtimeSafety()` tells code which side it is on. The tags are `.debug .safe .fast .small` (`std.lang.Optimize`).
-- **Run the suite in the mode you ship.** The checks fire only in the modes that keep them: a Debug suite proves the code passes Debug's checks, and a ReleaseFast binary has none left to fire. CI runs `zig build test -Doptimize=ReleaseSafe` beside the Debug edit loop, and the build file says which release mode the repo ships.
+- **Run the suite in the mode you ship.** A Debug suite proves the code passes Debug's checks, and a ReleaseFast binary has none left to fire. CI runs `zig build test -Doptimize=ReleaseSafe` beside the Debug edit loop, and the build file says which release mode the repo ships.
 
 ## Disclosed
 - Read `reference/build.md` when the task touches `build.zig` or `build.zig.zon`: the module that stays Debug under `-Doptimize`, the fingerprint, `zig fetch --save` and `zig build --fetch`, passthrough args, cross-compiling, `zig fmt --check`.
