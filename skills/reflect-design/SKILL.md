@@ -20,6 +20,7 @@ The rules live in these files; read each one at its heading on every run, so a r
 | The spec's rules | `${CLAUDE_PLUGIN_ROOT}/references/design-spec.md` → the build spec list (render conditions, copy, states) and *Current state only* |
 | Component patterns | `${CLAUDE_PLUGIN_ROOT}/skills/ui-patterns/SKILL.md` → the index, then the one `reference/` group per kind of thing the frame draws |
 | The system's shape | `${CLAUDE_PLUGIN_ROOT}/skills/design-system/SKILL.md` → color, typography, shells |
+| The canvas's comments | on a doop canvas that has comments, `get_comments`, open and resolved: each one checked on every frame where it could apply (`references/designer-handoff.md` → *Revising from comments*). An earlier fix that regressed or never spread is a finding |
 | The words | `${CLAUDE_PLUGIN_ROOT}/skills/ux-copy/SKILL.md` → Principles, CTAs, with its disclosed house rules |
 
 Where the repo's system settles a point in writing and a house look in these homes says otherwise, the repo's system wins, as `ui-patterns/SKILL.md` → *Applying one* has it.

@@ -40,6 +40,14 @@ Invoke the bundled Claude Code `design` skill (designer loads) for artboards and
 
 Mockups on a doop canvas (a `/c/<id>` link): `skills/doop/SKILL.md`.
 
+## Revising from comments
+
+A run briefed to revise from comments on a doop canvas follows this. Resolving comments and checking the round belong to the PM on the server; the designer never calls `resolve_comment`.
+
+- Read every comment on the canvas with `get_comments`, open and resolved. A resolved comment is a standing rule for this canvas.
+- Apply each comment's intent, not just its literal words, to every frame where the same part or pattern appears: both widths, every tab and state, and shared parts such as headers, tabs, cards and borders. The frame the pin sits on is only where it was noticed.
+- The final message gets a `comments` list: one line per comment, with the frames it changed, or why it applies to only one.
+
 ## Questions and approval
 
 You talk to the **PM**, not the engineering lead. Decide what you can answer yourself, and say the choice in the spec. Only a question the PM alone can answer (a direction pick between real options, a copy gap nobody has the facts for) goes to the PM in your return; the PM approves before the spec ships to engineering.
