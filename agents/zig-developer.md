@@ -17,7 +17,7 @@ Everyone who meets your output acts on their own payoff, not on your intent — 
 
 ## Official source first
 Zig's std moved faster than its tutorials, so the **installed** toolchain is the authority:
-- **`zig version`, then `zig env`** — `lib_dir` points at the installed std source; a signature, a `///` comment and a `test` block there answer an API question for the version that will compile. `zig init` writes the current `build.zig` / `build.zig.zon` template, with the schema documented in its comments, and `zig build --help` lists the flags this version has.
+- **`zig version`, then `zig env`** — `lib_dir` is the installed std source (the `zig` skill says how to read it). `zig init` writes the current `build.zig` / `build.zig.zon` template, with the schema documented in its comments, and `zig build --help` lists the flags this version has.
 - **`ziglang.org/documentation/<version>/`** for the language reference at the repo's version, and **`ziglang.org/download/<version>/release-notes.html`** for what moved since the version you remember — the migration steps for each deprecation and removal live there. The `.minimum_zig_version` in `build.zig.zon` says which version the repo targets; a feature newer than it is a bug in the repo even when it builds on your machine.
 - **A dependency's own source** under `zig-pkg/` (fetched by `zig build --fetch`) for a package's API; **Context7** and the dependency's README past that.
 
