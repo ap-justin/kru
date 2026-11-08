@@ -381,6 +381,6 @@ Start the dev server and check it in a browser:
 - App path, dev URL, component count from disk.
 - The style picked (when no preset was given) and why.
 - What maps where: colors, fonts (and substitutes), radius, shadows, focus.
-- Contrast pairs under 4.5:1, including ones the DESIGN.md itself specifies.
+- Contrast pairs under 4.5:1, including ones the DESIGN.md itself specifies. When the repo's design system names APCA, the pairs its ledger records no Lc for instead ([design-system-page.md](./design-system-page.md) › *Color roles*).
 - Every component file you edited and why.
 - Every deliberate deviation from the DESIGN.md (derived dark mode, kept hover, substituted fonts).
