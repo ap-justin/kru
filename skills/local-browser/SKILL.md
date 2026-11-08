@@ -23,6 +23,10 @@ One 500 is not the app's: a workspace package's new `exports` entry doesn't reac
 
 `take_snapshot` returns the a11y tree with a `uid` per element, and every interaction tool takes that `uid`. Screenshots are for the human reading the report: capture with `filePath` and `Read` the file when a defect needs to be *seen*. A full-viewport capture taken just after a sheet, dialog or popover opens can paint a stale compositor frame that disagrees with `getBoundingClientRect` and the computed transform; before reporting geometry read off one, re-take it element-scoped (by `uid`) — where the picture and the numbers disagree, the picture is the one that's wrong.
 
+### Proof images are never committed
+
+A screenshot or other image taken as proof or review evidence is written outside the checkout, to the path `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" path tmp/<run>/<name>.png` prints, and is never `git add`ed in a product repo or the store. It reaches the PM attached to a PR comment, or in the review's report. Design references a brief needs (competitor refs, mockups) are not proof; they live where the brief puts them.
+
 ## 3. Set a breakpoint with `emulate`, and carry every override on every call
 
 `emulate` takes the viewport as a string — `"375x812x3,mobile,touch"` — and renders a true 375px CSS viewport. Two verified behaviours decide whether a sweep is measuring what it thinks:

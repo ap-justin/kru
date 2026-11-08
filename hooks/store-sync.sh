@@ -59,11 +59,14 @@ copy_newer() {
   else cp -Rp "$from/." "$to/"; fi
 }
 
-# a store repo nobody seeded still keeps hook state local and merges appends.
+# a store repo nobody seeded still keeps hook state local and merges appends;
+# every store keeps proof images local.
 # a store seeded with `merge=union` moves to the line merge, since union
 # brings back a line one side deleted whenever the other appended beside it
 seed_defaults() {
   [ -f "$home/.gitignore" ] || printf '%s\n' '# session-lived hook state' 'audit/' 'lead-gate/' 'tmp/' '.DS_Store' > "$home/.gitignore"
+  # unguarded, so a store seeded before the image rules gains them too
+  kru_ignore_images "$home/.gitignore"
   [ -f "$home/.gitattributes" ] || printf '%s\n' \
     '# line files: both sides of a concurrent append land, and a deletion holds' \
     'inbox.md merge=kru-lines' 'refusals.jsonl merge=kru-lines' 'management/*/TODOS.md merge=kru-lines' > "$home/.gitattributes"

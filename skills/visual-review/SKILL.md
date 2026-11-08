@@ -10,7 +10,7 @@ You review the UI as it actually renders, in a real browser, against the **appro
 
 **The build must match the approved mockups and build spec.** Engineering does not design in-session; this pass is where intent is checked in pixels.
 
-1. **Spec match (required)** — at **desktop ~1440** and **mobile 375**, compare each screen in the slice to the mockups the brief names. Layout, hierarchy, spacing, type scale, colour roles, component choice, and visible copy that appears on the mockup are in scope. Report each mismatch as a finding with evidence (screenshot path) and a concrete fix for the builder. Name the spec file or mockup path in the report header.
+1. **Spec match (required)** — at **desktop ~1440** and **mobile 375**, compare each screen in the slice to the mockups the brief names. Layout, hierarchy, spacing, type scale, colour roles, component choice, and visible copy that appears on the mockup are in scope. Report each mismatch as a finding with evidence (screenshot path, outside the checkout per `skills/local-browser/SKILL.md` → *Proof images are never committed*) and a concrete fix for the builder. Name the spec file or mockup path in the report header.
 2. **Coverage** — states and widths the mockups do not show but the build spec names (empty, error, loading, disabled, focus-visible, content extremes). **"This state exists and no one has checked it"** is a finding even when it looks fine.
 3. **Root cause** — when something is broken (not merely off-spec), trace to `file:line` and scope.
 

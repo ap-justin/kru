@@ -56,11 +56,34 @@ kru_is_cloud() { [ "${CLAUDE_CODE_REMOTE:-}" = "true" ]; }
 
 kru_home() { printf '%s' "${KRU_HOME:-$HOME/.kru}"; }
 
+# the ignore rules that keep proof images out of every store root. evidence
+# belongs in `tmp/` (skills/local-browser/SKILL.md); these catch an image a run
+# drops in one of the folders below, at any depth in the store, anyway
+kru_image_ignore_rules() {
+  local dir ext
+  for dir in 'proof/' 'shots/' '*-shots/' '_previous/' 'screenshots/'; do
+    for ext in png jpg jpeg webp gif; do printf '**/%s**/*.%s\n' "$dir" "$ext"; done
+  done
+}
+
+# append each rule the file lacks; creates the file, and touches nothing when
+# every rule is there
+kru_ignore_images() {
+  local file=$1 rule
+  mkdir -p "$(dirname "$file")" 2>/dev/null || return 0
+  [ -f "$file" ] || : > "$file" 2>/dev/null || return 0
+  while IFS= read -r rule; do
+    grep -qxF -- "$rule" "$file" 2>/dev/null || printf '%s\n' "$rule" >> "$file"
+  done < <(kru_image_ignore_rules)
+}
+
 kru_project() {
   [ -n "${KRU_PROJECT_STORE:-}" ] && { printf '%s' "$KRU_PROJECT_STORE"; return 0; }
   # no user level survives a cloud vm, so the plan rides in the branch instead.
   # committed, not ignored: a .kru/ nobody commits dies with the machine.
   if [ -z "${KRU_HOME:-}" ] && [ -z "${KRU_STORE_REPO:-}" ] && kru_is_cloud; then
+    # it ships in the branch, so proof images under it are ignored from the first resolve
+    kru_ignore_images "$(kru_repo_root)/.kru/.gitignore"
     printf '%s/.kru' "$(kru_repo_root)"; return 0
   fi
   printf '%s/management/%s' "$(kru_home)" "$(kru_slug)"
@@ -82,6 +105,8 @@ kru_path() {
     patterns/*)  printf '%s/patterns/%s.md' "$(kru_home)" "${1#patterns/}" ;;
     audit)       printf '%s/audit' "$(kru_home)" ;;
     audit/*)     printf '%s/audit/%s.jsonl' "$(kru_home)" "${1#audit/}" ;;
+    tmp)         printf '%s/tmp' "$(kru_home)" ;;
+    tmp/*)       printf '%s/tmp/%s' "$(kru_home)" "${1#tmp/}" ;;
     lead-gate)   printf '%s/lead-gate' "$(kru_home)" ;;
     lead-gate/*) printf '%s/lead-gate/%s' "$(kru_home)" "${1#lead-gate/}" ;;
     todos)       printf '%s/TODOS.md' "$(kru_project)" ;;
