@@ -63,7 +63,7 @@ The **designer** runs `audit` on a coverage read, ahead of the element half of `
 
 - **Shape, never value.** A hue, a face, a px or an easing curve in a return is the failure — the look is the designer's approved spec, transcribed once by a builder.
 - **Structure, never taste.** What either verb settles or reports is a set, a rule, a step's purpose, or a value off its ladder. Which values were chosen is the design's.
-- **Contrast is recorded, never computed here.** Which pairs the system settled as legible belongs in the ledger, as the APCA Lc the designer judged them at; a figure derived here to overturn a design does not, and no seat computes a WCAG ratio. `accessibility-review` leaves 1.4.3 and 1.4.11 unassessed, so the designer's APCA judgement is the only contrast call.
+- **Contrast is recorded, never computed here.** Which pairs the system settled as legible, the focus ring against each surface it sits on included, belongs in the ledger as the APCA Lc the designer judged them at; a figure derived here to overturn a design does not, and no seat computes a WCAG ratio. `accessibility-review` leaves 1.4.3, 1.4.11, 2.4.11 and 2.4.13 unassessed, so the designer's APCA judgement is the only contrast call.
 
 ## Owned elsewhere
 

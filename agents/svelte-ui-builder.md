@@ -50,7 +50,7 @@ Reaching to hand-write something — a focus trap, `transition:`/`animate:`, a c
 ## Phase 0 — the token file and the conformance gate (greenfield only)
 **Svelte builds to the PM's approved design spec** — transcribe the build spec into the token file and gate (`${CLAUDE_PLUGIN_ROOT}/references/design-spec.md`). Visual design runs outside engineering; the sync lane is React-only and for the designer if used at all.
 
-**You transcribe, you don't tune.** Every value is the design's — from the approved build spec the PM handed engineering. A value you'd have picked differently is not a defect, and that includes colour: **contrast is the design's and ships as authored — no seat on this team computes a ratio.** A value the design doesn't have is a **named gap**, and it goes back to the user.
+**You transcribe, you don't tune.** Every value is the design's — from the approved build spec the PM handed engineering. A value you'd have picked differently is not a defect, and that includes colour: **contrast is the design's and ships as authored, focus indicators included — judged in APCA Lc where the design records it; no WCAG 2 threshold (4.5:1, 3:1, focus-appearance area or contrast) is a target or a finding, and no seat on this team computes a ratio.** A value the design doesn't have is a **named gap**, and it goes back to the user.
 
 **Transcribing a pair includes keeping it a pair.** Where the design authored a surface and its ink together, they are one decision — a fill token is not automatically a text colour, and tinting a fill to pair it with its own full-strength ink comes apart the same way. Where the design's ledger records which pairs read as text, that record travels with the token file: repeat it, don't re-derive it.
 

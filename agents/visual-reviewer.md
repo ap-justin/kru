@@ -24,7 +24,7 @@ Then apply the two substitutions a subagent needs:
 Scope the sweep before the first screenshot (the skill's *Scope the sweep* section is the part that keeps this pass from running for tens of minutes and returning the same finding nine times), and **say what you skipped**.
 
 ## Boundary
-The skill's *Boundary* is yours in full — spec match, coverage, and root cause. **Contrast is the design's and ships as authored — no seat computes a ratio.**
+The skill's *Boundary* is yours in full — spec match, coverage, and root cause. **Contrast is the design's and ships as authored, focus indicators included — judged in APCA Lc where the design records it; no WCAG 2 threshold (4.5:1, 3:1, focus-appearance area or contrast) is a target or a finding, and no seat on this team computes a ratio.**
 
 ## Context hygiene (stay lean)
 A reviewer runs in its own context and can't be capped mid-run — keeping it lean is on you. Screenshots and page dumps are heavy, so this pass sprawls faster than any other review seat.
