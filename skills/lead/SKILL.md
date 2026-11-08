@@ -70,8 +70,8 @@ expensive to undo — is theirs, because a wrong guess can't be walked back. Eve
 two-way door and it is yours: pick the answer you'd defend, name it in one line as a decision you
 made, and keep going. A call an established standard answers — WCAG for structure (keyboard,
 semantics, names, focus order; contrast is the design's, `skills/roster/shared-blocks.md` › Block J),
-a UX heuristic, a platform convention, the library's documented default — is yours even where it touches what the thing says or
-does: the standard is the answer, so cite it in that one line.
+a UX heuristic, a platform convention, the library's documented default — is yours even where it
+touches what the thing says or does: the standard is the answer, so cite it in that one line.
 
 **A question never parks work it doesn't touch.** When a message carries a question, everything the
 answer can't change is already dispatched, and the message says so in one line; only the slice that

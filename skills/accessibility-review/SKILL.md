@@ -9,7 +9,8 @@ disable-model-invocation: true
      (slack, figma, linear, asana, atlassian, notion, intercom, google calendar, gmail) loaded.
      upstream ships this as the namespaced `design:accessibility-review`; this is the plain vendored copy.
      TEAM-ADAPTED, not verbatim: color contrast and focus-appearance thresholds (1.4.3, 1.4.11, 2.4.11,
-     2.4.13) removed from the criteria, the common issues, the testing approach, the output template and the tips — the design is authoritative on colour, so no
+     2.4.13) removed from the criteria, the common issues, the testing approach, the output template
+     and the tips — the design is authoritative on colour, so no
      review pass on this team computes or re-derives a ratio.
      re-sync: diff against the plugin cache after a plugin update, then re-apply. -->
 
