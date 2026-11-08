@@ -72,7 +72,7 @@ A grid of pairs, each rendered as the surface with "Aa" in its foreground color,
 | `destructive` on `background`         | Yes          |
 | Each extra text token on `background` | When defined |
 
-Contrast follows the repo's design system. When its `.claude/CLAUDE.md` › `## Design system` or the DESIGN.md names APCA (`skills/design-system/SKILL.md`), show and report each pair in APCA Lc against the thresholds that system sets, show no WCAG 2 ratio or level, and leave pairs the design settled unreported. Otherwise: use `ColorPair` from the helpers. It measures contrast live and re-measures when the theme changes. Report any pair below 4.5:1 for body-size text, even when the DESIGN.md specifies it. A brand primary at 3:1 behind 14px labels is a real finding.
+Contrast follows the repo's design system. When its `.claude/CLAUDE.md` › `## Design system` or the DESIGN.md names APCA (`skills/design-system/SKILL.md`), show and report each pair as APCA Lc against the thresholds that system sets, report no WCAG 2 ratio or level, and report only pairs the design left unsettled. Otherwise: use `ColorPair` from the helpers. It measures contrast live and re-measures when the theme changes. Report any pair below 4.5:1 for body-size text, even when the DESIGN.md specifies it. A brand primary at 3:1 behind 14px labels is a real finding.
 
 ### Palette
 
