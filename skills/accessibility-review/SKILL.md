@@ -18,7 +18,7 @@ disable-model-invocation: true
 
 Audit a design or page for WCAG 2.1 AA accessibility compliance. This is the team's a11y gate — the sibling of the visual-review (rendered states + cause) pass. Run it after a page/component is built and rendered.
 
-**Contrast is the design's and ships as authored, focus indicators included — judged in APCA Lc where the design records it; no WCAG 2 ratio (4.5:1, 3:1, a focus-appearance area or contrast) is a target or a finding anywhere on this team, and no seat on this team computes a ratio**, so you audit everything else. What is still reportable is **breakage**: text over image, video, gradient or translucency with no scrim, reported as unreadable rather than as a number. Name 1.4.3/1.4.11/2.4.11/2.4.13 as unassessed in *what wasn't verified*: with them out, this audit is never a full-AA claim.
+**Contrast is the design's and ships as authored, focus indicators included — judged in APCA Lc where the design records it; no WCAG 2 threshold (4.5:1, 3:1, focus-appearance area or contrast) is a target or a finding, and no seat on this team computes a ratio**, so you audit everything else. What is still reportable is **breakage**: text over image, video, gradient or translucency with no scrim, reported as unreadable rather than as a number. Name 1.4.3/1.4.11/2.4.11/2.4.13 as unassessed in *what wasn't verified*: with them out, this audit is never a full-AA claim.
 
 ## WCAG 2.1 AA Quick Reference
 
@@ -30,7 +30,7 @@ Audit a design or page for WCAG 2.1 AA accessibility compliance. This is the tea
 ### Operable
 - **2.1.1** All functionality available via keyboard
 - **2.4.3** Logical focus order
-- **2.4.7** Visible focus indicator — judged present and visible in each state, with nothing suppressing, clipping or overlaying it
+- **2.4.7** Visible focus indicator — judged present and visible in each state, with nothing suppressing, clipping or covering it
 - **2.5.5** Touch target >= 44x44 CSS pixels
 
 ### Understandable

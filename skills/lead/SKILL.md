@@ -69,7 +69,7 @@ it costs someone using it — is theirs, because nothing in the codebase implies
 expensive to undo — is theirs, because a wrong guess can't be walked back. Everything else is a
 two-way door and it is yours: pick the answer you'd defend, name it in one line as a decision you
 made, and keep going. A call an established standard answers — WCAG for structure (keyboard,
-semantics, names, focus order; contrast is the design's, `skills/roster/shared-blocks.md` › Block J),
+semantics, names, focus order; contrast is the design's, `skills/roster/shared-blocks.md` → Block J),
 a UX heuristic, a platform convention, the library's documented default — is yours even where it
 touches what the thing says or does: the standard is the answer, so cite it in that one line.
 
