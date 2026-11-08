@@ -58,7 +58,7 @@ kru_home() { printf '%s' "${KRU_HOME:-$HOME/.kru}"; }
 
 # the ignore rules that keep proof images out of every store root. evidence
 # belongs in `tmp/` (skills/local-browser/SKILL.md); these catch an image a run
-# drops in a proof or shots folder inside the store anyway
+# drops in one of the folders below, at any depth in the store, anyway
 kru_image_ignore_rules() {
   local dir ext
   for dir in 'proof/' 'shots/' '*-shots/' '_previous/' 'screenshots/'; do
