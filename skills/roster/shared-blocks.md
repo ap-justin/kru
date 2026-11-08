@@ -227,7 +227,7 @@ Read `package.json` and {the seat's peer artifacts — existing routes / compone
 
 ## Block J — the contrast clause
 
-Required on every seat that could otherwise reach for a ratio: the three **UI component builders**, `accessibility-reviewer`, `visual-reviewer` — five seats, `grep -l "contrast is the design's and ships as authored" agents/*.md`. Not on the designer, whose APCA judgement is the design deciding (below), and not on the lead, who points here instead (`skills/lead/SKILL.md` › *Two things reach them*). It rides inside whatever sentence already tells the seat where a value comes from, rather than as a bullet of its own.
+Required on every seat that could otherwise reach for a ratio: the three **UI component builders**, `accessibility-reviewer`, `visual-reviewer` — five seats. Not on the designer, whose APCA judgement is the design deciding (below), and not on the lead, who points here instead (`skills/lead/SKILL.md` › *Two things reach them*). It rides inside whatever sentence already tells the seat where a value comes from, rather than as a bullet of its own.
 
 ```
 contrast is the design's and ships as authored, focus indicators included — judged in APCA Lc where the design records it; no WCAG 2 ratio (4.5:1, 3:1, a focus-appearance area or contrast) is a target or a finding anywhere on this team, and no seat on this team computes a ratio

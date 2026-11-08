@@ -29,7 +29,7 @@ Audit a design or page for WCAG 2.1 AA accessibility compliance. This is the tea
 ### Operable
 - **2.1.1** All functionality available via keyboard
 - **2.4.3** Logical focus order
-- **2.4.7** Visible focus indicator — judged as present and visible in each state (not suppressed, not clipped, not hidden behind an overlay), never by a ratio
+- **2.4.7** Visible focus indicator — judged present and visible in each state, with nothing suppressing, clipping or overlaying it
 - **2.5.5** Touch target >= 44x44 CSS pixels
 
 ### Understandable
