@@ -227,20 +227,21 @@ Read `package.json` and {the seat's peer artifacts — existing routes / compone
 
 ## Block J — the contrast clause
 
-Required on every seat that could otherwise reach for a ratio: the three **UI component builders**, `accessibility-reviewer`, `visual-reviewer`. It rides inside whatever sentence already tells the seat where a value comes from, rather than as a bullet of its own.
+Required on every seat that could otherwise reach for a ratio: the three **UI component builders**, `accessibility-reviewer`, `visual-reviewer` — five seats, `grep -l "contrast is the design's and ships as authored" agents/*.md`. Not on the designer, whose APCA judgement is the design deciding (below), and not on the lead, who points here instead (`skills/lead/SKILL.md` › *Two things reach them*). It rides inside whatever sentence already tells the seat where a value comes from, rather than as a bullet of its own.
 
 ```
-contrast is the design's and ships as authored — no seat on this team computes a ratio
+contrast is the design's and ships as authored, focus indicators included — judged in APCA Lc where the design records it; no WCAG 2 ratio (4.5:1, 3:1, a focus-appearance area or contrast) is a target or a finding anywhere on this team, and no seat on this team computes a ratio
 ```
 
 **Invariant clauses:**
-- ⚠ `contrast is the design's` — the **positive** half, and it has to come first. Left as a bare prohibition the clause reads as a gap in the practice, and a seat helpfully fills a gap; stated as ownership it reads as a decision already taken, which is what it is.
+- ⚠ `contrast is the design's` — the **positive** half, and it has to come first; `focus indicators included` and `judged in APCA Lc where the design records it` ride in it, so the ownership covers the ring and names the design's own measure. Left as a bare prohibition the clause reads as a gap in the practice, and a seat helpfully fills a gap; stated as ownership it reads as a decision already taken, which is what it is.
 - ⚠ `ships as authored` — this is what stops the softer failure: a seat that doesn't compute a ratio but still flags a pair as "worth checking," which routes a design decision back to the user as a defect.
+- ⚠ `no WCAG 2 ratio (4.5:1, 3:1, a focus-appearance area or contrast) is a target or a finding anywhere on this team` — names the thresholds a seat otherwise falls back to when no target is stated; a focus ring moved up a Radix step to reach 3:1 is the failure it closes.
 - `no seat on this team computes a ratio` — team-wide, not seat-local. Scoped to the seat, each one assumes some *other* seat has it covered, and the criterion silently comes back.
 
 **The pair carve-out — a permitted companion, never an edit to the clause.** The clause bans *deciding* a pair; it does not ban holding one together. Where the design authored a surface and its ink as one decision, a fill token spent as a text colour is a **conformance** finding — cited by token name against the system's own ledger, never by a ratio the seat worked out. The three UI builders carry it as a following sentence (*transcribing a pair includes keeping it a pair*). The screen seats — `accessibility-reviewer`, `visual-reviewer` — carry **no** carve-out: for them the ban is total, because a finding they file reads as an a11y verdict whatever it cites. Recording measured ratios in a token ledger is likewise not covered by this block, and neither is the designer's APCA judgement of a pair, recorded there as its Lc (`skills/design-system/SKILL.md`): that is the design deciding, and the system documenting decisions already taken (`${CLAUDE_PLUGIN_ROOT}/references/ui-practice.md` → *Contrast*).
 
-**Tailored slots**: the host sentence. `accessibility-reviewer` and the `skills/accessibility-review/SKILL.md` skill additionally name **1.4.3 / 1.4.11 as unassessed** in their output, so a clean run is never read as a full-AA claim — that naming is theirs alone and is not part of this block.
+**Tailored slots**: the host sentence. `accessibility-reviewer` and the `skills/accessibility-review/SKILL.md` skill additionally name **1.4.3 / 1.4.11 / 2.4.11 / 2.4.13 as unassessed** in their output, so a clean run is never read as a full-AA claim — that naming is theirs alone and is not part of this block.
 
 ## Block E — the token-vocabulary bullet
 
