@@ -72,7 +72,7 @@ A grid of pairs, each rendered as the surface with "Aa" in its foreground color,
 | `destructive` on `background`         | Yes          |
 | Each extra text token on `background` | When defined |
 
-Contrast follows the repo's design system. When its `.claude/CLAUDE.md` › `## Design system` or the DESIGN.md names APCA (`skills/design-system/SKILL.md`), show each pair as APCA Lc against that system's thresholds, in place of a WCAG 2 ratio or level, and report only pairs the design left unsettled. Otherwise: use `ColorPair` from the helpers. It measures contrast live and re-measures when the theme changes. Report any pair below 4.5:1 for body-size text, even when the DESIGN.md specifies it. A brand primary at 3:1 behind 14px labels is a real finding.
+When the repo's design system names APCA — in `.claude/CLAUDE.md` › `## Design system` or the DESIGN.md — label each pair with the APCA Lc its ledger records, and show no WCAG 2 ratio or level: `ColorPair` computes only WCAG, so it isn't used here. Report only a pair the ledger records no Lc for, as unsettled and the designer's to judge (`skills/design-system/SKILL.md` › *Contrast is recorded*). Otherwise: use `ColorPair` from the helpers. It measures contrast live and re-measures when the theme changes. Report any pair below 4.5:1 for body-size text, even when the DESIGN.md specifies it. A brand primary at 3:1 behind 14px labels is a real finding.
 
 ### Palette
 
@@ -257,7 +257,7 @@ They import `cn` from `@/lib/utils`. Rewrite that path to the project's `utils` 
 ## Checklist
 
 - [ ] Every installed component renders (run the coverage script).
-- [ ] Color roles shown as pairs with contrast; any pair under 4.5:1 (under the design system's own APCA thresholds when it names APCA) is noted in the report.
+- [ ] Color roles shown as pairs with contrast; any pair under 4.5:1 is noted in the report (when the design system names APCA, any pair its ledger records no Lc for).
 - [ ] Type specimen covers every DESIGN.md type token, in real copy.
 - [ ] Radius and elevation ladders name the components that use each step.
 - [ ] Primitives have a state matrix; Button and fields include loading and invalid.
