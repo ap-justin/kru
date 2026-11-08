@@ -62,7 +62,7 @@ kru_home() { printf '%s' "${KRU_HOME:-$HOME/.kru}"; }
 kru_image_ignore_rules() {
   local dir ext
   for dir in 'proof/' 'shots/' '*-shots/' '_previous/' 'screenshots/'; do
-    for ext in png jpg jpeg webp gif; do printf '**/%s*.%s\n' "$dir" "$ext"; done
+    for ext in png jpg jpeg webp gif; do printf '**/%s**/*.%s\n' "$dir" "$ext"; done
   done
 }
 

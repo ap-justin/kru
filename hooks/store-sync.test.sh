@@ -133,7 +133,7 @@ check "a re-entered stop pushes the store" \
 # --- proof images stay out of the store -------------------------------------
 ignored() { git -C "$1" check-ignore -q "$2"; }
 check "a fresh store ignores proof images" \
-  'ignored "$h1/.kru" management/acme-web/pr-1/proof/a.png && ignored "$h1/.kru" shots/b.jpeg && ignored "$h1/.kru" x/login-shots/c.webp && ignored "$h1/.kru" _previous/d.gif && ignored "$h1/.kru" x/screenshots/e.jpg' "[$(cat "$h1/.kru/.gitignore")]"
+  'ignored "$h1/.kru" management/acme-web/pr-1/proof/a.png && ignored "$h1/.kru" management/acme-web/pr-1/proof/round4/a.png && ignored "$h1/.kru" shots/v1/b.jpeg && ignored "$h1/.kru" x/login-shots/c.webp && ignored "$h1/.kru" _previous/d.gif && ignored "$h1/.kru" x/screenshots/e.jpg' "[$(cat "$h1/.kru/.gitignore")]"
 check "an image outside those folders is not ignored" '! ignored "$h1/.kru" management/acme-web/brief/mock.png'
 
 h6="$sandbox/h6"; mkdir -p "$h6"
