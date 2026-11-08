@@ -181,10 +181,10 @@ The held state is `aria-disabled` and the handler ignores the press. `disabled` 
 ## A field's error sits in that field's column, also when a button shares its row
 
 **Trigger:** an input with an action on the same row — *Add*, *Save* and *Cancel*, a search box and its button.
-**Pattern:** the input and its error form one column, and the button sits beside that column. The error goes directly under the input, inside the column, aligned with the input's start edge.
+**Pattern:** the input and its error form one column, the error under the input and aligned with its start edge; the button sits beside that column.
 **Default it corrects:** the error rendered under the whole row, so a right-aligned error line lands under the button and reads as the button's.
 **Why:** an error is read against the box directly above it. Under the row, it sits closer to the action than to the field, and the operator looks for the fault in the wrong place.
-**Applies when:** any field shares a row with a control. A design system that settles error placement in writing wins.
+**Applies when:** the design system is silent on error placement. One that settles it in writing wins.
 
 ## A choice of real options is a select whose options carry their own mark
 
