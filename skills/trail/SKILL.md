@@ -6,7 +6,7 @@ user-invocable: false
 
 # Working a project in trail
 
-Trail is reached over MCP (`POST /mcp`, Streamable HTTP, stateless) or REST (`/api/v1`). The tool descriptions and `/api/v1/openapi.json` are the source for arguments; this file carries the order of operations and the traps they leave out. Not run against a live trail.
+Trail is reached over MCP (`POST /mcp`, Streamable HTTP, stateless) or REST (`/api/v1`). Arguments: the tool descriptions and `/api/v1/openapi.json`. Not run against a live trail.
 
 ## Connect once
 - Get the trail URL and **your own bot key** from whoever runs trail. The key is the author on every write, so one key belongs to one bot; a shared key credits your work to someone else.
@@ -29,7 +29,6 @@ Every create and `post_status_update` takes an `idempotency_key`. Derive it from
 `post_status_update` with `health` (`on_track`, `at_risk`, `off_track`), keyed per project per day as above, so a rerun routine posts once.
 
 ## One-time Linear import
-Do these in order.
 1. **Choose the project key first.** An issue whose `externalRef` is in the target key's form (project `JUS`, ref `JUS-187`) keeps its number; the rest are numbered after the highest kept. Keys are unique across trail and fixed after import, so only one project can take a Linear team key. A second project from the same team gets new numbers and its old `JUS-187` references stop resolving.
 2. **Read the whole Linear project**: every page until none remain, archived issues included if they come over, each with state name and state type, its comments, and the project's status updates.
 3. **Build one payload and send it.** `externalRef` is the Linear identifier. Send `statusType` (Linear `state.type`) on every issue; custom states like In Review map only through it. Map health `onTrack`/`atRisk`/`offTrack` to `on_track`/`at_risk`/`off_track`. Over 16 MiB, split by issue across calls with the same project fields and key.
