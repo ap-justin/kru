@@ -65,7 +65,7 @@ copy_newer() {
 # brings back a line one side deleted whenever the other appended beside it
 seed_defaults() {
   [ -f "$home/.gitignore" ] || printf '%s\n' '# session-lived hook state' 'audit/' 'lead-gate/' 'tmp/' '.DS_Store' > "$home/.gitignore"
-  # proof images stay out of the store, on a store seeded before the rule too
+  # unguarded, so a store seeded before the image rules gains them too
   kru_ignore_images "$home/.gitignore"
   [ -f "$home/.gitattributes" ] || printf '%s\n' \
     '# line files: both sides of a concurrent append land, and a deletion holds' \

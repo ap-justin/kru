@@ -25,7 +25,7 @@ One 500 is not the app's: a workspace package's new `exports` entry doesn't reac
 
 ### Proof images are never committed
 
-A screenshot or other image taken as proof or review evidence is written outside the checkout, to `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" path tmp/<run>/<name>.png`, and is never `git add`ed in a product repo or the store. It reaches the PM attached to a PR comment, or in the review's report. Design references a brief needs (competitor refs, mockups) are not proof; they live where the brief puts them.
+A screenshot or other image taken as proof or review evidence is written outside the checkout, to the path `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" path tmp/<run>/<name>.png` prints, and is never `git add`ed in a product repo or the store. It reaches the PM attached to a PR comment, or in the review's report. Design references a brief needs (competitor refs, mockups) are not proof; they live where the brief puts them.
 
 ## 3. Set a breakpoint with `emulate`, and carry every override on every call
 

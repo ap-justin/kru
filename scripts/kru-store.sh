@@ -56,9 +56,9 @@ kru_is_cloud() { [ "${CLAUDE_CODE_REMOTE:-}" = "true" ]; }
 
 kru_home() { printf '%s' "${KRU_HOME:-$HOME/.kru}"; }
 
-# the ignore rules that keep proof images out of every store root: a screenshot
-# taken as evidence goes to `tmp/` (skills/local-browser/SKILL.md), and an image
-# a run drops in a folder of the store's own never gets committed
+# the ignore rules that keep proof images out of every store root. evidence
+# belongs in `tmp/` (skills/local-browser/SKILL.md); these catch an image a run
+# drops in a proof or shots folder inside the store anyway
 kru_image_ignore_rules() {
   local dir ext
   for dir in 'proof/' 'shots/' '*-shots/' '_previous/' 'screenshots/'; do
