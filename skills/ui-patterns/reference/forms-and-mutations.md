@@ -178,6 +178,14 @@ The held state is `aria-disabled` and the handler ignores the press. `disabled` 
 **Why:** one strip with two occupants swaps hint for error and shifts the layout. The hint is tied to the control with `aria-describedby` (entry above).
 **Applies when:** the field has a hint. A field with none is label, control, error.
 
+## A field's error sits in that field's column, also when a button shares its row
+
+**Trigger:** an input with an action on the same row — *Add*, *Save* and *Cancel*, a search box and its button.
+**Pattern:** the input and its error form one column, the error under the input and aligned with its start edge; the button sits beside that column.
+**Default it corrects:** the error rendered under the whole row, so a right-aligned error line lands under the button and reads as the button's.
+**Why:** an error is read against the box directly above it. Under the row, it sits closer to the action than to the field, and the operator looks for the fault in the wrong place.
+**Applies when:** the design system doesn't settle error placement in writing.
+
 ## A choice of real options is a select whose options carry their own mark
 
 **Trigger:** a list of options that each have a logo or icon of their own — payment methods, providers, carriers.
