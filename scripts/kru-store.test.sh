@@ -122,6 +122,9 @@ is "refusals is cross-project" "$home/.kru/refusals.jsonl"
 run "$repo" path patterns/card-grid
 is "a pattern is cross-project" "$home/.kru/patterns/card-grid.md"
 
+run "$repo" path tmp/proof/pr-1
+is "a proof-image folder is cross-project tmp" "$home/.kru/tmp/proof/pr-1"
+
 run "$repo" path audit/sess-1
 is "the audit ledger is cross-project" "$home/.kru/audit/sess-1.jsonl"
 
@@ -152,6 +155,20 @@ is "agent memory follows the store repo on a cloud vm" "$home/.kru/management/ac
 run "$repo" path nope
 report "an unknown logical name is a usage error" \
   "$([ "$code" = 64 ] && echo true || echo false)" "exit $code: $out"
+
+# --- proof images stay out of the in-branch root ----------------------------
+cloud_repo="$sandbox/cloud-repo"; mkdir -p "$cloud_repo" && git -C "$cloud_repo" init -q
+resolve_cloud() { (cd "$cloud_repo" && env -u KRU_HOME -u KRU_STORE_REPO -u KRU_PROJECT_STORE HOME="$home" CLAUDE_CODE_REMOTE=true bash "$store" "$@" 2>&1); }
+out=$(resolve_cloud project)
+cg="$cloud_repo/.kru"
+report "the in-branch root ignores proof images from the first resolve" \
+  "$([ "$out" = "$cg" ] && git -C "$cloud_repo" check-ignore -q .kru/plan/x/proof/a.png && git -C "$cloud_repo" check-ignore -q .kru/shots/b.jpg && git -C "$cloud_repo" check-ignore -q .kru/x/login-shots/c.webp && git -C "$cloud_repo" check-ignore -q .kru/_previous/d.gif && git -C "$cloud_repo" check-ignore -q .kru/issues/screenshots/e.png && echo true || echo false)" "got [$out] [$(cat "$cg/.gitignore" 2>&1)]"
+report "a plan file under the in-branch root stays committable" \
+  "$(! git -C "$cloud_repo" check-ignore -q .kru/plan/x/brief.md && echo true || echo false)" ""
+printf '%s\n' 'custom/' >> "$cg/.gitignore"
+resolve_cloud project >/dev/null; resolve_cloud project >/dev/null
+report "a later resolve keeps a hand-added rule and repeats no rule" \
+  "$(grep -qx 'custom/' "$cg/.gitignore" && [ -z "$(sort "$cg/.gitignore" | uniq -d)" ] && echo true || echo false)" "[$(cat "$cg/.gitignore")]"
 
 # --- where: the line a skill reports ----------------------------------------
 run "$repo" where

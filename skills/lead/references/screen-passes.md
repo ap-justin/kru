@@ -26,7 +26,7 @@ Without mockups in the brief, the seat returns that spec match cannot run; you s
 Three things bound the batch:
 
 - **Cost** — `visual-reviewer` drives a browser for minutes; run on slices that render, with explicit pages and spec pointers.
-- **A report path, named per seat** — transcripts and screenshots land there; the return is a capped fix list plus pointer.
+- **A report path, named per seat** — transcripts and screenshots land there, and the path sits outside the checkout (`skills/local-browser/SKILL.md` → *Proof images are never committed*); the return is a capped fix list plus pointer.
 - **Run the suite first on a token-shaped defect** — literals and off-scale values belong in the repo gate, not the browser.
 
 ## The user's passes

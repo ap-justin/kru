@@ -32,7 +32,7 @@ has already moved.
 | | Cross-project root | Project root |
 |---|---|---|
 | default | `~/.kru` | `<cross-project root>/management/<project-slug>` |
-| cloud session (`CLAUDE_CODE_REMOTE=true`) | `~/.kru` — session-lived | **`<repo>/.kru`**, and it ships in the branch |
+| cloud session (`CLAUDE_CODE_REMOTE=true`) | `~/.kru` — session-lived | **`<repo>/.kru`**, and it ships in the branch; resolving it writes `.kru/.gitignore` with the proof-image rules |
 | `KRU_STORE_REPO` set, any surface | `~/.kru`, a checkout of that repo | under it, as the default row — cloud included |
 | `KRU_HOME` set | that path, on every surface | under it, as the default row |
 | `KRU_PROJECT_STORE` set | — | that path |

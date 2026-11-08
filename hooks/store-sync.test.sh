@@ -130,6 +130,23 @@ stdin='{"session_id":"sess-re","stop_hook_active":true}' run "$h1" stop
 check "a re-entered stop pushes the store" \
   '[ "$(remote_has management/acme-web/plan/checkout/reentered.md)" = reentered ]' "[$out]"
 
+# --- proof images stay out of the store -------------------------------------
+ignored() { git -C "$1" check-ignore -q "$2"; }
+check "a fresh store ignores proof images" \
+  'ignored "$h1/.kru" management/acme-web/pr-1/proof/a.png && ignored "$h1/.kru" shots/b.jpeg && ignored "$h1/.kru" x/login-shots/c.webp && ignored "$h1/.kru" _previous/d.gif && ignored "$h1/.kru" x/screenshots/e.jpg' "[$(cat "$h1/.kru/.gitignore")]"
+check "an image outside those folders is not ignored" '! ignored "$h1/.kru" management/acme-web/brief/mock.png'
+
+h6="$sandbox/h6"; mkdir -p "$h6"
+run "$h6" start
+printf '%s\n' 'audit/' 'proof/' > "$h6/.kru/.gitignore"
+run "$h6" start
+check "an existing .gitignore keeps its lines and gains the missing image rules" \
+  'grep -qx "audit/" "$h6/.kru/.gitignore" && grep -qx "proof/" "$h6/.kru/.gitignore" && ignored "$h6/.kru" management/acme-web/pr-1/proof/a.png && ignored "$h6/.kru" x/_previous/d.gif' "[$(cat "$h6/.kru/.gitignore")]"
+before=$(cat "$h6/.kru/.gitignore")
+run "$h6" start
+check "a second run adds nothing" '[ "$(cat "$h6/.kru/.gitignore")" = "$before" ]' "[$(cat "$h6/.kru/.gitignore")]"
+check "no rule is written twice" '[ -z "$(sort "$h6/.kru/.gitignore" | uniq -d)" ]' "[$(sort "$h6/.kru/.gitignore" | uniq -d)]"
+
 # --- fail soft --------------------------------------------------------------
 h3="$sandbox/h3"; mkdir -p "$h3"
 run "$h3" start KRU_STORE_REPO="$sandbox/missing.git"
