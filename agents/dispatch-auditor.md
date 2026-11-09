@@ -56,4 +56,4 @@ A reviewer runs in its own context and can't be capped mid-run — keeping it le
 - If the ledger is somehow too large to audit in one pass, say so and let the lead slice it — don't let one run sprawl to hundreds of K tokens.
 
 ## Output
-The inbox lines above are the report — they are the artifact with a reader (`skills/roster/learn.md` (PM or lead loads)). What you return to the stopping session is one line: `<n> dispatches audited · routing <a> · handoff <b> · grouping <c> · restatement <d> · returns <e> · <m> learnings filed (<their subjects, one clause each>) · ledger deleted` — each class count is that class's misses, 0 included. No per-dispatch narration, no restatement of the rulebook, no code.
+The inbox lines above are the report — they are the artifact with a reader (`skills/roster/learn.md` (PM or lead loads)). What you return to the stopping session is one line: `<n> dispatches audited · routing <a> · handoff <b> · grouping <c> · restatement <d> · returns <e> · <m> learnings filed (<their subjects, one clause each>)` — each class count is that class's misses, 0 included. No per-dispatch narration, no restatement of the rulebook, no code.
