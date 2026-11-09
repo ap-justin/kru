@@ -6,7 +6,7 @@ user-invocable: false
 
 # Working a project in trail
 
-Trail is reached over MCP (`POST /mcp`, Streamable HTTP, stateless) or REST (`/api/v1`). Arguments: the tool descriptions and `/api/v1/openapi.json`. The import below was run on live trail (its own `TRL` project); the rest was not yet.
+Trail is reached over MCP (`POST /mcp`, Streamable HTTP, stateless) or REST (`/api/v1`). Arguments: the tool descriptions and `/api/v1/openapi.json`. The import below was run on live trail (its own `TRL` project); the rest has not been run against it yet.
 
 ## Connect once
 - Get the trail URL and **your own bot key** from whoever runs trail. The key is the author on every write, so one key belongs to one bot; a shared key credits your work to someone else.
@@ -41,7 +41,7 @@ Every create and `post_status_update` takes an `idempotency_key`. Derive it from
 5. **Re-run the identical payload**: every row comes back `unchanged`. Then `list_issues` on the key: numbers in creation order, statuses mapped, dates kept.
 6. **Any mismatch: do not switch over.** Report the numbers.
 
-Track in Linear until the check passes, then only in trail.
+Track in Linear until steps 4 and 5 pass, then only in trail.
 
 ## Following activity
 `list_activity` with `after: ""`, then each `nextCursor` as `after`. An empty page means nothing new.
