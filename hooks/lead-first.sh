@@ -1,7 +1,7 @@
 #!/bin/bash
-# sessionstart (startup|clear|resume|compact — a /clear starts a new session the
-# gate re-arms on, and a resumed or compacted one has lost the reminder its
-# startup line gave): tell the session to load its entry contract — the lead's
+# sessionstart (startup|clear|resume|compact|fork — a /clear or a
+# --fork-session resume starts a new session the gate re-arms on, and a resumed
+# or compacted one has lost the reminder its startup line gave): tell the session to load its entry contract — the lead's
 # to build, the designer's to design — before its first tool call, so
 # `require-lead.sh` rarely has to block. the block is the backstop and costs a round trip: under
 # a harness with its own approval hook, that hook has already held the blocked

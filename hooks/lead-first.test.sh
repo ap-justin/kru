@@ -72,7 +72,7 @@ if [ "$code" -eq 0 ] && printf '%s' "$out" | grep -qF 'kru:lead'; then pass=$((p
 
 # registered under a matcher that includes every way a session starts or goes on
 # (the hook ignores .source, so the matcher is the only place either is decided)
-for src in startup clear resume compact; do
+for src in startup clear resume compact fork; do
   if jq -e --arg s "$src" '[.hooks.SessionStart[] | select((.matcher // "") | split("|") | index($s)) | .hooks[].command | select(contains("lead-first.sh"))] | length == 1' "$root/hooks/hooks.json" >/dev/null 2>&1; then
     pass=$((pass + 1)); else fail=$((fail + 1)); echo "FAIL: hooks.json does not register lead-first.sh under $src"; fi
 done
