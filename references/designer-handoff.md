@@ -29,9 +29,9 @@ Sweep every frame for these before the final message:
 
 ## Canvas and the bundled Claude Code `design` skill (designer loads)
 
-Invoke the bundled Claude Code `design` skill (designer loads) for artboards and publish:
-
 **No `design` skill and no doop canvas:** the bundled skill needs Claude Code v2.1.234 or later on a Pro, Max, Team or Enterprise plan (Enterprise: an owner enables it), and `disableBundledSkills` turns it off ([changelog](https://code.claude.com/docs/en/whats-new/2026-w34), [artifacts](https://code.claude.com/docs/en/artifacts)). A session with neither it nor a doop canvas to draw on stops before the first frame and tells the PM in the final message that the design needs one of the two; it does not substitute loose HTML or PNGs for mockups.
+
+Invoke the bundled Claude Code `design` skill (designer loads) for artboards and publish:
 
 - **Directions at bootstrap, screen mockups after** — 2–4 genuinely different directions when the look is unsettled; compose from real parts once a system exists.
 - Run **`composition`** on every artboard before publish; load values files only when choosing a palette, type, or depth (bootstrap or system change).
