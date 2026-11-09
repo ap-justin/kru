@@ -4,7 +4,8 @@
 # exists — posttooluse on the dispatch fires at launch for a background seat,
 # with nothing to read — so the check lives here. a seat stopping without the
 # line is kept running once and asked for it; one that still stops without it
-# is logged to the session ledger for dispatch-auditor. fail open everywhere.
+# is logged to the session ledger for dispatch-auditor. dispatch-auditor
+# stopping deletes that ledger. fail open everywhere.
 command -v jq >/dev/null 2>&1 || exit 0
 plugin_root="${1:-$CLAUDE_PLUGIN_ROOT}"
 [ -d "$plugin_root/agents" ] || exit 0
@@ -14,7 +15,13 @@ input=$(cat) || exit 0
 seat=$(printf '%s' "$input" | jq -r '.agent_type // empty' 2>/dev/null)
 seat="${seat#kru:}"
 [ -z "$seat" ] && exit 0
-[ "$seat" = "dispatch-auditor" ] && exit 0
+# the auditor stopping is the audit's completion mark: the ledger's absence is
+# what the Stop nudge reads as audited, and a hook deletes it without a prompt
+if [ "$seat" = "dispatch-auditor" ]; then
+  sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
+  [ -n "$sid" ] && rm -f "$(kru_path "audit/$sid")" 2>/dev/null
+  exit 0
+fi
 [ -f "$plugin_root/agents/${seat}.md" ] || exit 0
 grep -q '^## The return pass' "$plugin_root/agents/${seat}.md" 2>/dev/null || exit 0
 

@@ -65,5 +65,22 @@ printf '%s\n' '{"type":"tool_use","input":{"message":"Return pass: whole slice"}
 stop c1 "kru:$blocko" "" false "$tp"
 quiet "the line found in the seat's own transcript lets go" c1
 
+# the auditor stopping deletes its session ledger; another seat's stop leaves it
+mkdir -p "$audit"
+printf '%s\n' '{"seat":"x"}' > "$audit/d1.jsonl"
+stop d1 "kru:dispatch-auditor" "1 dispatches audited"
+[ "$code" -eq 0 ] && [ -z "$out" ] && [ ! -e "$audit/d1.jsonl" ] && ok=true || ok=false
+report "dispatch-auditor stopping deletes its session ledger" "$ok" "exit $code, out: $out, ledger present: $([ -e "$audit/d1.jsonl" ] && echo yes || echo no)"
+
+printf '%s\n' '{"seat":"x"}' > "$audit/d2.jsonl"
+printf '%s\n' '{"seat":"x"}' > "$audit/d3.jsonl"
+stop d2 "kru:$blocko" "Return pass: read the slice whole"
+stop d2 "kru:$plain" "findings: none"
+[ -e "$audit/d2.jsonl" ] && [ -e "$audit/d3.jsonl" ] && ok=true || ok=false
+report "another seat's stop leaves the session ledger in place" "$ok" "d2 present: $([ -e "$audit/d2.jsonl" ] && echo yes || echo no)"
+stop d2 "kru:dispatch-auditor" "done"
+[ ! -e "$audit/d2.jsonl" ] && [ -e "$audit/d3.jsonl" ] && ok=true || ok=false
+report "the auditor's stop deletes only its own session's ledger" "$ok" "d3 present: $([ -e "$audit/d3.jsonl" ] && echo yes || echo no)"
+
 printf '%d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]

@@ -45,8 +45,8 @@ Append to the file `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" path inbox
 
 Lane is `[workflow]`, source is `agent:dispatch-auditor`, project is the ledger's `cwd`, date is today. `skills/roster/learn.md` (PM or lead loads) sweeps, dedupes, and decides the promotion; the user reviews its diff before any commit.
 
-## Closeout — delete the ledger
-`rm` the ledger file. The inbox line is the durable record, you are the ledger's only reader, and the Stop hook reads the file's absence as *audited* — leaving it triggers the nudge again. **The audit is not done until the ledger is gone**, findings or none.
+## Closeout — the ledger goes with you
+The SubagentStop hook (`hooks/log-return.sh`) removes the ledger when you stop; your closeout is the inbox lines and the one-line return. The inbox line is the durable record, and the ledger's absence is how the Stop hook reads *audited* — a ledger left standing triggers the nudge again.
 
 ## Context hygiene (stay lean)
 A reviewer runs in its own context and can't be capped mid-run — keeping it lean is on you, and you read far more than you change (you change nothing but the store).
