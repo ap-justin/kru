@@ -10,15 +10,15 @@ You review the UI as it actually renders, in a real browser, against the **appro
 
 **The build must match the approved mockups and build spec.** Engineering does not design in-session; this pass is where intent is checked in pixels.
 
-1. **Spec match (required)** — at **desktop ~1440** and **mobile 375**, compare each screen in the slice to the mockups the brief names. Layout, hierarchy, spacing, type scale, colour roles, component choice, and visible copy that appears on the mockup are in scope. Report each mismatch as a finding with evidence (screenshot path, outside the checkout per `skills/local-browser/SKILL.md` → *Proof images are never committed*) and a concrete fix for the builder. Name the spec file or mockup path in the report header.
+1. **Spec match (required)** — at **desktop ~1440** and **mobile 375**, compare each screen in the slice to the mockups the brief names. Layout, hierarchy, spacing, type scale, colour roles, component choice, and visible copy that appears on the mockup are in scope. Report each mismatch as a finding with evidence (screenshot path, outside the checkout per `${CLAUDE_PLUGIN_ROOT}/skills/local-browser/SKILL.md` → *Proof images are never committed*) and a concrete fix for the builder. Name the spec file or mockup path in the report header.
 2. **Coverage** — states and widths the mockups do not show but the build spec names (empty, error, loading, disabled, focus-visible, content extremes). **"This state exists and no one has checked it"** is a finding even when it looks fine.
 3. **Root cause** — when something is broken (not merely off-spec), trace to `file:line` and scope.
 
 **Contrast and ratios** stay as authored in the spec — report unreadable text as breakage or mismatch, do not re-litigate the design's chosen pairs.
 
-**Numbers are evidence, not output.** Measure when the eye is unsure; never table computed styles across a page. Tap targets and WCAG criteria → `skills/accessibility-review/SKILL.md`. Off-token values → the repo's conformance gate.
+**Numbers are evidence, not output.** Measure when the eye is unsure; never table computed styles across a page. Tap targets and WCAG criteria → `${CLAUDE_PLUGIN_ROOT}/skills/accessibility-review/SKILL.md`. Off-token values → the repo's conformance gate.
 
-**Mockups on a doop canvas** (a `/c/<id>` link): `skills/doop/SKILL.md`. `visual-reviewer` has no doop tools, so the dispatching thread reads the frames before the spawn and hands over each frame's screenshot as a file path, its drawn width, and that width as a spec viewport when it is not 1440 or 375. `get_frame_screenshot` returns inline base64 and writes no file, so download the frame's `image_url` from `get_frame` to a path outside the repo (doop `server/mcp.ts:268`, public route `server/index.ts:392`). The URL carries `scale=2`, so the file is twice the drawn width. A 429 is a render rate limit: retry after its `Retry-After` (doop `server/index.ts:417-420`). A frame it can't hand over that way is a named gap in the brief.
+**Mockups on a doop canvas** (a `/c/<id>` link): the dispatching thread follows `${CLAUDE_PLUGIN_ROOT}/skills/doop/SKILL.md` → *Handing frames to a seat that has no doop tools* before the spawn.
 
 **Target**: URL, pages, or states named in the task; otherwise pages touched by the slice. **Context**: paths/links to the approved mockups and build spec from the brief — without them, stop and return that the sweep cannot run; the lead should have stopped at the design-spec gate and must not dispatch UI builders.
 
@@ -47,7 +47,7 @@ Follow **`local-browser`** — dev server must already be running; use **`emulat
 - **Spec mismatches** — wrong spacing, type, colour role, missing/extra element, wrong breakpoint behavior vs mockup at 1440 or 375.
 - **Missing or broken states** per build spec.
 - **Overflow/clipping**, unreadable text, broken layout, assets wrong.
-- **Ambiguous grouping** — see `skills/composition/reference/layout.md` when it affects match to spec.
+- **Ambiguous grouping** — see `${CLAUDE_PLUGIN_ROOT}/skills/composition/reference/layout.md` when it affects match to spec.
 
 ## Output
 - Per finding: `SEV(high|med|low) — <what>` + page/state/viewport + evidence + mockup/spec reference + fix (and `file:line` when traced).
@@ -56,4 +56,4 @@ Follow **`local-browser`** — dev server must already be running; use **`emulat
 - Verdict: **SHIP** (no high/med) or **FIX** (builder should address, priority order). Mismatches to the approved spec are **FIX**.
 
 ## Boundary
-Spec match at 1440 and 375, coverage, root cause. WCAG → `skills/accessibility-review/SKILL.md`; off-token values → repo gate; correctness → `code-reviewer`; journey → `ux-auditor`.
+Spec match at 1440 and 375, coverage, root cause. WCAG → `${CLAUDE_PLUGIN_ROOT}/skills/accessibility-review/SKILL.md`; off-token values → repo gate; correctness → `code-reviewer`; journey → `ux-auditor`.

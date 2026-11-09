@@ -39,6 +39,10 @@ assistant_read_path() { jq -nc --arg p "$1" '{type:"assistant", message:{content
 { user "design it"; assistant_read "$root/skills/designer-x/SKILL.md"; tool_result; } > "$tx/designer-x-read.jsonl"
 { user "design it"; assistant_read "$root/myskills/lead/SKILL.md"; tool_result; } > "$tx/prefix-read.jsonl"
 { user "design it"; assistant_read "/repo/.claude/skills/lead/SKILL.md"; tool_result; } > "$tx/project-lead-read.jsonl"
+{ user "build it"; assistant_read "/repo/skills/designer/SKILL.md"; tool_result; } > "$tx/repo-designer-read.jsonl"
+{ user "build it"; assistant_read "/repo/.agents/skills/designer/SKILL.md"; tool_result; } > "$tx/agents-designer-read.jsonl"
+{ user "build it"; assistant_read "/other-plugin/skills/lead/SKILL.md"; tool_result; } > "$tx/other-plugin-lead-read.jsonl"
+{ user "build it"; assistant_read "$root/.claude/skills/lead/SKILL.md"; tool_result; } > "$tx/root-claude-lead-read.jsonl"
 # touching the file is not loading it: only a Read counts
 assistant_tool() { jq -nc --arg n "$1" --arg p "$2" '{type:"assistant", message:{content:[{type:"tool_use", name:$n, input:{file_path:$p}}]}}'; }
 { user "build it"; assistant_tool Write "$root/skills/lead/SKILL.md"; tool_result; } > "$tx/lead-write.jsonl"
@@ -81,7 +85,7 @@ check() {
   input=$(jq -nc --arg s "$sid" --arg t "$tool" --arg c "$cmd" --arg p "$transcript" \
     '{session_id:$s, transcript_path:$p, tool_name:$t,
       tool_input:(if $t == "Bash" then {command:$c} elif $t == "Skill" then {skill:"kru:lead"} else {file_path:"/x/a.ts"} end)}')
-  out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_ROOT \
+  out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_STORE_REPO -u CLAUDE_CODE_REMOTE -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_ROOT \
     HOME="$home" "$@" bash "$hook" "$root" 2>&1)
   code=$?
   local ok=true
@@ -133,6 +137,11 @@ check refuse Edit "" "$tx/prose.jsonl"
 check refuse Edit "" "$tx/prose-read-mention.jsonl"
 check refuse Edit "" "$tx/tool-result-path.jsonl"
 check refuse Edit "" "$tx/project-lead-read.jsonl"
+# another skill of the same name, wherever it sits outside the plugin, is no load
+check refuse Edit "" "$tx/repo-designer-read.jsonl"
+check refuse Edit "" "$tx/agents-designer-read.jsonl"
+check refuse Edit "" "$tx/other-plugin-lead-read.jsonl"
+check refuse Edit "" "$tx/root-claude-lead-read.jsonl"
 check refuse Edit "" "$tx/lead-write.jsonl"
 check refuse Edit "" "$tx/lead-edit.jsonl"
 for s in kru:designer-x kru:leader x-lead other:kru:designer; do
@@ -143,8 +152,44 @@ check refuse Edit "" "$tx/leader-cmd-then-turn.jsonl"
 
 # the block message points at both entries
 msg=$(jq -nc --arg p "$p" '{session_id:"msg", transcript_path:$p, tool_name:"Edit", tool_input:{}}' |
-  env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE HOME="$home" bash "$hook" "$root" 2>&1)
+  env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_STORE_REPO -u CLAUDE_CODE_REMOTE -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE HOME="$home" bash "$hook" "$root" 2>&1)
 if printf '%s' "$msg" | grep -qF 'kru:designer'; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL: block message does not name kru:designer\n  %s\n' "$msg"; fi
+
+# the Read of the contract file is itself exempt, so the instruction the block
+# and the SessionStart line give can be followed; any other Read is gated
+read_call() { # <expect> <path> <sid> [root]
+  local expect=$1 path=$2 sid=$3 r=${4:-$root} out code
+  out=$(jq -nc --arg s "$sid" --arg p "$p" --arg f "$path" '{session_id:$s, transcript_path:$p, tool_name:"Read", tool_input:{file_path:$f}}' |
+    env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_STORE_REPO -u CLAUDE_CODE_REMOTE -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_ROOT \
+    HOME="$home" bash "$hook" "$r" 2>&1); code=$?
+  if { [ "$expect" = allow ] && [ "$code" -eq 0 ] && [ -z "$out" ]; } || { [ "$expect" = refuse ] && [ "$code" -eq 2 ]; }; then pass=$((pass + 1)); else
+    fail=$((fail + 1)); printf 'FAIL (%s, exit %s): Read %s\n  %s\n' "$expect" "$code" "$path" "$out"; fi
+}
+read_call allow "$root/skills/lead/SKILL.md" rd1
+read_call allow "$root/skills/designer/SKILL.md" rd2
+read_call refuse "/repo/skills/lead/SKILL.md" rd3
+read_call refuse "/repo/.claude/skills/lead/SKILL.md" rd4
+read_call refuse "$root/skills/composition/SKILL.md" rd5
+
+# a plugin root that is a version dir: a Read in a sibling version (the plugin
+# updated mid-session) counts, a sibling plugin's does not
+cache="$sandbox/cache/kru"
+for v in kru/0.1.0 kru/0.2.0; do
+  mkdir -p "$cache/$v/skills/lead" "$cache/$v/skills/designer" && : > "$cache/$v/skills/lead/SKILL.md" && ln -s "$root/scripts" "$cache/$v/scripts"
+done
+mkdir -p "$cache/other/skills/lead"
+{ user "build it"; assistant_read "$cache/kru/0.1.0/skills/lead/SKILL.md"; tool_result; } > "$tx/old-version-read.jsonl"
+{ user "build it"; assistant_read "$cache/other/skills/lead/SKILL.md"; tool_result; } > "$tx/sibling-plugin-read.jsonl"
+read_call allow "$cache/kru/0.1.0/skills/lead/SKILL.md" rd6 "$cache/kru/0.2.0"
+read_call refuse "$cache/other/skills/lead/SKILL.md" rd7 "$cache/kru/0.2.0"
+for t in old-version-read:allow sibling-plugin-read:refuse; do
+  n=$((n + 1))
+  out=$(jq -nc --arg s "v$n" --arg p "$tx/${t%%:*}.jsonl" '{session_id:$s, transcript_path:$p, tool_name:"Edit", tool_input:{}}' |
+    env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_STORE_REPO -u CLAUDE_CODE_REMOTE -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_ROOT \
+    HOME="$home" bash "$hook" "$cache/kru/0.2.0" 2>&1); code=$?
+  if { [ "${t##*:}" = allow ] && [ "$code" -eq 0 ]; } || { [ "${t##*:}" = refuse ] && [ "$code" -eq 2 ]; }; then pass=$((pass + 1)); else
+    fail=$((fail + 1)); printf 'FAIL (%s, exit %s): transcript %s under a versioned root\n  %s\n' "${t##*:}" "$code" "${t%%:*}" "$out"; fi
+done
 
 # fires once per session: the block writes the mark, the retry passes
 check refuse Edit "" "$p" once
@@ -208,13 +253,13 @@ check refuse Edit "" "$tx/cmd-meta-then-turn.jsonl"
 # fail open: no transcript, no session, no lead skill under the root
 check allow Edit "" "$sandbox/missing.jsonl"
 input=$(jq -nc --arg p "$p" '{transcript_path:$p, tool_name:"Edit", tool_input:{}}')
-out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE HOME="$home" bash "$hook" "$root" 2>&1); code=$?
+out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_STORE_REPO -u CLAUDE_CODE_REMOTE -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE HOME="$home" bash "$hook" "$root" 2>&1); code=$?
 if [ "$code" -eq 0 ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (allow, exit %s): missing session_id\n  %s\n' "$code" "$out"; fi
 # a root with the store resolver but no lead skill: the plain transcript would be
 # gated, so a pass here is the skill check's
 bare="$sandbox/bareroot"; mkdir -p "$bare" && ln -s "$root/scripts" "$bare/scripts"
 input=$(jq -nc --arg p "$p" '{session_id:"noroot", transcript_path:$p, tool_name:"Edit", tool_input:{}}')
-out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_ROOT HOME="$home" bash "$hook" "$bare" 2>&1); code=$?
+out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_STORE_REPO -u CLAUDE_CODE_REMOTE -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_ROOT HOME="$home" bash "$hook" "$bare" 2>&1); code=$?
 if [ "$code" -eq 0 ] && [ -z "$out" ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (allow, exit %s): root without lead skill\n  %s\n' "$code" "$out"; fi
 
 
@@ -223,11 +268,11 @@ if [ "$code" -eq 0 ] && [ -z "$out" ]; then pass=$((pass + 1)); else fail=$((fai
 # silence is the resolver check's and not the skill check's
 noscripts="$sandbox/noscriptsroot"; mkdir -p "$noscripts/skills/lead" && : > "$noscripts/skills/lead/SKILL.md"
 input=$(jq -nc --arg p "$p" '{session_id:"noscripts", transcript_path:$p, tool_name:"Edit", tool_input:{}}')
-out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_ROOT HOME="$home" bash "$hook" "$noscripts" 2>&1); code=$?
+out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_STORE_REPO -u CLAUDE_CODE_REMOTE -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_ROOT HOME="$home" bash "$hook" "$noscripts" 2>&1); code=$?
 if [ "$code" -eq 0 ] && [ -z "$out" ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (allow, exit %s): root without store resolver\n  %s\n' "$code" "$out"; fi
 ln -s "$root/scripts" "$noscripts/scripts"
 input=$(jq -nc --arg p "$p" '{session_id:"noscripts-linked", transcript_path:$p, tool_name:"Edit", tool_input:{}}')
-out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_ROOT HOME="$home" bash "$hook" "$noscripts" 2>&1); code=$?
+out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_STORE_REPO -u CLAUDE_CODE_REMOTE -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_ROOT HOME="$home" bash "$hook" "$noscripts" 2>&1); code=$?
 if [ "$code" -eq 2 ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (refuse, exit %s): root with resolver and lead skill\n  %s\n' "$code" "$out"; fi
 
 printf '%d passed, %d failed\n' "$pass" "$fail"

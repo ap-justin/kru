@@ -30,9 +30,20 @@ plugin_root="${1:-$CLAUDE_PLUGIN_ROOT}"
 [ -f "$plugin_root/skills/lead/SKILL.md" ] || exit 0
 input=$(cat) || exit 0
 
-# the load itself is a Skill call — gating it would close the only door out
+# the load itself is a Skill call — gating it would close the only door out. so
+# is the Read of the contract file the block message and the SessionStart line
+# offer instead; read_lead_path below is the one test of "that file", shared
+# with the transcript scan
 tool=$(printf '%s' "$input" | jq -r '.tool_name // empty' 2>/dev/null)
 [ "$tool" = "Skill" ] && exit 0
+case "${plugin_root##*/}" in
+  [0-9]*.[0-9]*.[0-9]*) read_base=$(dirname "$plugin_root") ;;
+  *) read_base="$plugin_root" ;;
+esac
+read_lead_path='def contract_path($base): startswith($base) and test("(^|/)skills/(lead|designer)/SKILL\\.md$") and (test("/\\.(claude|agents)/skills/") | not);'
+if [ "$tool" = "Read" ]; then
+  [ "$(printf '%s' "$input" | jq -r --arg base "${read_base%/}/" "$read_lead_path"' (.tool_input.path? // .tool_input.file_path? // "") | contract_path($base)' 2>/dev/null)" = "true" ] && exit 0
+fi
 
 # a read-only bash command is an inspection, not a build
 if [ "$tool" = "Bash" ]; then
@@ -49,16 +60,18 @@ transcript=$(printf '%s' "$input" | jq -r '.transcript_path // empty' 2>/dev/nul
 # skills/lead/SKILL.md, or a /kru:lead slash command — never prose or a quoted
 # path alone. the designer contract (skills/designer/SKILL.md, /kru:designer)
 # passes the same three ways: a design session never builds, so the lead's
-# contract is not its precondition. a read matches whole path segments and never
-# a .claude/skills/ dir. a Skill load takes bare "lead", but the designer needs
-# the kru: prefix: "designer" is a common name for a repo's or user's own skill,
-# and loading that one is not loading this contract.
-lead_loaded=$(jq -rn --arg lead '(^|/)skills/(lead|designer)/SKILL\.md$' '
+# contract is not its precondition. a read matches whole path segments and sits
+# under the plugin root, or under a sibling version dir of it when the root is
+# one (.../kru/kru/<version>, so a mid-session update still counts): another
+# plugin's or a repo's skills/lead or skills/designer, a .claude/ or .agents/
+# skills dir included, is not this contract. a Skill load takes bare "lead",
+# but the designer needs the kru: prefix: "designer" is a common name for a
+# repo's or user's own skill, and loading that one is not loading this contract.
+lead_loaded=$(jq -rn --arg base "${read_base%/}/" "$read_lead_path"'
   def read_lead:
     .type == "assistant" and (.message.content | type) == "array" and
     any(.message.content[]?; .type == "tool_use" and .name == "Read" and
-      ((.input.path? // .input.file_path? // "") |
-        test($lead) and (test("/\\.claude/skills/") | not)));
+      ((.input.path? // .input.file_path? // "") | contract_path($base)));
   [inputs] | any(
     (.type == "assistant" and (.message.content | type) == "array" and
       any(.message.content[]?; .type == "tool_use" and .name == "Skill" and

@@ -2,6 +2,8 @@
 
 Read when a brief touches UI. The engineering lead checks for this **before** dispatching builders; it does not draft or approve design.
 
+`${CLAUDE_PLUGIN_ROOT}` below is the plugin's install dir: the directory above `references/`, when you `Read` this file rather than have it injected.
+
 ## What counts as a design spec
 
 An **approved design spec** is two parts the PM received from the designer (a separate bot or human) and attached to the brief:
@@ -11,14 +13,14 @@ An **approved design spec** is two parts the PM received from the designer (a se
 
 **Current state only.** One canvas and one spec, each describing the product as it is now; a change replaces the old frame and the old wording.
 
-Mockups on a doop canvas (a `/c/<id>` link): `skills/doop/SKILL.md`.
+Mockups on a doop canvas (a `/c/<id>` link): `${CLAUDE_PLUGIN_ROOT}/skills/doop/SKILL.md`.
 
 Optional but useful: motion dials, coverage-ledger gaps handed to the PM as builder slices.
 
 ## What engineering does with it
 
-- **Build** to the spec — the UI component builders implement components and screens; the token file and conformance gate stay the repo's (`references/ui-practice.md`, `references/ui-handoff.md`).
-- **Verify** — `visual-reviewer` compares the running UI to the mockups at 1440 and 375 and reports mismatches back to the builder (`skills/visual-review/SKILL.md`). `accessibility-reviewer` and `ux-auditor` run on the built UI as before.
+- **Build** to the spec — the UI component builders implement components and screens; the token file and conformance gate stay the repo's (`${CLAUDE_PLUGIN_ROOT}/references/ui-practice.md`, `${CLAUDE_PLUGIN_ROOT}/references/ui-handoff.md`).
+- **Verify** — `visual-reviewer` compares the running UI to the mockups at 1440 and 375 and reports mismatches back to the builder (`${CLAUDE_PLUGIN_ROOT}/skills/visual-review/SKILL.md`). `accessibility-reviewer` and `ux-auditor` run on the built UI as before.
 - **Gaps** — a value the approved spec does not cover is a **named gap** to the PM (with the token name it would need), not an invention in code.
 
 ## What is out of scope for the lead

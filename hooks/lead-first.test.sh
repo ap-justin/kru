@@ -17,7 +17,7 @@ check() {
   local expect=$1 label=$2; shift 2
   local out code ok=true ctx
   out=$(jq -nc '{session_id:"s", hook_event_name:"SessionStart", source:"startup", cwd:"/tmp"}' |
-    env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE \
+    env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_STORE_REPO -u CLAUDE_CODE_REMOTE -u CLAUDE_PLUGIN_ROOT -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE \
     HOME="$home" "$@" bash "$hook" "$root" 2>&1)
   code=$?
   [ "$code" -eq 0 ] || ok=false
@@ -52,30 +52,35 @@ check line "switches lifted"
 # no jq on PATH: only bash builtins and coreutils linked in
 bin="$sandbox/bin"; mkdir -p "$bin"
 for c in dirname cat env; do ln -s "$(command -v "$c")" "$bin/$c"; done
-out=$(printf '{}' | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE HOME="$home" PATH="$bin" "$(command -v bash)" "$hook" "$root" 2>&1); code=$?
+out=$(printf '{}' | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_STORE_REPO -u CLAUDE_CODE_REMOTE -u CLAUDE_PLUGIN_ROOT -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE HOME="$home" PATH="$bin" "$(command -v bash)" "$hook" "$root" 2>&1); code=$?
 if [ "$code" -eq 0 ] && [ -z "$out" ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (silent, exit %s): no jq\n  %s\n' "$code" "$out"; fi
 
 # fail open: a root with the store resolver but no lead skill. the same call
 # against the real root speaks, so the silence is the skill check's
 bare="$sandbox/bareroot"; mkdir -p "$bare" && ln -s "$root/scripts" "$bare/scripts"
-out=$(printf '{}' | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE HOME="$home" bash "$hook" "$bare" 2>&1); code=$?
+out=$(printf '{}' | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_STORE_REPO -u CLAUDE_CODE_REMOTE -u CLAUDE_PLUGIN_ROOT -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE HOME="$home" bash "$hook" "$bare" 2>&1); code=$?
 if [ "$code" -eq 0 ] && [ -z "$out" ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (silent, exit %s): root without lead skill\n  %s\n' "$code" "$out"; fi
 
 # fail open: a root with the lead skill but no store resolver. linking the
 # resolver in makes the same root speak, so the silence is the resolver check's
 noscripts="$sandbox/noscriptsroot"; mkdir -p "$noscripts/skills/lead" && : > "$noscripts/skills/lead/SKILL.md"
-out=$(printf '{}' | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE HOME="$home" bash "$hook" "$noscripts" 2>&1); code=$?
+out=$(printf '{}' | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_STORE_REPO -u CLAUDE_CODE_REMOTE -u CLAUDE_PLUGIN_ROOT -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE HOME="$home" bash "$hook" "$noscripts" 2>&1); code=$?
 if [ "$code" -eq 0 ] && [ -z "$out" ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (silent, exit %s): root without store resolver\n  %s\n' "$code" "$out"; fi
 ln -s "$root/scripts" "$noscripts/scripts"
-out=$(printf '{}' | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE HOME="$home" bash "$hook" "$noscripts" 2>&1); code=$?
+out=$(printf '{}' | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_STORE_REPO -u CLAUDE_CODE_REMOTE -u CLAUDE_PLUGIN_ROOT -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE HOME="$home" bash "$hook" "$noscripts" 2>&1); code=$?
 if [ "$code" -eq 0 ] && printf '%s' "$out" | grep -qF 'kru:lead'; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (line, exit %s): root with resolver and lead skill\n  %s\n' "$code" "$out"; fi
 
-# registered under a matcher that includes startup and clear (the hook ignores
-# .source, so the matcher is the only place either is decided)
-for src in startup clear; do
+# registered under a matcher that includes every way a session starts or goes on
+# (the hook ignores .source, so the matcher is the only place either is decided)
+for src in startup clear resume compact; do
   if jq -e --arg s "$src" '[.hooks.SessionStart[] | select((.matcher // "") | split("|") | index($s)) | .hooks[].command | select(contains("lead-first.sh"))] | length == 1' "$root/hooks/hooks.json" >/dev/null 2>&1; then
     pass=$((pass + 1)); else fail=$((fail + 1)); echo "FAIL: hooks.json does not register lead-first.sh under $src"; fi
 done
+
+# the registered command passes the plugin root as its argument, which the hook
+# reads before $CLAUDE_PLUGIN_ROOT
+if jq -e '[.hooks.SessionStart[].hooks[].command | select(contains("lead-first.sh")) | select(contains("\"${CLAUDE_PLUGIN_ROOT}\"") and endswith("\"${CLAUDE_PLUGIN_ROOT}\""))] | length == 1' "$root/hooks/hooks.json" >/dev/null 2>&1; then
+  pass=$((pass + 1)); else fail=$((fail + 1)); echo "FAIL: hooks.json does not pass the plugin root to lead-first.sh"; fi
 
 printf '%d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]

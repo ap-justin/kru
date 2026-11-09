@@ -1,6 +1,7 @@
 #!/bin/bash
-# sessionstart (startup|clear — /clear starts a new session the gate re-arms
-# on): tell the session to load its entry contract — the lead's to build, the
+# sessionstart (startup|clear|resume|compact — a /clear starts a new session the
+# gate re-arms on, and a resumed or compacted one has lost the reminder its
+# startup line gave): tell the session to load its entry contract — the lead's to build, the
 # designer's to design — before its first tool call, so `require-lead.sh`
 # rarely has to block. the block is the backstop and costs a round trip: under
 # a harness with its own approval hook, that hook has already held the blocked
@@ -8,6 +9,8 @@
 #
 # its own hook rather than a line in setup-nudge.sh, which exits early in the
 # plugin's repo and in a repo that already has a sheet — this must reach both.
+# the Read it offers is exempt in require-lead.sh, so following it never hits
+# the gate.
 #
 # silent under the gate's own switches, so it never asks for a load the gate
 # won't enforce.
