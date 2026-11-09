@@ -4,8 +4,7 @@
 # exists — posttooluse on the dispatch fires at launch for a background seat,
 # with nothing to read — so the check lives here. a seat stopping without the
 # line is kept running once and asked for it; one that still stops without it
-# is logged to the session ledger for dispatch-auditor. dispatch-auditor
-# stopping deletes that ledger. fail open everywhere.
+# is logged to the session ledger for dispatch-auditor. fail open everywhere.
 command -v jq >/dev/null 2>&1 || exit 0
 plugin_root="${1:-$CLAUDE_PLUGIN_ROOT}"
 [ -d "$plugin_root/agents" ] || exit 0
