@@ -14,7 +14,13 @@ input=$(cat) || exit 0
 seat=$(printf '%s' "$input" | jq -r '.agent_type // empty' 2>/dev/null)
 seat="${seat#kru:}"
 [ -z "$seat" ] && exit 0
-[ "$seat" = "dispatch-auditor" ] && exit 0
+# the auditor stopping is the audit's completion mark: the ledger's absence is
+# what the Stop nudge reads as audited, and a hook deletes it without a prompt
+if [ "$seat" = "dispatch-auditor" ]; then
+  sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
+  [ -n "$sid" ] && rm -f "$(kru_path "audit/$sid")" 2>/dev/null
+  exit 0
+fi
 [ -f "$plugin_root/agents/${seat}.md" ] || exit 0
 grep -q '^## The return pass' "$plugin_root/agents/${seat}.md" 2>/dev/null || exit 0
 

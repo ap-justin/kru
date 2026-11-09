@@ -45,8 +45,8 @@ Append to the file `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" path inbox
 
 Lane is `[workflow]`, source is `agent:dispatch-auditor`, project is the ledger's `cwd`, date is today. `skills/roster/learn.md` (PM or lead loads) sweeps, dedupes, and decides the promotion; the user reviews its diff before any commit.
 
-## Closeout — delete the ledger
-`rm` the ledger file. The inbox line is the durable record, you are the ledger's only reader, and the Stop hook reads the file's absence as *audited* — leaving it triggers the nudge again. **The audit is not done until the ledger is gone**, findings or none.
+## Closeout
+The SubagentStop hook (`hooks/log-return.sh`) removes the ledger when you stop, and its absence is how the Stop hook reads *audited*. The inbox line is the durable record; your closeout is those lines and the one-line return.
 
 ## Context hygiene (stay lean)
 A reviewer runs in its own context and can't be capped mid-run — keeping it lean is on you, and you read far more than you change (you change nothing but the store).
@@ -56,4 +56,4 @@ A reviewer runs in its own context and can't be capped mid-run — keeping it le
 - If the ledger is somehow too large to audit in one pass, say so and let the lead slice it — don't let one run sprawl to hundreds of K tokens.
 
 ## Output
-The inbox lines above are the report — they are the artifact with a reader (`skills/roster/learn.md` (PM or lead loads)). What you return to the stopping session is one line: `<n> dispatches audited · routing <a> · handoff <b> · grouping <c> · restatement <d> · returns <e> · <m> learnings filed (<their subjects, one clause each>) · ledger deleted` — each class count is that class's misses, 0 included. No per-dispatch narration, no restatement of the rulebook, no code.
+The inbox lines above are the report — they are the artifact with a reader (`skills/roster/learn.md` (PM or lead loads)). What you return to the stopping session is one line: `<n> dispatches audited · routing <a> · handoff <b> · grouping <c> · restatement <d> · returns <e> · <m> learnings filed (<their subjects, one clause each>)` — each class count is that class's misses, 0 included. No per-dispatch narration, no restatement of the rulebook, no code.

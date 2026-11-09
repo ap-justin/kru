@@ -14,7 +14,7 @@ input=$(cat) || exit 0
 seat=$(printf '%s' "$input" | jq -r '.tool_input.subagent_type // empty' 2>/dev/null)
 seat="${seat#kru:}"
 [ -z "$seat" ] && exit 0
-# the auditor's own dispatch would re-create the ledger it just deleted
+# the auditor's own dispatch would re-create the ledger its stop deletes
 [ "$seat" = "dispatch-auditor" ] && exit 0
 # only team seats are auditable against the lead contract
 [ -f "$plugin_root/agents/${seat}.md" ] || exit 0

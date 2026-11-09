@@ -165,7 +165,7 @@ The rows spell the default root; substitute what `home` printed when it differs.
 |---|---|
 | `"additionalDirectories": ["~/.kru"]` | reads outside the working dir; under `acceptEdits` it also auto-approves `mkdir`/`touch`/`rm`/`mv`/`cp` there |
 | `Read(~/.kru/**)` · `Edit(~/.kru/**)` (covers Write too) | a todo appended, a defect file written, a brief rewritten |
-| `Bash(rm <home>/.kru/audit/*)` · `Bash(rm <home>/.kru/management/*/issues/*)` | the two deletions the contract *mandates* — the audit closeout (`agents/dispatch-auditor.md`) and the defect file a landed fix closes (`skills/lead/references/reconcile.md`) |
+| `Bash(rm <home>/.kru/management/*/issues/*)` | the deletion the contract *mandates* — the defect file a landed fix closes (`skills/lead/references/reconcile.md`) |
 
 Two things decide whether those last rules ever fire:
 
