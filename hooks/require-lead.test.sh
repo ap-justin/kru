@@ -141,7 +141,7 @@ check refuse Edit "" "$tx/prose.jsonl"
 check refuse Edit "" "$tx/prose-read-mention.jsonl"
 check refuse Edit "" "$tx/tool-result-path.jsonl"
 check refuse Edit "" "$tx/project-lead-read.jsonl"
-# another skill of the same name, wherever it sits outside the plugin, is no load
+# another skill of the same name, anywhere but the plugin's own skills/, is no load
 check refuse Edit "" "$tx/repo-designer-read.jsonl"
 check refuse Edit "" "$tx/agents-designer-read.jsonl"
 check refuse Edit "" "$tx/other-plugin-lead-read.jsonl"
@@ -176,7 +176,8 @@ read_call allow "$root/skills/designer/SKILL.md" rd2
 read_call refuse "/repo/skills/lead/SKILL.md" rd3
 read_call refuse "/repo/.claude/skills/lead/SKILL.md" rd4
 read_call refuse "$root/skills/composition/SKILL.md" rd5
-# under the root, so only the .claude/.agents exclusion or the segment anchors refuse these
+# each shares the root as a prefix, so only the .claude/.agents exclusion, the
+# segment anchors or the root's trailing slash refuse these
 read_call refuse "$root/.claude/skills/lead/SKILL.md" rd8
 read_call refuse "$root/.agents/skills/designer/SKILL.md" rd9
 read_call refuse "$root/skills/lead/SKILL.md.bak" rd10

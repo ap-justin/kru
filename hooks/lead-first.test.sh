@@ -37,7 +37,8 @@ check() {
 }
 
 check line "startup"
-# the argument wins over $CLAUDE_PLUGIN_ROOT: the env root has no resolver, so reading it would stay silent
+# the argument wins over $CLAUDE_PLUGIN_ROOT: the env root has no resolver, so
+# reading it would stay silent
 check line "argument over CLAUDE_PLUGIN_ROOT" CLAUDE_PLUGIN_ROOT=/nonexistent
 
 # the gate's switches silence it
@@ -73,7 +74,7 @@ out=$(printf '{}' | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU
 if [ "$code" -eq 0 ] && printf '%s' "$out" | grep -qF 'kru:lead'; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (line, exit %s): root with resolver and lead skill\n  %s\n' "$code" "$out"; fi
 
 # registered under a matcher that includes every way a session starts or goes on
-# (the hook ignores .source, so the matcher is the only place either is decided)
+# (the hook ignores .source, so the matcher is the only place any is decided)
 for src in startup clear resume compact fork; do
   if jq -e --arg s "$src" '[.hooks.SessionStart[] | select((.matcher // "") | split("|") | index($s)) | .hooks[].command | select(contains("lead-first.sh"))] | length == 1' "$root/hooks/hooks.json" >/dev/null 2>&1; then
     pass=$((pass + 1)); else fail=$((fail + 1)); echo "FAIL: hooks.json does not register lead-first.sh under $src"; fi

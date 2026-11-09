@@ -30,10 +30,10 @@ plugin_root="${1:-$CLAUDE_PLUGIN_ROOT}"
 [ -f "$plugin_root/skills/lead/SKILL.md" ] || exit 0
 input=$(cat) || exit 0
 
-# the load itself is a Skill call — gating it would close the only door out. so
-# is the Read of the contract file the block message and the SessionStart line
-# offer instead; read_lead_path below is the one test of "that file", shared
-# with the transcript scan
+# the load itself is a Skill call, or the Read of the contract file the block
+# message and the SessionStart line offer instead — gating either would close
+# the only door out. read_lead_path below is the one test of "that file",
+# shared with the transcript scan
 tool=$(printf '%s' "$input" | jq -r '.tool_name // empty' 2>/dev/null)
 [ "$tool" = "Skill" ] && exit 0
 case "${plugin_root##*/}" in
