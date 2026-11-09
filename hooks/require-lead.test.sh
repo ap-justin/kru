@@ -43,6 +43,10 @@ assistant_read_path() { jq -nc --arg p "$1" '{type:"assistant", message:{content
 { user "build it"; assistant_read "/repo/.agents/skills/designer/SKILL.md"; tool_result; } > "$tx/agents-designer-read.jsonl"
 { user "build it"; assistant_read "/other-plugin/skills/lead/SKILL.md"; tool_result; } > "$tx/other-plugin-lead-read.jsonl"
 { user "build it"; assistant_read "$root/.claude/skills/lead/SKILL.md"; tool_result; } > "$tx/root-claude-lead-read.jsonl"
+# under the root, so only the .agents exclusion can refuse it
+{ user "build it"; assistant_read "$root/.agents/skills/lead/SKILL.md"; tool_result; } > "$tx/root-agents-lead-read.jsonl"
+# a sibling dir that only shares the root's name as a prefix
+{ user "build it"; assistant_read "${root}-x/skills/lead/SKILL.md"; tool_result; } > "$tx/root-prefix-sibling-read.jsonl"
 # touching the file is not loading it: only a Read counts
 assistant_tool() { jq -nc --arg n "$1" --arg p "$2" '{type:"assistant", message:{content:[{type:"tool_use", name:$n, input:{file_path:$p}}]}}'; }
 { user "build it"; assistant_tool Write "$root/skills/lead/SKILL.md"; tool_result; } > "$tx/lead-write.jsonl"
@@ -142,6 +146,8 @@ check refuse Edit "" "$tx/repo-designer-read.jsonl"
 check refuse Edit "" "$tx/agents-designer-read.jsonl"
 check refuse Edit "" "$tx/other-plugin-lead-read.jsonl"
 check refuse Edit "" "$tx/root-claude-lead-read.jsonl"
+check refuse Edit "" "$tx/root-agents-lead-read.jsonl"
+check refuse Edit "" "$tx/root-prefix-sibling-read.jsonl"
 check refuse Edit "" "$tx/lead-write.jsonl"
 check refuse Edit "" "$tx/lead-edit.jsonl"
 for s in kru:designer-x kru:leader x-lead other:kru:designer; do
@@ -170,6 +176,12 @@ read_call allow "$root/skills/designer/SKILL.md" rd2
 read_call refuse "/repo/skills/lead/SKILL.md" rd3
 read_call refuse "/repo/.claude/skills/lead/SKILL.md" rd4
 read_call refuse "$root/skills/composition/SKILL.md" rd5
+# under the root, so only the .claude/.agents exclusion or the segment anchors refuse these
+read_call refuse "$root/.claude/skills/lead/SKILL.md" rd8
+read_call refuse "$root/.agents/skills/designer/SKILL.md" rd9
+read_call refuse "$root/skills/lead/SKILL.md.bak" rd10
+read_call refuse "$root/skills/designer-x/SKILL.md" rd11
+read_call refuse "${root}-x/skills/lead/SKILL.md" rd12
 
 # a plugin root that is a version dir: a Read in a sibling version (the plugin
 # updated mid-session) counts, a sibling plugin's does not
@@ -180,9 +192,14 @@ done
 mkdir -p "$cache/other/skills/lead"
 { user "build it"; assistant_read "$cache/kru/0.1.0/skills/lead/SKILL.md"; tool_result; } > "$tx/old-version-read.jsonl"
 { user "build it"; assistant_read "$cache/other/skills/lead/SKILL.md"; tool_result; } > "$tx/sibling-plugin-read.jsonl"
+# a plugin whose dir name only starts with the root's plugin dir name: kru-tools beside kru
+{ user "build it"; assistant_read "$cache/kru-tools/0.1.0/skills/lead/SKILL.md"; tool_result; } > "$tx/prefix-plugin-read.jsonl"
 read_call allow "$cache/kru/0.1.0/skills/lead/SKILL.md" rd6 "$cache/kru/0.2.0"
 read_call refuse "$cache/other/skills/lead/SKILL.md" rd7 "$cache/kru/0.2.0"
-for t in old-version-read:allow sibling-plugin-read:refuse; do
+read_call refuse "$cache/kru-tools/0.1.0/skills/lead/SKILL.md" rd13 "$cache/kru/0.2.0"
+# the root's own version dir, which is where lead-first.sh sends the session
+read_call allow "$cache/kru/0.2.0/skills/lead/SKILL.md" rd14 "$cache/kru/0.2.0"
+for t in old-version-read:allow sibling-plugin-read:refuse prefix-plugin-read:refuse; do
   n=$((n + 1))
   out=$(jq -nc --arg s "v$n" --arg p "$tx/${t%%:*}.jsonl" '{session_id:$s, transcript_path:$p, tool_name:"Edit", tool_input:{}}' |
     env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_STORE_REPO -u CLAUDE_CODE_REMOTE -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_ROOT \

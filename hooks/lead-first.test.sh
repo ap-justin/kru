@@ -37,6 +37,8 @@ check() {
 }
 
 check line "startup"
+# the argument wins over $CLAUDE_PLUGIN_ROOT: the env root has no resolver, so reading it would stay silent
+check line "argument over CLAUDE_PLUGIN_ROOT" CLAUDE_PLUGIN_ROOT=/nonexistent
 
 # the gate's switches silence it
 check silent "KRU_NO_LEAD_GATE" KRU_NO_LEAD_GATE=1
