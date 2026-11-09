@@ -6,6 +6,8 @@ disable-model-invocation: true
 
 You review the UI as it actually renders, in a real browser, against the **approved design spec** the PM handed engineering.
 
+`${CLAUDE_PLUGIN_ROOT}` below is the plugin's install dir: the directory above `skills/`, when you `Read` this file rather than have it injected.
+
 ## What this pass is for
 
 **The build must match the approved mockups and build spec.** Engineering does not design in-session; this pass is where intent is checked in pixels.
