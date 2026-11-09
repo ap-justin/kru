@@ -2,13 +2,15 @@
 
 For the **designer** (standalone bot or human) using kru's design skills — the bundled Claude Code `design` skill (designer loads), `composition`, `design-system`, `design-gallery`, `landing-page`, `ux-principles`, `user-research`, `research-synthesis`, `ux-copy`, `ui-patterns`, `brand-marks`, `algorithmic-art`, gen-asset tooling (`scripts/asset/`), motion skills, and related references. The engineering lead does not run this workflow or dispatch design seats.
 
+`${CLAUDE_PLUGIN_ROOT}` below is the plugin's install dir: the directory above `references/`, when you `Read` this file rather than have it injected.
+
 ## Your output to the PM
 
-When the design is ready for build, hand the PM a single package they can attach to an engineering brief (`references/design-spec.md`):
+When the design is ready for build, hand the PM a single package they can attach to an engineering brief (`${CLAUDE_PLUGIN_ROOT}/references/design-spec.md`):
 
 1. **Approved mockups** — link or export path at the viewports engineering will check (**1440** and **375** minimum).
 2. **Build spec** — everything a builder needs without guessing: **flows and IA** (screen inventory, journeys, conventions corpus / `design/conventions.md` when the repo uses it), tokens (or explicit mapping into the repo's token file), components and variants, states per screen, motion notes, final in-product copy on the design, breakpoints, and **asset paths** (marks, icons, imagery, video or generative art exports).
-3. **Part map** (`skills/designer/SKILL.md`, step 2) — each drawn element tied to its ledger row or class, each icon to a glyph on the repo's list, additions listed with reasons; then the **reflect-design list** (`skills/reflect-design/SKILL.md`) of what the designer's own look-back fixed.
+3. **Part map** (`${CLAUDE_PLUGIN_ROOT}/skills/designer/SKILL.md`, step 2) — each drawn element tied to its ledger row or class, each icon to a glyph on the repo's list, additions listed with reasons; then the **reflect-design list** (`${CLAUDE_PLUGIN_ROOT}/skills/reflect-design/SKILL.md`) of what the designer's own look-back fixed.
 4. **Approval line** — state that the PM (or owner) signed off; engineering treats the spec as authoritative.
 
 Working files (artboards, `canvas.json`, images) stay **local and uncommitted** beside `.design-work/` in the repo or in the designer's store — they are inputs to the mockups, not something the lead serves or commits. Only the approved exports and build spec cross to the PM.
@@ -23,9 +25,11 @@ Sweep every frame for these before the final message:
 
 - **Slop** — a label that repeats what the control or picture already says, duplicated information, decoration that carries nothing, a span drawn as a control, a stray or empty element, invented placeholder wording.
 - **The parts people notice** — stats, footers, graphics — get the best reference you can find and the real thing built: grouped, complete, illustrated.
-- **Only what the product renders** — a frame shows an element only in the state where the product renders it; each element's condition and the per-state tests go in the build spec (`references/design-spec.md`).
+- **Only what the product renders** — a frame shows an element only in the state where the product renders it; each element's condition and the per-state tests go in the build spec (`${CLAUDE_PLUGIN_ROOT}/references/design-spec.md`).
 
 ## Canvas and the bundled Claude Code `design` skill (designer loads)
+
+**No `design` skill and no doop tools:** the bundled skill needs Claude Code v2.1.265 or later and a session where artifacts are available (the conditions: [artifacts → Availability](https://code.claude.com/docs/en/artifacts#availability)), and `disableBundledSkills` turns it off. A session with neither it nor doop tools to draw on (a canvas the brief names, or one this run creates) stops before the first frame and tells the PM in the final message that the design needs one of the two; it does not substitute loose HTML or PNGs for mockups.
 
 Invoke the bundled Claude Code `design` skill (designer loads) for artboards and publish:
 
@@ -38,7 +42,7 @@ Invoke the bundled Claude Code `design` skill (designer loads) for artboards and
 - **Motion:** check every row of a motion spec against `${CLAUDE_PLUGIN_ROOT}/skills/emil-design-eng/SKILL.md` (`Read` it), and name the principle each row follows; reduced motion gets its own version of each row.
 - **Coverage ledger** (`design-system.md` beside the token file): run `design-system` `audit` first, then element × state rows; report gaps as the builder's next slices, never as values you invent in the repo.
 
-Mockups on a doop canvas (a `/c/<id>` link): `skills/doop/SKILL.md`.
+Mockups on a doop canvas (a `/c/<id>` link): `${CLAUDE_PLUGIN_ROOT}/skills/doop/SKILL.md`.
 
 ## Revising from comments
 

@@ -17,6 +17,8 @@ Hand it:
 3. **Target** — URLs/pages and the states the spec names that mockups do not show.
 4. **Report path** — per `gates.md`.
 
+When the mockups are a doop canvas, the seat has no doop tools: you read the frames and hand over each screenshot file, its drawn width and any extra spec viewport before the spawn (`skills/doop/SKILL.md` → *Handing frames to a seat that has no doop tools*).
+
 The seat compares the running UI to the mockups at **1440** and **375**. Mismatches are **FIX** findings for the builder. It still covers empty/error/loading/disabled/focus and traces breakage to `file:line`.
 
 Without mockups in the brief, the seat returns that spec match cannot run; you should have stopped at Step 3's design spec gate.
