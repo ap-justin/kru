@@ -6,7 +6,7 @@ user-invocable: false
 
 # Working a project in trail
 
-Trail is reached over MCP (`POST /mcp`, Streamable HTTP, stateless) or REST (`/api/v1`). Arguments: the tool descriptions and `/api/v1/openapi.json`. Not run against a live trail.
+Trail is reached over MCP (`POST /mcp`, Streamable HTTP, stateless) or REST (`/api/v1`). Arguments: the tool descriptions and `/api/v1/openapi.json`. The import below was run on live trail (its own `TRL` project); the rest was not yet.
 
 ## Connect once
 - Get the trail URL and **your own bot key** from whoever runs trail. The key is the author on every write, so one key belongs to one bot; a shared key credits your work to someone else.
@@ -29,11 +29,17 @@ Every create and `post_status_update` takes an `idempotency_key`. Derive it from
 `post_status_update` with `health` (`on_track`, `at_risk`, `off_track`), keyed per project per day as above, so a rerun routine posts once.
 
 ## One-time Linear import
-1. **Choose the project key first.** An issue whose `externalRef` is in the target key's form (project `JUS`, ref `JUS-187`) keeps its number; the rest are numbered after the highest kept. Keys are unique across trail and fixed after import, so only one project can take a Linear team key. A second project from the same team gets new numbers and its old `JUS-187` references stop resolving.
-2. **Read the whole Linear project**: every page until none remain, archived issues included if they come over, each with state name and state type, its comments, and the project's status updates.
-3. **Build one payload and send it.** `externalRef` is the Linear identifier. Send `statusType` (Linear `state.type`) on every issue; custom states like In Review map only through it. Map health `onTrack`/`atRisk`/`offTrack` to `on_track`/`at_risk`/`off_track`. Over 16 MiB, split by issue across calls with the same project fields and key.
+1. **The trail key is the project's own**, 2–10 characters, never a Linear team key (`JUS`, `BG`): many projects share a team key, and a trail key is unique and fixed after import. Issues are numbered under it in payload order, and each keeps its Linear identifier as `sourceKey`.
+2. **Read the whole Linear project**: `get_project`; `list_issues` with the project, `includeArchived` and `orderBy: createdAt`, every page; `get_issue` for each issue, since the list cuts descriptions short and leaves out attachments; `list_comments` for each issue; `get_status_updates` with type `project`.
+3. **Build one payload and call `import_project` once**, issues oldest first.
+   - Project: `externalRef` is the Linear project uuid.
+   - Issue: `externalRef` is the Linear issue uuid, `sourceKey` the identifier (`JUS-187`), `status` the state name, `statusType` the state type (custom states like In Review map only through it), plus `priority`, `estimate` in hours, `createdAt`, `completedAt` when done or canceled, `sourceAuthor`, and `links`: the attachments plus the Linear issue URL.
+   - Comment: `externalRef` is the Linear comment uuid, with `body`, `createdAt` and `sourceAuthor`.
+   - Health: `onTrack`/`atRisk`/`offTrack` become `on_track`/`at_risk`/`off_track`.
+   - Over 16 MiB, split by issue across calls with the same project fields and key.
 4. **Count check.** Linear issues read == `created.issues + updated.issues + unchanged.issues` in the result == issues counted by paging `list_issues` to the end. Repeat for comments and status updates.
-5. **Any mismatch: do not switch over.** Re-run (rows match by `externalRef`, nothing duplicates) and report the numbers.
+5. **Re-run the identical payload**: every row comes back `unchanged`. Then `list_issues` on the key: numbers in creation order, statuses mapped, dates kept.
+6. **Any mismatch: do not switch over.** Report the numbers.
 
 Track in Linear until the check passes, then only in trail.
 
