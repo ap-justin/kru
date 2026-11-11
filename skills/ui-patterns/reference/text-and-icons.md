@@ -141,7 +141,7 @@
 **Pattern:** no underline at rest or on hover; hover and `:focus-visible` show through colour, background or the focus ring. An underline is for a real link (`<a href>`) alone.
 **Default it corrects:** a component library's link-variant button that underlines on hover, or an action given `text-decoration: underline` so it looks clickable.
 **Why:** an underline promises navigation; on an action it hides the difference between going somewhere and doing something. Justin, Nov 11: "anything that is not a link should not be underlined".
-**Applies when:** a link inside a sentence keeps its underline, and a list of links follows the entry above. A design system that settles link and button styling in writing wins.
+**Applies when:** always. A link inside a sentence keeps its underline, and a list of links follows the entry above. A design system that settles link and button styling in writing wins.
 
 ## A status is bare text in its own ink, never a chip
 
