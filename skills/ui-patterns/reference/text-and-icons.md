@@ -1,14 +1,15 @@
 # Text and icons
 
-## An icon beside a label aligns to the label's first line
+## A mark beside a label aligns to the label's first line
 
-**Trigger:** an icon, bullet, avatar or status dot set beside text that can wrap to two or more lines.
-**Pattern:** give the icon a box exactly one line tall and align it to the start of the text.
+**Trigger:** an icon, bullet, avatar, status dot, badge or count set beside text that can wrap to two or more lines: a card title, page or sheet header, settings card, nav row or menu item.
+**Pattern:** give the mark a box exactly one line tall and align it to the start of the text. A mark shorter than a line, such as a badge, centres inside that box.
 **Default it corrects:** centering the icon against the whole text block, so it drifts to the middle of a two-line label and lands between the lines on three — or pinning it with a hand-tuned `margin-top` that is correct at exactly one font size.
 **Why:** the reader's eye enters at the first line; the icon labels that entry point, not the paragraph's geometric center. A magic-number offset also silently breaks the moment the type scale, the line-height, or the user's zoom changes.
 **Shape:**
 ```css
 .icon { block-size: 1lh; align-self: start; }  /* one line tall, so it centers on the first line */
+.lead { block-size: 1lh; display: flex; align-items: center; }  /* wraps a badge or count; the row sets align-items: start */
 ```
 **Applies when:** the text can wrap. A single-line label that cannot wrap centers fine either way — reach for this when the string is user-supplied or the container is narrow. `lh` units carry a Baseline status; `modern-css` owns whether this stack needs a fallback. **Where the mark is also a tap target**, the one-line box is the *layout* box and the target grows around it — padding, or an overlay pseudo-element — so the alignment above still holds. A 44px layout box measures more than one line, and `align-self: start` only moves whichever box is shorter than the row: inert while the label is single-line, and moving the *label* instead once it wraps past 44px. Measure both boxes before accepting a one-line alignment fix.
 
