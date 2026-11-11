@@ -80,6 +80,8 @@ Answer what the brief and the repo already settle. A product call, or an approva
 
 `sky status <agent>` prints the run's `summary` and `compare` link, or `error:` for a failed run. More work on the same change, such as review findings, goes to `sky agent follow-up <agent> --prompt=…`, which starts the next run in the same session and branch once the last one has ended. An unrelated task gets a new agent. `sky agent archive <agent>` stops any active run and deletes the worktree, losing uncommitted work; an archived agent takes no more runs.
 
+A run's sandbox has no GitHub login, so `git fetch` and `git pull` inside it always fail with `could not read Username`. When each run starts, Sky moves `origin/<default>` to GitHub's tip, but not the local default branch, so a brief bases merges, conflict fixes and review ranges on `origin/<default>`, such as `origin/main`. To pick up a default branch that moved during a run, let the run end and continue with `sky agent follow-up`.
+
 ## Usage limit
 
 Sky has no verified handling of Claude's usage limit. When a run stops on it, tell your human which agent stopped and what `status` shows, and leave the agent as it is for them.
