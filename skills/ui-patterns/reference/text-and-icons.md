@@ -135,6 +135,14 @@
 **Why:** a list of links is already read as links; the underline adds a line under each item and nothing to the meaning.
 **Applies when:** the links stand alone as a list. A link inside a sentence keeps its non-colour cue (WCAG 1.4.1). A design system that settles link styling in writing wins.
 
+## Only a link is underlined
+
+**Trigger:** a text button, a button in a link variant, a clickable label, or any other action drawn as plain text.
+**Pattern:** no underline at rest or on hover; signal hover and `:focus-visible` with colour, a background or the focus ring. An underline is for a real link (`<a href>`) alone.
+**Default it corrects:** a component library's link-variant button that underlines on hover, or an action given `text-decoration: underline` so it looks clickable.
+**Why:** an underline promises navigation; on an action it hides the difference between going somewhere and doing something. Justin, Nov 11: "anything that is not a link should not be underlined".
+**Applies when:** always. A link inside a sentence keeps its underline, and a list of links follows the entry above. A design system that settles link and button styling in writing wins.
+
 ## A status is bare text in its own ink, never a chip
 
 **Trigger:** drawing a status — paid, sent, skipped, pending — in a row, a detail or the dropdown that sets it.
