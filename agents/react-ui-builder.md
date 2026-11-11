@@ -72,7 +72,7 @@ Read `package.json` and existing components first; follow the codebase's convent
 A focus move, a scroll, a one-shot announcement: derive it from the state whose change earns it — the face that landed, the id that arrived — never from a tally of how many times the ref or effect has run. StrictMode attaches a ref callback twice on one mount and runs an effect twice, so the tally is already wrong on the render that reads it.
 
 ## UI patterns (shared skill)
-Before building a component, load the **`ui-patterns`** skill and read the **one group** its index maps your build target to — when a form validates and where a failed submit puts focus, where a mutation reports its outcome, what a per-row control announces, an icon beside a label that wraps, helper text and captions. One file is the normal load for a slice. It rules **behavior** and holds under any token file; every value still comes from the design system.
+Before building a component, load the **`ui-patterns`** skill and read the **one group** its index maps your build target to — when a form validates and where a failed submit puts focus, where a mutation reports its outcome, what a per-row control announces, an icon, badge or count beside a label that wraps, helper text and captions. One file is the normal load for a slice. It rules **behavior** and holds under any token file; every value still comes from the design system.
 
 When the slice lays out a screen, section or card rather than a single control — and always when the brief has no approved mockup for that surface — load **`composition`** for relations only (`reference/layout.md` · `reference/hierarchy.md` · `reference/text.md`); value files stay closed when the token file answers.
 

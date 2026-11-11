@@ -26,6 +26,8 @@ Sweep every frame for these before the final message:
 - **Slop** — a label that repeats what the control or picture already says, duplicated information, decoration that carries nothing, a span drawn as a control, a stray or empty element, invented placeholder wording.
 - **The parts people notice** — stats, footers, graphics — get the best reference you can find and the real thing built: grouped, complete, illustrated.
 - **Only what the product renders** — a frame shows an element only in the state where the product renders it; each element's condition and the per-state tests go in the build spec (`${CLAUDE_PLUGIN_ROOT}/references/design-spec.md`).
+- **A frame is one screen** — the product as it renders at that width, in one state, theme and mode. Nothing on it explains the design: no title block, lede, caption, class name, state label or annotation outline. A state the screen can't show alongside another gets its own frame, named in the frame name. Notes go on a notes page or frame beside the canvas, naming the screen frames by id, and the build spec keeps them. Justin, Nov 11: "comments about the canvas or what the canvas is about belongs to some other place close to canvas".
+- **Status on the first line** — a status, badge, count or icon beside text that can wrap sits on that text's first line (`${CLAUDE_PLUGIN_ROOT}/skills/ui-patterns/reference/text-and-icons.md` → *A mark beside a label aligns to the label's first line*). At least one 375 frame shows a wrapped title with its badge on the first line. Justin, Nov 11: "status should be aligned to the first line of the card title".
 
 ## Canvas and the bundled Claude Code `design` skill (designer loads)
 
