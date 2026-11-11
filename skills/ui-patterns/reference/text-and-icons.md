@@ -4,8 +4,8 @@
 
 **Trigger:** an icon, bullet, avatar, status dot, badge or count set beside text that can wrap to two or more lines: a card title, page or sheet header, settings card, nav row or menu item.
 **Pattern:** give the mark a box exactly one line tall and align it to the start of the text. A mark shorter than a line, such as a badge, centres inside that box.
-**Default it corrects:** centering the icon against the whole text block, so it drifts to the middle of a two-line label and lands between the lines on three — or pinning it with a hand-tuned `margin-top` that is correct at exactly one font size.
-**Why:** the reader's eye enters at the first line; the icon labels that entry point, not the paragraph's geometric center. A magic-number offset also silently breaks the moment the type scale, the line-height, or the user's zoom changes.
+**Default it corrects:** centering the mark against the whole text block, so it drifts to the middle of a two-line label and lands between the lines on three — or pinning it with a hand-tuned `margin-top` that is correct at exactly one font size.
+**Why:** the reader's eye enters at the first line; the mark labels that entry point, not the paragraph's geometric center. A magic-number offset also silently breaks the moment the type scale, the line-height, or the user's zoom changes.
 **Shape:**
 ```css
 .icon { block-size: 1lh; align-self: start; }  /* one line tall, so it centers on the first line */
