@@ -77,10 +77,9 @@ const args = parseArgs(process.argv.slice(2));
 
 const prompt = args.prompt;
 const outPath = args.out;
-// gemini-nano-banana-2.1 is the default: Google's primary image model, for both
-// text-to-image and edit mode. gemini-2.5-flash-image shuts down 2027-03-15 and
-// every imagen-* model was shut down by 2026-08-17 (ai.google.dev deprecations).
-// any other gemini-*-image id still works through --model.
+// gemini-nano-banana-2.1 does both text-to-image and edit mode. not
+// gemini-2.5-flash-image: it shuts down 2027-03-15 (ai.google.dev deprecations).
+// any other gemini-*-image id works through --model.
 const model = args.model ?? "gemini-nano-banana-2.1";
 const inputPath = args.input; // when set: edit/enhance this image instead of pure t2i
 // --cutout: true-alpha background removal via rembg (local, no API key). gemini
@@ -153,7 +152,7 @@ const ai = new GoogleGenAI({ apiKey });
 
 // edit-mode source image, typed from its bytes rather than its extension. gemini
 // accepts png, jpeg, webp, heic and heif; sharp reports avif as heif/av1, so only
-// heif/hevc passes as heic. anything else (avif, gif, tiff, svg) is sent as png.
+// heif/hevc passes as heic. anything else (avif, gif, tiff, svg) is converted to png.
 async function editSource(
   file: string,
 ): Promise<{ mimeType: string; data: string }> {
@@ -173,8 +172,8 @@ async function editSource(
   return { mimeType: "image/png", data: png.toString("base64") };
 }
 
-// returns the raw generated image bytes (gemini returns jpeg; sharp reads the real
-// format from the bytes, so the --out extension doesn't matter).
+// returns the raw generated image bytes, in whatever format the model picks (jpeg
+// or png); sharp reads it from the bytes, so the --out extension doesn't matter.
 async function generate(): Promise<Buffer> {
   // gemini image path. edit mode sends the source image in chat; otherwise pure t2i.
   let parts: Part[] | undefined;
