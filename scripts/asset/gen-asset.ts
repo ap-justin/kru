@@ -151,12 +151,26 @@ if (!apiKey && !isCutout) {
 
 const ai = new GoogleGenAI({ apiKey });
 
-// edit-mode source image type, from its extension (gemini accepts png, jpeg, webp).
-function mimeFor(file: string): string {
-  const ext = extname(file).slice(1).toLowerCase();
-  if (ext === "jpg" || ext === "jpeg") return "image/jpeg";
-  if (ext === "webp") return "image/webp";
-  return "image/png";
+// edit-mode source image, typed from its bytes rather than its extension. gemini
+// accepts png, jpeg, webp, heic and heif; sharp reports avif as heif/av1, so only
+// heif/hevc passes as heic. anything else (avif, gif, tiff, svg) is sent as png.
+async function editSource(
+  file: string,
+): Promise<{ mimeType: string; data: string }> {
+  const src = readFileSync(file);
+  const { format, compression } = await sharp(src).metadata();
+  const passThrough: Record<string, string> = {
+    png: "image/png",
+    jpeg: "image/jpeg",
+    webp: "image/webp",
+  };
+  const mimeType =
+    format === "heif" && compression === "hevc"
+      ? "image/heic"
+      : passThrough[format ?? ""];
+  if (mimeType) return { mimeType, data: src.toString("base64") };
+  const png = await sharp(src).png().toBuffer();
+  return { mimeType: "image/png", data: png.toString("base64") };
 }
 
 // returns the raw generated image bytes (gemini returns jpeg; sharp reads the real
@@ -165,11 +179,11 @@ async function generate(): Promise<Buffer> {
   // gemini image path. edit mode sends the source image in chat; otherwise pure t2i.
   let parts: Part[] | undefined;
   if (inputPath) {
-    const srcB64 = readFileSync(inputPath).toString("base64");
+    const source = await editSource(inputPath);
     const chat = ai.chats.create({ model });
     const res = await chat.sendMessage({
       message: [
-        { inlineData: { mimeType: mimeFor(inputPath), data: srcB64 } },
+        { inlineData: source },
         { text: prompt },
       ],
     });
