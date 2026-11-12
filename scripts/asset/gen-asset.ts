@@ -79,7 +79,7 @@ const prompt = args.prompt;
 const outPath = args.out;
 // gemini-nano-banana-2.1 does both text-to-image and edit mode. not
 // gemini-2.5-flash-image: it shuts down 2027-03-15 (ai.google.dev deprecations).
-// any other gemini-*-image id works through --model.
+// any other gemini image model id works through --model.
 const model = args.model ?? "gemini-nano-banana-2.1";
 const inputPath = args.input; // when set: edit/enhance this image instead of pure t2i
 // --cutout: true-alpha background removal via rembg (local, no API key). gemini
@@ -175,7 +175,7 @@ async function editSource(
 // returns the raw generated image bytes, in whatever format the model picks (jpeg
 // or png); sharp detects it from the bytes, so it needn't match the --out extension.
 async function generate(): Promise<Buffer> {
-  // gemini image path. edit mode sends the source image in chat; otherwise pure t2i.
+  // edit mode sends the source image in chat; otherwise pure t2i.
   let parts: Part[] | undefined;
   if (inputPath) {
     const source = await editSource(inputPath);
