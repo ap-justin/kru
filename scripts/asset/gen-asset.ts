@@ -2,7 +2,7 @@
 //
 // gen-asset — designer-library asset generator (see references/designer-handoff.md).
 //
-// generates (or edits) a raster asset with Google Gemini/Imagen, then runs a
+// generates (or edits) a raster asset with a Google Gemini image model, then runs a
 // sharp optimization pass so the output is web-ready (avif/webp, sized) and the
 // builder can drop it straight into a project's static/ dir.
 //
@@ -77,9 +77,11 @@ const args = parseArgs(process.argv.slice(2));
 
 const prompt = args.prompt;
 const outPath = args.out;
-// gemini-2.5-flash-image ("nano banana") is the general default and the only
-// model that supports edit mode. pass an imagen-* id for high-fidelity t2i.
-const model = args.model ?? "gemini-2.5-flash-image";
+// gemini-nano-banana-2.1 is the default: Google's primary image model, for both
+// text-to-image and edit mode. gemini-2.5-flash-image shuts down 2027-03-15 and
+// every imagen-* model was shut down by 2026-08-17 (ai.google.dev deprecations).
+// any other gemini-*-image id still works through --model.
+const model = args.model ?? "gemini-nano-banana-2.1";
 const inputPath = args.input; // when set: edit/enhance this image instead of pure t2i
 // --cutout: true-alpha background removal via rembg (local, no API key). gemini
 // edit models can't emit alpha — they recomposite onto an opaque matte — so real
@@ -97,10 +99,6 @@ const sizes = (args.sizes ?? "")
   .map((s) => parseInt(s.trim(), 10))
   .filter((n) => Number.isFinite(n) && n > 0);
 const quality = parseInt(args.quality ?? "72", 10);
-// imagen-only: native output size ("1K" default, "2K" largest crisp t2i).
-// aspectRatio uses the same --aspect flag as video (default 16:9). ignored by gemini.
-const imageSize = args["image-size"] ?? "1K";
-const imgAspect = args.aspect ?? "16:9";
 
 // --- video (veo) opts -----------------------------------------------------
 // video path is chosen by --video or by passing a veo-* model. everything below
@@ -153,34 +151,17 @@ if (!apiKey && !isCutout) {
 
 const ai = new GoogleGenAI({ apiKey });
 
-// returns the raw generated image bytes (png-ish) from whichever model path applies.
-async function generate(): Promise<Buffer> {
-  // imagen path: high-fidelity text-to-image via generateImages.
-  if (model.startsWith("imagen")) {
-    if (inputPath) {
-      throw new Error(
-        "edit mode (--input) requires a gemini image model, not imagen.",
-      );
-    }
-    const res = await ai.models.generateImages({
-      model,
-      prompt,
-      config: {
-        numberOfImages: 1,
-        includeRaiReason: true,
-        aspectRatio: imgAspect,
-        imageSize,
-      },
-    });
-    const b64 = res.generatedImages?.[0]?.image?.imageBytes;
-    if (!b64) {
-      throw new Error(
-        `imagen returned no image (rai: ${res.generatedImages?.[0]?.raiFilteredReason ?? "n/a"})`,
-      );
-    }
-    return Buffer.from(b64, "base64");
-  }
+// edit-mode source image type, from its extension (gemini accepts png, jpeg, webp).
+function mimeFor(file: string): string {
+  const ext = extname(file).slice(1).toLowerCase();
+  if (ext === "jpg" || ext === "jpeg") return "image/jpeg";
+  if (ext === "webp") return "image/webp";
+  return "image/png";
+}
 
+// returns the raw generated image bytes (gemini returns jpeg; sharp reads the real
+// format from the bytes, so the --out extension doesn't matter).
+async function generate(): Promise<Buffer> {
   // gemini image path. edit mode sends the source image in chat; otherwise pure t2i.
   let parts: Part[] | undefined;
   if (inputPath) {
@@ -188,7 +169,7 @@ async function generate(): Promise<Buffer> {
     const chat = ai.chats.create({ model });
     const res = await chat.sendMessage({
       message: [
-        { inlineData: { mimeType: "image/png", data: srcB64 } },
+        { inlineData: { mimeType: mimeFor(inputPath), data: srcB64 } },
         { text: prompt },
       ],
     });
