@@ -173,7 +173,7 @@ async function editSource(
 }
 
 // returns the raw generated image bytes, in whatever format the model picks (jpeg
-// or png); sharp reads it from the bytes, so the --out extension doesn't matter.
+// or png); sharp detects it from the bytes, so it needn't match the --out extension.
 async function generate(): Promise<Buffer> {
   // gemini image path. edit mode sends the source image in chat; otherwise pure t2i.
   let parts: Part[] | undefined;
