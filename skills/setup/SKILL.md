@@ -187,9 +187,10 @@ Two things decide whether those last rules ever fire:
 preferences, plans and the seats' repo memory only survive it through `KRU_STORE_REPO` — a private
 repo the user owns, which `hooks/store-sync.sh` keeps the home synced to. It takes two halves,
 because a cloud session reads no user settings (above): the cloud session's own environment
-variables carry it on the vm, and `~/.claude/settings.json` → `env` carries it on this machine, so
-both ends sync one store. Check that `env`. Unset and the user runs cloud sessions: offer it. On a
-yes, add `"KRU_STORE_REPO": "<owner>/<store-repo>"` to that `env`, and tell the user to set the same
+variables carry it on the vm, and on this machine either the plugin's *Store repo* option
+(`claude plugin configure kru`) or `~/.claude/settings.json` → `env` carries it, so both ends sync
+one store. Check both. Unset in both and the user runs cloud sessions: offer it. On a yes, add
+`"KRU_STORE_REPO": "<owner>/<store-repo>"` to that `env`, and tell the user to set the same
 variable in their cloud sessions' environment variables. The session reaches a private store only
 when the user attaches it to the session, and store-sync clones it at session start.
 
