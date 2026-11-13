@@ -26,8 +26,9 @@ fixed keys are setup step 1's fields, spelled as there: `project seats` · `skil
 from — a manifest entry, or on a blank repo the decision standing in for one (`← decided 2026-09-04 · /setup`).
 A seat line names the directories its seat owns, each in backticks: the handoff gate checks every file
 a brief names against them, so a file under another seat's directory shows up as a grouping miss. A directory two seats split is
-claimed by neither whole: each line lists its exceptions by path, following the split in
-`${CLAUDE_PLUGIN_ROOT}/references/routing.md` → *Hono splits by what a route renders*.
+claimed by neither whole: each seat line names the shared directory, then the paths in it that the
+other seat keeps. The split follows the `${CLAUDE_PLUGIN_ROOT}/references/routing.md` tie-break for
+that seat pair (Hono's is *Hono splits by what a route renders*).
 
 ## Renderings
 
