@@ -241,7 +241,7 @@ the script changes, its network hosts change, or about seven days pass
 (`code.claude.com/docs/en/cloud-environments` → *Environment caching*) — so the `# kru` line carries
 the installed `VERSION`, and moving it is what rebuilds the cache. A first write sets it. A re-run moves it only when
 its first-output comparison (*Re-run*) named a seat or skill that changed since the line's version, since a
-cloud session gets those only from a rebuilt cache; with none, the line stays and so does the cache.
+cloud session gets those only from a rebuilt cache.
 `skills/propagate/SKILL.md` step 7 moves it across repos on a release. The
 built-in *You should know* mod is enabled the same way: the laptop's `claude plugin enable` command never reaches
 the VM, and where telemetry is off the line is a no-op. The vm has no official marketplace,
@@ -460,10 +460,10 @@ once, is `skills/propagate/SKILL.md`'s; a change that needs the file re-derived 
   stamp is the signal: a stamp below the installed `VERSION` is behind — report that to the caller; re-derive only when the task says to.
 
 **First output of a re-run: the seats that changed since the stamp.** Compare the sheet's stamp (`<!-- kru vX.Y.Z`,
-step 4) with the installed `VERSION`. For each `${CLAUDE_PLUGIN_ROOT}/references/routing.md` row ending `since vN` with N above
-the stamp, and whose detection signal this repo's manifests match, say it before anything else: "since vX: new seat
+step 4) with the installed `VERSION`. For each `${CLAUDE_PLUGIN_ROOT}/references/routing.md` row ending `since vX.Y.Z` with that version above
+the stamp, and whose detection signal this repo's manifests match, say it before anything else: "since vX.Y.Z: new seat
 `<name>` matches `<signal>`" (`changed seat` for a row that already routed here). Rows without `since`, and a stamp
-at `VERSION`, say nothing. The `since` tag is the only record — no changelog, no network.
+at `VERSION`, say nothing. The `since` tag is the only record.
 
 **The citations are what make a re-run an edit rather than a second copy.** Each derived line carries
 what it came from, so a re-run reads the file, re-derives, and edits the lines it can account for.
