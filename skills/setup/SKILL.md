@@ -463,13 +463,12 @@ once, is `skills/propagate/SKILL.md`'s; a change that needs the file re-derived 
 - **The plugin moved** — `skills/roster/learn.md` (PM or lead loads) promoted a preference, a seat was hired or renamed. The
   stamp is the signal: a stamp below the installed `VERSION` is behind — report that to the caller; re-derive only when the task says to.
 
-**First output of a re-run: the seats that changed since the stamp.** Run before step 1 writes anything.
+**First output of a re-run: the seats that changed since the stamp.**
 Compare the sheet's stamp (`<!-- kru vX.Y.Z`, step 4) with the installed `VERSION`. For each
 `${CLAUDE_PLUGIN_ROOT}/references/routing.md` row ending `since vX.Y.Z` with that version above the stamp,
 and whose detection signal matches this repo — the same check step 1 runs — write one line for step 6's
 report: "since vX.Y.Z: new seat `<name>` matches `<signal>`" when the sheet's seat lines don't name it
-yet, "since vX.Y.Z: changed seat `<name>` matches `<signal>`" when they do. Rows without `since`, and a
-stamp at `VERSION`, say nothing.
+yet, "since vX.Y.Z: changed seat `<name>` matches `<signal>`" when they do.
 
 **The citations are what make a re-run an edit rather than a second copy.** Each derived line carries
 what it came from, so a re-run reads the file, re-derives, and edits the lines it can account for.
