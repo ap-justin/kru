@@ -20,7 +20,7 @@ A row added or changed in a release ends with `since vX.Y.Z`, which a `setup` re
 | A Node program a person, shell or scheduler runs — a CLI and its `bin`, a script, a queue worker, a cron job, a daemon: flags, stdout/stderr/exit codes, `--json`, stdin, env/config precedence, signals and clean shutdown | `node-developer` |
 | Zig — `build.zig` / `build.zig.zon` / `.zig` files: the build graph, allocators and ownership, error unions, `std.Io`, comptime, a red `zig build test` or `zig fmt --check` gate, cross-compiling | `zig-developer` |
 | Hono, `hono` — an API: routes, middleware, validators, `onError`/`notFound`, streaming/SSE, the exported `AppType` + `hc` client (any runtime; the runtime's config, bindings and deploy stay with its platform seat) | `hono-builder` |
-| UI written in **hono/jsx** — `hono` in `package.json` plus `.tsx` importing `hono/jsx` or `hono/jsx/dom`, or `jsxImportSource: "hono/jsx"`: server-rendered pages and components, client components, their CSS and client bundle | `hono-ui-builder` · since v0.194.0 |
+| UI written in **hono/jsx** — `hono` in `package.json` plus `.tsx` importing `hono/jsx` or `hono/jsx/dom`, or `jsxImportSource: "hono/jsx"`: server-rendered pages and components, client components, their CSS and client bundle | `hono-ui-builder` · since v0.195.0 |
 | Go, `go.mod` serving a React SPA — `net/http` handlers/middleware, the JSON contract, embed + serve the built app, **and** the SPA's typed client/query hooks/route glue (whole request path) | `go-fullstack-builder` |
 | React **component implementation** — pages/sections/interactive UI as props-in/callbacks-out `.tsx` (RR7, Next, TanStack Start, or Go-served repo) | `react-ui-builder` |
 | Svelte **component implementation** — pages/sections/interactive UI as props-in/callbacks-out `.svelte` | `svelte-ui-builder` |
@@ -54,7 +54,7 @@ A row added or changed in a release ends with `since vX.Y.Z`, which a `setup` re
 | coverage sweep or fan-out across many files; repair a red/flaky suite; an exempt seat's logic-dense output; a repo with no testing conventions captured yet | `test-writer` |
 | a **test or spec file** the slice's own red-green build writes | the behavior seat (Block D) |
 | a standalone sweep, browser or harness **test file** the sheet gives its own lane | the sheet's lane owner, or `test-writer` when the sheet names none |
-| repo tooling: pnpm workspaces/catalogs/lockfile · `turbo.json` monorepo task graph + caching · Biome/ESLint/Prettier lint+format · wiring a new package into the graph | `toolchain-engineer` |
+| repo tooling: pnpm workspaces/catalogs/lockfile · `turbo.json` monorepo task graph + caching · Biome/ESLint/Prettier lint+format · wiring a new package into the graph · a custom loader or plugin in the build tool a UI bundle uses | `toolchain-engineer` · since v0.195.0 |
 | repo-wide TypeScript infrastructure: strict migration, monorepo project references, type-perf profiling | a general agent with the `typescript` skill loaded |
 | a half-formed idea the PM wants grilled without committing to a record | **`skills/brainstorm/SKILL.md`** — grill like `brief`, write nothing until the task approves persist |
 | ambiguous or high-blast-radius change the PM wants stress-tested and written down before building | **`skills/brief/SKILL.md`** — load and run; not a seat you spawn |
