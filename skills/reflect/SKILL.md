@@ -35,7 +35,7 @@ What keeps the first phase affordable: **every seat runs in its own context**, s
 
    When the target carries test files, also assign them to **`test-writer`** for a read-only pass — behavior nothing covers, assertions that can't go red, tests that pass by order or clock; it runs nothing.
 
-   UI stack seats (`react-ui-builder`, `svelte-ui-builder`, `web-components-builder`) include **spec conformance** in their lane read when the PR or brief names mockups: compare shipped UI to `${CLAUDE_PLUGIN_ROOT}/references/design-spec.md` from source and whatever the seat's official chain names — that is the owning builder checking the approved spec, not a separate `visual-reviewer` dispatch.
+   UI stack seats (`react-ui-builder`, `svelte-ui-builder`, `web-components-builder`, `hono-ui-builder`) include **spec conformance** in their lane read when the PR or brief names mockups: compare shipped UI to `${CLAUDE_PLUGIN_ROOT}/references/design-spec.md` from source and whatever the seat's official chain names — that is the owning builder checking the approved spec, not a separate `visual-reviewer` dispatch.
 
    Every file assigned is checkable: list the target's files, list the assignments, and the two match.
 

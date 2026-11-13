@@ -18,6 +18,7 @@ names the seat and its skills has this question answered — take the answer.
 | A Node program a person, shell or scheduler runs — a CLI and its `bin`, a script, a queue worker, a cron job, a daemon: flags, stdout/stderr/exit codes, `--json`, stdin, env/config precedence, signals and clean shutdown | `node-developer` |
 | Zig — `build.zig` / `build.zig.zon` / `.zig` files: the build graph, allocators and ownership, error unions, `std.Io`, comptime, a red `zig build test` or `zig fmt --check` gate, cross-compiling | `zig-developer` |
 | Hono, `hono` — an API: routes, middleware, validators, `onError`/`notFound`, streaming/SSE, the exported `AppType` + `hc` client (any runtime; the runtime's config, bindings and deploy stay with its platform seat) | `hono-builder` |
+| UI written in **hono/jsx** — `hono` in `package.json` plus `.tsx` importing `hono/jsx` or `hono/jsx/dom`, or `jsxImportSource: "hono/jsx"`: server-rendered pages and components, client components, their CSS and client bundle | `hono-ui-builder` |
 | Go, `go.mod` serving a React SPA — `net/http` handlers/middleware, the JSON contract, embed + serve the built app, **and** the SPA's typed client/query hooks/route glue (whole request path) | `go-fullstack-builder` |
 | React **component implementation** — pages/sections/interactive UI as props-in/callbacks-out `.tsx` (RR7, Next, TanStack Start, or Go-served repo) | `react-ui-builder` |
 | Svelte **component implementation** — pages/sections/interactive UI as props-in/callbacks-out `.svelte` | `svelte-ui-builder` |
@@ -63,6 +64,7 @@ names the seat and its skills has this question answered — take the answer.
 | **no specialist matches** | **return to the caller**, naming the seat it would need (*Handling gaps*); the general path only when the task approves it |
 
 **Contested lanes — the tie-breaks the table can't hold.** Each seat's own definition states its half; read that rather than a copy, and reach for these when two rows look plausible:
+- **Hono splits by what a route renders**: the route, middleware, validators and `AppType` = `hono-builder` · the page, layout and component modules it renders with `hono/jsx`, and `hono/jsx/dom` client components = `hono-ui-builder`.
 - **Hono splits like a framework on Workers**: the Hono app = `hono-builder` · `wrangler` config, bindings, D1 and deploy = `cloudflare-builder` (on Node/Bun, the image and deploy = `fly-platform-engineer`) · the code calling its `hc` client = that consumer's seat.
 - **SQLite four ways, split by the driver**: an embedded `.db` file on `better-sqlite3`/`node:sqlite`/`bun:sqlite` = `sqlite-architect` · **D1** = `cloudflare-builder` (it's CF's SQLite) · **Turso/libSQL**, local, Cloud or synced = `turso-specialist` · a Postgres server = `postgres-architect`.
 - **Vercel two ways**: app code = the framework builder · deploy/env/infra = `vercel-platform-engineer` · speed and caching-for-speed = `vercel-perf-optimizer`.

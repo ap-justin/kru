@@ -1,6 +1,6 @@
 # UI — approved design upstream, system owned by the repo
 
-The team's UI doctrine, read by the three UI component builders, `design-system`, `design-gallery`, and `lead`'s from-scratch path. Read when any UI build starts: from scratch at *Bootstrap*, an existing repo at *Steady state*.
+The team's UI doctrine, read by the four UI component builders, `design-system`, `design-gallery`, and `lead`'s from-scratch path. Read when any UI build starts: from scratch at *Bootstrap*, an existing repo at *Steady state*.
 
 **Design is made outside this team.** A designer (standalone bot or human) uses the plugin's design skills (the bundled Claude Code `design` skill (designer loads), `composition`, `landing-page`, and the rest — `${CLAUDE_PLUGIN_ROOT}/references/designer-handoff.md`). The **owner approves** mockups and build spec; the **PM** attaches that approved package to engineering (`references/design-spec.md`). Engineering never runs a mockup or canvas step.
 
