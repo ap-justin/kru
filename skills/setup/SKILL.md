@@ -38,7 +38,8 @@ Completion: the standard is loaded.
 
 ### 1. Derive the sheet — *full run*
 Read the repo. Every line **cites what it came from**: a line with no derivation is a guess, and a
-re-run has no way to check it.
+re-run has no way to check it. On a re-run, read the existing stamp and run *Re-run*'s comparison
+before this step writes anything: step 4 overwrites the stamp, and step 1d's cloud line uses the result.
 
 | Field | Derive from | What it retires |
 |---|---|---|
@@ -239,7 +240,10 @@ Plugins install here because a cloud session ignores the repo's `enabledPlugins`
 the user runs locally. The environment cache keeps them at the version the script installed until
 the script changes, its network hosts change, or about seven days pass
 (`code.claude.com/docs/en/cloud-environments` → *Environment caching*) — so the `# kru` line carries
-the installed `VERSION`, and `skills/propagate/SKILL.md` moving it is what rebuilds the cache on a new release. The
+the installed `VERSION`, and moving it is what rebuilds the cache. A first write sets it; a re-run
+moves it only when *Re-run*'s comparison named a new or changed seat, because a cloud session gets
+that seat only from a rebuilt cache.
+`skills/propagate/SKILL.md` step 7 moves it across repos on a release. The
 built-in *You should know* mod is enabled the same way: the laptop's `claude plugin enable` command never reaches
 the VM, and where telemetry is off the line is a no-op. The vm has no official marketplace,
 so the base adds it ahead of any `@claude-plugins-official` install. Below them goes what the vm lacks before
@@ -436,10 +440,13 @@ Completion: the file holds the pass and the sheet, and no human-authored rule le
 approval in the task.
 
 ### 6. Report
-A short paragraph, in the user's vocabulary: what the team now knows about this project and what it
+On a full re-run, the report opens with *Re-run*'s `since` lines. Then a short paragraph, in the user's vocabulary: what the team now knows about this project and what it
 will do differently for it — the seats this repo runs, anything the derivation turned up that the
 repo had never written down, what the team may now do without asking (step 1d) in one line, and — on a repo that didn't opt into
-Claude Code on the web — the one clause saying the cloud environment was skipped and the task can opt in. The pass's edits, filed lint slices and inbox lines ride as one counted
+Claude Code on the web — the one clause saying the cloud environment was skipped and the task can opt in. When a `.claude/cloud-setup.md` block
+changed, the `# kru` line included, tell the user to paste each changed block into the dialog field
+it sits under: the dialog holds its own copy, and a pasted setup script or host list is what rebuilds
+the cache. The pass's edits, filed lint slices and inbox lines ride as one counted
 clause ("plus 6 cleanups to the project notes"); the diff is there if asked.
 
 Completion: before you send it, check yourself — every line that went in traces to a derivation, and
@@ -455,6 +462,13 @@ once, is `skills/propagate/SKILL.md`'s; a change that needs the file re-derived 
   citations are the signal: a derived line that no longer matches disk is a line to re-derive.
 - **The plugin moved** — `skills/roster/learn.md` (PM or lead loads) promoted a preference, a seat was hired or renamed. The
   stamp is the signal: a stamp below the installed `VERSION` is behind — report that to the caller; re-derive only when the task says to.
+
+**First output of a re-run: the seats that changed since the stamp.**
+Compare the sheet's stamp (`<!-- kru vX.Y.Z`, step 4) with the installed `VERSION`. For each
+`${CLAUDE_PLUGIN_ROOT}/references/routing.md` row ending `since vX.Y.Z` with that version above the stamp,
+and whose detection signal matches this repo — the same check step 1 runs — write one line for step 6's
+report: "since vX.Y.Z: new seat `<name>` matches `<signal>`" when the sheet's seat lines don't name it
+yet, "since vX.Y.Z: changed seat `<name>` matches `<signal>`" when they do.
 
 **The citations are what make a re-run an edit rather than a second copy.** Each derived line carries
 what it came from, so a re-run reads the file, re-derives, and edits the lines it can account for.
