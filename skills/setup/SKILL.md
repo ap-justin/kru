@@ -440,12 +440,13 @@ Completion: the file holds the pass and the sheet, and no human-authored rule le
 approval in the task.
 
 ### 6. Report
-On a re-run, the report opens with *Re-run*'s `since` lines. Then a short paragraph, in the user's vocabulary: what the team now knows about this project and what it
+On a full re-run, the report opens with *Re-run*'s `since` lines. Then a short paragraph, in the user's vocabulary: what the team now knows about this project and what it
 will do differently for it — the seats this repo runs, anything the derivation turned up that the
 repo had never written down, what the team may now do without asking (step 1d) in one line, and — on a repo that didn't opt into
 Claude Code on the web — the one clause saying the cloud environment was skipped and the task can opt in. When a `.claude/cloud-setup.md` block
-changed, the `# kru` line included, tell the user to paste that block into the environment's setup
-script: the dialog holds its own copy, and the pasted script is what rebuilds the cache. The pass's edits, filed lint slices and inbox lines ride as one counted
+changed, the `# kru` line included, tell the user to paste each changed block into the dialog field
+it sits under: the dialog holds its own copy, and a pasted setup script or host list is what rebuilds
+the cache. The pass's edits, filed lint slices and inbox lines ride as one counted
 clause ("plus 6 cleanups to the project notes"); the diff is there if asked.
 
 Completion: before you send it, check yourself — every line that went in traces to a derivation, and
