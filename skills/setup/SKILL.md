@@ -240,9 +240,9 @@ Plugins install here because a cloud session ignores the repo's `enabledPlugins`
 the user runs locally. The environment cache keeps them at the version the script installed until
 the script changes, its network hosts change, or about seven days pass
 (`code.claude.com/docs/en/cloud-environments` → *Environment caching*) — so the `# kru` line carries
-the installed `VERSION`, and moving it is what rebuilds the cache. A first write sets it. A re-run moves it only when
-the comparison step 1 ran first (*Re-run*, against the stamp as it stood before this run) named a new or changed seat, because a
-cloud session gets that seat only from a rebuilt cache.
+the installed `VERSION`, and moving it is what rebuilds the cache. A first write sets it; a re-run
+moves it only when *Re-run*'s comparison named a new or changed seat, because a cloud session gets
+that seat only from a rebuilt cache.
 `skills/propagate/SKILL.md` step 7 moves it across repos on a release. The
 built-in *You should know* mod is enabled the same way: the laptop's `claude plugin enable` command never reaches
 the VM, and where telemetry is off the line is a no-op. The vm has no official marketplace,
@@ -468,7 +468,7 @@ Compare the sheet's stamp (`<!-- kru vX.Y.Z`, step 4) with the installed `VERSIO
 and whose detection signal matches this repo — the same check step 1 runs — write one line for step 6's
 report: "since vX.Y.Z: new seat `<name>` matches `<signal>`" when the sheet's seat lines don't name it
 yet, "since vX.Y.Z: changed seat `<name>` matches `<signal>`" when they do. Rows without `since`, and a
-stamp at `VERSION`, say nothing. The `since` tag is the only record.
+stamp at `VERSION`, say nothing.
 
 **The citations are what make a re-run an edit rather than a second copy.** Each derived line carries
 what it came from, so a re-run reads the file, re-derives, and edits the lines it can account for.
