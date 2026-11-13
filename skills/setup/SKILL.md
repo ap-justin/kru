@@ -240,7 +240,7 @@ the user runs locally. The environment cache keeps them at the version the scrip
 the script changes, its network hosts change, or about seven days pass
 (`code.claude.com/docs/en/cloud-environments` → *Environment caching*) — so the `# kru` line carries
 the installed `VERSION`, and moving it is what rebuilds the cache. A first write sets it. A re-run moves it only when
-its first-output comparison (*Re-run*) named a seat or skill that changed since the line's version, since a
+its first-output comparison (*Re-run*) named a seat or skill that changed since the line's version, because a
 cloud session gets those only from a rebuilt cache.
 `skills/propagate/SKILL.md` step 7 moves it across repos on a release. The
 built-in *You should know* mod is enabled the same way: the laptop's `claude plugin enable` command never reaches
