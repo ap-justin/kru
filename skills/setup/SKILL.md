@@ -185,9 +185,12 @@ Two things decide whether those last rules ever fire:
 
 **The store repo, when the user runs cloud sessions.** A cloud vm's home dies with the session, so
 preferences, plans and the seats' repo memory only survive it through `KRU_STORE_REPO` — a private
-repo the user owns, which `hooks/store-sync.sh` keeps the home synced to. Check
-`~/.claude/settings.json` → `env`. Unset and the user runs cloud sessions: offer it. On a yes, add
-`"KRU_STORE_REPO": "<owner>/<store-repo>"` to that `env`. The session reaches a private store only
+repo the user owns, which `hooks/store-sync.sh` keeps the home synced to. It takes two halves,
+because a cloud session reads no user settings (above): the cloud session's own environment
+variables carry it on the vm, and `~/.claude/settings.json` → `env` carries it on this machine, so
+both ends sync one store. Check that `env`. Unset and the user runs cloud sessions: offer it. On a
+yes, add `"KRU_STORE_REPO": "<owner>/<store-repo>"` to that `env`, and tell the user to set the same
+variable in their cloud sessions' environment variables. The session reaches a private store only
 when the user attaches it to the session, and store-sync clones it at session start.
 
 `KRU_NO_STORE_SYNC=1` turns the sync off for one session. The mechanics and the merge rules:
