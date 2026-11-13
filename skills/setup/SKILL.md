@@ -39,7 +39,7 @@ Completion: the standard is loaded.
 ### 1. Derive the sheet — *full run*
 Read the repo. Every line **cites what it came from**: a line with no derivation is a guess, and a
 re-run has no way to check it. On a re-run, read the existing stamp and run *Re-run*'s comparison
-before this step writes anything: step 4 overwrites the stamp, and step 1d's cloud line uses the result.
+before this step writes anything: step 4 overwrites the stamp, and step 6's report uses the result.
 
 | Field | Derive from | What it retires |
 |---|---|---|
@@ -188,91 +188,7 @@ preferences, plans and the seats' repo memory only survive it through `KRU_STORE
 repo the user owns, which `hooks/store-sync.sh` keeps the home synced to. Check
 `~/.claude/settings.json` → `env`. Unset and the user runs cloud sessions: offer it. On a yes, add
 `"KRU_STORE_REPO": "<owner>/<store-repo>"` to that `env`. The session reaches a private store only
-when the user attaches it to the session: the setup script runs with no git credentials, so its
-clone of a private store fails, and store-sync clones it at session start instead.
-
-**Opt-in: the cloud environment is a record in the repo.** This step runs only when the user's task
-says the repo uses Claude Code on the web, or the repo already carries a `.claude/cloud-setup.md`;
-otherwise skip it, and step 6 names the skip.
-The environment dialog is the only runtime for what the user pastes there, so the repo carries the
-record and the user's part is copying. Write `.claude/cloud-setup.md` as three copy blocks and nothing
-else, each under its dialog field's name:
-
-1. **Environment variables** — `KRU_STORE_REPO=<owner>/<store-repo>`.
-2. **Network access** — Custom, *include defaults* on, plus one host per line. Check every host the
-   setup script downloads from against the default list (`code.claude.com/docs/en/cloud-environments`),
-   since a blocked one surfaces only as a `SETUP FAIL` line in the setup log: `get.pnpm.io`, the Playwright CDNs
-   (`cdn.playwright.dev`, `playwright.download.prss.microsoft.com`) and the image's own PPA
-   (`ppa.launchpadcontent.net` — without it `apt-get update` 403s and every chained install is
-   skipped) sit outside it. Then the hosts step 1 read off the repo's `.env*` files and SDK calls,
-   sandbox hosts only, so a live key pasted by mistake reaches nothing. Context7 reaches the vm
-   under its bare name too (step 1c) — the repo's `.mcp.json`, with `mcp.context7.com` listed here.
-3. **Setup script**, from this base:
-
-```bash
-#!/bin/bash
-# kru v<VERSION>
-set -uo pipefail
-exec > >(tee -a /tmp/setup.log) 2>&1
-
-try() {
-  for _ in 1 2 3; do "$@" && return 0; sleep 2; done
-  echo "SETUP FAIL: $*"
-}
-
-# kru store
-try git clone -q https://github.com/<owner>/<store-repo> ~/.kru
-[ -f ~/.kru/setup.sh ] && try bash ~/.kru/setup.sh
-
-# plugins
-try claude plugin marketplace add anthropics/claude-plugins-official
-try claude plugin marketplace add <owner>/kru
-try claude plugin install kru@kru --scope user
-try claude plugin enable cc-plugin-you-should-know@builtin --scope user
-
-# <repo>: vm provisioning, each line under `try`
-
-node --version; pnpm --version; claude plugin list
-exit 0
-```
-
-Plugins install here because a cloud session ignores the repo's `enabledPlugins`; add each plugin
-the user runs locally. The environment cache keeps them at the version the script installed until
-the script changes, its network hosts change, or about seven days pass
-(`code.claude.com/docs/en/cloud-environments` → *Environment caching*) — so the `# kru` line carries
-the installed `VERSION`, and moving it is what rebuilds the cache. A first write sets it; a re-run
-moves it only when *Re-run*'s comparison named a new or changed seat, because a cloud session gets
-that seat only from a rebuilt cache.
-`skills/propagate/SKILL.md` step 7 moves it across repos on a release. The
-built-in *You should know* mod is enabled the same way: the laptop's `claude plugin enable` command never reaches
-the VM, and where telemetry is off the line is a no-op. The vm has no official marketplace,
-so the base adds it ahead of any `@claude-plugins-official` install. Below them goes what the vm lacks before
-this repo's first run, read off step 1's findings and the repo's own setup doc (`CONTRIBUTING*`,
-`README*`, `DEPLOY*`), each pinned to the version the repo pins: node's `engines` major fetched
-from `nodejs.org` when it isn't one the image ships (*Installed tools* on the same docs page);
-pnpm through its native installer with `SHELL=/bin/bash` in its env — the script has no login
-shell, and without one the installer fails — its `PATH` edit lands in a profile the session may
-never source, so the install hook below puts it on `PATH`; `apt-get install` for a system package; browsers
-for a browser-mode suite, pinned to the repo's `playwright` version, whose browser build is tied
-to it. `try` retries each step and names the one that still failed as a `SETUP FAIL` line, so a
-blocked download reads in `/tmp/setup.log` and the first session's setup log, beside the closing
-version line and plugin list that show what actually landed. The script runs as root, must exit
-zero — the closing `exit 0`, since one failed step shouldn't fail the environment — and finish in about
-five minutes, and only what it writes to disk survives the snapshot.
-
-Dependencies install from a committed SessionStart hook, because a hook tracks each branch's
-lockfile and the snapshot doesn't: `.claude/cloud-install.sh`, copied from
-`${CLAUDE_PLUGIN_ROOT}/skills/setup/cloud-install.sh` and filled in, then checked with `bash -n`. The
-template carries each line's reason. The one to keep in view when adapting it: the image puts its own
-node and pnpm on `PATH`, and a hook that lets them win looks fine in a shell and fails in turbo with
-`Exec format error` — so the pinned pnpm goes first on `PATH` and that `PATH` reaches later shells
-through `$CLAUDE_ENV_FILE`. Where the installer lays down a binary under `.tools/pnpm-exe/<ver>/`, it's
-linked into a directory holding nothing else; pnpm 12 lays down none, and its `$PNPM_HOME/bin/pnpm`
-wrapper resolves relative to its own path, so that directory goes on `PATH` whole. A session
-with several repos attached — the store counts — runs no repo hooks. `CLAUDE_CODE_ENABLE_TODO_TOOLS` goes in
-`.claude/settings.json`'s `env`, beside the hook's registration. The credentials
-posture is the user's to hold: the env-var field is readable by anyone who shares the environment,
-so a private environment with sandbox values, never a staging or production file.
+when the user attaches it to the session, and store-sync clones it at session start.
 
 `KRU_NO_STORE_SYNC=1` turns the sync off for one session. The mechanics and the merge rules:
 `${CLAUDE_PLUGIN_ROOT}/references/store.md` → *The store repo*.
@@ -312,8 +228,7 @@ per-machine and kept out of version control, and the repo's `.gitignore` is what
 
 Completion: every grant traces to evidence the derivation already produced, the `verify` skill
 matches the sheet's line or is the repo's own, the memory path is ignored, and the report names what
-the team may now do unasked (step 6). On an opted-in repo, `.claude/cloud-setup.md` and
-`.claude/cloud-install.sh` (passing `bash -n`) exist with the hook registered; otherwise neither exists.
+the team may now do unasked (step 6).
 
 ### 1e. Encode what the seats would otherwise be told — *full run*
 **`${CLAUDE_PLUGIN_ROOT}/references/lint-rules.md`** is the catalog of seat rules a check can hold. Take the rows whose stack
@@ -442,11 +357,8 @@ approval in the task.
 ### 6. Report
 On a full re-run, the report opens with *Re-run*'s `since` lines. Then a short paragraph, in the user's vocabulary: what the team now knows about this project and what it
 will do differently for it — the seats this repo runs, anything the derivation turned up that the
-repo had never written down, what the team may now do without asking (step 1d) in one line, and — on a repo that didn't opt into
-Claude Code on the web — the one clause saying the cloud environment was skipped and the task can opt in. When a `.claude/cloud-setup.md` block
-changed, the `# kru` line included, tell the user to paste each changed block into the dialog field
-it sits under: the dialog holds its own copy, and a pasted setup script or host list is what rebuilds
-the cache. The pass's edits, filed lint slices and inbox lines ride as one counted
+repo had never written down, and what the team may now do without asking (step 1d) in one line.
+The pass's edits, filed lint slices and inbox lines ride as one counted
 clause ("plus 6 cleanups to the project notes"); the diff is there if asked.
 
 Completion: before you send it, check yourself — every line that went in traces to a derivation, and
