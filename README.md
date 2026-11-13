@@ -28,27 +28,15 @@ Per repo instead, for everyone who clones it on their own machine, committed to 
 }
 ```
 
-**Claude Code on the web** gets neither synced plugins nor a repo's `enabledPlugins`, so kru installs
-from the cloud environment's setup script:
-```
-claude plugin marketplace add ap-justin/kru
-claude plugin install kru@kru --scope user
-```
-Tell `skills/setup/SKILL.md` the repo uses Claude Code on the web and it writes that script, with
-the rest of the environment, into the repo's `.claude/cloud-setup.md` for you to paste. The
-**task tools** switch reaches a session only from the repo's `.claude/settings.json`
-(`"env": { "CLAUDE_CODE_ENABLE_TODO_TOOLS": "1" }`) or the cloud environment's variables.
-User settings never reach it.
-
 Two things about a cloud session worth knowing before the first run:
 
 - **The plan store moves into the clone** (`<repo>/.kru`) and ships in the branch, because no home
   dir survives the vm. Commit it, or it dies with the machine, and `KRU_HOME` puts it somewhere
   else. To keep it off the branch, set `KRU_STORE_REPO=<owner>/<repo>` (a private repo you own)
-  in the cloud environment's variables, and on your laptop in the plugin's *Store repo* option
+  in a cloud session's environment variables, and on your laptop in the plugin's *Store repo* option
   (`/plugin` → kru → Configure, or `claude plugin configure kru`) or `settings.json` `env`: the whole
   store (preferences, plans, the seats' repo memory) is cloned at session start and pushed at
-  every turn end, on web and laptop alike. `references/store.md` → *The store repo*.
+  every turn end, wherever the session runs. `references/store.md` → *The store repo*.
 - **The seats' official sources are off the default network allowlist.** Under `Trusted`, a seat
   can't reach `vitest.dev`, `zod.dev`, `orm.drizzle.team` or the rest of `SOURCES.md`, and answers
   from training data instead, which is the one thing this team exists to prevent. Wiring **context7
@@ -57,7 +45,7 @@ Two things about a cloud session worth knowing before the first run:
 
 ## Requirements
 - **Claude Code 2.1.311 or newer.** An older CLI runs the seats but silently drops the newer settings they carry, and fires `SubagentStop` about twice a minute for a seat still running. The return-pass hook reads each of those as a return missing its `Return pass:` line.
-- **Recommended: the built-in *You should know* mod** (`claude plugin enable cc-plugin-you-should-know@builtin`, Claude Code 2.1.287+). A side agent flags what you or the lead missed while seats are still running; it needs telemetry on. `skills/setup/SKILL.md` enables it on cloud VMs too.
+- **Recommended: the built-in *You should know* mod** (`claude plugin enable cc-plugin-you-should-know@builtin`, Claude Code 2.1.287+). A side agent flags what you or the lead missed while seats are still running; it needs telemetry on.
 - **`jq`**, for the hooks. Without it every hook fails open and the team still runs, ungated.
 - **The task tools switched on.** Newer models ship with them off, and the lead tracks its work in them.
   A plugin can't turn them on for you, so add this to `~/.claude/settings.json` and restart:
