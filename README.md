@@ -36,7 +36,7 @@ Two things about a cloud session worth knowing before the first run:
   in a cloud session's environment variables, and on your laptop in the plugin's *Store repo* option
   (`/plugin` → kru → Configure, or `claude plugin configure kru`) or `settings.json` `env`: the whole
   store (preferences, plans, the seats' repo memory) is cloned at session start and pushed at
-  every turn end, on web and laptop alike. `references/store.md` → *The store repo*.
+  every turn end, in a cloud session and on a laptop alike. `references/store.md` → *The store repo*.
 - **The seats' official sources are off the default network allowlist.** Under `Trusted`, a seat
   can't reach `vitest.dev`, `zod.dev`, `orm.drizzle.team` or the rest of `SOURCES.md`, and answers
   from training data instead, which is the one thing this team exists to prevent. Wiring **context7

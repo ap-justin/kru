@@ -183,7 +183,7 @@ Two things decide whether those last rules ever fire:
   With a store repo set (below), the project half lives under the home on the vm too, so the grants
   cover it there.
 
-**The store repo, when the user works on the web.** A cloud vm's home dies with the session, so
+**The store repo, when the user runs cloud sessions.** A cloud vm's home dies with the session, so
 preferences, plans and the seats' repo memory only survive it through `KRU_STORE_REPO` — a private
 repo the user owns, which `hooks/store-sync.sh` keeps the home synced to. Check
 `~/.claude/settings.json` → `env`. Unset and the user runs cloud sessions: offer it. On a yes, add
