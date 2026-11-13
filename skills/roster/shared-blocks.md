@@ -170,7 +170,7 @@ What you verify before return is whatever a user could **not** confirm by using 
 
 ## Block F — `## Scope — build the real path, not every path`
 
-Required on every seat that **writes app code** (26 seats: the four framework builders, `go-fullstack-builder`, `cloudflare-builder`, `hono-builder`, `hono-ui-builder`, `sanity-builder`, both data architects, `turso-specialist`, `better-auth-specialist`, `stripe-specialist`, `paypal-specialist`, `chariot-specialist`, `nowpayments-specialist`, `quickbooks-specialist`, `zapier-specialist`, the four UI component builders, `python-developer`, `node-developer`, `zig-developer`, `extension-builder`). Reviewers, config seats and the two text-producing seats don't build, so there is no breadth to bound.
+Required on every seat that **writes app code** (26 seats: the four framework builders, `go-fullstack-builder`, `cloudflare-builder`, `hono-builder`, `sanity-builder`, both data architects, `turso-specialist`, `better-auth-specialist`, `stripe-specialist`, `paypal-specialist`, `chariot-specialist`, `nowpayments-specialist`, `quickbooks-specialist`, `zapier-specialist`, the four UI component builders, `python-developer`, `node-developer`, `zig-developer`, `extension-builder`). Reviewers, config seats and the two text-producing seats don't build, so there is no breadth to bound.
 
 ```
 ## Scope — build the real path, not every path

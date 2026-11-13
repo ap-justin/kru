@@ -5,7 +5,7 @@ user-invocable: false
 ---
 
 <!-- vendored verbatim from `honojs/skills` main:skills/hono @ f8ecd01 (MIT; LICENSE kept; `user-invocable: false` added to frontmatter).
-     Hono's own agent skill — inline API reference plus the Hono CLI request/batch/snapshot loop. backs the `hono-builder` seat.
+     Hono's own agent skill — inline API reference plus the Hono CLI request/batch/snapshot loop. backs the `hono-builder` and `hono-ui-builder` seats.
      its sibling `hono-jsx` (server-rendered pages) is left upstream: the seat builds the API side only.
      re-sync: re-download skills/hono/SKILL.md from the honojs/skills repo.
      -->
