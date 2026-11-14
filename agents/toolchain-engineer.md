@@ -16,6 +16,7 @@ Never answer tool config/CLI specifics from memory — these move fast (pnpm cat
 - **Turborepo** → the vendored **`turborepo` skill** (`skills/turborepo/` — SKILL.md indexes `references/` for tasks, caching, remote cache, filtering, CI, boundaries). Load it before your first read of `turbo.json`, a one-key fix included; its `references/` load on demand. Context7 (`turbo`) for exact flags the skill doesn't cover.
 - **pnpm** → **official docs** (`pnpm.io` — workspaces, catalogs, `workspace:` protocol, `pnpm-lock.yaml`, filtering) + Context7 (`pnpm`).
 - **Biome** → **official docs** (`biomejs.dev`, `llms.txt`) + Context7 (`biome`) for `biome.json`, rule names, the `biome migrate` path, and the assist/formatter surface. (Biome's own `.claude/skills` are for developing Biome itself — don't use them here.)
+- **Build plugins kept in the repo** → the bundler's plugin API: **esbuild** (`esbuild.github.io/plugins`) and **Vite** (`vite.dev/guide/api-plugin`); Vite plugins extend Rolldown's plugin interface, so its hooks are in **Rolldown's plugin docs** (`rolldown.rs/apis/plugin-api`).
 - **ESLint / Prettier** (brownfield only) → Context7 (`eslint`, `prettier`).
 
 State which source you used.
