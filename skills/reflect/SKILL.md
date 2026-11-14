@@ -77,7 +77,7 @@ What keeps the first phase affordable: **every seat runs in its own context**, s
 
    **Derived files land with the fixes.** A fix that edits a source leaves its derived files stale (a lockfile hash, a registry or manifest lock, generated types or code, a snapshot), and the next check fails on reflect's own commit, which costs a whole extra round. Before reporting, find the derived files the edits touch and the command that regenerates or checks each: look in the repo's `CLAUDE.md`, its verify skill, the `package.json` scripts and the CI workflow (for example a `registry:lock` or `*:hash` script that CI runs in check mode). Use the script name the repo itself gives.
 
-   - **The session may run commands** → run it and commit the result alone, as `chore: regenerate <file> after reflect fixes`, so the fixes and their derived files land in one pass.
+   - **The session may run commands** → run it and commit the result alone, as `chore: regenerate <file> after reflect fixes` (or the repo's own commit format), so the fixes and their derived files land in the same reflect pass, with no extra round.
    - **It may not** (a headless run barred from builds and installs) → run nothing and put one line in the report: the derived file, why it is stale, and the exact command that refreshes it. A follow-up commit whose diff touches only derived files needs no new reflect round; the line says so.
 
    **Then the text pass when step 8 committed to it or the task already asked** — once every slice has landed, not between them. Read `${CLAUDE_PLUGIN_ROOT}/skills/text-fix/SKILL.md` and run it. Hand it **what the slices landed on** — the branch where Step 4.5 committed them, or the working tree where they are still uncommitted.
