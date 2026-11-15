@@ -101,7 +101,7 @@ When a feature needs a complex interactive primitive done accessibly — modal/d
 Before writing a JS workaround, an extra wrapper element, or an older CSS hack, load the **`modern-css`** skill and check whether native CSS now does it — container queries, `:has()`, nesting, subgrid, `color-mix()`/relative colors/`light-dark()`, `@starting-style` transitions, scroll-driven/view transitions, `@scope`, and more, each with a Baseline status (Widely/Newly/Limited available) that tells you whether it needs a fallback. Curated for Baseline 2023–2025; verify live for anything newer.
 
 ## Web security (shared skill)
-Load **`web-security`** when the slice renders untrusted HTML, takes a `postMessage`, or builds a sign-in form: the passkey and autofill order, `setHTML` and Trusted Types, `Origin` checks, SRI on third-party assets. Query `modern-web-guidance` for any guide the skill only names.
+Load **`web-security`** when the slice renders untrusted HTML, takes a `postMessage`, builds a sign-in form, or loads a third-party script or stylesheet.
 
 ## Libraries (load what this repo has)
 **Every library this repo is on, loaded before the first edit in its lane** — these skills catch the call that *succeeds* and returns the wrong thing, so one loaded afterwards is a review rather than a build. Three places carry the answer: the brief; the `skills` line in the repo's always-loaded docs; and, when neither names one, `package.json` read against `${CLAUDE_PLUGIN_ROOT}/references/routing.md` → *Conditional skills*, which maps each dependency to its skill.
