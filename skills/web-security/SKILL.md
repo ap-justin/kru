@@ -1,6 +1,6 @@
 ---
 name: web-security
-description: Browser-side security recipes — passkey sign-in order (conditional UI, immediate mode, reauth, Signal API), untrusted HTML (Sanitizer, Trusted Types), postMessage origin checks, SRI on third-party assets. Load for a sign-in form or rendered user HTML. Server auth and CSP headers are out.
+description: Browser-side security recipes — passkey sign-in order (conditional UI, immediate mode, reauth, Signal API), untrusted HTML (Sanitizer, Trusted Types), postMessage origin checks, SRI on third-party assets. Load for a sign-in form or rendered user HTML. Server auth and host header config are out.
 user-invocable: false
 ---
 
@@ -21,7 +21,7 @@ Recompute against today; the aging rule is `modern-css`'s.
 ## Sign-in, in this order (`passkey-authentication`, `passkeys`)
 1. **`rpId` comes from the server's options** (`publicKey.rpId` or `publicKey.rp.id`) and goes to every Signal call. `location.hostname` fails on a parent-domain or related-origin RP ID with `SecurityError` or a silent wrong target.
 2. **Feature-detect once on load**: `PublicKeyCredential.getClientCapabilities()` (the guides load `webauthn-polyfills` where it's missing). No `conditionalGet` → skip the passkey path; the form stays a working password form.
-3. **Markup**: one `<form>` with labelled inputs, `autocomplete="username webauthn"` on the identifier, `current-password` on the password, a stable `name`/`id`, and a submit button named for what it does (`autofill-sign-in-form`). `autofocus` goes only on a dedicated sign-in page or dialog, with a page title or dialog name and `aria-describedby` for the instructions; it stays off a form embedded in a larger page.
+3. **Markup**: one `<form>` with labelled inputs, `autocomplete="username webauthn"` on the identifier, `current-password` on the password, a stable `name`/`id`, and a submit button named for what it does (`forms/autofill-sign-in-form`, not under `guides/security`). `autofocus` goes only on a dedicated sign-in page or dialog, with a page title or dialog name and `aria-describedby` for the instructions; it stays off a form embedded in a larger page.
 4. **Conditional get** with `mediation: "conditional"` and an `AbortController`. Swallow `NotAllowedError` and `AbortError`.
 5. **A "Sign in with passkey" button** aborts the conditional request first, runs the modal get, and re-arms conditional get if the user cancels.
 6. **Verify**: send `credential.toJSON()`. On HTTP `404` while signed out, call `signalUnknownCredential({ rpId, credentialId: encoded.id })`; `credentialId` is the base64url string, never `rawId`.
@@ -29,8 +29,8 @@ Recompute against today; the aging rule is `modern-css`'s.
 Traps, each as the failure it causes:
 - **Immediate mode (`uiMode: 'immediate'`) on the dedicated sign-in page**: the button does nothing for anyone without a local credential, and QR and security-key options are suppressed (`quick-sign-ins`). It belongs on a "Sign in" link, checkout or favorite click, where `NotAllowedError` falls through to the real sign-in. Check `capabilities.immediateGet` first, or an unsupporting browser ignores the key and opens a blocking QR dialog. Call it from a click only, with no `allowCredentials` and no `signal`.
 - **Reauthentication with empty `allowCredentials`** is a discoverable get: the user can pick a different account's passkey mid-session. List the signed-in user's credential ids, and have the server check the returned credential belongs to the session user (`passkey-reauthentication`).
-- **Conditional create** runs only after a full sign-in that used a password, after every factor succeeded, after aborting the conditional get; it stays silent on `InvalidStateError`, `NotAllowedError`, `AbortError` (`passkey-conditional-create`). Magic-link, OTP and federated sign-ins never trigger it.
-- **A "Create passkey" button shows only when `getClientCapabilities()` reports `passkeyPlatformAuthenticator`**. A promotion after sign-in sets `authenticatorAttachment: "platform"`; a settings page omits it so security keys work (`passkey-registration`).
+- **Conditional create** runs only when `capabilities.conditionalCreate` is true, after a full sign-in that used a password, after every factor succeeded, after aborting the conditional get; it stays silent on `InvalidStateError`, `NotAllowedError`, `AbortError` (`passkey-conditional-create`). Magic-link, OTP and federated sign-ins never trigger it.
+- **A "Create passkey" button shows only when `getClientCapabilities()` reports both `passkeyPlatformAuthenticator` and `conditionalGet`**. A promotion after sign-in sets `authenticatorAttachment: "platform"`; a settings page omits it so security keys work (`passkey-registration`).
 - **Signal API ids must be unpadded base64url**; a placeholder like `'passkey-1'` throws `TypeError` on page load. Validate before the call, log failures with `console.warn`, and call `signalAllAcceptedCredentials` on the management page load and after every delete. Renaming a passkey is a server label and sends no signal; renaming the account calls `signalCurrentUserDetails` (`passkey-management`).
 - **The AAGUID labels a row in the management list and decides nothing**: platform passkeys give no attestation, so it can be forged (`passkeys`).
 
@@ -62,7 +62,7 @@ Better Auth owns the server: options and verify endpoints, the `passkey` plugin,
 
 ## Left out
 - Passkey server verification, challenge storage, credential tables: a vetted library per language (`passkeys`), or Better Auth.
-- CSP, `Connection-Allowlist`, COOP/COEP, cookies and the other response headers (`security`, `restrict-outbound-connections`): the platform seat's host config.
+- CSP, `Connection-Allowlist`, COOP/COEP, cookies and the other response headers (`security`, `restrict-outbound-connections`): the platform seat sets them on the host. Step 7 above states only what Trusted Types needs from the page.
 - Client-side verification of an email token, hand-rolled JWT or WebAuthn parsing (`verify-email-ownership`).
 
 ## Everything else
