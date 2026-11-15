@@ -1,4 +1,4 @@
-# Baseline CSS features, 2023–2025
+# Baseline CSS features, 2023–2026
 
 Curated from web.dev/baseline/2023, /2024, /2025; the `BL 2026` rows were read from `api.webstatus.dev` on 2026-11-14. CSS only (selectors, properties, functions, at-rules, units, media features) — closely-related HTML/JS platform features are in the last table since builders reach for them alongside CSS.
 

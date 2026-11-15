@@ -1,6 +1,6 @@
 ---
 name: modern-css
-description: Baseline 2023-2025 native CSS safe to use now — container queries, :has(), nesting, subgrid, color-mix()/light-dark(), @starting-style, scroll-driven animation, view transitions, @scope — plus the defensive defaults that break on real content (overflow, viewport units, zoom, RTL). Use before writing CSS that would reach for a JS workaround, extra wrapper, or preprocessor trick.
+description: Baseline 2023-2026 native CSS safe to use now — container queries, :has(), nesting, subgrid, color-mix()/light-dark(), @starting-style, scroll-driven animation, view transitions, @scope — plus the defensive defaults that break on real content (overflow, viewport units, zoom, RTL). Use before writing CSS that would reach for a JS workaround, extra wrapper, or preprocessor trick.
 user-invocable: false
 ---
 
@@ -50,7 +50,7 @@ If a build is doing any of the left column, check the right column's Baseline st
 `em`, `ch` and `ex` inside a custom property resolve at **use**, not at definition — one `--inset: 0.75em` is two different lengths on a 14px caption and an 18px heading, so a token meant to line two elements up doesn't. Derive a shared inset from a px- or rem-valued root token; leave font-relative only what is genuinely text-relative. (`lh` resolves the same way, which is exactly why the icon-alignment pattern above wants it.)
 
 ## Consult current status, don't guess
-This snapshot covers Baseline 2023–2025 only. For anything shipped after 2025, or a feature not in the reference list, or a project with an unusual support floor — don't answer from memory. Check live: `api.webstatus.dev/v1/features/<id>`, MDN's Baseline badge on the feature's page, caniuse.com, or `web.dev/baseline/<feature-slug>` via WebFetch. Baseline status changes monthly; training data lags it.
+This snapshot covers Baseline 2023–2025 plus the 2026 rows read on 2026-11-14. For anything shipped since then, or a feature not in the reference list, or a project with an unusual support floor — don't answer from memory. Check live: `api.webstatus.dev/v1/features/<id>`, MDN's Baseline badge on the feature's page, caniuse.com, or `web.dev/baseline/<feature-slug>` via WebFetch. Baseline status changes monthly; training data lags it.
 
 For a pattern this skill doesn't cover, Modern Web Guidance has about 200 vanilla HTML/CSS/JS guides with Baseline status and fallbacks: `npx -y modern-web-guidance@latest search "<2–5 word query>"`, then `retrieve "<id>"` (`SOURCES.md` → *Client-side web platform*).
 
