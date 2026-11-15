@@ -60,7 +60,7 @@ The "What it does" column is a **signpost to jog recognition, not a spec** — l
 | Feature | Status | Since | What it does |
 |---|---|---|---|
 | Lazy-loading images and iframes | Widely | 2023-12-19 | `loading="lazy"` — defers offscreen resources with no observer |
-| Fetch priority | Newly | 2024-10-29 | `fetchpriority="high"/"low"` — reprioritizes a resource without a preload tag |
+| Fetch priority | Newly | 2024-10-29 | `fetchpriority="high"/"low"` — reprioritizes a resource the parser already found; it does not make a CSS or script image discoverable |
 | Lazy-loading media | Limited | — | `loading="lazy"` on `<video>`/`<audio>` |
 | `<img sizes="auto">` | Limited | — | Lets the browser compute `sizes` for a lazy-loaded image |
 | `blocking="render"` | Limited | — | Explicitly marks a resource as render-blocking |

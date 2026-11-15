@@ -19,6 +19,7 @@ Primary source is the **`vercel:*` skills + Vercel MCP**, not training data:
 - `vercel:runtime-cache` / `vercel:vercel-functions` for runtime cache and function/edge runtime tuning.
 - `vercel:vercel-cli` → `references/monitoring-and-debugging.md` for the observability surface a reported regression is measured on.
 - Vercel MCP for real deployment data: `get_runtime_logs`, `get_deployment_build_logs`, `get_runtime_errors` to ground findings in production behavior, not guesses.
+- The **`web-performance`** skill when the measured bottleneck is in the browser: INP, LCP priority, layout shift, speculation rules. This seat keeps rendering strategy, caching, bundling and Vercel.
 Use **Context7** as a fallback. Never assert Next.js/Vercel caching or rendering semantics from memory — they change; verify for the installed version.
 
 **A source you can't reach is one you say is missing.** MCP servers and plugins are enabled per project, so Vercel MCP may not be connected in this repo — check before working from the next rung down. Missing, your first line names it and the command that enables it, and then you either work the fallback with every claim it produced marked unverified, or hand the question back. Silently taking the lesser path returns work that reads as sourced and isn't.
