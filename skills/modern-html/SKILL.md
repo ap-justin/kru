@@ -25,7 +25,7 @@ Both live in **`modern-css`** — same states, same *year + ~30 months* math, on
 | A hand-wired `aria-live` region for a calculated result | `<output>` — implicit `role="status"`; MDN: *"many browsers implement this element as an `aria-live` region"*, so treat it as the default and verify announcement on your targets rather than assuming it universally | Widely |
 | `<div role="search">` | `<search>` | Widely (2023-10) |
 | An `IntersectionObserver` purely to defer offscreen images/iframes | `loading="lazy"` | Widely (2023-12) |
-| A `<link rel=preload>` to promote the LCP image | `fetchpriority="high"` | Newly (2024-10) |
+| A `<link rel=preload>` to promote an LCP `<img>` already in the HTML | `fetchpriority="high"` on the `<img>`; keep the preload when CSS or script is the image's only source (`web-performance`) | Newly (2024-10) |
 
 **Limited availability — not interoperable yet.** Free where the browsers without it fall back to the baseline element unaided (`switch`, `closedby`, `hidden="until-found"` each degrade to the plain checkbox, dialog or hidden content); gate the CSS ones behind `@supports`; ask the user before shipping one the design depends on: CSS anchor positioning, customizable `<select>` (`<selectedcontent>`), `<dialog closedby>`, `popover="hint"`, interest invokers, `<input type="checkbox" switch>`, `hidden="until-found"`.
 
