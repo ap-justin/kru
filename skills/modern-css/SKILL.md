@@ -1,6 +1,6 @@
 ---
 name: modern-css
-description: Baseline 2023-2025 native CSS safe to use now — container queries, :has(), nesting, subgrid, color-mix()/light-dark(), @starting-style, scroll-driven animation, view transitions, @scope — plus the defensive defaults that break on real content (overflow, viewport units, zoom, RTL). Use before writing CSS that would reach for a JS workaround, extra wrapper, or preprocessor trick.
+description: Baseline 2023-2026 native CSS safe to use now — container queries, :has(), nesting, subgrid, color-mix()/light-dark(), @starting-style, scroll-driven animation, view transitions, @scope — plus the defensive defaults that break on real content (overflow, viewport units, zoom, RTL). Use before writing CSS that would reach for a JS workaround, extra wrapper, or preprocessor trick.
 user-invocable: false
 ---
 
@@ -16,7 +16,7 @@ Every feature below carries a Baseline status (from web.dev/baseline), and the s
 Baseline status moves with the calendar, not with this file. Rule: **feature's Baseline year (`BL` column in `reference/baseline.md`) + ~30 months ≈ when it crosses into Widely available.** So as of any given date:
 - `BL 2023` — 30+ months out from any 2023 date, so treat as **Widely available**.
 - `BL 2024` — right around the 30-month line; verify individually if the project has a strict support floor, otherwise treat as **Newly available** trending to widely.
-- `BL 2025` — well short of 30 months; treat as **Newly available**, verify support target before using unconditionally.
+- `BL 2025` and later — well short of 30 months; treat as **Newly available**, verify support target before using unconditionally.
 
 Don't hardcode "safe" onto a year forever — redo this math against the current date, or just check live status (MDN's Baseline badge, caniuse.com, or `web.dev/baseline/<feature>`) when it matters.
 
@@ -37,10 +37,10 @@ The actual value of this skill: recognizing when a familiar workaround is now ob
 | Custom scrollbar-styling libraries | `scrollbar-color`, `scrollbar-width`, `scrollbar-gutter` |
 | JS virtualization purely for offscreen render cost | `content-visibility: auto` + `contain-intrinsic-size` |
 | Manually maintained typed CSS custom properties | `@property` (registered custom properties) |
-| Global unscoped selectors reached for encapsulation via BEM alone | `@scope` |
+| Global unscoped selectors reached for encapsulation via BEM alone, or `.dark .x` / `.light .x` theming that ties on specificity | `@scope` — the nearest scope root wins, where equal specificity falls back to source order |
 | Hand-tuned `margin-top` to line an icon up with a multiline label | `lh` units (the pattern is `ui-patterns` → `text-and-icons`; this skill owns whether `lh` needs a fallback here) |
-| JS carousel library | `scroll-snap-type` + `scroll-snap-align` on a native scroller, `overscroll-behavior-x: contain`; buttons call `scrollBy` (sign flipped in RTL) |
-| JS auto-growing `<textarea>` | `field-sizing: content` with `min-height`/`max-height` in `lh` — limited availability; unsupported browsers keep a fixed-height textarea that scrolls, which is the fallback |
+| JS carousel library | `scroll-snap-type` + `scroll-snap-align` on a native scroller, `overscroll-behavior-x: contain` (limited availability: an enhancement, not a guarantee); buttons call `scrollBy` (sign flipped in RTL) |
+| JS auto-growing `<textarea>` | `field-sizing: content` with `min-height`/`max-height` in `lh` — newly available (2026-06); an explicit `width`/`height` overrides it, and unsupported browsers keep a fixed-height textarea that scrolls, which is the fallback |
 | JS height measurement to animate an accordion | `::details-content` + `interpolate-size: allow-keywords` transitioning `height` — `interpolate-size` is limited availability; unsupported browsers open instantly, which is the fallback |
 | Popper/Floating UI placing a popover beside its trigger | anchor positioning (`position-area`, `position-try-fallbacks`) — check live status; unsupported placement breaks, so gate it behind `@supports (position-area: block-end)` and keep the library where the support floor needs it |
 
@@ -50,7 +50,9 @@ If a build is doing any of the left column, check the right column's Baseline st
 `em`, `ch` and `ex` inside a custom property resolve at **use**, not at definition — one `--inset: 0.75em` is two different lengths on a 14px caption and an 18px heading, so a token meant to line two elements up doesn't. Derive a shared inset from a px- or rem-valued root token; leave font-relative only what is genuinely text-relative. (`lh` resolves the same way, which is exactly why the icon-alignment pattern above wants it.)
 
 ## Consult current status, don't guess
-This snapshot covers Baseline 2023–2025 only. For anything shipped after 2025, or a feature not in the reference list, or a project with an unusual support floor — don't answer from memory. Check live: MDN's Baseline badge on the feature's page, caniuse.com, or `web.dev/baseline/<feature-slug>` via WebFetch. Baseline status changes monthly; training data lags it.
+This snapshot covers Baseline 2023–2025 plus the 2026 rows read on 2026-11-14. For anything shipped since then, or a feature not in the reference list, or a project with an unusual support floor — don't answer from memory. Check live: `api.webstatus.dev/v1/features/<id>`, MDN's Baseline badge on the feature's page, caniuse.com, or `web.dev/baseline/<feature-slug>` via WebFetch. Baseline status changes monthly; training data lags it.
+
+For a pattern this skill doesn't cover, Modern Web Guidance has about 200 vanilla HTML/CSS/JS guides with Baseline status and fallbacks: `npx -y modern-web-guidance@latest search "<2–5 word query>"`, then `retrieve "<id>"` (`SOURCES.md` → *Client-side web platform*).
 
 ## Defaults that break on real content
 `reference/defensive.md` — CSS that renders right on the content it was written against and breaks on production's — overflow, viewport units, zoom, RTL, colour mixing. Read it when laying out a page, a card grid or a scroller, or when reviewing CSS for overflow.
