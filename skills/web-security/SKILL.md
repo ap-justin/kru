@@ -62,7 +62,7 @@ Better Auth owns the server: options and verify endpoints, the `passkey` plugin,
 
 ## Left out
 - Passkey server verification, challenge storage, credential tables: a vetted library per language (`passkeys`), or Better Auth.
-- CSP, `Connection-Allowlist`, COOP/COEP, cookies and the other response headers (`security`, `restrict-outbound-connections`): the platform seat sets them on the host. *Untrusted HTML* step 7 states only what Trusted Types needs from the page.
+- CSP, `Connection-Allowlist`, COOP/COEP, cookies and the other response headers (`security`, `restrict-outbound-connections`): the seat that owns the response sets them: the framework builder in middleware or hooks, the platform seat in host config, `better-auth-specialist` for session cookies. *Untrusted HTML* step 7 states only what Trusted Types needs from the page.
 - Client-side verification of an email token, hand-rolled JWT or WebAuthn parsing (`verify-email-ownership`).
 
 ## Everything else
