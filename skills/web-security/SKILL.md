@@ -9,7 +9,7 @@ Recipes over Chrome's Modern Web Guidance security guides (`guides/security/<id>
 ## Status (`api.webstatus.dev`, read 2026-11-14)
 | Feature | Baseline | Consequence |
 |---|---|---|
-| `webauthn`, `subresource-integrity` | Widely | no fallback |
+| `webauthn`, `subresource-integrity` | Widely | no fallback for the core API; the newer WebAuthn helpers (`getClientCapabilities`, `parseRequestOptionsFromJSON`, `toJSON`) come from `webauthn-polyfills` where missing |
 | `trusted-types` | Newly (2026-02-24) | enforce through CSP; the guide's tinyfill covers older browsers |
 | `webauthn-signals` | Limited (no Firefox) | gate every call on `if (PublicKeyCredential.signalX)` |
 | `sanitizer` (`setHTML`) | Limited (no Safari) | DOMPurify fallback, loaded only when `'setHTML' in Element.prototype` is false |
@@ -22,7 +22,7 @@ Recompute against today; the aging rule is `modern-css`'s.
 1. **`rpId` comes from the server's options** (`publicKey.rpId` or `publicKey.rp.id`) and goes to every Signal call. `location.hostname` fails on a parent-domain or related-origin RP ID with `SecurityError` or a silent wrong target.
 2. **Feature-detect once on load**: `PublicKeyCredential.getClientCapabilities()` (the guides load `webauthn-polyfills` where it's missing). No `conditionalGet` → skip the passkey path; the form stays a working password form.
 3. **Markup**: one `<form>` with labelled inputs, `autocomplete="username webauthn"` on the identifier, `current-password` on the password, a stable `name`/`id`, and a submit button named for what it does (`forms/autofill-sign-in-form`, not under `guides/security`). `autofocus` goes only on a dedicated sign-in page or dialog, with a page title or dialog name and `aria-describedby` for the instructions; it stays off a form embedded in a larger page.
-4. **Conditional get** with `mediation: "conditional"` and an `AbortController`. Swallow `NotAllowedError` and `AbortError`.
+4. **Conditional get**: decode the server's JSON with `PublicKeyCredential.parseRequestOptionsFromJSON()` (raw JSON in `publicKey` throws `TypeError`), then get with `mediation: "conditional"` and an `AbortController`. Swallow `NotAllowedError` and `AbortError`.
 5. **A "Sign in with passkey" button** aborts the conditional request first, runs the modal get, and re-arms conditional get if the user cancels.
 6. **Verify**: send `credential.toJSON()`. On HTTP `404` while signed out, call `signalUnknownCredential({ rpId, credentialId: encoded.id })`; `credentialId` is the base64url string, never `rawId`.
 
@@ -71,4 +71,4 @@ Better Auth owns the server: options and verify endpoints, the `passkey` plugin,
 - Client-side verification of an email token, hand-rolled JWT or WebAuthn parsing (`verify-email-ownership`).
 
 ## Everything else
-`restrict-outbound-connections`, `local-network-access`, `verify-email-ownership` (origin trial), `client-side-encryption`, `digital-signatures` and the rest of `guides/security`: `npx -y modern-web-guidance@latest search "<one capability>"`, 2–5 words per query and one capability each, then `retrieve <id>[,<id>]`. Guides behind an origin trial or a volatile feature need `set-allow-origin-trials` or `set-allow-volatile-features` first. Without `npx`, read `guides/security/<id>/guide.md` on `raw.githubusercontent.com`.
+`restrict-outbound-connections`, `local-network-access`, `verify-email-ownership` (origin trial), `client-side-encryption`, `digital-signatures` and the rest of `guides/security`: query the Modern Web Guidance CLI as `SOURCES.md` → *Client-side web platform* says. A guide behind an origin trial or a volatile feature is gated on `retrieve` for the developer's consent: ask the user before running `set-allow-origin-trials` or `set-allow-volatile-features`, which write `.mwgrc` into the repo, and don't read the gated guide off `raw.githubusercontent.com` to get around the gate.
