@@ -52,7 +52,7 @@ If a build is doing any of the left column, check the right column's Baseline st
 ## Consult current status, don't guess
 This snapshot covers Baseline 2023–2025 plus the 2026 rows read on 2026-11-14. For anything shipped since then, or a feature not in the reference list, or a project with an unusual support floor — don't answer from memory. Check live: `api.webstatus.dev/v1/features/<id>`, MDN's Baseline badge on the feature's page, caniuse.com, or `web.dev/baseline/<feature-slug>` via WebFetch. Baseline status changes monthly; training data lags it.
 
-For a pattern this skill doesn't cover, Modern Web Guidance has about 200 vanilla HTML/CSS/JS guides with Baseline status and fallbacks: `npx -y modern-web-guidance@latest search "<2–5 word query>"`, then `retrieve "<id>"` (`SOURCES.md` → *Client-side web platform*).
+For a pattern this skill doesn't cover, Modern Web Guidance has vanilla HTML/CSS/JS guides with Baseline status and fallbacks: `npx -y modern-web-guidance@latest search "<2–5 word query>"`, then `retrieve "<id>"` (`SOURCES.md` → *Client-side web platform*).
 
 ## Defaults that break on real content
 `reference/defensive.md` — CSS that renders right on the content it was written against and breaks on production's — overflow, viewport units, zoom, RTL, colour mixing. Read it when laying out a page, a card grid or a scroller, or when reviewing CSS for overflow.

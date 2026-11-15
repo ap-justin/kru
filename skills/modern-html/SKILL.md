@@ -48,7 +48,7 @@ Native is enough for: a modal shell, a disclosure, an exclusive accordion, a lig
 - **A `command` button inside a `<form>` does nothing without `type="button"`**, and a `command="close"` button does not belong inside `<form method="dialog">` — pick one close path (WHATWG HTML issue 10832). A button carrying both `popovertarget` and `commandfor` for one popover toggles it twice and ends where it started.
 
 ## Patterns this skill doesn't cover
-Modern Web Guidance ships about 200 vanilla HTML/CSS/JS guides with Baseline status and fallbacks. Query it with `npx -y modern-web-guidance@latest search "<2–5 word query>"`, then `retrieve "<id>"` (`SOURCES.md` → *Client-side web platform*).
+Modern Web Guidance ships vanilla HTML/CSS/JS guides with Baseline status and fallbacks. Query it with `npx -y modern-web-guidance@latest search "<2–5 word query>"`, then `retrieve "<id>"` (`SOURCES.md` → *Client-side web platform*).
 
 ## Not this skill's job
 - **Baseline states and the aging rule** — `modern-css`, which owns them for both halves of the platform.
