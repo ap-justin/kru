@@ -1,6 +1,6 @@
 ---
 name: web-security
-description: Browser-side security recipes — passkey sign-in order (conditional UI, immediate mode, reauth, Signal API), untrusted HTML (Sanitizer, Trusted Types), postMessage origin checks, SRI on third-party assets. Load for a sign-in form or rendered user HTML. Server auth and host header config are out.
+description: Browser-side security recipes — passkey sign-in order (conditional UI, immediate mode, reauth, Signal API), untrusted HTML (Sanitizer, Trusted Types), postMessage origin checks, SRI on third-party assets. Load for a sign-in form or rendered user HTML. Server auth and response-header config are out.
 user-invocable: false
 ---
 
@@ -62,7 +62,7 @@ Better Auth owns the server: options and verify endpoints, the `passkey` plugin,
 
 ## Left out
 - Passkey server verification, challenge storage, credential tables: a vetted library per language (`passkeys`), or Better Auth.
-- CSP, `Connection-Allowlist`, COOP/COEP, cookies and the other response headers (`security`, `restrict-outbound-connections`): the platform seat sets them on the host. Step 7 above states only what Trusted Types needs from the page.
+- CSP, `Connection-Allowlist`, COOP/COEP, cookies and the other response headers (`security`, `restrict-outbound-connections`): the platform seat sets them on the host. *Untrusted HTML* step 7 states only what Trusted Types needs from the page.
 - Client-side verification of an email token, hand-rolled JWT or WebAuthn parsing (`verify-email-ownership`).
 
 ## Everything else
