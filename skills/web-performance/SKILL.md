@@ -32,7 +32,7 @@ Fallback code, the yield loop and the attribution fields: `reference/interaction
 4. **Preloads.** An image preload defaults to low priority, so give the LCP preload `fetchpriority="high"`. Fonts are already high: leave the attribute off, keep `crossorigin` on every font preload (same-origin too), and cap preloads at two images and two or three fonts [optimize-preload-priority, performance].
 5. **Scripts.** `fetchpriority="high"` on at most one or two async scripts the first interaction needs; `low` on analytics and on parser-blocking scripts at the end of the body [optimize-script-priority]. A third-party script gets `defer` and a place near the end of the body [performance].
 6. **Below-the-fold rendering.** `content-visibility: auto` on large sections that are below the fold only: on above-the-fold content it makes the browser evaluate visibility before rendering and delays load. Pair it with `contain-intrinsic-size: auto <length>`; without it the section collapses to 0 px off-screen and the scrollbar jumps. Derive the length from the content (`lh`, `ch`, an average) rather than guessing pixels [defer-rendering-heavy-content, performance].
-7. **Background requests.** `priority: 'low'` in `fetch()` options for analytics and speculative data. The key is `priority`; `importance` is dead [deprioritize-background-fetches].
+7. **Background requests.** `priority: 'low'` in `fetch()` options for analytics and speculative data. The key is `priority` [deprioritize-background-fetches].
 
 Traps:
 - `loading="lazy"` on the LCP image defers the request until layout finishes; never combine it with `fetchpriority="high"` [optimize-image-priority, performance].
@@ -51,7 +51,7 @@ Write `fetchpriority` as `high` or `low` only, on the few tags where the browser
 - **`Cache-Control: no-store` on a page** blocks the back/forward cache and makes every Back a full load; `no-cache` or `max-age=0` serves fresh content without that cost [performance].
 
 ## Layout shift
-The guides carry no CLS-attribution recipe; read shifts from the RUM already in place. The causes they do name:
+Read shifts from the RUM already in place; the guides have no CLS-attribution recipe, only these causes:
 - Images and video without `width`/`height` (or a CSS `aspect-ratio`) [performance].
 - A deferred section without `contain-intrinsic-size` [defer-rendering-heavy-content, interactions-in-complex-layouts].
 - A late-arriving block with no reserved box. For streamed placeholders give stable dimensions or a skeleton at the final size; announce progress in a small live region (not `role="alert"`) and leave focus where it is [out-of-order-html-streaming].
