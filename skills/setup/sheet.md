@@ -78,3 +78,14 @@ user-scope few named once as the set the repo inherits rather than repeated per 
 A cost line is the one field with no file to read it off, so it is the one to be most careful about:
 measure it or cite the config that sets it. A plausible cost asserted from the runner's reputation is
 the failure this shape invites — the sheet is read as derived fact on every later session.
+
+**The browser-support line** is the one field in a repo that renders client-side web UI (`screens`) whose
+wording Modern Web Guidance (`${CLAUDE_PLUGIN_ROOT}/SOURCES.md` → *Client-side web platform*) reads, so it is
+written exactly, into whichever section of the host file already owns the repo's conventions:
+
+```
+**Browser Support:** Baseline Widely available
+```
+
+Where the repo's `AGENTS.md` or `CLAUDE.md` already carries a `**Browser Support:**` line, leave it
+alone and write no second one: it is the repo's own policy, and a re-run must not reset it.

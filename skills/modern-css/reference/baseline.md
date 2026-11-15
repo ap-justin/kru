@@ -1,6 +1,6 @@
 # Baseline CSS features, 2023–2025
 
-Curated from web.dev/baseline/2023, /2024, /2025. CSS only (selectors, properties, functions, at-rules, units, media features) — closely-related HTML/JS platform features are in the last table since builders reach for them alongside CSS.
+Curated from web.dev/baseline/2023, /2024, /2025; the `BL 2026` rows were read from `api.webstatus.dev` on 2026-11-14. CSS only (selectors, properties, functions, at-rules, units, media features) — closely-related HTML/JS platform features are in the last table since builders reach for them alongside CSS.
 
 Grouped by **capability** (how you'd reach for it), not by year — the year is the `BL` column. See `SKILL.md`'s aging rule for turning that year into a *current* Baseline status: 2023 ≈ Widely available, 2024 ≈ crossing the line, 2025 ≈ Newly available. Recompute against today; don't trust the year as a fixed label.
 
@@ -15,7 +15,7 @@ The "What it does" column is a one-line **signpost to jog recognition, not a spe
 | `:nth-child(An+B of S)` | 2023 | Filters `:nth-child` matches by an inner selector |
 | `:user-valid`, `:user-invalid` | 2023 | Form-validation pseudo-classes that only fire after user interaction |
 | `:state()` | 2024 | Matches a custom element's internal state, set via its `CustomStateSet` |
-| `@scope` | 2025 | Scopes selectors to a DOM subtree, with a scoping root and optional lower limit boundary |
+| `@scope` | 2026 | Scopes selectors to a DOM subtree, with a scoping root and optional lower limit boundary |
 | `::target-text` | 2024 | Styles text highlighted via a URL text-fragment link |
 | `::details-content` | 2025 | Targets a `<details>` element's disclosure content |
 | `::spelling-error`, `::grammar-error` | 2025 | Styling hooks for browser-flagged spelling/grammar text |
@@ -29,7 +29,7 @@ The "What it does" column is a one-line **signpost to jog recognition, not a spe
 | Subgrid | 2023 | A grid item's own grid can inherit the parent's tracks (`grid-template-columns/rows: subgrid`) |
 | Two-value `display` | 2023 | Shorthand for outer + inner display (e.g. `display: block flow-root`) |
 | `align-content` on block containers | 2024 | Distributes a block formatting context's children along the block axis |
-| `text-wrap` (incl. `balance`, `pretty`) | 2024 | Controls line-wrapping strategy; `balance` evens out line lengths for headlines |
+| `text-wrap` (incl. `balance`) | 2024 | Controls line-wrapping strategy; `balance` evens out line lengths for headlines. `text-wrap: pretty` is a separate feature, limited availability |
 | Vertical form controls | 2024 | Form-control alignment/orientation adapted for vertical writing modes |
 
 ## Color
@@ -69,7 +69,7 @@ The "What it does" column is a one-line **signpost to jog recognition, not a spe
 | View Transitions (same-document) | 2025 | Animates between two DOM states via the `::view-transition-*` pseudo-element tree |
 | `view-transition-class` | 2025 | Assigns a class to elements in a view transition, for shared styling |
 
-Scroll-driven animation (`animation-timeline: scroll()/view()`) is the native replacement for `IntersectionObserver`-linked animation — verify its live Baseline status (it trails the years above); see SKILL.md.
+Scroll-driven animation (`animation-timeline: scroll()/view()`) is the native replacement for `IntersectionObserver`-linked animation — Newly available since 2026-10-27 (`api.webstatus.dev`), so BL 2026; see SKILL.md.
 
 ## Scroll & rendering performance
 
@@ -115,6 +115,7 @@ Scroll-driven animation (`animation-timeline: scroll()/view()`) is the native re
 | Alt text for CSS-generated content | 2024 | `content: "text" / "alt text"` — accessible label for generated content |
 | `outline` shorthand | 2023 | Shorthand for `outline-color`/`-style`/`-width` |
 | `@page` | 2024 | Print/paging layout control |
+| `field-sizing` | 2026 | Sizes inputs, selects and textareas to their content; explicit `width`/`height` overrides it |
 | `print-color-adjust` | 2025 | Whether the browser may adjust colors for print output |
 | `ruby-align`, `ruby-position` | 2024 | Positions ruby annotation text relative to its base |
 
