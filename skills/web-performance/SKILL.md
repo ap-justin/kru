@@ -40,7 +40,7 @@ Traps:
 - `<video loading="lazy">` with no integer `width`/`height` keeps the default 300×150 box, which can fail to intersect the viewport and never load; `<audio loading="lazy">` needs `controls` for the same reason [lazy-load-video-and-audio].
 - A poster image is fetched eagerly even under `preload="none"`; `loading="lazy"` on the `<video>` is what defers it [lazy-load-video-and-audio].
 
-Leave out `importance` attributes and `loading="auto"` (no browser supports either), `fetchpriority="auto"` (omit the attribute), and a priority hint on every tag (it exists to override a heuristic known to be wrong here) [optimize-image-priority, optimize-script-priority].
+Write `fetchpriority` as `high` or `low` only, on the few tags where the browser's heuristic is known to be wrong; `importance` and `loading="auto"` are supported by no browser [optimize-image-priority, optimize-script-priority].
 
 ## Slow next page
 **Which kind of navigation?** Speculation rules need a document that navigates; a single-page app never does [improve-next-page-load-performance].
@@ -67,5 +67,4 @@ Traps: a slow or down third-party host delays first paint and no developer-set t
 
 ## What is outside this skill
 - Server caching, CDN, rendering strategy and bundler config are the stack seat's; `vercel-perf-optimizer` for Next.js on Vercel.
-- Guides not summarized here: `avoid-redundant-large-asset-downloads`, `batch-analytics-events`, `calculate-total-foreground-time`, `conditional-async-dependencies`, `deliver-optimized-decorative-images`, `detect-initial-visibility-state`, `efficient-background-processing`, `full-session-analytics`, `interaction-paint-timing`, `load-shared-resources-declaratively`, `resolution-optimized-pseudo-elements`, `share-web-fonts-across-origins`, and the overview `performance` (critical CSS, resource hints, fonts, service workers, code splitting).
-- Read those with `npx -y modern-web-guidance@latest search "<topic>"` then `retrieve <id>`. Without npx, `https://raw.githubusercontent.com/GoogleChrome/modern-web-guidance-src/<sha>/guides/performance/<id>/guide.md`; this skill was written from `5e5cd33`. The `{{ BASELINE_STATUS("<id>") }}` placeholders in the source are unrendered; read each status at `https://api.webstatus.dev/v1/features/<id>`.
+- Guides not summarized here (critical CSS, resource hints, fonts, service workers, code splitting, analytics batching, background processing) are read with `npx -y modern-web-guidance@latest search "<topic>"` then `retrieve <id>`. Without npx, `https://raw.githubusercontent.com/GoogleChrome/modern-web-guidance-src/<sha>/guides/performance/<id>/guide.md`; this skill was written from `5e5cd33`. The `{{ BASELINE_STATUS("<id>") }}` placeholders in the source are unrendered; read each status at `https://api.webstatus.dev/v1/features/<id>`.
