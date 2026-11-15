@@ -43,8 +43,6 @@ Traps, each as the failure it causes:
 6. **An escaping policy is not a sanitizer.** Entity-escaped output dropped into `href="${escaped}"` or an unquoted attribute still carries `javascript:`. A `default` policy of `s => s` turns Trusted Types into a no-op (`security`).
 7. **Trusted Types rolls out report-only first**: `Content-Security-Policy-Report-Only: require-trusted-types-for 'script'`, enforce when reports reach zero. A framework or library that writes sinks with plain strings breaks under enforcement, so audit them before enforcing. The `trusted-types` allowlist names every policy, `dompurify` and any `default` included; with enforcement on, the DOMPurify fallback passes `RETURN_TRUSTED_TYPE: true`. A `<meta>` CSP works only as the first child of `<head>`. Content rendered elsewhere is sanitized on the server too.
 
-The header's value is the page's requirement; setting it on a host is the platform seat's.
-
 ## Origins (`validate-origins`)
 - **Privilege boundary (a `postMessage` command)**: `Origin.from(event).isSameOrigin(TRUSTED)`. A sibling subdomain is a different origin on purpose. **Post-login `returnTo` and link classes**: `isSameSite`, which rejects `http:` downgrades and neighbours on `.github.io` or `.co.uk`.
 - `isSameOrigin` takes an `Origin`, never a string (`TypeError`); `Origin.from('null')` throws; wrap runtime input in `try/catch` and answer `false`.
@@ -65,7 +63,6 @@ Better Auth owns the server: options and verify endpoints, the `passkey` plugin,
 ## Left out
 - Passkey server verification, challenge storage, credential tables: a vetted library per language (`passkeys`), or Better Auth.
 - CSP, `Connection-Allowlist`, COOP/COEP, cookies and the other response headers (`security`, `restrict-outbound-connections`): the platform seat's host config.
-- Secrets, tokens, sessions.
 - Client-side verification of an email token, hand-rolled JWT or WebAuthn parsing (`verify-email-ownership`).
 
 ## Everything else

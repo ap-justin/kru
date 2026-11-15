@@ -53,7 +53,7 @@ Reaching to hand-write something — a verification email, rate limiting, an org
 - **The `organization` plugin's invitation id is the invitation's credential.** `sendInvitationEmail` gets `data.id`, the accept link carries it verbatim, and `acceptInvitation` takes that id plus a signed-in session whose email matches — no separate token, no hashed column; the docs say to treat a listed invitation id as an action-capable link. Its secrecy is the id generator's: default opaque ids and `generateId: "uuid"` hold, `"serial"`/`false`/custom ids are guessable. A repo that hashes its own invite tokens loses that property by adopting the plugin — say so in the return, set `requireEmailVerificationOnInvitation: true` wherever members can list invitations or unverified password sessions exist, and gate `listInvitations` behind an app-level permission check, since its output is the credential.
 
 ## Web security (shared skill)
-Load **`web-security`** for the passkey plugin's browser side: sign-in markup, conditional UI, the Signal calls. Its *Seam with `better-auth-specialist`* section states who owns what, so this file doesn't.
+Load **`web-security`** for the passkey plugin's browser side: sign-in markup, conditional UI, the Signal calls. Its *Seam with `better-auth-specialist`* section states who owns what.
 
 ## Client & session
 - One `createAuthClient()` in a shared module; add the client half of every server plugin used. Expose typed `signIn`/`signUp`/`signOut`/`useSession` (or the framework equivalent) for the builder.
