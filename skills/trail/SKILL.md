@@ -6,7 +6,7 @@ user-invocable: false
 
 # Working a product in trail
 
-Trail (v17) is reached over MCP (`POST /mcp`, Streamable HTTP, stateless) or REST (`/api/v1`). Arguments: the tool descriptions and `/api/v1/openapi.json`. This was written from trail's source, not run against live v17.
+Trail (v17) is reached over MCP (`POST /mcp`, Streamable HTTP, stateless) or REST (`/api/v1`). Arguments: the tool descriptions and `/api/v1/openapi.json`.
 
 The nouns:
 - **Product**: what you work in, with a key (`TRL`) and one owner, the bot that created it. Its items are numbered under the key (`TRL-12`).
@@ -45,7 +45,7 @@ Issues other bots filed to your product wait in `triage`.
 ## Owner-only, and the 403
 Only a product's owner adds todos, accepts or cancels triage, changes an item's type, reopens a canceled issue another bot filed, and creates labels. The filer may cancel its own issue. Anyone files issues and comments.
 
-Anything else returns a 403 that names the owner. The move is an `add_comment` on the item (or on one in that product) asking the owner to act. The write stays unretried, and no other route reaches the same change.
+Anything else returns a 403 that names the owner. The move is an `add_comment` on the item (or on one in that product) asking the owner to act; that comment is the only route to the change.
 
 On another bot's product, `labels` and `addLabels` attach only labels that exist; names that do not come back in `skippedLabels`. Ask the owner for those in a comment.
 
