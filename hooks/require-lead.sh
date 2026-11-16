@@ -13,9 +13,10 @@
 # stands; anything unparsed keeps it, because a miss here is a silent ungated
 # build and a false gate costs one message.
 #
-# it fires once per session: the mark is written whether or not the block lands,
-# so a session that declines is nagged no further and a subagent's own tool call
-# never trips a gate meant for the lead.
+# it fires once per session: the first gated call decides and marks the session,
+# whether it blocks or fails open (an unreadable transcript, a /kru: command in
+# flight), and no later call is judged. a session that declines is nagged no
+# further and a subagent's own tool call never trips a gate meant for the lead.
 #
 # fail open on anything that isn't a clear miss. kill switch: touch the file
 # the resolver's `lead-gate/off`. a marker file rather than a flag alone, because
@@ -53,8 +54,12 @@ fi
 
 sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
 [ -z "$sid" ] && exit 0
+mark_dir="$(kru_path lead-gate)"
+mark="$mark_dir/$sid"
+[ -e "$mark" ] && exit 0
+mark_session() { mkdir -p "$mark_dir" 2>/dev/null && : > "$mark" 2>/dev/null; }
 transcript=$(printf '%s' "$input" | jq -r '.transcript_path // empty' 2>/dev/null)
-[ -r "$transcript" ] || exit 0
+[ -r "$transcript" ] || { mark_session; exit 0; }
 
 # anchored to how a load is recorded: a Skill call, a Read of
 # skills/lead/SKILL.md, or a /kru:lead slash command — never prose or a quoted
@@ -96,13 +101,10 @@ if [ -n "$cmd_line" ]; then
     grep -v '"isMeta":true' |
     tail -1 | cut -d: -f1)
   case "$say_line" in ''|*[!0-9]*) say_line=0 ;; esac
-  [ "$say_line" -le "$cmd_line" ] && exit 0
+  [ "$say_line" -le "$cmd_line" ] && { mark_session; exit 0; }
 fi
 
-mark_dir="$(kru_path lead-gate)"
-mark="$mark_dir/$sid"
-[ -e "$mark" ] && exit 0
-mkdir -p "$mark_dir" 2>/dev/null && : > "$mark" 2>/dev/null
+mark_session
 
 printf 'kru: this session has not loaded the lead contract. Read %s/skills/lead/SKILL.md (or invoke the kru:lead skill; to design rather than build, invoke kru:designer instead), then take the action again — nothing else about the request has changed. This fires once per session, from the kru plugin, and only plain read-only Bash commands are exempt (ls, cat, grep, git status/log/diff/show and a few more; no redirect, $( or cd); Read, Grep and Glob need the load too. To run without it: touch %s\n' "$plugin_root" "$(kru_path lead-gate/off)" >&2
 exit 2

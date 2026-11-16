@@ -214,6 +214,15 @@ check refuse Edit "" "$p" once
 check allow Edit "" "$p" once
 check allow Bash "rm -rf build" "$p" once
 
+# the first gated call decides: one that fails open on an unreadable transcript
+# is marked, so a later call with a readable transcript and no lead is not gated
+check allow Edit "" "$sandbox/missing.jsonl" failopen
+if [ -e "$home/.kru/lead-gate/failopen" ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL: unreadable-transcript call left no mark\n'; fi
+check allow Edit "" "$p" failopen
+# same under a /kru: command: the call it exempts is the session's first
+check allow Edit "" "$tx/cmd-latest.jsonl" cmdfirst
+check allow Edit "" "$tx/cmd-then-turn.jsonl" cmdfirst
+
 # read-only bash is an inspection
 check allow Bash "ls" "$p"
 check allow Bash "ls -la hooks" "$p"
