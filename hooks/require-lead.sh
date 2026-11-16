@@ -90,10 +90,11 @@ lead_loaded=$(jq -rn --arg base "${read_base%/}/" "$read_lead_path"'
 
 # a /kru:<skill> run is that skill's contract, not the lead's — the ones
 # that dispatch load lead themselves. exempt only while the command is still the
-# session's latest word: a plain turn after it is an ordinary session again. the
-# harness follows a command with an isMeta user line holding the skill body, and
-# that is not the user speaking. a user who types "isMeta":true gets it escaped
-# in the compact json, so the unescaped match only hits the harness's field.
+# session's latest word, and a call it exempts marks the session like any first
+# call, so a plain turn after that stays ungated. the harness follows a command
+# with an isMeta user line holding the skill body, and that is not the user
+# speaking. a user who types "isMeta":true gets it escaped in the compact json,
+# so the unescaped match only hits the harness's field.
 cmd_line=$(grep -nE '<command-name>/?kru:' "$transcript" | tail -1 | cut -d: -f1)
 if [ -n "$cmd_line" ]; then
   say_line=$(grep -n '"type":"user"' "$transcript" |
