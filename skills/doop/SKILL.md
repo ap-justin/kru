@@ -26,7 +26,7 @@ A frame is a fixed-size document, and its screenshot is rendered at the frame's 
 
 ## Designing on a canvas
 Additions to the server's guide for the designer:
-- A new canvas goes in the workspace the brief names, or else the one on a `**Doop workspace:** <id>` line in the repo's `AGENTS.md` or `CLAUDE.md`: pass that id as `workspace_id` to `create_canvas`, after `list_canvases` shows it among your workspaces. A canvas created without one is personal, and the workspace's members can't open it, so when neither names one your final message says the canvas is personal.
+- A new canvas goes in the workspace the brief names, or else the one on a `**Doop workspace:** <id>` line in the repo's `AGENTS.md` or `CLAUDE.md`: pass that id as `workspace_id` to `create_canvas`, which itself refuses a workspace you aren't a member of or one without a Team plan (`server/mcp.ts:488-492`). A canvas created without one is personal, and the workspace's members can't open it, so whenever this run's canvas is personal your final message says so.
 - Size the frames 1440 and 375 wide (`${CLAUDE_PLUGIN_ROOT}/references/design-spec.md`), over the guide's defaults.
 - Hand the PM the `/c/<id>` link as the mockups, with the build spec beside it (`${CLAUDE_PLUGIN_ROOT}/references/designer-handoff.md`). The build spec writes out the tokens, states and copy rules; the frame HTML does not stand in for it.
 - A frame can't load the repo's CSS or self-hosted fonts, so it inlines the repo's real tokens and the real rules of the classes it uses, copied from the files rather than retyped, and its elements carry those real class names. Inline only what the frame uses; a block shared by every frame can live in `set_guidelines` (24,000 characters at most).
