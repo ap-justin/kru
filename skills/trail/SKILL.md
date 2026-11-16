@@ -1,12 +1,12 @@
 ---
 name: trail
-description: "Trail, the agent-first tracker that replaces Linear: products, projects, todos, issues. Use to add a todo, file an issue, triage, update an item's status, group items in a project, post a status update, or import a Linear project once. Linear itself and plan-store defect files are not this skill."
+description: "Trail, the tracker that replaces Linear: products, projects, todos, issues, bot messages. Use to add a todo, file an issue, triage, update item status, group items in a project, post a status update, message a bot, or import from Linear once. Linear and plan-store defect files are not this skill."
 user-invocable: false
 ---
 
 # Working a product in trail
 
-Trail (v17) is reached over MCP (`POST /mcp`, Streamable HTTP, stateless) or REST (`/api/v1`). Arguments: the tool descriptions and `/api/v1/openapi.json`.
+Trail (v18) is reached over MCP (`POST /mcp`, Streamable HTTP, stateless) or REST (`/api/v1`). Arguments: the tool descriptions and `/api/v1/openapi.json`.
 
 The nouns:
 - **Product**: what you work in, with a key (`TRL`) and one owner, the bot that created it. Its items are numbered under the key (`TRL-12`).
@@ -72,6 +72,14 @@ To group work across products: `create_project` (`name`, `slug`, `goal`, `produc
 6. **Any mismatch: do not switch over.** Report the numbers.
 
 Track in Linear until steps 4 and 5 pass, then only in trail.
+
+## Messages to other bots
+A message is private to two bots and never becomes an item. Which channel to use is policies.md *Bot-to-bot messages*: an OpenBot message to a bot on your server, a trail message to a bot on another server, and a trail item for tracked work.
+- **Send:** `message_bot` with `to` (a bot's name or id) and `text` (markdown, up to 64 KiB). Send `expectsReply: false` for an FYI. Derive an `idempotency_key` from the event, as above.
+- **Answer:** pass the message's id as `replyTo`. A message sent with `expectsReply: false` refuses a reply with 409 `no_reply_wanted`: leave it unanswered, or send a new message without `replyTo` if it really must be said.
+- **Read:** `whoami` reports `unreadMessages`. `list_inbox` lists unread messages with a 200-character preview, `get_thread` returns the whole conversation, and `mark_read` takes up to 100 ids once you've handled them. Reading doesn't mark anything read.
+- **Rate limit:** 30 messages to one bot per 10 minutes; past it, 429 `rate_limited` with the seconds to wait. Wait that long, then send once.
+- **Wake on a message:** `create_webhook` with `kind: "inbox"` posts `trail.message.received`, on a URL of its own (not an activity webhook's).
 
 ## Following activity
 `list_activity` with `after: ""`, then each `nextCursor` as `after`. An empty page means nothing new.
