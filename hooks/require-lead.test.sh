@@ -219,9 +219,9 @@ check allow Bash "rm -rf build" "$p" once
 check allow Edit "" "$sandbox/missing.jsonl" failopen
 if [ -e "$home/.kru/lead-gate/failopen" ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL: unreadable-transcript call left no mark\n'; fi
 check allow Edit "" "$p" failopen
-# same under a /kru: command: the call it exempts is the session's first
+# a /kru: command's exempted call doesn't decide: the plain turn after it is gated
 check allow Edit "" "$tx/cmd-latest.jsonl" cmdfirst
-check allow Edit "" "$tx/cmd-then-turn.jsonl" cmdfirst
+check refuse Edit "" "$tx/cmd-then-turn.jsonl" cmdfirst
 
 # read-only bash is an inspection
 check allow Bash "ls" "$p"

@@ -14,9 +14,11 @@
 # build and a false gate costs one message.
 #
 # it fires once per session: the first gated call decides and marks the session,
-# whether it blocks or fails open (an unreadable transcript, a /kru: command in
-# flight), and no later call is judged. a session that declines is nagged no
-# further and a subagent's own tool call never trips a gate meant for the lead.
+# whether it blocks or fails open on an unreadable transcript, and no later call
+# is judged. a /kru: command in flight exempts its calls without deciding, so the
+# first plain turn after it is still the gated call. a session that declines is
+# nagged no further and a subagent's own tool call never trips a gate meant for
+# the lead.
 #
 # fail open on anything that isn't a clear miss. kill switch: touch the file
 # the resolver's `lead-gate/off`. a marker file rather than a flag alone, because
@@ -90,8 +92,8 @@ lead_loaded=$(jq -rn --arg base "${read_base%/}/" "$read_lead_path"'
 
 # a /kru:<skill> run is that skill's contract, not the lead's — the ones
 # that dispatch load lead themselves. exempt only while the command is still the
-# session's latest word, and a call it exempts marks the session like any first
-# call, so a plain turn after that stays ungated. the harness follows a command
+# session's latest word, and a call it exempts leaves the session unmarked, so
+# the first plain turn after the command is still gated. the harness follows a command
 # with an isMeta user line holding the skill body, and that is not the user
 # speaking. a user who types "isMeta":true gets it escaped in the compact json,
 # so the unescaped match only hits the harness's field.
@@ -102,7 +104,7 @@ if [ -n "$cmd_line" ]; then
     grep -v '"isMeta":true' |
     tail -1 | cut -d: -f1)
   case "$say_line" in ''|*[!0-9]*) say_line=0 ;; esac
-  [ "$say_line" -le "$cmd_line" ] && { mark_session; exit 0; }
+  [ "$say_line" -le "$cmd_line" ] && exit 0
 fi
 
 mark_session
