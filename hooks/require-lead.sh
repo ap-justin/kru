@@ -13,9 +13,12 @@
 # stands; anything unparsed keeps it, because a miss here is a silent ungated
 # build and a false gate costs one message.
 #
-# it fires once per session: the mark is written whether or not the block lands,
-# so a session that declines is nagged no further and a subagent's own tool call
-# never trips a gate meant for the lead.
+# it fires once per session: the first gated call decides and marks the session,
+# whether it blocks or fails open on an unreadable transcript, and no later call
+# is judged. a /kru: command in flight exempts its calls without deciding, so the
+# first plain turn after it is still the gated call. a session that declines is
+# nagged no further and a subagent's own tool call never trips a gate meant for
+# the lead.
 #
 # fail open on anything that isn't a clear miss. kill switch: touch the file
 # the resolver's `lead-gate/off`. a marker file rather than a flag alone, because
@@ -53,8 +56,12 @@ fi
 
 sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
 [ -z "$sid" ] && exit 0
+mark_dir="$(kru_path lead-gate)"
+mark="$mark_dir/$sid"
+[ -e "$mark" ] && exit 0
+mark_session() { mkdir -p "$mark_dir" 2>/dev/null && : > "$mark" 2>/dev/null; }
 transcript=$(printf '%s' "$input" | jq -r '.transcript_path // empty' 2>/dev/null)
-[ -r "$transcript" ] || exit 0
+[ -r "$transcript" ] || { mark_session; exit 0; }
 
 # anchored to how a load is recorded: a Skill call, a Read of
 # skills/lead/SKILL.md, or a /kru:lead slash command — never prose or a quoted
@@ -85,10 +92,11 @@ lead_loaded=$(jq -rn --arg base "${read_base%/}/" "$read_lead_path"'
 
 # a /kru:<skill> run is that skill's contract, not the lead's — the ones
 # that dispatch load lead themselves. exempt only while the command is still the
-# session's latest word: a plain turn after it is an ordinary session again. the
-# harness follows a command with an isMeta user line holding the skill body, and
-# that is not the user speaking. a user who types "isMeta":true gets it escaped
-# in the compact json, so the unescaped match only hits the harness's field.
+# session's latest word, and a call it exempts leaves the session unmarked, so
+# the first plain turn after the command is still gated. the harness follows a command
+# with an isMeta user line holding the skill body, and that is not the user
+# speaking. a user who types "isMeta":true gets it escaped in the compact json,
+# so the unescaped match only hits the harness's field.
 cmd_line=$(grep -nE '<command-name>/?kru:' "$transcript" | tail -1 | cut -d: -f1)
 if [ -n "$cmd_line" ]; then
   say_line=$(grep -n '"type":"user"' "$transcript" |
@@ -99,10 +107,7 @@ if [ -n "$cmd_line" ]; then
   [ "$say_line" -le "$cmd_line" ] && exit 0
 fi
 
-mark_dir="$(kru_path lead-gate)"
-mark="$mark_dir/$sid"
-[ -e "$mark" ] && exit 0
-mkdir -p "$mark_dir" 2>/dev/null && : > "$mark" 2>/dev/null
+mark_session
 
 printf 'kru: this session has not loaded the lead contract. Read %s/skills/lead/SKILL.md (or invoke the kru:lead skill; to design rather than build, invoke kru:designer instead), then take the action again — nothing else about the request has changed. This fires once per session, from the kru plugin, and only plain read-only Bash commands are exempt (ls, cat, grep, git status/log/diff/show and a few more; no redirect, $( or cd); Read, Grep and Glob need the load too. To run without it: touch %s\n' "$plugin_root" "$(kru_path lead-gate/off)" >&2
 exit 2
