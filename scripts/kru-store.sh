@@ -53,7 +53,7 @@ kru_repo_root() {
 # set in the repo's committed .claude/settings.json `env`, it reaches every surface.
 kru_origin_name() {
   local url
-  url=$(git remote get-url origin 2>/dev/null) || return 0
+  url=$(git -C "$(kru_repo_root)" remote get-url origin 2>/dev/null) || return 0
   url=${url%/}; url=${url%.git}; url=${url##*[/:]}
   printf '%s' "$url"
 }
