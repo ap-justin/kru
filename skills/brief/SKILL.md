@@ -14,6 +14,8 @@ going to land**.
 **Inside a repo, map it before you grill** (`lead` Step 1): a question answerable from the codebase is
 answered from the codebase, never asked.
 
+**A change that adds or hardens a guard for a rare case passes the edge-case check before it's briefed** (`${CLAUDE_PLUGIN_ROOT}/skills/lead/references/gates.md` → *Edge-case guards*). Grill its path, evidence and existing cover with the user. One that fails is briefed as a data fix, or not at all.
+
 ## 1. Read the intake first
 
 The store's existing `plan/<effort>/brief.md` (if you're re-grilling an effort), `TODOS.md` (the captured, untriaged one-liners), and the store's `notes/` (freeform brainstorming — **input, never authority**: cite it as *"there's a note that says…"*, never as a decision, and never let it override the brief, the repo's docs, or the user).
