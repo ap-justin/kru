@@ -43,6 +43,7 @@ The checks that make the test concrete:
 - **Up to three routes, each a different idea with its own rationale**, plus the one you prefer and why (Airey p. 47; Wheeler p. 48). When one idea is plainly right, show it and its variations instead of padding the set (Identify, HarperCollins).
 - **Show only concepts that can work** — a weak one included for contrast is one the user may pick (Identify, Introduction).
 - **A new mark feels foreign at first.** Say so with the set: a first reaction ("I don't like blue") is not a verdict, and testing a mark on gut response rejects the unfamiliar (Identify, Introduction; Conservation International).
+- Before presenting, view every render. For each route say what it could be mistaken for.
 - In a redesign, show the old marks in a dated row ending in the new one, so attachment carries over (Identify, Conservation International; NBC).
 
 ## Traps
@@ -50,5 +51,5 @@ The checks that make the test concrete:
 - **Depicting the building, or anything that can disappear** — it says nothing about what the org does and dates with the thing (Identify, Library of Congress; Alliance for Downtown New York).
 - **A symbol added because marks have symbols.** Have a reason for it (Identify, Merck). Decoration is right when the brief asks for it, and then the parts are drawn to work as pattern too (Identify, Shinsegae).
 - **An ownable-looking common shape.** A circle, a check, a letter in a square can't be owned; replace it with a new form of the same idea, and note that a search is due before anyone commits (Identify, Amesco; NBC).
-- **A character mark** dates first (Wheeler p. 64).
+- **A character mark** dates first (Wheeler p. 64). An animal or object mark stays free of letters, so it reads as the creature or the thing.
 - **Clean construction taken for an idea.** Circles and a module make any mark look finished, including a generic one. Precision isn't distinctiveness, so a well-built mark gets the "could anyone else use it?" check harder, not softer.

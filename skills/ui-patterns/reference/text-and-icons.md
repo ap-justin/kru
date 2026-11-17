@@ -104,6 +104,14 @@
 .press-with-value { white-space: nowrap; }
 ```
 
+## Centred content is centred in what the person sees
+
+**Trigger:** content placed in the middle of a screen — an empty state, a loader, a sign-in card, a dialog.
+**Pattern:** centre it in the visible area: below the top bar and inside the viewport, so it sits optically about 40% from the top.
+**Default it corrects:** `top: 50%` or `min-height: 100vh` centring against the whole page, so the content sits low once a top bar takes its height and a phone's browser bars shrink the viewport.
+**Why:** the eye reads the visible area as the screen. True centre looks low, and the bar's height or the browser chrome pushes it lower still.
+**Applies when:** the content is alone in its area. Content that flows from the top is not centred.
+
 ## A QR code's quiet zone is part of the drawing
 
 **Trigger:** rendering a QR code, and placing anything next to it.
