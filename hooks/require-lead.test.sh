@@ -80,15 +80,17 @@ meta_body() { jq -nc --arg t "$1" '{type:"user", isMeta:true, message:{role:"use
 pass=0 fail=0
 n=0
 # check <expect> <tool> <command-or-empty> <transcript> [sid] [VAR=value...]
+# with agent_id set in the caller's env, the call is a subagent's
 # expect: refuse | allow
 check() {
   local expect=$1 tool=$2 cmd=$3 transcript=$4 sid=${5:-}
   shift 4; [ $# -gt 0 ] && shift
   n=$((n + 1)); [ -n "$sid" ] || sid="s$n"
   local input out code
-  input=$(jq -nc --arg s "$sid" --arg t "$tool" --arg c "$cmd" --arg p "$transcript" \
+  input=$(jq -nc --arg s "$sid" --arg t "$tool" --arg c "$cmd" --arg p "$transcript" --arg a "${agent_id:-}" \
     '{session_id:$s, transcript_path:$p, tool_name:$t,
-      tool_input:(if $t == "Bash" then {command:$c} elif $t == "Skill" then {skill:"kru:lead"} else {file_path:"/x/a.ts"} end)}')
+      tool_input:(if $t == "Bash" then {command:$c} elif $t == "Skill" then {skill:"kru:lead"} else {file_path:"/x/a.ts"} end)}
+      + (if $a != "" then {agent_id:$a, agent_type:"general-purpose"} else {} end)')
   out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_STORE_REPO -u CLAUDE_CODE_REMOTE -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_ROOT \
     HOME="$home" "$@" bash "$hook" "$root" 2>&1)
   code=$?
@@ -219,6 +221,10 @@ check allow Bash "rm -rf build" "$p" once
 check allow Edit "" "$sandbox/missing.jsonl" failopen
 if [ -e "$home/.kru/lead-gate/failopen" ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL: unreadable-transcript call left no mark\n'; fi
 check allow Edit "" "$p" failopen
+# a call made by a subagent carries agent_id and is never gated, whatever the
+# parent's transcript says; the same call without it is the lead's and is refused
+agent_id=a1b2c3 check allow Edit "" "$tx/cmd-then-turn.jsonl" seat1
+check refuse Edit "" "$tx/cmd-then-turn.jsonl" seat2
 # a /kru: command's exempted call doesn't decide: the plain turn after it is gated
 check allow Edit "" "$tx/cmd-latest.jsonl" cmdfirst
 check refuse Edit "" "$tx/cmd-then-turn.jsonl" cmdfirst
@@ -271,9 +277,8 @@ check refuse Edit "" "$p" "" CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE=false
 # and with both lifted the same call is gated, so the passes above are the switches'
 check refuse Edit "" "$p"
 
-# a /kru: command exempts while it is the latest user word, tool results aside
-check allow Edit "" "$tx/cmd-latest.jsonl"
-check refuse Edit "" "$tx/cmd-then-turn.jsonl"
+# the harness's isMeta line after a /kru: command is not the user speaking
+# (the cmd-latest and cmd-then-turn pair runs above, on the cmdfirst session)
 check allow Edit "" "$tx/cmd-meta.jsonl"
 check refuse Edit "" "$tx/cmd-meta-then-turn.jsonl"
 
