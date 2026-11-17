@@ -17,6 +17,12 @@ repo="$sandbox/acme-web"
 mkdir -p "$home" "$repo"
 git -C "$repo" init -q 2>/dev/null
 git -C "$repo" commit -q --allow-empty -m init 2>/dev/null
+# a second repo with an origin, for the slug cases that read it
+oclone="$sandbox/clone-folder"
+mkdir -p "$oclone"
+git -C "$oclone" init -q 2>/dev/null
+git -C "$oclone" commit -q --allow-empty -m init 2>/dev/null
+git -C "$oclone" remote add origin https://github.com/acme/origin-name.git
 
 pass=0 fail=0
 report() {
@@ -83,15 +89,39 @@ is "KRU_PROJECT_STORE outranks a store repo" "$sandbox/pinned"
 
 # --- slug: one name across both stores --------------------------------------
 run "$repo" slug
-is "slug is the repo's dir name" "acme-web"
+is "no origin: slug is the repo's dir name" "acme-web"
 
 run "$repo/.git" slug
 is "slug is stable from a subdir" "acme-web"
 
+run "$oclone" slug
+is "slug is the origin repo's name, not the folder" "origin-name"
+
+mkdir -p "$oclone/sub"
+run "$oclone/sub" slug
+is "origin slug is stable from a subdir" "origin-name"
+
+run "$oclone" slug KRU_PROJECT=acme-oss
+is "KRU_PROJECT outranks the origin name" "acme-oss"
+
+git -C "$oclone" remote set-url origin git@github.com:acme/ssh-name.git
+run "$oclone" slug
+is "an ssh origin url gives its repo name" "ssh-name"
+
+git -C "$oclone" remote set-url origin https://github.com/acme/https-name
+run "$oclone" slug
+is "an https origin url without .git gives its repo name" "https-name"
+
+git -C "$oclone" remote set-url origin "$sandbox/somewhere/path-name.git"
+run "$oclone" slug
+is "a local path origin gives its basename" "path-name"
+
+git -C "$oclone" remote set-url origin https://github.com/acme/origin-name.git
+
 # a slice dispatched into a worktree keeps the dispatching session's store
-if git -C "$repo" worktree add -q "$sandbox/wt-feature" -b feature 2>/dev/null; then
+if git -C "$oclone" worktree add -q "$sandbox/wt-feature" -b feature 2>/dev/null; then
   run "$sandbox/wt-feature" slug
-  is "a linked worktree resolves to the main repo's slug" "acme-web"
+  is "a linked worktree resolves to the main repo's origin name" "origin-name"
 else
   printf 'SKIP: git worktree unavailable\n'
 fi

@@ -39,11 +39,13 @@ has already moved.
 | `KRU_HOME` set | that path, on every surface | under it, as the default row |
 | `KRU_PROJECT_STORE` set | — | that path |
 
-**`<project-slug>` is the repo's dir name**, and a linked worktree resolves to the **main** repo — a
-slice dispatched into a worktree writes to the same store as the session that dispatched it.
-**`KRU_PROJECT` overrides the slug.** A clone's dir name differs by machine — a cloud vm names it
-after the github repo — so set it in the repo's committed `.claude/settings.json`
-(`"env": {"KRU_PROJECT": "<name>"}`) and every surface lands in the same `management/<name>`.
+**`<project-slug>` is the origin repo's name** (`git remote get-url origin`, last path part, `.git`
+dropped), so every clone of a repo lands in the same `management/<name>` whatever its folder is called —
+sky clones every product into `repo`. A repo with no origin falls back to its dir name. A linked
+worktree resolves to the **main** repo — a slice dispatched into a worktree writes to the same store as
+the session that dispatched it. **`KRU_PROJECT` overrides the slug**, and is only needed when two repos
+share a name or a repo has no origin: set it in the repo's committed `.claude/settings.json`
+(`"env": {"KRU_PROJECT": "<name>"}`).
 `KRU_PROJECT_STORE` pins a whole path instead, but an environment variable set on a cloud
 environment reaches every repo opened in it.
 

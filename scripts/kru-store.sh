@@ -46,11 +46,23 @@ kru_repo_root() {
 }
 
 # one name identifies a project across both stores — the inbox line `skills/remember/SKILL.md`
-# stamps and the plan dir the planner writes carry the same slug. the dir name
-# differs by machine — a cloud vm names the clone after the github repo — so
-# KRU_PROJECT pins it; set in the repo's committed .claude/settings.json `env`,
-# it reaches every surface.
-kru_slug() { printf '%s' "${KRU_PROJECT:-$(basename "$(kru_repo_root)")}"; }
+# stamps and the plan dir the planner writes carry the same slug. the slug is
+# the origin repo's name, because the clone's dir name differs by machine (sky
+# clones every product into `repo`); no origin falls back to the dir name.
+# KRU_PROJECT pins it for two repos that share a name, or a repo with no origin;
+# set in the repo's committed .claude/settings.json `env`, it reaches every surface.
+kru_origin_name() {
+  local url
+  url=$(git -C "$(kru_repo_root)" remote get-url origin 2>/dev/null) || return 0
+  url=${url%/}; url=${url%.git}; url=${url##*[/:]}
+  printf '%s' "$url"
+}
+kru_slug() {
+  [ -n "${KRU_PROJECT:-}" ] && { printf '%s' "$KRU_PROJECT"; return 0; }
+  local name
+  name=$(kru_origin_name)
+  printf '%s' "${name:-$(basename "$(kru_repo_root)")}"
+}
 
 kru_is_cloud() { [ "${CLAUDE_CODE_REMOTE:-}" = "true" ]; }
 
