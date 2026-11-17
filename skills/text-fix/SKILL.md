@@ -38,4 +38,5 @@ Four classes of text, four standards, and a real target almost always carries mo
 
 ## Don't
 
+- Don't loop on rewording: take each real fix once, and end the pass when the next edit would only reword text the standard already accepts.
 - Don't run the formatter, the linter, or the build afterwards. The test literals `prose-fix` carried are the only thing that could go red, and the diff already shows them; a formatter's diff hides all four passes at once.

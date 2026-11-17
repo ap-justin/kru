@@ -10,7 +10,7 @@ user-invocable: false
      upstream ships this as the namespaced `design:ux-copy`; this is the plain vendored copy.
      TEAM-ADAPTED: dead CONNECTORS.md pointer dropped, connector block rewritten as team equivalents
      (repo strings for voice, the design spec's screen inventory for context); error messages split field-level vs system-level, where upstream gives every error the what+why+how structure.
-     DISCLOSED DEVIATION (house rules): three owner rules added to the body, each marked *house rule* where it sits — labels name what is needed in a newcomer's words (Principles 1), no prose where the flow already says it (Principles 2), and a button confirming an errand is named for what the person just did, where upstream's CTA rule names the outcome (CTAs). re-sync: diff, then re-apply. -->
+     DISCLOSED DEVIATION (house rules): three owner rules added to the body, each marked *house rule* where it sits — labels name what is needed in a newcomer's words, and a group label names its members (Principles 1), no prose where the flow already says it (Principles 2), and a button confirming an errand is named for what the person just did, where upstream's CTA rule names the outcome (CTAs). re-sync: diff, then re-apply. -->
 
 # UX copy
 
@@ -25,7 +25,7 @@ Write or review UX copy for any interface context.
 
 ## Principles
 
-1. **Clear**: Say exactly what you mean. No jargon, no ambiguity. *House rule:* a label says what is needed or what the thing is, in words a newcomer already knows (not `look for`, not `finalize your order`).
+1. **Clear**: Say exactly what you mean. No jargon, no ambiguity. *House rule:* a label says what is needed or what the thing is, in words a newcomer already knows (not `look for`, not `finalize your order`). A label for a group names each member it covers ("Card, wallet and bank transfer"), not a vague umbrella such as a processor's name.
 2. **Concise**: Use the fewest words that convey the full meaning. *House rule:* no prose where the flow already says it.
 3. **Consistent**: Same terms for the same things everywhere.
 4. **Useful**: Every word should help the user accomplish their goal.
@@ -40,7 +40,7 @@ Write or review UX copy for any interface context.
 - *House rule:* a button that confirms an errand the person did is named for what they just did ("I've messaged them"), not for the next state (the exception to the verb-first and match-the-outcome lines above)
 
 ### Error Messages
-**A field error is read with its label, so it carries the fault alone**: `EIN` / `required`. The label already names the field, and the requirement is not what the operator is deciding at that moment.
+**A field error is read with its label, so it carries the fault alone**: `EIN` / `required`. The label already names the field, and the requirement is not what the operator is deciding at that moment. A message says what is missing ("Enter a note") and never tells the person to untick something to skip a field.
 
 **A system-level error** stands alone, so it carries the structure: what happened + why + how to fix.
 - "Payment declined. Your card was declined by your bank. Try a different card or contact your bank."

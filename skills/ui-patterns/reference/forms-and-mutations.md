@@ -165,10 +165,18 @@ The held state is `aria-disabled` and the handler ignores the press. `disabled` 
 ## A field's error is the predicate its label completes
 
 **Trigger:** the message under an invalid field — required, out of range, malformed, a cross-field bound.
-**Pattern:** the column reads as one sentence — label, box, predicate. The predicate stands alone, as an instruction, in the operator's own figures, lowercase with no full stop: `required`, `between $5 and $50,000`, `required, or untick to skip`. It is plain text, no icon, in the error colour, directly under its own control.
+**Pattern:** the column reads as one sentence — label, box, predicate. The predicate stands alone, as an instruction, in the operator's own figures, lowercase with no full stop: `required`, `between $5 and $50,000`, `enter a note`. It says what is missing and never tells the person to untick or skip something. It is plain text, no icon, in the error colour, directly under its own control.
 **Default it corrects:** `Email is required` / `Required.` / `The email you entered is invalid` / `above the largest gift of $20.00` — the label restated, the value echoed under the box still showing it, a report of what went wrong where an instruction was owed, a clause capitalised and stopped as a sentence of its own, `$20.00` from an operator who typed `20`, and an icon in front of it.
 **Why:** the label and the box are already on screen; a message repeating either is read twice and trusted less. An instruction is the fix; a report leaves the operator to derive it. A figure in a form they never typed is a second value to reconcile. The colour and the place already mark it as an error, so an icon says it a second time. Consequence prose belongs to the confirm dialog, on the one press where it changes a decision.
 **Applies when:** the message sits under its own field. A design system that settles error marks in writing wins. A summary that folds fields into one string has left the box, so it names the field — and that is where a secret gets masked, because the control showing it is out of view. Folded into one live-region line, the predicates join on commas: each is a clause, and the line reads as one. Repair before you refuse: what the parse can normalise — surrounding whitespace, a missing scheme — it accepts, and only what survives that earns a predicate. A refusal the system could have repaired itself sends the operator back to retype a value it already understood.
+
+## A money field formats as it is typed
+
+**Trigger:** an input for an amount of money — a gift, a price, a limit.
+**Pattern:** the field carries an input mask that adds the thousands separators while the person types, so `50000` reads `50,000` at once. The submitted value is the plain number.
+**Default it corrects:** a bare text or number input that shows `50000` until a blur or a submit, or one that rejects the typed commas.
+**Why:** a long run of digits is hard to check against the figure the person meant, and a mask answers that at the keystroke. A hint or an error line explaining the format is the prose the mask replaces (`text-and-icons.md`, *Explanatory prose*).
+**Applies when:** the field takes a currency amount. A count, a year or an ID is not money.
 
 ## A field reads label, hint, control, error
 

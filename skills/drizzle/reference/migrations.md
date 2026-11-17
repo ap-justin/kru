@@ -23,6 +23,8 @@ if (!lastDbMigration || Number(lastDbMigration.created_at) < migration.folderMil
 
 **Consequence: a migration that merges in with an older timestamp than one already applied is skipped silently, forever.** Two developers generating migrations on parallel branches is enough to trigger it — branch A generates at 10:00, branch B at 10:05, B merges and deploys first, then A merges and its file is never applied. No error, no warning; the schema is just missing a change and the snapshot claims otherwise.
 
+Two branches that each generate the next index (`0007_…`) leave two files sharing it, and the one merged second can be the skipped one. After a deploy, compare the rows in the ledger below with the files in `drizzle/`: a file with no row was skipped.
+
 Defences: regenerate (don't merge) a migration whose branch was overtaken, run `drizzle-kit check` after any merge that touches `drizzle/`, and treat a migration file in a merge conflict as a rebase-and-regenerate, never a hand-merge.
 
 Ledger location: `__drizzle_migrations` in the `drizzle` schema on pg (both names configurable), a plain table on sqlite.

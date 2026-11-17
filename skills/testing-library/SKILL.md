@@ -95,6 +95,9 @@ Every call is `await`ed; one `userEvent.setup()` per test, before `render`. Repr
 ## `fireEvent.change` with the value already set is dropped
 `change` to `'a'`, `'a'`, `'b'` on a controlled input reaches `onChange` as `['a', 'b']` — React's value tracker skips a change that doesn't move the value, and `fireEvent.input` takes the same path. A test that "changes" a field to what it already holds fails on the tracker, not on the handler.
 
+## jsdom has no `AnimationEvent`, so React hears `webkitAnimationEnd`
+React picks the animation event name from what the browser supports, and jsdom lacks `AnimationEvent`, so it listens for `webkitAnimationEnd`. `fireEvent.animationEnd(el)` dispatches `animationend`, which no handler hears. Dispatch the name React listens for: `fireEvent(el, new Event('webkitAnimationEnd', { bubbles: true }))`.
+
 ## `renderHook`: read `result.current` after the act
 ```ts
 const { result } = renderHook(() => useState(0))

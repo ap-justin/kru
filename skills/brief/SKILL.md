@@ -61,4 +61,6 @@ You grill *and* you read the code — you're the only seat holding both the inte
 
 Grill for the cadence like any other load-bearing decision — the environment boundary is usually the question worth asking ("does anything here need to be deployed before the next step is even testable?"). It goes in `Landing plan` as nested checkboxes; `lead` Step 4.5 ticks each commit and PR as it lands. Don't leave it implicit in the ticket graph — a big effort's `planner` tickets *expand* the landing plan, they don't replace it.
 
+A change that launches a public site or page names `${CLAUDE_PLUGIN_ROOT}/skills/seo-review/SKILL.md` in its `Done when`, so the build ends with an SEO pass on the shipped routes.
+
 The brief is the durable input for everything downstream: `planner` reads it instead of a spec-less prompt, builders get their scope from `Blast radius` + `Non-goals`, and `Landing plan` + `Done when` are what `lead` Step 4.5 reconciles against and what each PR description is written from.

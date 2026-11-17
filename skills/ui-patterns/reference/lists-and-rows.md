@@ -124,6 +124,14 @@ The focus ring moves to the card, since the link's own box is just the title.
 ```
 **Applies when:** the facts are different kinds. A breadcrumb or a list of like items ("Tags: a, b, c") is a sequence, and its separator carries order or membership. A design system that settles label styling in writing wins over how a label is set apart.
 
+## A status's explanation is a (!) tooltip beside it, never an extra row
+
+**Trigger:** a table row whose status needs a reason — a failed payment, a held item, a skipped step.
+**Pattern:** a (!) icon button with a tooltip sits beside the status and carries the reason. The table keeps one row per record.
+**Default it corrects:** an extra row or sub-line under the record that explains the status, so the table doubles in height and the columns lose their rhythm.
+**Why:** the mark tells the reader there is a reason, and the tooltip gives it to the one who asks. The status stays in its own ink (`text-and-icons.md`, status entry); the (!) adds the reason without a second row to scan.
+**Applies when:** the reason is short and only some rows have one. The icon button is named for its row (*A repeated control names its own row*, above). A design system that settles the mark in writing wins.
+
 ## A table's filter is a bare icon button in its column header
 
 **Trigger:** filtering a data table by status, date, assignee or type.
