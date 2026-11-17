@@ -90,11 +90,26 @@ A denial's `--reason` names the tool to use instead (Read, Grep or Edit for a re
 
 Answer what the brief and the repo already settle. A product call, or an approval for something hard to undo (a production migration, a deploy, a deletion), goes to your human while the run waits.
 
-`sky status <agent>` prints the run's `summary` and `compare` link, or `error:` for a failed run. More work on the same change, such as review findings, goes to `sky agent follow-up <agent> --prompt=…`, which starts the next run in the same session and branch once the last one has ended. An unrelated task gets a new agent. `sky agent archive <agent>` stops any active run and deletes the worktree, losing uncommitted work; an archived agent takes no more runs.
+`sky status <agent>` prints the run's `summary` and `compare` link, or `error:` for a failed run. More work on the same change, such as review findings, goes to `sky agent follow-up <agent> --prompt=…`, which starts the next run in the same session and branch once the last one has ended. A follow-up launches like a new run: it gets the current runner, instructions, secrets and nested login, and only the conversation carries over. If it repeats an older nested command from that history, point it at the one its instructions print now. An unrelated task gets a new agent. `sky agent archive <agent>` stops any active run and deletes the worktree, losing uncommitted work; an archived agent takes no more runs.
 
 The sandbox has no GitHub credential by design (*Once per repo*, step 7), so `git push`, and `git fetch` or `git pull` of a private repo, fail there; a brief never asks for them. When each run starts, Sky moves `origin/<default>` to GitHub's tip, names that tip (short sha, UTC time) in the run's instructions, and leaves the local default branch behind, so a brief bases merges, conflict fixes and review ranges on `origin/<default>`. To pick up a default branch that moved during a run, the run calls `node /opt/sky/runner.mjs sync`: it refreshes `origin/<default>` through the connector without touching local branches or the worktree, and says whether the default branch moved, rewound or was rewritten. When GitHub's default branch is more than 100 commits ahead it refuses and leaves `origin/<default>` where it was. A private repo's start-of-run refresh has the same limit, so its follow-up run starts from that same commit; a public repo's refresh goes over git with no limit, so its follow-up run starts from GitHub's tip. "The repo is busy" means another run held the repo lock for 30 seconds; the run tries again in a minute.
 
 `sync` also brings in the run's own branch: when a fix is pushed to the run's GitHub branch (`--branch <name>` when the run publishes to a branch of that name), tell the run to `node /opt/sky/runner.mjs sync` (with the same `--branch <name>`) and publish again. Its unpublished commits are rebased onto the pushed ones. This replaces handing the run a patch to apply.
+
+Publish takes the PR title from `--title` on every publish, so a brief names the title it wants. Sky doesn't check which files a branch changes, so a brief also names the files it expects. When the default branch moved and the run's branch wasn't brought in by `sync`, a re-publish rebases onto the new base, which drops a merge of `origin/<default>` and replays the commits it carried; a branch `sync` brought pushes into is only fast-forwarded, so its merge stays.
+
+## When a run fails
+
+`sky status` names the failure:
+- `sandbox_restarted`: the sandbox rebooted, or its first process restarted, while the runner was up, usually from memory use. The error gives the restart time, the load and the last Bash command.
+- `runner_killed`: the kernel killed the runner, or free memory fell below the environment's floor.
+- `runner_lost`: neither was seen.
+
+Before `run.failed`, the run posts a `runner.warning` with free memory, uptime, top processes and any out-of-memory lines; read it first. After `sandbox_restarted` or `runner_killed`, don't rerun the step unchanged: commit first, bound the step's input, run test suites one at a time, and write the follow-up from `git status` on disk rather than the run's summary. Files in `/tmp` have been lost on a reboot, so keep anything needed in the worktree.
+
+A sandbox can hold less memory than it reports, and every agent in an environment shares it, up to the environment's `concurrency`. Sky doesn't serialize heavy work, so run one heavy job (a full test suite, a build) per environment at a time.
+
+Each run refreshes kru at start with a 30-second limit. A failed refresh logs one warning and the run keeps the cached kru, so a run can start on an older kru than the newest release.
 
 ## Usage limit
 
