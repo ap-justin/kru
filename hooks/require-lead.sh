@@ -16,9 +16,9 @@
 # it fires once per session: the first gated call decides and marks the session,
 # whether it blocks or fails open on an unreadable transcript, and no later call
 # is judged. a /kru: command in flight exempts its calls without deciding, so the
-# first plain turn after it is still the gated call. a session that declines is
-# nagged no further and a subagent's own tool call never trips a gate meant for
-# the lead.
+# first gated call of a plain turn after it still decides. a session that declines
+# is nagged no further, and a subagent's own tool call never trips a gate meant for
+# the lead: a call that carries agent_id exits before anything else is read.
 #
 # fail open on anything that isn't a clear miss. kill switch: touch the file
 # the resolver's `lead-gate/off`. a marker file rather than a flag alone, because
@@ -32,6 +32,11 @@ plugin_root="${1:-$CLAUDE_PLUGIN_ROOT}"
 [ -e "$(kru_path lead-gate/off)" ] && exit 0
 [ -f "$plugin_root/skills/lead/SKILL.md" ] || exit 0
 input=$(cat) || exit 0
+# the gate is for the lead session, and a seat exists only after a gated or
+# exempted lead call, so a call made by a subagent (which alone carries agent_id)
+# has no verdict to give. without this a seat's call is judged against the
+# parent's transcript, where a plain user line mid-run refuses it
+[ -n "$(printf '%s' "$input" | jq -r '.agent_id // empty' 2>/dev/null)" ] && exit 0
 
 # the load itself is a Skill call, or the Read of the contract file the block
 # message and the SessionStart line offer instead — gating either would close
@@ -93,10 +98,10 @@ lead_loaded=$(jq -rn --arg base "${read_base%/}/" "$read_lead_path"'
 # a /kru:<skill> run is that skill's contract, not the lead's — the ones
 # that dispatch load lead themselves. exempt only while the command is still the
 # session's latest word, and a call it exempts leaves the session unmarked, so
-# the first plain turn after the command is still gated. the harness follows a command
-# with an isMeta user line holding the skill body, and that is not the user
-# speaking. a user who types "isMeta":true gets it escaped in the compact json,
-# so the unescaped match only hits the harness's field.
+# the first gated call of a plain turn after the command still decides. the
+# harness follows a command with an isMeta user line holding the skill body, and
+# that is not the user speaking. a user who types "isMeta":true gets it escaped
+# in the compact json, so the unescaped match only hits the harness's field.
 cmd_line=$(grep -nE '<command-name>/?kru:' "$transcript" | tail -1 | cut -d: -f1)
 if [ -n "$cmd_line" ]; then
   say_line=$(grep -n '"type":"user"' "$transcript" |
