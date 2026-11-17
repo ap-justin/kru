@@ -96,7 +96,7 @@ The sandbox has no GitHub credential by design (*Once per repo*, step 7), so `gi
 
 `sync` also brings in the run's own branch: when a fix is pushed to the run's GitHub branch (`--branch <name>` when the run publishes to a branch of that name), tell the run to `node /opt/sky/runner.mjs sync` (with the same `--branch <name>`) and publish again. Its unpublished commits are rebased onto the pushed ones. This replaces handing the run a patch to apply.
 
-Publish takes the PR title from `--title` on each publish, so a brief pins the title it wants and the file list it expects (Sky has no file-list check). When the default branch moved and the run's branch wasn't brought in by `sync`, a re-publish rebases onto the new base, which drops a merge of `origin/<default>` and replays the commits it carried; a branch `sync` brought pushes into is only fast-forwarded, so its merge stays.
+Publish takes the PR title from `--title` on every publish, so a brief names the title it wants. Sky doesn't check which files a branch changes, so a brief also names the files it expects. When the default branch moved and the run's branch wasn't brought in by `sync`, a re-publish rebases onto the new base, which drops a merge of `origin/<default>` and replays the commits it carried; a branch `sync` brought pushes into is only fast-forwarded, so its merge stays.
 
 ## When a run fails
 
