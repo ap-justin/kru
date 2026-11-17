@@ -27,7 +27,7 @@ Config-vs-Secret storage defaults by target differ, and it matters for who can r
 ## Deploys, previews, and the three ways to "promote" — only one rebuilds
 Any push, a Vercel Drop, `vercel deploy`, a Deploy Hook, or the REST API triggers a build; a successful build is a deployment. Each deployment gets both a branch-specific preview URL (always the branch's latest) and a commit-specific one (pinned to that commit). ([`vercel.com/docs/deployments`](https://vercel.com/docs/deployments))
 
-A green GitHub check can sit beside a deployment the Ignored Build Step CANCELED: so the check passing doesn't show the deployment built. Read the deployment's own status.
+A green GitHub check can sit beside a deployment the Ignored Build Step CANCELED, so a passing check doesn't show the deployment built. Read the deployment's own status.
 
 "Promote" names three different mechanisms, and conflating them is the trap:
 - **Instant Rollback** — reassigns domains to a deployment that **already served production traffic**. No rebuild. Only eligible target: something previously aliased to production (most preview deployments never qualify).

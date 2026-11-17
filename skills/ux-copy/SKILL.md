@@ -40,7 +40,7 @@ Write or review UX copy for any interface context.
 - *House rule:* a button that confirms an errand the person did is named for what they just did ("I've messaged them"), not for the next state (the exception to the verb-first and match-the-outcome lines above)
 
 ### Error Messages
-**A field error is read with its label, so it carries the fault alone**: `EIN` / `required`. The label already names the field, and the requirement is not what the operator is deciding at that moment. A message says what is missing ("Enter a note") and never tells the person to untick something to skip a field.
+**A field error is read with its label, so it carries the fault alone**: `EIN` / `required`. The label already names the field, and the requirement is not what the operator is deciding at that moment.
 
 **A system-level error** stands alone, so it carries the structure: what happened + why + how to fix.
 - "Payment declined. Your card was declined by your bank. Try a different card or contact your bank."

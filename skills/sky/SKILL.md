@@ -65,7 +65,7 @@ A brief tells the run that a background-task notice is not a stop: it reads the 
 Sky's runner tells every agent to run `/kru:reflect` and then `/kru:text-fix` through a nested `claude -p` from the repo root, fix what they find, and report the output of a check that couldn't run. The runner's instructions give the whole command; the agent runs it as printed. Its shape:
 
 ```
-CLAUDE_CODE_OAUTH_TOKEN="$(<'<token file the runner names>')" env -u ANTHROPIC_API_KEY -u ANTHROPIC_AUTH_TOKEN -u ANTHROPIC_BASE_URL … claude --settings '{"env":{"KRU_NO_LEAD_GATE":"1"}}' -p "/kru:reflect" > <scratch dir>/reflect.log 2>&1
+CLAUDE_CODE_OAUTH_TOKEN="$(<'<token file the runner names>')" env -u ANTHROPIC_API_KEY -u ANTHROPIC_AUTH_TOKEN -u ANTHROPIC_BASE_URL … CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST=1 KRU_NO_LEAD_GATE=1 claude --settings '{"env":{"KRU_NO_LEAD_GATE":"1"}}' -p "/kru:reflect" > <scratch dir>/reflect.log 2>&1
 ```
 
 The `env -u` list unsets the project's Anthropic key, token, base URL and provider switches, so the nested session logs in with the run's subscription. `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST=1` and `KRU_NO_LEAD_GATE=1` keep the lead gate from blocking the nested session's first tool call. The agent leaves the token file to the command and writes each check's output to the scratch dir, read with the Read tool. The brief names the checks in its done-check so the summary reports them. A summary that says a check couldn't run is a gap to report, not a pass. Their passing is the agent's evidence, not the independent check [`reliable-work`](../reliable-work/SKILL.md) stands beside it.
