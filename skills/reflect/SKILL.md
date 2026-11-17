@@ -51,7 +51,7 @@ What keeps the first phase affordable: **every seat runs in its own context**, s
 
    What comes back is three things:
 
-   - **The findings** — ranked by severity, ten at most, each with `file:line`.
+   - **The findings** — ranked by severity, ten at most, each with `file:line`. A finding that adds or hardens a guard for a rare case also carries its path, evidence and existing cover, or is marked *speculative, ask first* (`${CLAUDE_PLUGIN_ROOT}/skills/lead/references/gates.md` → *Edge-case guards*).
    - **The trace** — `Look-back: <what it read> · <the sources it loaded> · <what it found, or `clean`>`, on the contract and for the reasons at `${CLAUDE_PLUGIN_ROOT}/skills/roster/shared-blocks.md` → Block O. The **sources** field is this phase's addition: a seat auditing its lane from training data rather than the source its definition pins it to returns confident findings about a framework version this repo doesn't run.
    - **The pointer to its report**, which is uncapped and holds the passing rules, the tables and the coverage matrices. Leave the reports closed — their existence is the record, and reading one into the main thread is the balloon waves and shortlists exist to avoid. Open one only when a returned finding is too thin to act on.
 
