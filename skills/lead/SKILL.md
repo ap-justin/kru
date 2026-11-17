@@ -72,6 +72,9 @@ made, and keep going. A call an established standard answers — WCAG for struct
 semantics, names, focus order; contrast is the design's, `skills/roster/shared-blocks.md` → Block J),
 a UX heuristic, a platform convention, the library's documented default — is yours even where it
 touches what the thing says or does: the standard is the answer, so cite it in that one line.
+Code that adds or hardens a guard for a rare case is a product call, even though the edit is a two-way door:
+it passes `${CLAUDE_PLUGIN_ROOT}/skills/lead/references/gates.md` → *Edge-case guards* before a
+brief carries it, and a guard that check doesn't drop reaches the user with its cost.
 
 **A question never parks work it doesn't touch.** When a message carries a question, everything the
 answer can't change is already dispatched, and the message says so in one line; only the slice that
