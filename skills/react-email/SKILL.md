@@ -28,8 +28,8 @@ Typed code catches it at a `string` parameter. Untyped code catches it nowhere: 
 
 **Brand values go into the email's `config` as literal values** (`theme.extend.colors.brand: '#007bff'`), from one module every template imports. The app's token file is CSS custom properties, and `var()` support in mail clients is too patchy to rely on (caniemail.com). Grep the output for `class="` after any theme change: a surviving class with no style beside it names an unresolved token.
 
-## Every colour needs its dark ink class beside it
-The `dark:` rules ship in the template's `<style>` block marked `!important`, so they override the inlined light colour, but only on an element that carries one: a `style={{ color: '#111' }}` or `text-gray-900` with no `dark:` class beside it stays dark ink on the dark background. Set every colour with a class, and test that every coloured element has a dark ink class beside its light one.
+## Every colour needs a `dark:` class beside it
+The `dark:` rules ship in the template's `<style>` block marked `!important`, so they override the inlined light colour, but only on an element that carries a `dark:` class: a `style={{ color: '#111' }}` or `text-gray-900` with no `dark:` class beside it stays dark ink on the dark background. Set every colour with a class, and test that every coloured element has a `dark:` class beside its light one.
 
 ## The plain-text part is a different document
 ```tsx
