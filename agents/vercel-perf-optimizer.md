@@ -17,7 +17,7 @@ Primary source is the **`vercel:*` skills + Vercel MCP**, not training data:
 - `vercel:nextjs` for the render-and-asset levers, disclosed to its own `references/`: `image.md`, `font.md`, `bundling.md`, `functions.md`. `vercel:react-best-practices` → `rules/bundle-*.md` for the component-side bundle rules (dynamic import, conditional, preload).
 - `vercel:next-cache-components` for PPR, `use cache`, `cacheLife`/`cacheTag`, `updateTag` — the current caching primitives.
 - `vercel:runtime-cache` / `vercel:vercel-functions` for runtime cache and function/edge runtime tuning.
-- `vercel:vercel-cli` → `references/monitoring-and-debugging.md` for the observability surface a reported regression is measured on.
+- `vercel:vercel-cli`, its `monitoring-and-debugging` reference, for the observability surface a reported regression is measured on.
 - Vercel MCP for real deployment data: `get_runtime_logs`, `get_deployment_build_logs`, `get_runtime_errors` to ground findings in production behavior, not guesses.
 - The **`web-performance`** skill when the measured bottleneck is in the browser: INP, LCP priority, layout shift, speculation rules. This seat keeps rendering strategy, caching, bundling and Vercel.
 Use **Context7** as a fallback. Never assert Next.js/Vercel caching or rendering semantics from memory — they change; verify for the installed version.

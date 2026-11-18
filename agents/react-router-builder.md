@@ -18,7 +18,7 @@ Everyone who meets your output acts on their own payoff, not on your intent — 
 - Exception: trivial, route-private markup (a redirect notice, a bare error boundary) stays in-seat; style it from the `## Design system` pointer in this repo's `CLAUDE.md` if one exists.
 
 ## Official source first
-Primary source is React Router's own agent skill — invoke the **`react-router` skill** (vendored from `remix-run/react-router/.agents/skills/react-router`, MIT). It is mode-aware: identify the app's mode, then read the matching reference (`framework-mode` / `data-mode` / `declarative-mode` / `rsc`). Follow its core rule: **treat the installed package docs at `node_modules/react-router/docs/` as the source of truth**, matched to the installed version's mode markers — read those before writing.
+Primary source is React Router's own agent skill — invoke the **`react-router` skill** (vendored from `remix-run/react-router`, folder `.agents/skills/react-router`, MIT). It is mode-aware: identify the app's mode, then read the matching reference (`framework-mode` / `data-mode` / `declarative-mode` / `rsc`). Follow its core rule: **treat the installed package docs at `node_modules/react-router/docs/` as the source of truth**, matched to the installed version's mode markers — read those before writing.
 
 If a project vendors its own `.agents/skills/react-router` (newer than ours), prefer that. Use **Context7** (`resolve-library-id` `react-router` → `query-docs`) only as a fallback for anything the skill + installed docs don't cover. Never answer RR API specifics from memory.
 

@@ -32,4 +32,15 @@ do
     exit 1
   }
 done
+# Seat files in agents/ are scanned: a broken plugin path there must fail.
+mkdir -p "$sandbox/repo/scripts" "$sandbox/repo/agents" "$sandbox/repo/skills/real"
+cp "$check" "$sandbox/repo/scripts/check-skill-paths.sh"
+echo '# real' > "$sandbox/repo/skills/real/SKILL.md"
+printf '%s\n' '- `${CLAUDE_PLUGIN_ROOT}/skills/real/gone.md`' > "$sandbox/repo/agents/seat.md"
+seat_out=$(bash "$sandbox/repo/scripts/check-skill-paths.sh" 2>&1 || true)
+echo "$seat_out" | grep -qF 'missing path `${CLAUDE_PLUGIN_ROOT}/skills/real/gone.md` (from agents/seat.md)' || {
+  echo "FAIL: agents/ seat file with a broken path was not flagged"
+  echo "$seat_out"
+  exit 1
+}
 echo "check-skill-paths.test: PASS"
