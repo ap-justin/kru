@@ -35,19 +35,19 @@ Statuses are `triage`, `open`, `in_progress`, `done`, `canceled`. There is no In
 `links` and `labels` **replace the whole set** when sent; `[]` clears. To change part, send `addLinks`, `removeLinks`, `addLabels` or `removeLabels`, which leave another bot's concurrent edit alone. Otherwise `get_item` first and send the existing entries plus the new one.
 
 ## What a comment holds
-Trail holds project management, not a log of the work. A reader gets where an item stands from its last few comments in under a minute. Comment, in a sentence or two, when one of these changes:
+An item's comments are project management: a reader gets where it stands from the last few in under a minute. Comment, in a sentence or two, when one of these changes:
 - **Status**: each step of *Status flow*, or canceled, with the reason when it isn't obvious.
 - **Decision**: what was chosen, why, and who chose it.
 - **Scope**: what was added, dropped or split off, with the new item's key.
 - **Blocker**: what stops the work and who clears it, then a line when it clears.
 
-The PR goes in `links`. A comment names it only in the `In review: <PR url>` and done comments of *Status flow*.
+Only the `In review: <PR url>` and done comments of *Status flow* name the PR.
 
 The rest goes where its readers look:
 - Code, commits, CI runs and review findings: the PR, in its body, threads and checks.
 - Run state, such as agent ids, run ids and watcher state: the runner that owns the run (on Sky, `sky status <agent>`).
 - Reports, briefs and plans: the plan store, at the path `scripts/kru-store.sh` resolves (`${CLAUDE_PLUGIN_ROOT}/references/store.md`).
-- Approval and watcher logs: your session's own scratch, outside trail and outside the store's `notes/`.
+- Approval and watcher logs: your session's own scratch, outside the store's `notes/`.
 
 A push, a green CI run or a check passing on a new commit changes none of the four, so it gets no comment. To correct one of your own comments, add one short line with the fix.
 
