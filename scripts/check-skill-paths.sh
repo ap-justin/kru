@@ -46,6 +46,7 @@ HTML_COMMENT = re.compile(r"<!--.*?-->", re.DOTALL)
 
 SCAN_ROOTS = [
     root / "skills",
+    root / "agents",
     root / "references",
     root / "hooks",
     root / "scripts",
@@ -194,7 +195,8 @@ def resolve_repo_path(path_word: str, source: Path) -> Path | None:
 def path_exists(path_word: str, source: Path) -> bool:
     if is_external_or_non_repo(path_word):
         return True
-    if "*" in path_word or "<" in path_word or "{" in path_word:
+    # `${CLAUDE_PLUGIN_ROOT}` is a real path prefix, not a placeholder: expand it before looking for `{`.
+    if any(c in expand_plugin_root(path_word) for c in "*<{"):
         return True
     full = resolve_repo_path(path_word, source)
     if full is None:
