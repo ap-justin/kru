@@ -59,7 +59,7 @@ SCAN_FILES = [
 ]
 
 SKIP_FILES = {root / "scripts" / "check-skill-paths.sh"}
-# vendored verbatim: their paths are written for upstream's layout (`<SKILLS>` placeholders, upstream's own scripts)
+# Vendored verbatim: their paths are written for upstream's layout (`<SKILLS>` placeholders, upstream's own scripts).
 SKIP_DIRS = [root / "skills" / n for n in ("hyperframes", "hyperframes-cli", "hyperframes-registry")]
 
 
