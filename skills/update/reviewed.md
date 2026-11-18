@@ -87,7 +87,7 @@ Previous: 2.1.310 — 2026-10-24, read back to 2.1.296. 2.1.295 — 2026-10-10, 
 | `turborepo` | vercel/turborepo · 53629a0 (2.11.3) | b19f6a5 | **Decline.** b19f6a5 cuts the skill to a pointer at `node_modules/turbo/docs/README.md` (turbo ≥ 2.11.5) and deletes `command/` + `references/`. The pointer reads only after install on turbo ≥ 2.11.5; `toolchain-engineer` sets monorepos up before install and on older turbo, so the offline guide stays. Mark → b19f6a5. |
 | `shadcn` | shadcn-ui/ui path · 4233ed1 | 4233ed1 | **Current.** Last re-synced 2026-10-24: `SKILL.md` *Assistant activity uses `Trace`* rule, `Trace` in the Chat row and `rules/chat.md` index line; `rules/chat.md` *Assistant activity uses Trace* + *Code and tool output use CodeBlock*, install line gains `trace code-block`. Re-applied: provenance, description, Workflow step 3 blocks line, `--chart-*` Charts row. |
 | `webgpu-threejs-tsl` · `algorithmic-art` · `react-router` | af2319b · b9e19e6 · 8f364c8 | same | **Current.** |
-| `hyperframes` · `hyperframes-cli` · `hyperframes-registry` | heygen-com/hyperframes · 3ee095b (vendored 2026-11-18) | 3ee095b | **Current.** Taken whole and unedited; the `motion-designer` seat overrides the beacon, cloud and account commands. |
+| `hyperframes` · `hyperframes-cli` · `hyperframes-registry` | heygen-com/hyperframes · 3ee095b (vendored 2026-11-18) | 3ee095b | **Current.** Taken whole, bodies unedited; each `SKILL.md` frontmatter adds `disable-model-invocation: true` (re-added on re-sync); the `motion-designer` seat overrides the beacon, cloud and account commands. |
 | `local-browser` | locally authored | — | Not applicable. |
 
 ### Declined — siblings not carried (2026-10-25; 2026-10-29 additions marked)
