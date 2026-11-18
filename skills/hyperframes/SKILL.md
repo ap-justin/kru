@@ -7,7 +7,7 @@ disable-model-invocation: true
 <!-- vendored from `heygen-com/hyperframes` (main, sha 3ee095b) → `skills/hyperframes`.
      HyperFrames by HeyGen (Apache-2.0), listed in `claude-plugins-official` as plugin `hyperframes`.
      Carried by the `motion-designer` seat, which reads it by path. `disable-model-invocation`
-     is the one frontmatter change: other sessions don't load it, so none follows its usage beacon. Otherwise verbatim; the seat's own body adapts the usage beacon,
+     is the one frontmatter change: other sessions don't load it, so none follows its usage beacon. Otherwise verbatim; the seat's own body overrides the usage beacon,
      cloud and account commands and the prerequisites check.
      Re-sync: re-download `skills/hyperframes/` from https://github.com/heygen-com/hyperframes/tree/main/skills/hyperframes, then re-add `disable-model-invocation: true`. -->
 
