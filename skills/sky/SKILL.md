@@ -68,7 +68,7 @@ Sky's runner tells every agent to run `/kru:reflect` and then `/kru:text-fix` th
 CLAUDE_CODE_OAUTH_TOKEN="$(<'<token file the runner names>')" env -u ANTHROPIC_API_KEY -u ANTHROPIC_AUTH_TOKEN -u ANTHROPIC_BASE_URL … CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST=1 KRU_NO_LEAD_GATE=1 claude --settings '{"env":{"KRU_NO_LEAD_GATE":"1"}}' -p "/kru:reflect" > <scratch dir>/reflect.log 2>&1
 ```
 
-The `env -u` list unsets the project's Anthropic key, token, base URL and provider switches, so the nested session logs in with the run's subscription. `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST=1` and `KRU_NO_LEAD_GATE=1` keep the lead gate from blocking the nested session's first tool call. The agent leaves the token file to the command and writes each check's output to the scratch dir, read with the Read tool. The brief names the checks in its done-check so the summary reports them. A summary that says a check couldn't run is a gap to report, not a pass. Their passing is the agent's evidence, not the independent check [`reliable-work`](../reliable-work/SKILL.md) stands beside it.
+The `env -u` list unsets the project's Anthropic key, token, base URL and provider switches, so the nested session logs in with the run's subscription. `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST=1` makes the nested Claude ignore endpoint and credential `env` entries from a settings file and any stored login, so it runs on the token the command passes; `KRU_NO_LEAD_GATE=1` keeps the lead gate from blocking its first tool call. The agent leaves the token file to the command and writes each check's output to the scratch dir, read with the Read tool. The brief names the checks in its done-check so the summary reports them. A summary that says a check couldn't run is a gap to report, not a pass. Their passing is the agent's evidence, not the independent check [`reliable-work`](../reliable-work/SKILL.md) stands beside it.
 
 ## Waiting, answering, reading the result
 
@@ -104,7 +104,7 @@ Publish takes the PR title from `--title` on every publish, so a brief names the
 
 `sky status` names the failure:
 - `sandbox_restarted`: the sandbox rebooted, or its first process restarted, while the runner was up, usually from memory use. The error gives the restart time, the load and the last Bash command.
-- `runner_killed`: the kernel killed the runner, or free memory fell below the environment's floor.
+- `runner_killed`: the kernel killed the runner, or the sprite had less free memory than Sky's floor (`SPRITE_MIN_FREE_MB`).
 - `runner_lost`: neither was seen.
 
 Before `run.failed`, the run posts a `runner.warning` with free memory, uptime, top processes and any out-of-memory lines; read it first. After `sandbox_restarted` or `runner_killed`, don't rerun the step unchanged: commit first, bound the step's input, run test suites one at a time, and write the follow-up from `git status` on disk rather than the run's summary. Files in `/tmp` have been lost on a reboot, so keep anything needed in the worktree.
@@ -115,7 +115,7 @@ Each run refreshes kru at start with a 30-second limit. A failed refresh logs on
 
 ## Usage limit
 
-Each environment draws on a pool of subscriptions and falls back to a pay-per-use API key, so a run does not stop for a usage-limit reset.
+An environment runs on one subscription unless it is set to a pool (`sky env set-claude <env> pool`), which moves its runs to the subscription with the most headroom. A run that hits its subscription's usage limit is retried once on the pay-per-use API key (a pool tries its next subscription first). With no key on the server, or the environment's fallback set to `none`, a launch while the subscription is limited fails with `claude_limited` and the reset time.
 
 ## Known gaps
 
