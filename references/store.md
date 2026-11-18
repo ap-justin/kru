@@ -4,8 +4,8 @@ The team writes two kinds of durable state, and they have different lifetimes:
 
 - **Cross-project** — the preference loop (`inbox`, `patterns/`, `refusals`) and the hooks' own
   session bookkeeping (`audit/`, `lead-gate/`). It follows the **user**, across every engagement.
-  One file in `patterns/` is not a banked pattern: `patterns/doop-workspaces` is the standing
-  repo → workspace map the `doop` skill reads, and the sweep never reads, moves or empties it.
+  Two files in `patterns/` are not banked patterns: `patterns/doop-workspaces` and `patterns/doop-libraries` are the standing
+  repo → workspace and repo → library-canvas maps the `doop` skill reads, and the sweep never reads, moves or empties them.
 - **Project** — one project's plan of record: `TODOS.md`, `issues/`, `notes/`, `plan/`
   (`TRACKER.md` owns its layout).
 
@@ -118,7 +118,7 @@ than a couple of writes into one `batch` call.
 
 `skills/roster/learn.md` (PM or lead loads) is where the two backends meet. On the `artifact` backend it:
 
-1. reads `inbox`, `patterns/` (less the standing `doop-workspaces` map) and `refusals` from **files** — what this machine's hooks and seats
+1. reads `inbox`, `patterns/` (less the standing `doop-workspaces` and `doop-libraries` maps) and `refusals` from **files** — what this machine's hooks and seats
    wrote since the last sweep,
 2. merges them into the artifact store, which is what carries them to the user's other machines and
    to a cloud session,
