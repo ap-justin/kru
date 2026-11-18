@@ -32,15 +32,33 @@ do
     exit 1
   }
 done
-# Seat files in agents/ are scanned: a broken plugin path there must fail.
+# Seat files in agents/ are scanned: a broken plugin path there must fail,
+# while an existing path and a `<name>` placeholder in the same file must not be reported.
 mkdir -p "$sandbox/repo/scripts" "$sandbox/repo/agents" "$sandbox/repo/skills/real"
 cp "$check" "$sandbox/repo/scripts/check-skill-paths.sh"
 echo '# real' > "$sandbox/repo/skills/real/SKILL.md"
-printf '%s\n' '- `${CLAUDE_PLUGIN_ROOT}/skills/real/gone.md`' > "$sandbox/repo/agents/seat.md"
-seat_out=$(bash "$sandbox/repo/scripts/check-skill-paths.sh" 2>&1 || true)
+cat > "$sandbox/repo/agents/seat.md" << 'EOF'
+- `${CLAUDE_PLUGIN_ROOT}/skills/real/gone.md`
+- `${CLAUDE_PLUGIN_ROOT}/skills/real/SKILL.md`
+- `${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md`
+EOF
+seat_rc=0
+seat_out=$(bash "$sandbox/repo/scripts/check-skill-paths.sh" 2>&1) || seat_rc=$?
+[ "$seat_rc" -ne 0 ] || {
+  echo "FAIL: agents/ seat file with a broken path should exit nonzero"
+  echo "$seat_out"
+  exit 1
+}
 echo "$seat_out" | grep -qF 'missing path `${CLAUDE_PLUGIN_ROOT}/skills/real/gone.md` (from agents/seat.md)' || {
   echo "FAIL: agents/ seat file with a broken path was not flagged"
   echo "$seat_out"
   exit 1
 }
+for ok in 'skills/real/SKILL.md' 'skills/<name>/SKILL.md'; do
+  ! echo "$seat_out" | grep -qF "$ok" || {
+    echo "FAIL: agents/ seat path was flagged but should pass: $ok"
+    echo "$seat_out"
+    exit 1
+  }
+done
 echo "check-skill-paths.test: PASS"
