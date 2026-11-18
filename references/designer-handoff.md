@@ -46,6 +46,15 @@ Invoke the bundled Claude Code `design` skill (designer loads) for artboards and
 
 Mockups on a doop canvas (a `/c/<id>` link): `${CLAUDE_PLUGIN_ROOT}/skills/doop/SKILL.md`.
 
+## Doop component library
+
+Where the repo names a library, the workflow above runs with these changes; the steps are in `${CLAUDE_PLUGIN_ROOT}/skills/doop/SKILL.md` → *A repo's component library*.
+
+- Screens compose published components with `<doop-use>`; the part map's additions are the only hand-drawn elements, and a published component the repo has moved past is an addition with the reason "library out of date".
+- The final message of a screen run adds a drift note naming each such component and what differs.
+- The build spec's component rows name the repo's code, as before: the library is a copy, and the builder reads the repo.
+- A library build run's package is the doop skill's list, not a build spec.
+
 ## Revising from comments
 
 A run briefed to revise from a doop canvas's comments leaves `resolve_comment` to the PM, who checks the round on the server.
