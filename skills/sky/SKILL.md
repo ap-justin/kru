@@ -1,6 +1,6 @@
 ---
 name: sky
-description: "Handing a build to Sky, the self-hosted service that runs Claude Code agents in sandboxes. Use when starting a Sky run, waiting on it, answering its questions or approvals, setting up a repo's Sky environment, or when Sky is down. Running Claude Code directly: claude-code-delegation."
+description: "Handing a build to Sky, the self-hosted service that runs Claude Code agents in sandboxes. Use when starting a Sky run, waiting on it, answering its questions or approvals, previewing its build, setting up a repo's Sky environment, or when Sky is down. Running Claude Code directly: claude-code-delegation."
 user-invocable: false
 ---
 
@@ -8,7 +8,7 @@ user-invocable: false
 
 Sky runs each agent in its own Claude Code session, git branch and worktree inside the environment's sandbox (one sprite per environment), and holds the run when the agent needs an answer or an approval. Sky's `docs/driving-agents.md` is the walk-through; its `README.md` lists the routes, MCP tools and webhook events.
 
-Install the CLI from the Sky you run; it needs Node 24 or later and `SKY_URL` set as an environment variable (per *Once per agent* below; with only the config file, put its `url` in the command instead): `mkdir -p ~/.local/bin && curl -fsSL "$SKY_URL/cli/sky.mjs" -o ~/.local/bin/sky && chmod +x ~/.local/bin/sky` (`~/.local/bin` on `PATH`), then check it with `sky --version`. Rerun the `curl` to update; the file matches the API it came from. Every `sky` command reads the config `sky apply` reads (`SKY_URL`, `SKY_API_KEY` or the config file) and takes `--json` to print the API's object instead of a line. The MCP server (`POST /mcp`) has matching tools: `launch`, `wait_for_events`, `status`, `list_agents`, `answer`, `approve` (which also denies, with `decision: "deny"`), `followup`, `archive`.
+Install the CLI from the Sky you run; it needs Node 24 or later and `SKY_URL` set as an environment variable (per *Once per agent* below; with only the config file, put its `url` in the command instead): `mkdir -p ~/.local/bin && curl -fsSL "$SKY_URL/cli/sky.mjs" -o ~/.local/bin/sky && chmod +x ~/.local/bin/sky` (`~/.local/bin` on `PATH`), then check it with `sky --version`. Rerun the `curl` to update; the file matches the API it came from. Every `sky` command reads the config `sky apply` reads (`SKY_URL`, `SKY_API_KEY` or the config file) and takes `--json` to print the API's object instead of a line. The MCP server (`POST /mcp`) has matching tools: `launch`, `wait_for_events`, `status`, `list_agents`, `answer`, `approve` (which also denies, with `decision: "deny"`), `followup`, `archive`, `preview`.
 
 ## Once per agent: get connected
 
@@ -99,6 +99,18 @@ The sandbox has no GitHub credential by design (*Once per repo*, step 7), so `gi
 `sync` also brings in the run's own branch: when a fix is pushed to the run's GitHub branch (`--branch <name>` when the run publishes to a branch of that name), tell the run to `node /opt/sky/runner.mjs sync` (with the same `--branch <name>`) and publish again. Its unpublished commits are rebased onto the pushed ones.
 
 Publish takes the PR title from `--title` on every publish, so a brief names the title it wants. Sky doesn't check which files a branch changes, so a brief also names the files it expects. When the default branch moved and the run's branch wasn't brought in by `sync`, a re-publish rebases onto the new base, which drops a merge of `origin/<default>` and replays the commits it carried; a branch `sync` brought pushes into is only fast-forwarded, so its merge stays.
+
+## Checking a build in a preview
+
+On a repo without PR previews, check a run's work by using it. `sky agent preview <agent> --port=<n>` builds the agent's branch for production on the environment's sprite, serves it, and prints a private link to open in a browser. `--build` and `--start` default from the worktree's lockfile (`pnpm build` and `pnpm start`, or the yarn, bun or npm pair); with no lockfile, pass both. The app listens on `--port` on all interfaces. The command waits, then exits 0 once the app is ready, or 1 with the tail of the failed build or start.
+
+- **The link holds a token.** Anyone who has it can use the app until the preview ends. It is printed once, so it stays out of chat, PRs, briefs and the kru store; open it yourself, or hand it only to whoever checks the build.
+- **A new commit needs a new preview.** The server keeps serving the build it started with. After a follow-up run, run the command again: it rebuilds and replaces the preview, with a new link.
+- **One per environment, and heavy.** Starting a preview on another agent replaces the running one. The build is a heavy job on the sprite's memory, so start it while no run is building or testing there.
+- **Stop it when done.** `sky agent preview <agent> --stop` ends it; otherwise it lasts until `--ttl` (24h by default, 7d at most) or until the agent is archived. `sky agent preview <agent>` on its own prints the state and expiry.
+- **It is not the host's build.** The preview runs on the sprite with the environment's secrets, so it can't vouch for the hosting platform's build, runtime or edge config, its env vars or its cron jobs. A repo that deploys to such a host still checks those there.
+
+Sky's `README.md` → *Previews* has the rest.
 
 ## When a run fails
 
