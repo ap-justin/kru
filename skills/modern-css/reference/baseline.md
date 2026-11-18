@@ -2,7 +2,7 @@
 
 Curated from web.dev/baseline/2023, /2024, /2025; the `BL 2026` rows were read from `api.webstatus.dev` on 2026-11-14. CSS only (selectors, properties, functions, at-rules, units, media features) — closely-related HTML/JS platform features are in the last table since builders reach for them alongside CSS.
 
-Grouped by **capability** (how you'd reach for it), not by year — the year is the `BL` column. See `SKILL.md`'s aging rule for turning that year into a *current* Baseline status: 2023 ≈ Widely available, 2024 ≈ crossing the line, 2025 ≈ Newly available. Recompute against today; don't trust the year as a fixed label.
+Grouped by **capability** (how you'd reach for it), not by year — the year is the `BL` column. See `SKILL.md`'s aging rule for turning that year into a *current* Baseline status: 2023 ≈ Widely available, 2024 ≈ crossing the line, 2025 and later ≈ Newly available. Recompute against today; don't trust the year as a fixed label.
 
 The "What it does" column is a one-line **signpost to jog recognition, not a spec** — for exact syntax, values, and edge behavior, look the feature up on MDN (`developer.mozilla.org`) or `web.dev/baseline/<feature>` before relying on it.
 
