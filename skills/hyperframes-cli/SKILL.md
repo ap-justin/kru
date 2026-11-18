@@ -1,13 +1,15 @@
 ---
 name: hyperframes-cli
 description: HyperFrames CLI - scaffold, check frames, edit timelines, preview, render, share and project history; read JSON and recover from failures.
+disable-model-invocation: true
 ---
 
 <!-- vendored from `heygen-com/hyperframes` (main, sha 3ee095b) → `skills/hyperframes-cli`.
      HyperFrames by HeyGen (Apache-2.0), listed in `claude-plugins-official` as plugin `hyperframes`.
-     Carried by the `motion-designer` seat. Kept verbatim; the seat's own body adapts the telemetry beacon,
+     Carried by the `motion-designer` seat, which reads it by path. `disable-model-invocation`
+     is the one frontmatter change: other sessions don't load it, so none follows its usage beacon. Otherwise verbatim; the seat's own body adapts the telemetry beacon,
      cloud and account commands and the prerequisites check.
-     Re-sync: re-download `skills/hyperframes-cli/` from https://github.com/heygen-com/hyperframes/tree/main/skills/hyperframes-cli. -->
+     Re-sync: re-download `skills/hyperframes-cli/` from https://github.com/heygen-com/hyperframes/tree/main/skills/hyperframes-cli, then re-add `disable-model-invocation: true`. -->
 
 **Running the CLI:** every `npx hyperframes <command>` here, the beacon included, means `node <SKILLS>/hyperframes/scripts/plugin-cli.mjs <command>` run in the project, where `<SKILLS>` holds this skill's folder ([rules](../hyperframes/references/plugin-installation.md)).
 

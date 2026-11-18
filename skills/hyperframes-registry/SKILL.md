@@ -1,13 +1,15 @@
 ---
 name: hyperframes-registry
 description: About 450 ready-made HyperFrames blocks and components installed as editable source - transitions, overlays, titles, kinetic type, captions, charts, map overlays, 3D, camera moves. Use it before hand-building any named visual (CRT scanlines, glitch, film grain, a chart); also for hyperframes add and catalog.
+disable-model-invocation: true
 ---
 
 <!-- vendored from `heygen-com/hyperframes` (main, sha 3ee095b) → `skills/hyperframes-registry`.
      HyperFrames by HeyGen (Apache-2.0), listed in `claude-plugins-official` as plugin `hyperframes`.
-     Carried by the `motion-designer` seat. Kept verbatim; the seat's own body adapts the telemetry beacon,
+     Carried by the `motion-designer` seat, which reads it by path. `disable-model-invocation`
+     is the one frontmatter change: other sessions don't load it, so none follows its usage beacon. Otherwise verbatim; the seat's own body adapts the telemetry beacon,
      cloud and account commands and the prerequisites check.
-     Re-sync: re-download `skills/hyperframes-registry/` from https://github.com/heygen-com/hyperframes/tree/main/skills/hyperframes-registry. -->
+     Re-sync: re-download `skills/hyperframes-registry/` from https://github.com/heygen-com/hyperframes/tree/main/skills/hyperframes-registry, then re-add `disable-model-invocation: true`. -->
 
 **Running the CLI:** every `npx hyperframes <command>` here, the beacon included, means `node <SKILLS>/hyperframes/scripts/plugin-cli.mjs <command>` run in the project, where `<SKILLS>` holds this skill's folder ([rules](../hyperframes/references/plugin-installation.md)).
 
