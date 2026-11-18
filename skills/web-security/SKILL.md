@@ -59,7 +59,7 @@ Traps, each as the failure it causes:
 
 ## Seam with `better-auth-specialist`
 Better Auth owns the server: options and verify endpoints, the `passkey` plugin, challenge storage, session and cookies. This skill owns the browser: feature detection, form markup, autofill, abort handling, the Signal calls and the states around them. The WebAuthn call itself belongs to whichever side of the repo already makes it. Better Auth's `passkeyClient` makes the sign-in and register calls through SimpleWebAuthn's browser package, so keep those; the guides' native-call rule (`passkeys`) governs calls it doesn't make. What changes under `passkeyClient`:
-- **Steps 2–3 apply; 4–5 don't.** `signIn.passkey` takes no `signal`: SimpleWebAuthn aborts a pending ceremony when the next one starts, and failures come back as `{ error: { code } }` rather than thrown, so there is no `NotAllowedError` to swallow. Call `signIn.passkey({ autoFill: true })` once for the conditional get (pass the boolean; don't rely on a default), with the `webauthn` input already in the DOM, and `signIn.passkey({ autoFill: false })` from the button.
+- **Steps 2–3 apply; 4–5 don't.** `signIn.passkey` takes no `signal`: SimpleWebAuthn aborts a pending ceremony when the next one starts, and failures come back as `{ error: { code } }` rather than thrown, so there is no `NotAllowedError` to swallow. Call `signIn.passkey({ autoFill: true })` once for the conditional get (pass the boolean explicitly), with the `webauthn` input already in the DOM, and `signIn.passkey({ autoFill: false })` from the button.
 - **`rpId`**: the options never reach app code. `better-auth-specialist` sets `passkey({ rpID })` explicitly to the registrable domain (the fallback is the `baseURL` host or `localhost`) and exposes the same value to the client for Signal calls.
 - **Unknown credential**: verify answers `401` with code `PASSKEY_NOT_FOUND`, not `404`; the credential id comes from `signIn.passkey({ returnWebAuthnResponse: true })`.
 - **`signalAllAcceptedCredentials` and `signalCurrentUserDetails` need the WebAuthn user handle**, which the plugin generates at random per registration and never stores. Passing the app's user id matches nothing, silently; skip both calls until the server stores the handle. `signalUnknownCredential` after a delete works with the row's `credentialID`.
@@ -67,7 +67,7 @@ Better Auth owns the server: options and verify endpoints, the `passkey` plugin,
 
 ## Left out
 - Passkey server verification, challenge storage, credential tables: a vetted library per language (`passkeys`), or Better Auth.
-- CSP, `Connection-Allowlist`, COOP/COEP, cookies and the other response headers (`security`, `restrict-outbound-connections`): the seat that owns the response sets them: the framework builder in middleware or hooks, the platform seat in host config, `better-auth-specialist` for session cookies. *Untrusted HTML* step 7 states only what Trusted Types needs from the page.
+- CSP, `Connection-Allowlist`, COOP/COEP, cookies and the other response headers (`security`, `restrict-outbound-connections`): the seat that owns the response sets them — the framework builder in middleware or hooks, the platform seat in host config, `better-auth-specialist` for session cookies. *Untrusted HTML* step 7 states only what Trusted Types needs from the page.
 - Client-side verification of an email token, hand-rolled JWT or WebAuthn parsing (`verify-email-ownership`).
 
 ## Everything else

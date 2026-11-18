@@ -13,12 +13,13 @@
 # stands; anything unparsed keeps it, because a miss here is a silent ungated
 # build and a false gate costs one message.
 #
-# it fires once per session: the first gated call decides and marks the session,
-# whether it blocks or fails open on an unreadable transcript, and no later call
-# is judged. a /kru: command in flight exempts its calls without deciding, so the
-# first gated call of a plain turn after it still decides. a session that declines
-# is nagged no further, and a subagent's own tool call never trips a gate meant for
-# the lead.
+# it fires once per session: a gated call that blocks, or fails open on an
+# unreadable transcript, marks the session, and no later call is judged. a call
+# that passes because the contract is loaded leaves no mark, so each later call
+# reads the transcript again and finds the same load. a /kru: command in flight
+# exempts its calls without marking, so the first gated call of a plain turn
+# after it still decides. a session that declines is nagged no further, and a
+# subagent's own tool call never trips a gate meant for the lead.
 #
 # fail open on anything that isn't a clear miss. kill switch: touch the file
 # the resolver's `lead-gate/off`. a marker file rather than a flag alone, because

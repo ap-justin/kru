@@ -32,7 +32,7 @@ Fallback code, the yield loop and the attribution fields: `reference/interaction
 4. **Preloads.** An image preload defaults to low priority, so give the LCP preload `fetchpriority="high"`. Fonts are already high: leave the attribute off, keep `crossorigin` on every font preload (same-origin too), and cap preloads at two images and two or three fonts [optimize-preload-priority, performance].
 5. **Scripts.** `fetchpriority="high"` on at most one or two async scripts the first interaction needs; `low` on analytics and on parser-blocking scripts at the end of the body [optimize-script-priority]. A third-party script gets `defer` and a place near the end of the body [performance].
 6. **Below-the-fold rendering.** `content-visibility: auto` on large sections that are below the fold only: on above-the-fold content it makes the browser evaluate visibility before rendering and delays load. Pair it with `contain-intrinsic-size: auto <length>`; without it the section collapses to 0 px off-screen and the scrollbar jumps. Derive the length from the content (`lh`, `ch`, an average) rather than guessing pixels [defer-rendering-heavy-content, performance].
-7. **Background requests.** `priority: 'low'` in `fetch()` options for analytics and speculative data. The key is `priority`; the old `importance` key is deprecated, so don't write it [deprioritize-background-fetches].
+7. **Background requests.** `priority: 'low'` in `fetch()` options for analytics and speculative data [deprioritize-background-fetches].
 
 Traps:
 - `loading="lazy"` on the LCP image defers the request until layout finishes; never combine it with `fetchpriority="high"` [optimize-image-priority, performance].

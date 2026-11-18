@@ -1,6 +1,6 @@
 # Status of the features the recipes use
 
-Read from `https://api.webstatus.dev/v1/features/<id>` on 2026-11-14. Recompute against today; the states and the aging rule are `modern-css`'s. A Limited row names the browsers that ship it.
+Read from `https://api.webstatus.dev/v1/features/<id>` on 2026-11-14. Recompute against today; the states and the aging rule are `modern-css`'s. Where a Limited row names browsers, those are the ones that ship it.
 
 | Feature (web-features id) | Status | Used for |
 |---|---|---|
