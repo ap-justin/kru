@@ -278,7 +278,6 @@ check refuse Edit "" "$p" "" CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE=false
 check refuse Edit "" "$p"
 
 # the harness's isMeta line after a /kru: command is not the user speaking
-# (the cmd-latest and cmd-then-turn pair runs above, on the cmdfirst session)
 check allow Edit "" "$tx/cmd-meta.jsonl"
 check refuse Edit "" "$tx/cmd-meta-then-turn.jsonl"
 

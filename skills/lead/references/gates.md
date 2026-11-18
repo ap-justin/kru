@@ -11,7 +11,7 @@ Loaded by `lead` when the branch is live.
 **A finding enters the fix list only when its trigger happens in normal use** — an ordinary user action, a provider's documented retry or redelivery, concurrency the real crons, retries and staff produce, data a UI or an import can create, an ordinary attacker. One that needs a convoluted trigger is dropped, one counted line in the report at most, never ranked or filed: our own keys or config failing once set (a key a *user* enters still gets validated and a clear error), a provider breaking its own docs, one human action racing itself within milliseconds, data no path can create, an attacker already holding our secrets or database, a vendor outage cited to justify new machinery, or several of these stacked. The same bar holds wherever a defect gets filed or fixed.
 
 **Edge-case guards: the check before a guard is built or hardened.** A finding, brief or slice that adds code to stop a rare case, or hardens such code (a timeout, an ordering fix, another field), carries three answers:
-1. **Path:** step by step, how the case actually happens: which screen or job, and whose action. No concrete path, no guard.
+1. **Path:** step by step, how the case actually happens: which screen or job, and whose action.
 2. **Evidence:** real occurrences counted in production data, errors or tickets, with dates. "It could happen" isn't evidence. A seat that can't count writes `evidence: not counted`.
 3. **Existing cover:** the person or process that already catches it, such as staff review of each application, a reconciliation, or an approval step.
 

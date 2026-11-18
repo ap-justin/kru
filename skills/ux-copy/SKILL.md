@@ -10,7 +10,7 @@ user-invocable: false
      upstream ships this as the namespaced `design:ux-copy`; this is the plain vendored copy.
      TEAM-ADAPTED: dead CONNECTORS.md pointer dropped, connector block rewritten as team equivalents
      (repo strings for voice, the design spec's screen inventory for context); error messages split field-level vs system-level, where upstream gives every error the what+why+how structure.
-     DISCLOSED DEVIATION (house rules): three owner rules added to the body, each marked *house rule* where it sits — labels name what is needed in a newcomer's words, and a group label names its members (Principles 1), no prose where the flow already says it (Principles 2), and a button confirming an errand is named for what the person just did, where upstream's CTA rule names the outcome (CTAs). re-sync: diff, then re-apply. -->
+     DISCLOSED DEVIATION (house rules): three owner rules added to the body, each marked *house rule* where it sits — labels name what is needed in a newcomer's words and a group label names its members (Principles 1); no prose where the flow already says it (Principles 2); and a button confirming an errand is named for what the person just did, where upstream's CTA rule names the outcome (CTAs). re-sync: diff, then re-apply. -->
 
 # UX copy
 

@@ -18,7 +18,7 @@ Park what the user liked into the team's preference inbox so a later `skills/ros
    - [<lane>] <the preference, tightly worded> — _user · <project-slug> · <YYYY-MM-DD>_
    ```
 
-   Project slug = `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" slug` (the origin repo's name; or `—` if none). Date = today. Source is always `user` for this load (agents append their own lines directly, per the lead's handoff).
+   Project slug = `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" slug` (the origin repo's name, or the dir name when there is no origin). Date = today. Source is always `user` for this load (agents append their own lines directly, per the lead's handoff).
 5. **Confirm in one line** — echo the banked line, note it'll land in the team on the next `skills/roster/learn.md` (PM or lead loads) sweep. Pass through whatever `bash "${CLAUDE_PLUGIN_ROOT}/scripts/kru-store.sh" where` prints, which is usually nothing. Then return to whatever was in flight.
 
 ## Don't

@@ -326,7 +326,7 @@ cutting is named with the file that answers it, and that file was opened and fou
 ### 4. Blend — *full run*
 The answers land as a **team section in the host file's own idiom** — the shape derived from that
 file the way the content is derived from the repo. Read what the file already does and match it:
-`${CLAUDE_PLUGIN_ROOT}/skills/setup/sheet.md` carries the fields, the two lines whose wording is
+`${CLAUDE_PLUGIN_ROOT}/skills/setup/sheet.md` carries the fields, the lines whose wording is
 fixed, and one sheet rendered in two idioms.
 
 **Placement is the file's own order.** The pointer orients a session before work starts, so it sits

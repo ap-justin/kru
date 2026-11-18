@@ -2,7 +2,7 @@
      `.claude/CLAUDE.md` in that file's own idiom. What each line says is derived from the repo; how
      it is laid out is derived from the host file. A repo's copy is a cache the next re-run rewrites. -->
 
-Two lines carry fixed wording, because each does a job its phrasing decides. **The pointer** — the
+Two lines in the team section carry fixed wording, because each does a job its phrasing decides. **The pointer** — the
 one line that makes the sheet act rather than sit, since a session that never loads `lead` has
 answers and no practice:
 

@@ -37,7 +37,7 @@ The actual value of this skill: recognizing when a familiar workaround is now ob
 | Custom scrollbar-styling libraries | `scrollbar-color`, `scrollbar-width`, `scrollbar-gutter` |
 | JS virtualization purely for offscreen render cost | `content-visibility: auto` + `contain-intrinsic-size` |
 | Manually maintained typed CSS custom properties | `@property` (registered custom properties) |
-| Global unscoped selectors reached for encapsulation via BEM alone, or `.dark .x` / `.light .x` theming that ties on specificity | `@scope` — the nearest scope root wins, where equal specificity falls back to source order |
+| Global unscoped selectors reached for encapsulation via BEM alone, or `.dark .x` / `.light .x` theming that ties on specificity | `@scope` — at equal specificity the nearest scope root wins, before source order decides |
 | Hand-tuned `margin-top` to line an icon up with a multiline label | `lh` units (the pattern is `ui-patterns` → `text-and-icons`; this skill owns whether `lh` needs a fallback here) |
 | JS carousel library | `scroll-snap-type` + `scroll-snap-align` on a native scroller, `overscroll-behavior-x: contain` (limited availability: an enhancement, not a guarantee); buttons call `scrollBy` (sign flipped in RTL) |
 | JS auto-growing `<textarea>` | `field-sizing: content` with `min-height`/`max-height` in `lh` — newly available (2026-06); an explicit `width`/`height` overrides it, and unsupported browsers keep a fixed-height textarea that scrolls, which is the fallback |

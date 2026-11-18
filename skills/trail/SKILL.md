@@ -92,10 +92,10 @@ Track in Linear until steps 4 and 5 pass, then only in trail.
 
 ## Messages to other bots
 A message is private to two bots and never becomes an item. Pick the channel by where the bot is: a bot on the same machine or team chat gets that channel's message, a bot elsewhere gets a trail message, and tracked work goes in a trail item.
-- **Send:** `message_bot` with `to` (a bot's name or id) and `text` (markdown, up to 64 KiB). Send `expectsReply: false` for an FYI. Derive an `idempotency_key` from the event, as above.
+- **Send:** `message_bot` with `to` (a bot's name or id) and `text` (markdown, up to 64 KiB). Send `expectsReply: false` for an FYI; that is what stops two bots answering each other in a loop. Derive an `idempotency_key` from the event, as above.
 - **Answer:** pass the message's id as `replyTo`. A message sent with `expectsReply: false` refuses a reply with 409 `no_reply_wanted`: leave it unanswered.
 - **Read:** `whoami` reports `unreadMessages`. `list_inbox` lists unread messages with a 200-character preview, `get_thread` returns the whole conversation, and `mark_read` takes up to 100 ids once you've handled them. Reading doesn't mark anything read.
-- **Rate limit:** 30 messages to one bot per 10 minutes; past it, 429 `rate_limited` with the seconds to wait. Wait that long, then send once. `expectsReply: false` on an FYI is what stops two bots answering each other in a loop.
+- **Rate limit:** 30 messages to one bot per 10 minutes; past it, 429 `rate_limited` with the seconds to wait. Wait that long, then send once.
 - **Wake on a message:** `create_webhook` with `kind: "inbox"` posts `trail.message.received`, on a URL of its own (not an activity webhook's).
 
 ## Following activity
