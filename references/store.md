@@ -4,8 +4,9 @@ The team writes two kinds of durable state, and they have different lifetimes:
 
 - **Cross-project** — the preference loop (`inbox`, `patterns/`, `refusals`) and the hooks' own
   session bookkeeping (`audit/`, `lead-gate/`). It follows the **user**, across every engagement.
-  Two files in `patterns/` are not banked patterns: `patterns/doop-workspaces` and `patterns/doop-libraries` are the standing
-  repo → workspace and repo → library-canvas maps the `doop` skill reads, and the sweep never reads, moves or empties them.
+  Two files in `patterns/` are not banked patterns: `patterns/doop-workspaces` and
+  `patterns/doop-libraries` are the standing repo → workspace and repo → library-canvas maps the
+  `doop` skill reads, and the sweep never reads, moves or empties them.
 - **Project** — one project's plan of record: `TODOS.md`, `issues/`, `notes/`, `plan/`
   (`TRACKER.md` owns its layout).
 

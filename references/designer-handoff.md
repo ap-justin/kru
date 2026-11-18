@@ -52,8 +52,7 @@ Where the repo names a library, the workflow above runs with these changes; the 
 
 - Screens compose published components with `<doop-use>`; the part map's additions are the only hand-drawn elements, and a published component the repo has moved past is an addition with the reason "library out of date".
 - The final message of a screen run adds a drift note naming each such component and what differs.
-- The build spec's component rows name the repo's code, as before: the library is a copy, and the builder reads the repo.
-- A library build run's package is the doop skill's list, not a build spec.
+- The build spec's component rows name the repo's code: the library is a copy, and the builder reads the repo.
 
 ## Revising from comments
 
