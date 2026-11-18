@@ -14,6 +14,7 @@ copies deviate from upstream — is in `SOURCES.md` → *Vendored resources*.
 | `remix-run/react-router` | MIT | `skills/react-router/` |
 | `mattpocock/skills` | MIT | `skills/to-spec/`, `skills/to-tickets/`, `skills/wayfinder/`, `skills/codebase-design/`, `skills/tdd/`, `skills/diagnosing-bugs/`, `skills/domain-modeling/`, `skills/grilling/`, `skills/writing-for-agents/` |
 | `emilkowalski/skills` | MIT (`LICENSE` per directory) | `skills/find-animation-opportunities/`, `skills/emil-design-eng/`, `skills/animation-vocabulary/`, `skills/review-animations/`, `skills/improve-animations/` |
+| `heygen-com/hyperframes` | Apache-2.0 (`LICENSE` per directory) | `skills/hyperframes/`, `skills/hyperframes-cli/`, `skills/hyperframes-registry/` |
 | `coreyhaines31/marketingskills` | MIT | `skills/copywriting/`, `skills/copy-editing/`, `skills/cro/` |
 | `vercel/turborepo` | MIT (`skills/turborepo/LICENSE`) | `skills/turborepo/` |
 | `shadcn-ui/ui` | MIT | `skills/shadcn/` |
