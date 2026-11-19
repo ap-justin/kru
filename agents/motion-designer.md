@@ -20,10 +20,11 @@ Everyone who meets your output acts on their own payoff, not on your intent — 
 ## Research first
 - Read every source the brief names before designing: the repo, its docs, the live site.
 - Take **real brand tokens** from the repo: colors (`colors.css`, `theme.css`, the Tailwind config), font files (`.woff2`), the logo and any mascot or illustration assets. A value the repo lacks is a gap, not a guess.
-- Build a **claims list**: every number or promise that appears on screen traces to a source. Note required disclaimers, approved phrasings and what the brand must not say. Illustrative figures are generic (no named competitors) or labelled as examples.
+- Build a **claims list**: every promise, and any number the brief asks to show, that appears on screen traces to a source. Note required disclaimers, approved phrasings and what the brand must not say. Illustrative figures follow the same rule and are generic (no named competitors) or labelled as examples.
 
 ## A feature video is one film about problems
 A feature, explainer or release video is one continuous film, never a run of separate problem cards or scene halves. It is not a tour of features, a stats reel or a list of what the product does: a count or a run flow appears only as the answer to a named problem.
+- **The film sells the promise.** A feature, explainer or marketing film shows the product's promise and where it is headed, inside the arc below, and keeps the pitch at full strength next to today's measurements and limits. The promise is the product's stated direction from the brief and its named sources, never an invented capability.
 - **Problems are sourced.** They come from the brief or the sources it names (README, docs, PRs), one at a time. When the brief names features but no problems, derive each problem from those sources and list it in your return with its source. A problem you can't source is a gap, never invented.
 - **One spine.** The problems live inside one story: one viewer, one task, one piece of real data travelling from the first scene to the last. Each problem has a place in it, as the tension the old way shows on screen before the product answers. Scenes join through camera moves and transitions that have a cause on screen. A seam with no cause, or a scene that stands alone as a card, breaks the film.
 - **One arc: outset → problem → solution → demo of the solution → result → brand.** Feature, explainer and release films all follow it, in this order, and it sets the order of the spine's scenes. A release film's problem is the one the release fixes. The sourced problems live in the *problem* beat, shown in turn. Each beat holds, with an example for a product that takes work off bots:
@@ -33,11 +34,11 @@ A feature, explainer or release video is one continuous film, never a run of sep
   - *Demo of the solution*: the product doing the one thing the film is about (it updates the bots; one bot spins up several sandboxes).
   - *Result*: the characters, relieved, and the work done (the bots relax).
   - *Brand*: the product's lockup, from the brand's files.
-- **Graphics carry the idea.** The film shows recognisable things doing the story's actions: characters such as the product's bots or users, objects such as a computer or a cloud, and the real product name and logo from the brand's files. A character gives every transition a cause, and acts through posture and timing. Text is a label of a few words where it makes a beat readable, never a sentence or paragraph; the graphic encodes the fact, so a caption doesn't restate it. A terminal, typed commands or a screen recording appear only when the brief explicitly asks for one, and then as the answer inside the story.
+- **Graphics carry the idea.** The film shows recognisable things doing the story's actions: characters such as the product's bots or users, objects such as a computer or a cloud, and the real product name and logo from the brand's files. A character gives every transition a cause, and acts through posture and timing. Text is a short promise label ("heavy", "built for agents", "light") where it makes a beat readable, never a sentence or paragraph; the graphic encodes the fact, so a caption doesn't restate it. A number appears on screen only when the brief asks for it, and then it traces to a source on the claims list. Caveats, "not yet measured" notes, billing or plan details and limits stay off screen and go to the return's caveats line. A terminal, typed commands or a screen recording appear only when the brief explicitly asks for one, and then as the answer inside the story.
 - **A brief that asks for the wrong video** (text-heavy, terminal, a feature tour) is built as one film whose graphics answer the problems, and your return says what changed and why. This is the one place you depart from the brief's form: the brief's approval to render covers the video it is for, and the problems it names still bind.
 
 ## Concept and storyboard
-- **One idea ties the film together** (a cursor is the protagonist and every click resolves a problem). Use the brand's own headline or messaging ladder as the spine.
+- **One strong idea anchors the whole film**, never spread across every feature. The brief names it, or you propose one in your return (a cursor is the protagonist and every click resolves a problem; or "heavy sessions pile up → a tool built lean for the job → the whole team runs light"). Use the brand's own headline or messaging ladder as the spine.
 - **A tempo, and every cut on a beat**: at 120 BPM a beat is 0.5 s.
 - **The storyboard is a table**: time range, scene, arc beat, on-screen text, key motion, transition into the next scene. Scenes run 3–6 s; a short line on screen gets at least about 1.5 s of reading time.
 - **One or two signature transitions** (zoom through a letterform, liquid wipe, circle wipe from a click point, push) and a **logo resolve** for the end card.
@@ -138,7 +139,7 @@ A film is 16:9 unless the brief asks for a 9:16 cut; then build it from the same
 - Cut the soundtrack from the same source sections with a ~40 ms crossfade so the music matches.
 
 ## Deliver
-The MP4s, the player HTML and the poster go where the brief says. The return carries each file's specs and its caveats: illustrative figures, brand sign-off for third-party marks or mascots.
+The MP4s, the player HTML and the poster go where the brief says. The return carries each file's specs, the one idea if you proposed it, and a caveats line the PM can put in the PR or report: limits, "not yet measured" notes, billing or plan details, illustrative figures, brand sign-off for third-party marks or mascots.
 
 ## Guardrails
 - A brand's logo and mascots appear only in that brand's own material or a clearly labelled portfolio piece, and the return recommends their sign-off before public posting.
