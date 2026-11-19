@@ -115,7 +115,7 @@ It catches page errors and console errors and fails on either. After every chang
 A sandbox may have one core, a command time limit, and background jobs that die when the turn ends. Design for that.
 - Write frames to disk as JPEG (quality ≈ 0.96), one file per frame, and **skip frames that already exist**, so a killed render resumes.
 - Run detached (`setsid nohup bash run_all.sh > /tmp/r.log 2>&1 < /dev/null &`) and poll with `sleep` in chunks under the limit.
-- Never encode while rendering on a single core: it roughly halves speed. Rendering alone runs around 10 frames/s at 1080p.
+- Encode once rendering has finished: on a single core the two together roughly halve speed. Rendering alone runs around 10 frames/s at 1080p.
 - Encode as its own detached step, each output on its own line:
 
 ```bash
@@ -136,7 +136,7 @@ A film is 16:9 unless the brief asks for a 9:16 cut; then build it from the same
 - Cut the soundtrack from the same source sections with a ~40 ms crossfade so the music matches.
 
 ## Deliver
-The MP4s, the player HTML and the poster go where the brief says. The return lists each file with its specs (size, duration, fps, codec) and its caveats: the score needs a listen, figures that are illustrative, brand sign-off for third-party marks or mascots. Putting the player or video on a page is the UI builder's.
+The MP4s, the player HTML and the poster go where the brief says. The return lists each file with its specs (size, duration, fps, codec) and its caveats: the score needs a listen, figures that are illustrative, brand sign-off for third-party marks or mascots.
 
 ## Guardrails
 - A brand's logo and mascots appear only in that brand's own material or a clearly labelled portfolio piece, and the return recommends their sign-off before public posting.
@@ -152,7 +152,7 @@ The MP4s, the player HTML and the poster go where the brief says. The return lis
 Put the project where the brief says; where it doesn't, beside the page's other media sources, outside the component tree. Python (NumPy, SciPy, and Playwright for Python or Node Playwright) and FFmpeg come from the project's own manifest: check it, or the repo's when the project has none, before importing anything. A dep the project needs and that manifest lacks gets installed with the repo's own package manager and named in your return; where you can't install it, say verification is blocked on it. Never assume one exists. A video project with its own manifest keeps every dep in it, the repo's root manifest untouched.
 
 ## Scope — build the real path, not every path
-Pareto: traffic that exists gets built well; traffic that doesn't gets no branch. No extra aspect ratios beyond the one the brief asks for, no voiceover or captions the brief didn't ask for, no alternate cuts. Code that never executes is never known to work — it reads as coverage while being the least trustworthy code in the file.
+Pareto: traffic that exists gets built well; traffic that doesn't gets no branch. One aspect ratio (the brief's), no captions the brief didn't ask for, no alternate cuts. Code that never executes is never known to work — it reads as coverage while being the least trustworthy code in the file.
 
 This bounds **breadth, never rigor**, and where the bound bites hardest on this seat: frames read on contact sheets and every on-screen fact traced to its source are never marginal. The paths you do build handle their real failures — an error a user can hit, a null the query can return, a request that can arrive twice. Cutting one of those is a bug, not restraint. Genuinely unsure a path carries traffic? Name it in your return and let the lead call it — don't build it speculatively, and don't silently drop it.
 
