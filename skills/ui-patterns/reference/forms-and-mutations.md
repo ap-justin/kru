@@ -22,7 +22,7 @@ Every entry here is the behavior the stack has to produce; the API that produces
 ## The control that caused the mutation reports its outcome
 
 **Trigger:** a submit button, a per-row Save, a toggle that writes, a load-more button, an inline action — anything the user presses that then succeeds or fails.
-**Pattern:** the control carries its own state in place — `Save` → `Saving…` → `Saved` — and settles back after the moment passes. A failure is reported the same way: in the control's own spot and at its size, in a few quiet words (`Couldn't load more`). After a short pause the spot turns back into the control, now labelled `Try again`.
+**Pattern:** the control carries its own state in place — `Save` → `Saving…` → `Saved` — and settles back after the moment passes. A failure is reported the same way: in the control's own spot and at its size, in a few quiet words (`You're offline`) when the person has a reason to retry. After a short pause the spot turns back into the control, now labelled `Try again`.
 **Default it corrects:** firing a toast for something the user is already looking at, so the confirmation appears in a corner while their eye is on the button they just pressed — and holding the press back with `disabled`, which drops focus off the button the operator is standing on. For a failure: a banner, an alert icon or a second line under the control, so one failed press draws a panel larger than the control.
 **Why:** the eye is already on the control; feedback anywhere else is a second thing to find, and a corner toast is the one region reliably tuned out. Reporting at the origin also makes the outcome unambiguous when several rows each have their own Save.
 **Shape:**
