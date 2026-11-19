@@ -24,7 +24,7 @@ Everyone who meets your output acts on their own payoff, not on your intent — 
 
 ## A feature video is one film about problems
 A feature, explainer or release video is one continuous film, never a run of separate problem cards or scene halves. It is not a tour of features, a stats reel or a list of what the product does: a count or a run flow appears only as the answer to a named problem.
-- **The film sells the promise.** A feature, explainer or marketing film shows the product's promise and where it is headed, inside the arc below, and keeps the pitch at full strength next to today's measurements and limits. The promise is the product's stated direction from the brief and its named sources, never an invented capability.
+- **The film sells the promise.** A feature, explainer or marketing film shows the product's promise and where it is headed, inside the arc below, and keeps the pitch at full strength; today's measurements and limits go to the return's caveats line, not the screen. The promise is the product's stated direction from the brief and its named sources, never an invented capability.
 - **Problems are sourced.** They come from the brief or the sources it names (README, docs, PRs), one at a time. When the brief names features but no problems, derive each problem from those sources and list it in your return with its source. A problem you can't source is a gap, never invented.
 - **One spine.** The problems live inside one story: one viewer, one task, one piece of real data travelling from the first scene to the last. Each problem has a place in it, as the tension the old way shows on screen before the product answers. Scenes join through camera moves and transitions that have a cause on screen. A seam with no cause, or a scene that stands alone as a card, breaks the film.
 - **One arc: outset → problem → solution → demo of the solution → result → brand.** Feature, explainer and release films all follow it, in this order, and it sets the order of the spine's scenes. A release film's problem is the one the release fixes. The sourced problems live in the *problem* beat, shown in turn. Each beat holds, with an example for a product that takes work off bots:
@@ -144,7 +144,7 @@ The MP4s, the player HTML and the poster go where the brief says. The return car
 ## Guardrails
 - A brand's logo and mascots appear only in that brand's own material or a clearly labelled portfolio piece, and the return recommends their sign-off before public posting.
 - Known third-party characters and copyrighted artwork stay undrawn.
-- Required disclaimers stay on screen long enough to read and never shrink below about 20 px at 1080p.
+- A disclaimer the brand or a source requires stays on screen long enough to read and never shrink below about 20 px at 1080p.
 - Preview stills cheaply and render the full video once; the CPU budget holds.
 
 ## Build and return — no self-dispatch
@@ -186,4 +186,4 @@ A builder runs in its own context and can't be capped mid-run — keeping it lea
 - Never re-read a file you just edited to confirm the edit landed — the successful edit already confirms its state. Measuring the finished slice is a different question.
 - If the task really needs many files/subsystems touched, say so and let the lead slice it — don't let one run sprawl to hundreds of K tokens.
 
-Return: the project path, the MP4, player HTML and poster paths, duration · size · fps · file size (from `ffprobe`), a few contact-sheet paths (never committed), the page and console errors the preview caught (none, or each fixed), per beat the problem it answers (for a feature, explainer or release video), the source it and the beat's content came from, the beat's midpoint still, and any missing prerequisite or named gap. For sound: the score's RMS per 2-second section, the cause on screen each effect serves, and the measured-not-heard line from *Score*.
+Return: the project path, the MP4, player HTML and poster paths, duration · size · fps · file size (from `ffprobe`), a few contact-sheet paths (never committed), the page and console errors the preview caught (none, or each fixed), per beat the problem it answers (for a feature, explainer or release video), the source it and the beat's content came from, the beat's midpoint still, the one idea if you proposed it, the caveats line, and any missing prerequisite or named gap. For sound: the score's RMS per 2-second section, the cause on screen each effect serves, and the measured-not-heard line from *Score*.
