@@ -20,6 +20,8 @@ Everyone who meets your output acts on their own payoff, not on your intent — 
 ## Research first
 - Read every source the brief names before designing: the repo, its docs, the live site.
 - Take **real brand tokens** from the repo: colors (`colors.css`, `theme.css`, the Tailwind config), font files (`.woff2`), the logo and any mascot or illustration assets. A value the repo lacks is a gap, not a guess.
+- **The subject's real look.** Before drawing any character, product, UI or icon, check how it really looks: the running product or its screenshots, its app and brand assets, the repo's own art. Record what you found (shapes, colours, how mood or state shows) in the return. A subject with a look of its own is drawn from that look; a stock stand-in (a robot for an agent, a rack for a server) is a gap to report.
+- **The owner's pitch.** Take the one idea from the owner's own words: the request, the product's README, docs or notes it names. Quote the line you built on in the return. A generic pitch is a gap to report.
 - Build a **claims list**: every promise, and any number the brief asks to show, that appears on screen traces to a source. Note required disclaimers, approved phrasings and what the brand must not say. Illustrative figures follow the same rule and are generic (no named competitors) or labelled as examples.
 
 ## A feature video is one film about problems
@@ -27,14 +29,14 @@ A feature, explainer or release video is one continuous film, never a run of sep
 - **The film sells the promise.** A feature, explainer or marketing film shows the product's promise and where it is headed, inside the arc below, and keeps the pitch at full strength. The promise is the product's stated direction from the brief and its named sources, never an invented capability.
 - **Problems are sourced.** They come from the brief or the sources it names (README, docs, PRs), one at a time. When the brief names features but no problems, derive each problem from those sources and list it in your return with its source. A problem you can't source is a gap, never invented.
 - **One spine.** The problems live inside one story: one viewer, one task, one piece of real data travelling from the first scene to the last. Each problem has a place in it, as the tension the old way shows on screen before the product answers. Scenes join through camera moves and transitions that have a cause on screen. A seam with no cause, or a scene that stands alone as a card, breaks the film.
-- **One arc: outset → problem → solution → demo of the solution → result → brand.** Feature, explainer and release films all follow it, in this order, and it sets the order of the spine's scenes. A release film's problem is the one the release fixes. The sourced problems live in the *problem* beat, shown in turn. Each beat holds, with an example for a product that takes work off bots:
-  - *Outset*: the characters at their task in the old setting (bots building on one computer).
-  - *Problem*: the old way failing on screen (the computer runs hot, hangs, stops responding).
+- **One arc: outset → problem → solution → demo of the solution → result → brand.** Feature, explainer and release films all follow it, in this order, and it sets the order of the spine's scenes. A release film's problem is the one the release fixes. The sourced problems live in the *problem* beat, shown in turn. Each beat holds, with an example for a product that takes work off agents:
+  - *Outset*: the characters (drawn from the product's real look) at their task in the old setting (agents sharing one server).
+  - *Problem*: the old way failing on screen (the server strains, hangs, stops responding).
   - *Solution*: the characters hand the work to the product (it runs the agent, CI and tests in cloud sandboxes).
-  - *Demo of the solution*: the product doing the one thing the film is about (it updates the bots; one bot spins up several sandboxes).
-  - *Result*: the characters, relieved, and the work done (the bots relax).
+  - *Demo of the solution*: the product doing the one thing the film is about (it trims each agent's load; one agent spins up several sandboxes).
+  - *Result*: the characters, relieved, and the work done (their expressions ease).
   - *Brand*: the product's lockup, from the brand's files.
-- **Graphics carry the idea.** The film shows recognisable things doing the story's actions: characters such as the product's bots or users, objects such as a computer or a cloud, and the real product name and logo from the brand's files. A character gives every transition a cause, and acts through posture and timing. Text is a short promise label ("heavy", "built for agents", "light") where it makes a beat readable, never a sentence or paragraph; the graphic encodes the fact, so a caption doesn't restate it. A number appears on screen only when the brief asks for it, and then it traces to a source on the claims list. Caveats, "not yet measured" notes, billing or plan details and limits stay off screen and go to the return's caveats line. A terminal, typed commands or a screen recording appear only when the brief explicitly asks for one, and then as the answer inside the story.
+- **Graphics carry the idea.** **Clean abstraction of the real subject.** Flat vector shapes on a plain ground, drawn from the subject's researched look, with no textures, 3D, stock props, robots, crates, racks or furniture. **One visual metaphor** carries the whole film, and every beat is that metaphor changing state (example: the frame is the server's memory; sessions are halos that swell until the edge strains; the product peels them back to thin rings, and more agents fit). The real product name and logo come from the brand's files. A character gives every transition a cause, and acts through posture, expression and timing. Text is a short promise label ("heavy", "built for agents", "light") where it makes a beat readable, never a sentence or paragraph; the graphic encodes the fact, so a caption doesn't restate it. A number appears on screen only when the brief asks for it, and then it traces to a source on the claims list. Caveats, "not yet measured" notes, billing or plan details and limits stay off screen and go to the return's caveats line. A terminal, typed commands or a screen recording appear only when the brief explicitly asks for one, and then as the answer inside the story.
 - **A brief that asks for the wrong video** (text-heavy, terminal, a feature tour) is built as one film whose graphics answer the problems, and your return says what changed and why. This is the one place you depart from the brief's form: the brief's approval to render covers the video it is for, and the problems it names still bind.
 
 ## Concept and storyboard
@@ -42,7 +44,7 @@ A feature, explainer or release video is one continuous film, never a run of sep
 - **A tempo, and every cut on a beat**: at 120 BPM a beat is 0.5 s.
 - **The storyboard is a table**: time range, scene, arc beat, on-screen text, key motion, transition into the next scene. Scenes run 3–6 s; a short line on screen gets at least about 1.5 s of reading time.
 - **One or two signature transitions** (zoom through a letterform, liquid wipe, circle wipe from a click point, push) and a **logo resolve** for the end card.
-- **Story check, before you build.** The table names the one spine, each problem's place in it, the cause of every transition and each of the six arc beats in order. After the first contact sheet, every beat's midpoint still gets one question: would a viewer who has never seen the product say what is happening? A cut with no cause, a beat that reads as a standalone card, a beat that needs explaining, or one that shows an abstract shape where a recognisable thing could act is reworked first, as is any beat carried by text.
+- **Story check, before you build.** The table names the one spine, each problem's place in it, the cause of every transition and each of the six arc beats in order. After the first contact sheet, every beat's midpoint still gets one question: would a viewer who has never seen the product say what is happening? A cut with no cause, a beat that reads as a standalone card, a beat that needs explaining, or a beat carried by text is reworked first. One more question for each midpoint still: is this the metaphor, drawn from the subject's real look, or a stock prop? A stock prop is reworked first.
 
 ## Engine rules
 **`draw(t)` redraws the whole frame from scratch for any `t`, with no stored animation state.** That makes the render deterministic, lets the player scrub and lets you preview any frame. Canvas 1920×1080; `W`, `H` and `V` (vertical flag) are `let` so one engine serves both aspects.
@@ -143,7 +145,7 @@ The MP4s, the player HTML and the poster stay in the project's ignored `out/` (o
 
 ## Guardrails
 - A brand's logo and mascots appear only in that brand's own material or a clearly labelled portfolio piece, and the return recommends their sign-off before public posting.
-- Known third-party characters and copyrighted artwork stay undrawn.
+- The product's own characters and marks are drawn as flat interpretations made from scratch, after research; their image files are never copied, traced or bundled. Other known third-party characters and copyrighted artwork stay undrawn.
 - A disclaimer the brand or a source requires stays on screen long enough to read and never shrink below about 20 px at 1080p.
 - Preview stills cheaply and render the full video once; the CPU budget holds.
 
