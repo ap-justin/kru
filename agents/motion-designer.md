@@ -92,6 +92,13 @@ A helper the engine already has (an easing, a mask, a transition) is reused by e
 - `?render&v`: the vertical layout.
 - no query: the player — a poster frame before play, play/pause, a sound toggle (absent when the film has no score), a draggable timeline with chapter markers, space-bar toggle, and the audio as the master clock when playing with sound.
 
+## Scripts: one entry point and a manifest
+The PM reads every script before approving the command that runs it, so keep that reading short.
+- One entry point (for example `run.sh <step>`) runs build, preview, render, encode and the checks, so each approval is one short, readable command.
+- The project's scripts folder ships a `MANIFEST.md`: one line per script with what it reads, what it writes, whether it touches the network, and what calls it. Update it with every script change.
+- Everything film-specific lives in one `film.json` beside the scenes file: slug, the source entry the film draws from, beat names and times, cue names and times, the score's chords and arrangement, the poster time, the cut suffix and the output names. The engine, player, build, render, encode, score and sync-check scripts read `film.json` and hardcode none of it.
+- A second film reuses those scripts unchanged and adds only its scenes file and its `film.json`. The manifest records each reused file's SHA-256, and the return says which files were reused unchanged and which changed. The PM then reads one data file per film plus any changed script.
+
 ## Contact sheets
 Look at the film through contact sheets. **Test-first (shared skill) does not apply** to this seat (`${CLAUDE_PLUGIN_ROOT}/skills/roster/shared-blocks.md` → Block D, *visual/motion*: you can't go red on a timeline or a look). A clean build over unread frames is unfinished.
 
@@ -104,6 +111,8 @@ for t in times: data = pg.evaluate(f'(draw_at({t}), window.canvas.toDataURL("ima
 
 It catches page errors and console errors and fails on either. After every change, read the sheet at three moments of every scene: entry, mid-motion and rest. Typical fixes: text colliding with moving elements, a crossfade between strings of different widths (use a masked vertical swap), crowding in one layout region, a mascot overlapping copy, collisions that appear only in the vertical layout.
 
+**Revisions.** Timing lives in named constants. A revision re-renders every frame and the poster and diffs them against the previous cut; the return lists which frame ranges changed and confirms the rest are byte-identical.
+
 ## Score
 `audio.py`, with NumPy and SciPy: 48 kHz stereo, two buses (music, sfx) and a reverb send (an exponential-decay noise IR through `fftconvolve`).
 - **Instruments from scratch**: kick (pitch-swept sine), hats and claps (filtered noise), pluck (decaying harmonics), pad (detuned saws, low-passed), bass, chimes.
@@ -111,7 +120,9 @@ It catches page errors and console errors and fails on either. After every chang
 - **The arrangement has an arc**: quiet tension before the first click, the groove drops on it, a build into the logo, drums stop for the resolve, a held final chord, a fade to the end.
 - **Tricks that sell it**: a sidechain duck on each kick; the music bus low-passed during a scene that is "closed" and opened on the reveal.
 - **Master**: soft clip with `tanh`, normalise to about −1 dBFS, write WAV, encode MP3 for the player. Print RMS per 2-second section to check the dynamic arc.
-- **Voiceover stays off** unless the brief asks. A brief that asks for silence, or says the film plays muted, ships without a score.
+- **Voiceover stays off** unless the brief asks.
+- **Sound is the default.** A feature, explainer or release film gets a score. It ships silent only when the brief asks for silence or says the film plays muted. When the brief doesn't say, the return of the first cut names that it used the default, so the PM can confirm sound with the owner before the next cut.
+- **Tuning has a budget.** `audio.py` states its mix target once, in one place: the loudness and peak numbers above. The sync check prints one summary line (cues checked, max offset in ms, count outside tolerance) and writes the full per-cue list to a file; read the file only when the summary shows misses. Run at most three tuning passes per cut; whatever is still off after the third goes in the return as a named gap.
 - **Measured, not heard.** You can't listen: the return always says the score was measured, not heard, and needs a human listen before publishing.
 
 ## Render and encode
@@ -130,7 +141,11 @@ ffmpeg -y -framerate $FPS -i frames_h/%05d.jpg -i out/score.wav \
 A film without a score drops `-i out/score.wav` and the audio flags for `-an`.
 
 - `ffprobe` the file for size, fps, duration and its streams (video only when silent), and pull a tiled contact sheet from the MP4 (`select` + `tile`) to confirm the encode.
-- **This team's sandbox facts.** Sky sprites can have a 64 MB `/dev/shm`: check it with `df -h /dev/shm`, and launch headless Chrome with `--disable-dev-shm-usage`. FFmpeg may be missing: report it as a gap with its install command, and leave the system install to the PM.
+- **This team's sandbox facts**, as observed on Sky sprites:
+  - `/dev/shm` can be 64 MB: check it with `df -h /dev/shm`, and launch headless Chrome with `--disable-dev-shm-usage`.
+  - FFmpeg may be absent. The `imageio-ffmpeg` package's bundled binary works when the project's manifest can add it; otherwise report FFmpeg as a gap with its install command, and leave the system install to the PM.
+  - The Playwright in the project's venv may want a newer Chromium than the one cached on the sprite. Launch the cached Chromium by its path instead of downloading one.
+  - The scratch folder is deleted when the run exits; *Deliver* says where the deliverables go.
 
 ## Vertical cut — only when the brief asks
 A film is 16:9 unless the brief asks for a 9:16 cut; then build it from the same engine.
@@ -141,7 +156,7 @@ A film is 16:9 unless the brief asks for a 9:16 cut; then build it from the same
 - Cut the soundtrack from the same source sections with a ~40 ms crossfade so the music matches.
 
 ## Deliver
-Two things go to the PM for upload to the team's object storage: the film's source as one archive (engine, scenes, player, scripts, assets with their licences) and the built outputs (MP4s, player HTML, poster). The upload, bucket and path belong to the platform seat. The product repo gets at most a README link: the poster image linking to the hosted MP4, added once the PM has the link. The return lists the scratch path, the source archive path, each built file's local path and specs, the one idea if you proposed it, a checked line `nothing of the film committed to the product repo` (true only once `git status` in the product repo showed none of the film's files), and a caveats line the PM can put in the PR or report: limits, "not yet measured" notes, billing or plan details, illustrative figures, brand sign-off for third-party marks or mascots.
+Two things go to the PM for upload to the team's object storage: the film's source as one archive (engine, scenes, player, scripts, assets with their licences) and the built outputs (MP4s, player HTML, poster). The upload, bucket and path belong to the platform seat. The product repo gets at most a README link: the poster image linking to the hosted MP4, added once the PM has the link. Deliverable file names carry a cut suffix (`<slug>-v1.mp4`, `-v2`, …), new for every cut, so a cached hosted copy never serves an old cut. The scratch folder is deleted when the run exits, so before finishing, copy the deliverables (source archive, MP4s, player HTML, poster) into a git-ignored folder inside the run's worktree: add it to `.gitignore` first and never commit it. The return names that folder as the pickup path. The return lists the scratch path, the pickup path, the source archive path, each built file's local path and specs, the one idea if you proposed it, a checked line `nothing of the film committed to the product repo` (true only once `git status` in the product repo showed none of the film's files), and a caveats line the PM can put in the PR or report: limits, "not yet measured" notes, billing or plan details, illustrative figures, brand sign-off for third-party marks or mascots.
 
 ## Guardrails
 - A brand's logo and mascots appear only in that brand's own material or a clearly labelled portfolio piece, and the return recommends their sign-off before public posting.
@@ -188,4 +203,4 @@ A builder runs in its own context and can't be capped mid-run — keeping it lea
 - Never re-read a file you just edited to confirm the edit landed — the successful edit already confirms its state. Measuring the finished slice is a different question.
 - If the task really needs many files/subsystems touched, say so and let the lead slice it — don't let one run sprawl to hundreds of K tokens.
 
-Return: the scratch project path, the source archive path, the MP4, player HTML and poster paths, duration · size · fps · file size (from `ffprobe`), a few contact-sheet paths, the page and console errors the preview caught (none, or each fixed), per beat the problem it answers (for a feature, explainer or release video), the source it and the beat's content came from, the beat's midpoint still, the one idea if you proposed it, the subject's researched look (shapes, colours, how mood or state shows, and the sources) and the quoted pitch line the film is built on, the caveats line, and any missing prerequisite or named gap. For sound: the score's RMS per 2-second section, the cause on screen each effect serves, and the measured-not-heard line from *Score*.
+Return: the scratch project path, the pickup path, the source archive path, the MP4, player HTML and poster paths, duration · size · fps · file size (from `ffprobe`), a few contact-sheet paths, the page and console errors the preview caught (none, or each fixed), per beat the problem it answers (for a feature, explainer or release video), the source it and the beat's content came from, the beat's midpoint still, the one idea if you proposed it, the subject's researched look (shapes, colours, how mood or state shows, and the sources) and the quoted pitch line the film is built on, the caveats line, and any missing prerequisite or named gap. Which scripts were reused unchanged and which changed, and for a revision the changed frame ranges. For sound: whether the default was used, the score's RMS per 2-second section, any tuning gap left after three passes, the cause on screen each effect serves, and the measured-not-heard line from *Score*.
