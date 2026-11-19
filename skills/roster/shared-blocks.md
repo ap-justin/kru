@@ -200,7 +200,7 @@ Required on the seats whose output **renders** (11 seats: the four framework bui
 
 **Exempt by decision** — record the reason, don't just omit:
 - `vercel-perf-optimizer` — measuring a running app **is** the job; `## Prove the win` is its version of this rule.
-- `motion-designer` — rendering a project and reading its frames **is** the job. It carries its own `## Build and return — no self-dispatch`: the no-spawn bullet and the PM-acceptance pointer, with the render and snapshots allowed.
+- `motion-designer` — rendering a project and reading its frames **is** the job. It carries its own `## Build and return — no self-dispatch`: the no-spawn bullet and the PM-acceptance pointer, with the render and contact sheets allowed.
 - `toolchain-engineer`, `vercel-platform-engineer`, `fly-platform-engineer` — config; nothing renders to be tempted by.
 - the data/auth/billing specialists, `python-developer`, `node-developer`, `zig-developer`, `extension-builder` and `hono-builder` — no rendered surface, and their gate is the suite (Block D). The Python, Node, Zig, extension and Hono seats carry the never-boot clause anyway, tailored: `zig-developer` verifies a process that stays up with a test that spawns it, drives it over its pipes and asserts on its exit, never a long-running binary, `--watch` or `--fuzz` left going; an MCP server is verified by calling its tools in-process from a test, never by launching it and driving a client, a long-running Node process by a test that spawns it, signals it and asserts on its exit, a Vite plugin through Vite's JavaScript API rather than a dev server, and a Hono app through `app.request()` and the Hono CLI, both in-process.
 - reviewers and the two text-producing seats — they don't build.
