@@ -33,6 +33,8 @@ What keeps the first phase affordable: **every seat runs in its own context**, s
 
 3. **Assign every file in the target to a stack seat on the sheet**, by the grouping rule at `${CLAUDE_PLUGIN_ROOT}/skills/lead/SKILL.md` → Step 3, *Group the change's files by seat* — a file's seat owns its stack, not the feature it was named after. **Do not dispatch `code-reviewer`, `architecture-reviewer`, `accessibility-reviewer`, or `visual-reviewer` here** — in-build Step 4 in `gates.md` is builder verification and evidence, not review seats; look-back is owning seats re-reading their lanes, not a second review pass.
 
+   **The fan-out happens for every target, whatever its size.** A small diff gets small lanes, never "the lead reads it alone". The one exception is a target whose files all belong to one seat: that seat reads it, and the report says so.
+
    When the target carries test files, also assign them to **`test-writer`** for a read-only pass — behavior nothing covers, assertions that can't go red, tests that pass by order or clock; it runs nothing.
 
    UI stack seats (`react-ui-builder`, `svelte-ui-builder`, `web-components-builder`, `hono-ui-builder`) include **spec conformance** in their lane read when the PR or brief names mockups: compare shipped UI to `${CLAUDE_PLUGIN_ROOT}/references/design-spec.md` from source and whatever the seat's official chain names — that is the owning builder checking the approved spec, not a separate `visual-reviewer` dispatch.
@@ -49,10 +51,11 @@ What keeps the first phase affordable: **every seat runs in its own context**, s
    - **Read-only, stated.** A builder seat has write tools and a bias toward using them, so the brief names findings as the deliverable and the working tree as not to move.
    - **What the work was for.** A seat still re-derives intent from code that may have gotten it wrong, which catches *built wrong* and never *built the wrong thing*. Hand down the behaviors: the PR body on a PR target, `brief.md`'s `Done when` where the store has one, the commit messages otherwise. On `everything` with none of those, the intent is the seat's sheet line, and it rides by name like the rest of the sheet.
 
-   What comes back is three things:
+   What comes back is four things:
 
    - **The findings** — ranked by severity, ten at most, each with `file:line`. A finding that adds or hardens a guard for a rare case also carries its path, evidence and existing cover, or is marked *speculative, ask first* (`${CLAUDE_PLUGIN_ROOT}/skills/lead/references/gates.md` → *Edge-case guards*).
    - **The trace** — `Look-back: <what it read> · <the sources it loaded> · <what it found, or `clean`>`, on the contract and for the reasons at `${CLAUDE_PLUGIN_ROOT}/skills/roster/shared-blocks.md` → Block O. The **sources** field is this phase's addition: a seat auditing its lane from training data rather than the source its definition pins it to returns confident findings about a framework version this repo doesn't run.
+   - **What it couldn't run.** A seat or slice that couldn't run something its lane needed (a test, a build, a lint), because of permissions or a missing tool, says so in its return. The verdict line counts it as a gap, `unverified: <what> couldn't run, <why>`, and never as clean.
    - **The pointer to its report**, which is uncapped and holds the passing rules, the tables and the coverage matrices. Leave the reports closed — their existence is the record, and reading one into the main thread is the balloon waves and shortlists exist to avoid. Open one only when a returned finding is too thin to act on.
 
 ## Then fix it
