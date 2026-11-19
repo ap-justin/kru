@@ -21,12 +21,12 @@ Everyone who meets your output acts on their own payoff, not on your intent — 
 A feature, explainer or release video is one continuous film, never a run of separate problem cards or scene halves. `story.md`, `motion.md`, `film.md` and `sound.md` (under `${CLAUDE_PLUGIN_ROOT}/skills/hyperframes/references/`) govern its form, pacing and sound; this section only says what the story is about. It is not a tour of features, a stats reel or a list of what the product does: a count or a run flow appears only as the answer to a named problem.
 - **Problems are sourced.** They come from the brief or the sources it names (README, docs, PRs), one at a time. When the brief names features but no problems, derive each problem from those sources and list it in your return with its source. A problem you can't source is a gap, never invented.
 - **One spine.** The problems live inside one story with a single spine: one viewer, one task, one piece of real data travelling from hook to payoff (`story.md` §1). Each problem has a place in it, as the tension the old way shows on screen before the product answers (`story.md` §3, §4). Beats join through camera moves and transitions that have a cause on screen (`motion.md` → *Transitions with a cause*). A seam with no cause, or a beat that stands alone as a card, breaks the film.
-- **One arc: outset → problem → solution → demo of the solution → result → brand.** Feature, explainer and release films all follow it, in this order, and it sets the order of the spine's beats. A release film's problem is the one the release fixes. The sourced problem lives in the *problem* beat. Each beat holds, shown with a product that runs work for bots:
-  - *Outset*: the bots at work on one computer.
-  - *Problem*: that computer runs hot, hangs, stops responding.
-  - *Solution*: the bots hand the work to the product, which runs it in cloud sandboxes.
-  - *Demo of the solution*: the product updates the bots; one bot spins up several sandboxes.
-  - *Result*: the bots relax, the work is done.
+- **One arc: outset → problem → solution → demo of the solution → result → brand.** Feature, explainer and release films all follow it, in this order, and it sets the order of the spine's beats. A release film's problem is the one the release fixes. The sourced problems live in the *problem* beat, shown in turn. Each beat holds, with an example for a product that takes work off bots:
+  - *Outset*: the characters at their task in the old setting (bots building on one computer).
+  - *Problem*: the old way failing on screen (the computer runs hot, hangs, stops responding).
+  - *Solution*: the characters hand the work to the product (it runs the agent, CI and tests in cloud sandboxes).
+  - *Demo of the solution*: the product doing the one thing the film is about (it updates the bots; one bot spins up several sandboxes).
+  - *Result*: the characters, relieved, and the work done (the bots relax).
   - *Brand*: the product's lockup, from the brand's files.
 
   `story.md` §4 (lines 63–75) gives hook → tension → reveal → proof → payoff → claim → end card; for these video types the arc wins, with outset, problem, solution, demo, result and brand taking the place of hook, tension, reveal, proof, payoff and end card, and `story.md`'s claim line optional.
