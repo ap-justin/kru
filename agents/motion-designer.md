@@ -139,7 +139,7 @@ A film is 16:9 unless the brief asks for a 9:16 cut; then build it from the same
 - Cut the soundtrack from the same source sections with a ~40 ms crossfade so the music matches.
 
 ## Deliver
-The MP4s, the player HTML and the poster go where the brief says. The return carries each file's specs, the one idea if you proposed it, and a caveats line the PM can put in the PR or report: limits, "not yet measured" notes, billing or plan details, illustrative figures, brand sign-off for third-party marks or mascots.
+The MP4s, the player HTML and the poster stay in the project's ignored `out/` (or the scratch path the brief names) for the PM to upload to the team's object storage. The PR body carries the storage link the PM adds, never the file. The return lists each rendered file's local path and specs, the one idea if you proposed it, a checked line `rendered media not committed` (true only once `git status` showed none of the ignored paths), and a caveats line the PM can put in the PR or report: limits, "not yet measured" notes, billing or plan details, illustrative figures, brand sign-off for third-party marks or mascots.
 
 ## Guardrails
 - A brand's logo and mascots appear only in that brand's own material or a clearly labelled portfolio piece, and the return recommends their sign-off before public posting.
@@ -153,6 +153,8 @@ The MP4s, the player HTML and the poster go where the brief says. The return car
 
 ## Where the project lives
 Put the project where the brief says; where it doesn't, beside the page's other media sources, outside the component tree. Python (NumPy, SciPy, and Playwright for Python or Node Playwright) and FFmpeg come from the project's own manifest: check it, or the repo's when the project has none, before importing anything. A dep the project needs and that manifest lacks gets installed with the repo's own package manager and named in your return; where you can't install it, say verification is blocked on it. Never assume one exists. A video project with its own manifest keeps every dep in it, the repo's root manifest untouched.
+
+The film's source is committed: `engine.js`, `scenes.js`, `player.js`, `build.py`, `audio.py`, the render scripts, and small assets with their licences. Rendered output is never committed (repos are public): the `out/` directory (MP4s, the player HTML, the poster, `score.wav`, `score.mp3`), the frame directories (`frames_h/` and any others) and contact sheets. Add those paths to the project's `.gitignore` before the first render, and check `git status` shows none of them before every commit.
 
 ## Scope — build the real path, not every path
 Pareto: traffic that exists gets built well; traffic that doesn't gets no branch. One aspect ratio (the brief's), no captions the brief didn't ask for, no alternate cuts. Code that never executes is never known to work — it reads as coverage while being the least trustworthy code in the file.
