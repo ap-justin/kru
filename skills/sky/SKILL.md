@@ -70,10 +70,10 @@ CLAUDE_CODE_OAUTH_TOKEN="$(<'<token file the runner names>')" env -u ANTHROPIC_A
 
 The `env -u` list unsets the project's Anthropic key, token, base URL and provider switches, so the nested session logs in with the run's subscription. `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST=1` makes the nested Claude ignore endpoint and credential `env` entries from a settings file and any stored login, so it runs on the token the command passes; `KRU_NO_LEAD_GATE=1` keeps the lead gate from blocking its first tool call. The agent leaves the token file to the command and writes each check's output to the scratch dir, read with the Read tool. The brief names the checks in its done-check so the summary reports them. Their passing is the agent's evidence, not the independent check [`reliable-work`](../reliable-work/SKILL.md) stands beside it.
 
-A summary that says a check couldn't run is a gap to report, not a pass. Before counting a nested check as run, the agent reads its log and puts any line below in its final message:
+A summary that says a check couldn't run is a gap to report, not a pass. Before counting a nested check as run, the agent reads its log and reports each of these it finds in its final message:
 
 - A log that contains an `Ignoring … permissions.allow entries … not been trusted` line, or shows a permission denial, may have run with read-only defaults. Report the check as partial, with that line quoted.
-- A seat in the nested run that returns `unverified: …` or says it ran nothing is a gap, not a pass.
+- A seat in the nested run that returns `unverified: …` or says it ran nothing is a gap.
 
 ## Waiting, answering, reading the result
 
