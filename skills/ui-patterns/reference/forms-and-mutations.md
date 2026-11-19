@@ -32,7 +32,7 @@ Every entry here is the behavior the stack has to produce; the API that produces
 </button>
 ```
 The held state is `aria-disabled` and the handler ignores the press. `disabled` blurs the button, so focus lands on `<body>` and the label change the button just made is announced to nobody.
-**Applies when:** the outcome lands on the screen the control is on. Cross-screen outcomes are the next entry. A failure that needs the person to do something else (fix a field, sign in again) still renders as an error at the control's field, not only in the button's label; the in-place failure above is for a retry of the same press. Where the repo's design system settles error appearance in writing, it wins on looks; this entry decides placement and behaviour.
+**Applies when:** the outcome lands on the screen the control is on. Cross-screen outcomes are the next entry. A failure that needs the person to do something else (fix a field, sign in again) still renders as an error at the control's field, not only in the button's label; the in-place failure above is for a retry of the same press that the person has a reason to make, such as after going offline. A failure the person didn't cause and can't fix, such as a page of results that fails because pagination is broken, shows nothing: the control is no longer shown, what already loaded stays, and the failure goes to the repo's error reporting. Where the repo's design system settles error appearance in writing, it wins on looks; this entry decides placement and behaviour.
 
 ## A toast is for an outcome that lands on a different screen
 
