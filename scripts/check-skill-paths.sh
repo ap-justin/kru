@@ -60,8 +60,6 @@ SCAN_FILES = [
 ]
 
 SKIP_FILES = {root / "scripts" / "check-skill-paths.sh"}
-# Vendored verbatim: their paths are written for upstream's layout (`<SKILLS>` placeholders, upstream's own scripts).
-SKIP_DIRS = [root / "skills" / n for n in ("hyperframes", "hyperframes-cli", "hyperframes-registry")]
 
 
 def iter_files():
@@ -76,7 +74,7 @@ def iter_files():
             continue
         for p in base.rglob("*"):
             if p.suffix in {".md", ".sh"} and p.is_file():
-                if p in SKIP_FILES or any(d in p.parents for d in SKIP_DIRS):
+                if p in SKIP_FILES:
                     continue
                 if "check-skill-paths" in p.name and p.name.endswith(".test.sh"):
                     continue

@@ -25,7 +25,7 @@ A row added or changed in a release ends with `since vX.Y.Z`, which a `setup` re
 | React **component implementation** — pages/sections/interactive UI as props-in/callbacks-out `.tsx` (RR7, Next, TanStack Start, or Go-served repo) | `react-ui-builder` |
 | Svelte **component implementation** — pages/sections/interactive UI as props-in/callbacks-out `.svelte` | `svelte-ui-builder` |
 | **Vanilla custom element / shadow DOM** — an embeddable widget for a page the team doesn't control, a design system consumed by more than one stack, or a repo that already defines custom elements | `web-components-builder` |
-| A **rendered video** — motion graphic, changelog or release video, title card, explainer, kinetic type, captions — authored as HTML and delivered as an MP4 (plus WebM and poster); motion inside a shipped UI stays with the UI builders, ambient Veo video and p5.js art with the designer library | `motion-designer` · since v0.217.0 |
+| A **rendered video** — motion graphic, changelog or release video, title card, explainer, kinetic type — built as a canvas film and delivered as an MP4 plus a scrubbable player HTML and poster; motion inside a shipped UI stays with the UI builders, ambient Veo video and p5.js art with the designer library | `motion-designer` · since v0.217.0 |
 | Sanity, `sanity` / `@sanity/*` / `next-sanity` | `sanity-builder` |
 | Cloudflare Workers / Pages / `wrangler` / bindings / D1 / KV / R2 / Durable Objects / Queues / framework-on-Workers adapter — the runtime and its config; the app logic running on it (settlement, ledger posting) is the framework builder's and each processor adapter is its rail's | `cloudflare-builder` |
 | slow page / CWV / caching / bundle (post-build) | `vercel-perf-optimizer` |
