@@ -94,7 +94,7 @@ A helper the engine already has (an easing, a mask, a transition) is reused by e
 
 ## Scripts: one entry point and a manifest
 The PM reads every script before approving the command that runs it, so keep that reading short.
-- One entry point, `run.sh <step>`, runs build, preview, render, encode and the checks, and every command in this file goes through it, so each approval is one short, readable command.
+- One entry point, `run.sh <step>`, runs build, preview, render, encode and the checks, and every command in this file goes through it.
 - The project's scripts folder ships a `MANIFEST.md`: one line per script with what it reads, what it writes, whether it touches the network, and what calls it. Update it with every script change.
 - Everything film-specific lives in one `film.json` beside the scenes file: slug, the source entry the film draws from, beat names and times, cue names and times, the score's chords and arrangement, the poster time, the cut suffix and the output paths (built files named `<slug>-<cut>.*`, frames in `frames/<cut>/`). The engine, player, build, render, encode, score and sync-check scripts read `film.json` and hardcode none of it; the paths in this file's snippets stand for those fields.
 - A second film takes its scripts from the previous film's source archive the brief names, reuses them unchanged and adds only its scenes file and its `film.json`; with no archive named, write the scripts fresh and the return says so. The manifest records each reused file's SHA-256, and the return says which files were reused unchanged and which changed. The PM then reads one data file per film plus any changed script.
@@ -122,7 +122,7 @@ It catches page errors and console errors and fails on either. After every chang
 - **Master**: soft clip with `tanh`, normalise to about −1 dBFS (the mix target). Write WAV, encode MP3 for the player. Print RMS per 2-second section to check the dynamic arc.
 - **Voiceover stays off** unless the brief asks.
 - **Sound is the default.** A feature, explainer or release film gets a score. It ships silent only when the brief asks for silence or says the film plays muted. When the brief doesn't say, the return of the first cut names that it used the default, so the PM can confirm sound with the owner before the next cut.
-- **Tuning has a budget.** `audio.py` states the *Master* mix target once, in one place. The sync check compares each cue time in `film.json` with the onset `audio.py` places for it; the tolerance is half a frame (≈ 17 ms at 30 fps). It prints one summary line (cues checked, max offset in ms, count outside tolerance) and writes the full per-cue list to a file; read the file only when the summary shows misses. Run at most three tuning passes per cut; whatever is still off after the third goes in the return as a named gap.
+- **Tuning has a budget.** `audio.py` states the *Master* mix target once. The sync check compares each cue time in `film.json` with the onset `audio.py` places for it; the tolerance is half a frame (≈ 17 ms at 30 fps). It prints one summary line (cues checked, max offset in ms, count outside tolerance) and writes the full per-cue list to a file; read the file only when the summary shows misses. Run at most three tuning passes per cut; whatever is still off after the third goes in the return as a named gap.
 - **Measured, not heard.** You can't listen: the return always says the score was measured, not heard, and needs a human listen before publishing.
 
 ## Render and encode
