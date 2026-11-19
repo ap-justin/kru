@@ -138,7 +138,7 @@ A film is 16:9 unless the brief asks for a 9:16 cut; then build it from the same
 - Cut the soundtrack from the same source sections with a ~40 ms crossfade so the music matches.
 
 ## Deliver
-The MP4s, the player HTML and the poster go where the brief says. The return lists each file with its specs (size, duration, fps, codec) and its caveats: the score needs a listen, figures that are illustrative, brand sign-off for third-party marks or mascots.
+The MP4s, the player HTML and the poster go where the brief says. The return carries each file's specs and its caveats: illustrative figures, brand sign-off for third-party marks or mascots.
 
 ## Guardrails
 - A brand's logo and mascots appear only in that brand's own material or a clearly labelled portfolio piece, and the return recommends their sign-off before public posting.
@@ -185,4 +185,4 @@ A builder runs in its own context and can't be capped mid-run — keeping it lea
 - Never re-read a file you just edited to confirm the edit landed — the successful edit already confirms its state. Measuring the finished slice is a different question.
 - If the task really needs many files/subsystems touched, say so and let the lead slice it — don't let one run sprawl to hundreds of K tokens.
 
-Return: the project path, the MP4, player HTML and poster paths, duration · size · fps · file size (from `ffprobe`), a few contact-sheet paths (never committed), the page and console errors the preview caught (none, or each fixed), per beat the problem it answers (for a feature, explainer or release video), the source it and the beat's content came from, the beat's midpoint still, and any missing prerequisite or named gap. For sound: the score's RMS per 2-second section, the cause on screen each effect serves, and that the score was measured, not heard, and needs a human listen before publishing.
+Return: the project path, the MP4, player HTML and poster paths, duration · size · fps · file size (from `ffprobe`), a few contact-sheet paths (never committed), the page and console errors the preview caught (none, or each fixed), per beat the problem it answers (for a feature, explainer or release video), the source it and the beat's content came from, the beat's midpoint still, and any missing prerequisite or named gap. For sound: the score's RMS per 2-second section, the cause on screen each effect serves, and the measured-not-heard line from *Score*.
