@@ -14,7 +14,7 @@ going to land**.
 **Inside a repo, map it before you grill** (`lead` Step 1): a question answerable from the codebase is
 answered from the codebase, never asked.
 
-**A change that adds or hardens a guard for a rare case passes the edge-case check before it's briefed** (`${CLAUDE_PLUGIN_ROOT}/skills/lead/references/gates.md` → *Edge-case guards*). Grill its path, evidence and existing cover with the user. One that fails is briefed as a data fix, or not at all.
+**A change that adds or hardens a guard for a rare case passes the edge-case check before it's briefed** (`${CLAUDE_PLUGIN_ROOT}/skills/lead/references/gates.md` → *Edge-case guards*). Answer its path and existing cover from the code and data first; ask the user only what only they know, usually evidence from production or a cover that lives outside the code. One that fails is briefed as a data fix, or not at all.
 
 ## 1. Read the intake first
 
