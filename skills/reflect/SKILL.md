@@ -33,7 +33,7 @@ What keeps the first phase affordable: **every seat runs in its own context**, s
 
 3. **Assign every file in the target to a stack seat on the sheet**, by the grouping rule at `${CLAUDE_PLUGIN_ROOT}/skills/lead/SKILL.md` → Step 3, *Group the change's files by seat* — a file's seat owns its stack, not the feature it was named after. **Do not dispatch `code-reviewer`, `architecture-reviewer`, `accessibility-reviewer`, or `visual-reviewer` here** — in-build Step 4 in `gates.md` is builder verification and evidence, not review seats; look-back is owning seats re-reading their lanes, not a second review pass.
 
-   **The fan-out happens for every target, whatever its size.** A small diff gets small lanes. The one exception is a target whose files, tests included, all belong to one seat: that seat reads it alone, and the merged report says so.
+   **The fan-out happens for every target, whatever its size.** A small diff gets small lanes. The one exception is a target whose files, tests included, all belong to one stack seat: that seat is the only stack seat dispatched, `test-writer` still reads any test files beside it, and the merged report says so.
 
    When the target carries test files, also assign them to **`test-writer`** for a read-only pass — behavior nothing covers, assertions that can't go red, tests that pass by order or clock; it runs nothing.
 

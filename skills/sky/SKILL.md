@@ -73,7 +73,7 @@ The `env -u` list unsets the project's Anthropic key, token, base URL and provid
 A summary that says a check couldn't run is a gap to report, not a pass. Before counting a nested check as run, the agent reads its log and reports each of these it finds in its final message:
 
 - A log that contains an `Ignoring … permissions.allow entries … not been trusted` line, or shows a permission denial, may have run with read-only defaults. Report the check as partial, with that line quoted.
-- A seat in the nested run that returns `unverified: …` or says it ran nothing is a gap.
+- A seat in the nested run that returns `unverified: …` or says it ran nothing is a gap. `test-writer` is the exception: it runs nothing in a look-back by design.
 
 ## Waiting, answering, reading the result
 
