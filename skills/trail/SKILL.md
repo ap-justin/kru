@@ -25,7 +25,7 @@ The nouns:
 - **Another product**: `file_issue` with `product`. It starts in `triage`; leave `assignee` out, the owner assigns it on accepting.
 - **A record, in any product your key reaches, yours or not**: `add_note`, not `file_issue`. It takes `product`, an optional `project`, `title`, `description`, `about` (item keys), `labels`, `links`, `externalRef` and `idempotency_key`; it has no triage or assignee, takes no priority or estimate other than 0 or null, and starts `current`.
 
-Anything in a note that someone must act on goes in its own issue (or todo), with the note in `about`.
+Anything in a note that someone must act on goes in its own issue (or todo), whose description names the note's key (`links` take web URLs only); a note you can edit then lists that issue in its `about`.
 
 `list_products` shows every product your key reaches.
 
