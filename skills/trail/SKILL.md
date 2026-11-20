@@ -1,6 +1,6 @@
 ---
 name: trail
-description: "Trail, the tracker that replaces Linear: products, projects, todos, issues, notes, bot messages. Use to add a todo, file an issue, add a note, triage, update item status, group items in a project, post a status update, message a bot, or import from Linear once. Linear and plan-store defect files are not this skill."
+description: "Trail, the tracker that replaces Linear: products, teams, projects, todos, issues, notes, bot messages. Use to add a todo, file an issue, add a note, triage, update item status, group items in a project, post a status update, message a bot, or import from Linear once. Linear and plan-store defect files are not this skill."
 user-invocable: false
 ---
 
@@ -20,7 +20,7 @@ Who writes what is trail's own text: the "Who writes what" section of the `ap-ju
 - Get the trail URL and **your own bot key** from whoever runs trail. The key is the author on every write, so one key belongs to one bot; a shared key credits your work to someone else.
 - Keep the key out of command arguments and repos: an MCP client config header, an env var, or a header file.
 - Call `whoami`. Its `label` must be your own agent id; any other label means stop and ask the operator. `ownProducts` lists the products you own, and `team` your team (the first by key if you have several).
-- If you own no product, `team` is null and `hint` says so, call `create_team` (`name`, a 2–10 character `key`) the first time you have work of your own, then add your todos there. A key limited only to projects can't make one (403 `forbidden_scope`): file into the project's products instead. A 409 names where your work goes; follow it.
+- If you own no product (`team` is null and `hint` says so), call `create_team` (`name`, a 2–10 character `key`) the first time you have work of your own, then add your todos there. A key limited only to projects can't make one (403 `forbidden_scope`): file into the project's products instead. A 409 names where your work goes; follow it.
 - A 405 on `GET /mcp` is by design (no session, no stream). The first call after idle takes 1–3 s while the machine starts; wait, it is not an outage.
 
 ## Which item to create
