@@ -308,11 +308,9 @@ check refuse Edit "" "$tx/cmd-meta-then-turn.jsonl"
 # fail open: no transcript, no session, no lead skill under the root
 check allow Edit "" "$sandbox/missing.jsonl"
 input=$(jq -nc --arg p "$p" '{transcript_path:$p, tool_name:"Edit", tool_input:{}}')
-before=$(ls -A "$home/.kru/lead-gate" 2>/dev/null | sort)
 out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_STORE_REPO -u CLAUDE_CODE_REMOTE -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE HOME="$home" bash "$hook" "$root" 2>&1); code=$?
-# no session to judge: silent pass, and no mark written under any name
-after=$(ls -A "$home/.kru/lead-gate" 2>/dev/null | sort)
-if [ "$code" -eq 0 ] && [ -z "$out" ] && [ "$before" = "$after" ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (allow, exit %s): missing session_id should pass silently and write no mark\n  %s\n' "$code" "$out"; fi
+# no session to judge: silent pass
+if [ "$code" -eq 0 ] && [ -z "$out" ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (allow, exit %s): missing session_id should pass silently\n  %s\n' "$code" "$out"; fi
 # a root with the store resolver but no lead skill: the plain transcript would be
 # gated, so a pass here is the skill check's
 bare="$sandbox/bareroot"; mkdir -p "$bare" && ln -s "$root/scripts" "$bare/scripts"

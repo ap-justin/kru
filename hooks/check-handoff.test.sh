@@ -200,6 +200,7 @@ check allow general-purpose "Preserve existing comments in the file."
 mkrepo() { git init -q "$sandbox/$1" && { [ -z "${2:-}" ] || git -C "$sandbox/$1" remote add origin "$2"; }; }
 mkrepo clone-a https://github.com/acme/widgets.git
 mkrepo clone-b git@github.com:acme/gadgets.git
+mkrepo clone-c
 mkdir -p "$sandbox/clone-a/src/deep" "$sandbox/plain" "$sandbox/pinned-dir"
 # slug_is <name> <want> <cwd> [VAR=value...]
 slug_is() {
@@ -213,6 +214,7 @@ slug_is() {
 slug_is "https origin names the repo" widgets "$sandbox/clone-a"
 slug_is "a subdirectory reads as its repo" widgets "$sandbox/clone-a/src/deep"
 slug_is "ssh origin names the repo" gadgets "$sandbox/clone-b"
+slug_is "no origin falls back to the directory name" clone-c "$sandbox/clone-c"
 slug_is "KRU_PROJECT pins the slug" pinned "$sandbox/clone-a" KRU_PROJECT=pinned
 slug_is "outside a repo CLAUDE_PROJECT_DIR names it" pinned-dir "$sandbox/plain" CLAUDE_PROJECT_DIR="$sandbox/pinned-dir"
 slug_is "leaked GIT_DIR and GIT_WORK_TREE are ignored" widgets "$sandbox/clone-a" \

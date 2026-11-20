@@ -16,6 +16,9 @@ out=$(run) && ok || no "the real tree should audit clean: $out"
 
 seat="$sandbox/agents/stripe-specialist.md"
 cp "$seat" "$sandbox/seat.orig"
+# the splices below assume a model: line, no tools: line and one bullet to strip
+grep -q '^model:' "$seat" && ! grep -q '^tools:' "$seat" && [ "$(grep -c 'Never spawn agents' "$seat")" = 1 ] ||
+  { echo "fixture drift: stripe-specialist.md needs a model: line, no tools: line and one 'Never spawn agents' line"; exit 1; }
 
 # case: bullet removed, no tools list -> fails and names the seat
 grep -v 'Never spawn agents' "$sandbox/seat.orig" > "$seat"
@@ -25,7 +28,9 @@ out=$(run) && no "a seat with neither guard should fail" || {
 
 # case: a tools list that names Agent is not a guard
 { sed -n '1,/^model:/p' "$sandbox/seat.orig"; echo 'tools: Read, Agent, Bash'; sed -n '/^model:/,$p' "$sandbox/seat.orig" | tail -n +2 | grep -v 'Never spawn agents'; } > "$seat"
-out=$(run) && no "a tools list with Agent should not count as a guard" || ok
+out=$(run) && no "a tools list with Agent should not count as a guard" || {
+  grep -q 'stripe-specialist.md: no no-spawn bullet' <<<"$out" && ok || no "expected the seat named: $out"
+}
 
 # case: a tools list without Agent is a guard
 { sed -n '1,/^model:/p' "$sandbox/seat.orig"; echo 'tools: Read, Grep, Bash'; sed -n '/^model:/,$p' "$sandbox/seat.orig" | tail -n +2 | grep -v 'Never spawn agents'; } > "$seat"
