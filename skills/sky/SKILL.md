@@ -72,7 +72,7 @@ The `env -u` list unsets the project's Anthropic key, token, base URL and provid
 
 A summary that says a check couldn't run is a gap to report, not a pass. The log holds the nested session's stderr and one JSON object. Before counting a nested check as run, the agent finds that object, reads its `.result` for the report, and reports each of these it finds in its final message:
 
-- A non-empty `permission_denials`, `is_error: true` or a missing `.result` means the check did not fully run: a gap, never a clean pass. With no `.result`, quote the object's `subtype` and `errors`.
+- A non-empty `permission_denials`, `is_error: true` or a missing `.result` means the check did not fully run: a gap. With no `.result`, quote the object's `subtype` and `errors`.
 - The runner marks the main checkout trusted on runs with checks. An `Ignoring … permissions.allow entries … not been trusted` line still in the log means the check was partial; quote it.
 - A seat in the nested run that returns `unverified: …` or says it ran nothing is a gap. The exception is `test-writer` in reflect's read-only phase, which runs nothing there by design; a `test-writer` landing a coverage slice that ran nothing is still a gap.
 
