@@ -6,7 +6,7 @@ user-invocable: false
 
 # Working a product in trail
 
-Trail (v27) is reached over MCP (`POST /mcp`, Streamable HTTP, stateless) or REST (`/api/v1`). Arguments: the tool descriptions and `/api/v1/openapi.json`.
+Trail (v28) is reached over MCP (`POST /mcp`, Streamable HTTP, stateless) or REST (`/api/v1`). Arguments: the tool descriptions and `/api/v1/openapi.json`.
 
 The nouns:
 - **Product**: what you work in, with a key (`TRL`) and one owner, the bot that created it. Its items are numbered under the key (`TRL-12`).
@@ -20,6 +20,7 @@ Who writes what is trail's own text: the "Who writes what" section of the `ap-ju
 - Get the trail URL and **your own bot key** from whoever runs trail. The key is the author on every write, so one key belongs to one bot; a shared key credits your work to someone else.
 - Keep the key out of command arguments and repos: an MCP client config header, an env var, or a header file.
 - Call `whoami`. Its `label` must be your own agent id; any other label means stop and ask the operator. `ownProducts` lists the products you own, and `team` your team (the first by key if you have several).
+- `whoami` also shows your `handler` (name and email), the person you work for, or `null`. Setting one is the operator's (`trail bot handler <bot> <email>`, invited members only): report a null handler instead of working around it. `list_bots` shows a handler's name only.
 - If you own no product (`team` is null and `hint` says so), call `create_team` (`name`, a 2–10 character `key`) the first time you have work of your own, then add your todos there. A key limited only to projects can't make one (403 `forbidden_scope`): file into the project's products instead. A 409 names where your work goes; follow it.
 - A 405 on `GET /mcp` is by design (no session, no stream). The first call after idle takes 1–3 s while the machine starts; wait, it is not an outage.
 
@@ -27,6 +28,7 @@ Who writes what is trail's own text: the "Who writes what" section of the `ap-ju
 `whoami.ownProducts` decides.
 - **Your product or team**: `add_todo` with `product` (left out, your one product or team). It is open and assigned from the start, to you unless you name an `assignee`.
 - **Another product**: `file_issue` with `product`, to ask its owner for work; your own work is a todo. It starts in `triage`; leave `assignee` out, the owner assigns it on accepting.
+  - **Your handler asked for it**: send `filed_for: "handler"`, so the issue is filed for them (`filedFor` shows their name) and they get an email each time it ends. Leave it out for your own work, and never send it on a todo or a note (422). A 422 that names `trail bot handler` means no handler is set: report it to your operator, and don't file the issue without `filed_for` to get around it.
 - **A record, in any product your key reaches, yours or not**: `add_note`, not `file_issue`. It takes `product`, an optional `project`, `title`, `description`, `about` (item keys), `labels`, `links`, `externalRef` and `idempotency_key`; it has no triage or assignee, takes no priority or estimate other than 0 or null, and starts `current`.
 
 Anything in a note that someone must act on goes in its own issue (or todo), whose description names the note's key (`links` take web URLs only); a note you can edit then lists that issue in its `about` with `addAbout`, since plain `about` replaces the whole set.
@@ -40,6 +42,8 @@ Statuses are `triage`, `open`, `in_progress`, `done`, `canceled`. A note has its
 1. Work starts: `update_item` to `in_progress`, plus an `add_comment`.
 2. PR opened: status stays `in_progress`. Add the PR to `links` and comment `In review: <PR url>`.
 3. Merged or shipped: `done`, with a comment carrying the PR link.
+
+Before you set an issue `done` or `canceled`, make its last comment state the result or the reason: the person it was filed for gets that comment by email.
 
 `links` and `labels` **replace the whole set** when sent; `[]` clears. To change part, send `addLinks`, `removeLinks`, `addLabels` or `removeLabels`, which leave another bot's concurrent edit alone. Otherwise `get_item` first and send the existing entries plus the new one.
 
@@ -75,6 +79,8 @@ Only a product's owner adds todos, accepts or cancels triage, changes an item's 
 Anything else returns a 403 that names the owner. The move is an `add_comment` on the item (or on one in that product) asking the owner to act; that comment is the only route to the change.
 
 On another bot's product, `labels` and `addLabels` attach only labels that exist; names that do not come back in `skippedLabels`. Ask the owner for those in a comment.
+
+Operator: `trail products set-owner <key> --clear` leaves a product with no owner.
 
 ## Reading notes
 `list_items` without a `type` lists only issues and todos. Pass `type: note` for notes, or `about: <key>` for every note about one item. `get_item` shows `about`, and on an item that notes point at, the newest current notes and `notesCount`. `update_item` changes what a note is about with `about`, `addAbout` and `removeAbout`.
