@@ -28,15 +28,12 @@ grep -q '^## The return pass' "$plugin_root/agents/${seat}.md" 2>/dev/null && bl
 sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
 [ -z "$sid" ] && exit 0
 
-# the git root is the engagement stamp, same walk as check-handoff.sh
+# the store's slug is the engagement stamp, same as check-handoff.sh
 cwd=$(printf '%s' "$input" | jq -r '.cwd // empty' 2>/dev/null)
-cwd_slug=""
-d="$cwd"
-while [ -n "$d" ] && [ "$d" != "/" ] && [ "$d" != "." ]; do
-  [ -e "$d/.git" ] && { cwd_slug=$(basename "$d"); break; }
-  d=$(dirname "$d")
-done
-[ -z "$cwd_slug" ] && [ -n "$cwd" ] && cwd_slug=$(basename "$cwd")
+cwd_slug=$(
+  if [ -n "$cwd" ]; then cd "$cwd" 2>/dev/null || { basename "$cwd"; exit 0; }; fi
+  unset GIT_DIR GIT_WORK_TREE
+  kru_slug)
 
 dir="$(kru_path audit)"
 mkdir -p "$dir" 2>/dev/null || exit 0

@@ -94,5 +94,34 @@ ok=true
 tail -1 "$audit/d1.jsonl" 2>/dev/null | jq -e '.block_o == true and (has("return_pass") | not)' >/dev/null 2>&1 || ok=false
 report "block o launch is flagged and silent" "$ok" "exit $code, out: $out"
 
+# the record's cwd is the store's slug (scripts/kru-store.sh), not the directory name
+mkrepo() { git init -q "$sandbox/$1" && { [ -z "${2:-}" ] || git -C "$sandbox/$1" remote add origin "$2"; }; }
+mkrepo clone-a https://github.com/acme/widgets.git
+mkrepo clone-b git@github.com:acme/gadgets.git
+mkrepo clone-c
+mkdir -p "$sandbox/clone-a/src/deep" "$sandbox/plain" "$sandbox/pinned-dir"
+n=0
+# slug_is <name> <want> <cwd> [VAR=value...] — one dispatch from <cwd>, then the record's cwd field
+slug_is() {
+  local name=$1 want=$2 cwd=$3 got; shift 3
+  n=$((n + 1))
+  jq -nc --arg s "slug$n" --arg c "$cwd" --arg seat "$plain" \
+    '{session_id:$s, cwd:$c, tool_name:"Agent", tool_input:{subagent_type:$seat, prompt:"p", description:"d"}}' |
+    env -u KRU_HOME -u KRU_PROJECT -u KRU_PROJECT_STORE -u KRU_STORE_URL -u CLAUDE_PROJECT_DIR -u CLAUDE_PLUGIN_ROOT \
+      HOME="$home" "$@" bash "$hook" "$root" >/dev/null 2>&1
+  got=$(tail -1 "$audit/slug$n.jsonl" 2>/dev/null | jq -r '.cwd' 2>/dev/null)
+  report "slug: $name" "$([ "$got" = "$want" ] && echo true || echo false)" "want [$want] got [$got]"
+}
+slug_is "https origin names the repo" widgets "$sandbox/clone-a"
+slug_is "a subdirectory reads as its repo" widgets "$sandbox/clone-a/src/deep"
+slug_is "ssh origin names the repo" gadgets "$sandbox/clone-b"
+slug_is "no origin falls back to the directory name" clone-c "$sandbox/clone-c"
+slug_is "KRU_PROJECT pins the slug" pinned "$sandbox/clone-a" KRU_PROJECT=pinned
+slug_is "outside a repo CLAUDE_PROJECT_DIR names it" pinned-dir "$sandbox/plain" CLAUDE_PROJECT_DIR="$sandbox/pinned-dir"
+# a GIT_DIR/GIT_WORK_TREE leaked from a parent git process must not repoint git at another repo
+slug_is "leaked GIT_DIR and GIT_WORK_TREE are ignored" widgets "$sandbox/clone-a" \
+  GIT_DIR="$sandbox/clone-b/.git" GIT_WORK_TREE="$sandbox/clone-b"
+slug_is "a cwd that is gone keeps its directory name" myrepo /work/myrepo
+
 printf '%d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]

@@ -32,16 +32,14 @@ prompt=$(printf '%s' "$input" | jq -r '.tool_input.prompt // empty' 2>/dev/null)
 [ -z "$prompt" ] && exit 0
 
 cwd=$(printf '%s' "$input" | jq -r '.cwd // empty' 2>/dev/null)
-# the engagement stamp `skills/roster/learn.md` (PM or lead loads) counts distinct repos with — the last path
-# segment names whichever subdirectory the lead ran from, so one repo reads as
-# several engagements and a team-wide preference grades as one client's.
-cwd_slug=""
-d="$cwd"
-while [ -n "$d" ] && [ "$d" != "/" ] && [ "$d" != "." ]; do
-  [ -e "$d/.git" ] && { cwd_slug=$(basename "$d"); break; }
-  d=$(dirname "$d")
-done
-[ -z "$cwd_slug" ] && [ -n "$cwd" ] && cwd_slug=$(basename "$cwd")
+# the engagement stamp `skills/roster/learn.md` (PM or lead loads) counts distinct repos with — the store's
+# own slug, since a directory name differs by clone and by the subdirectory the
+# lead ran from, so one repo reads as several engagements and a team-wide
+# preference grades as one client's. a leaked GIT_DIR would point git at another repo.
+cwd_slug=$(
+  if [ -n "$cwd" ]; then cd "$cwd" 2>/dev/null || { basename "$cwd"; exit 0; }; fi
+  unset GIT_DIR GIT_WORK_TREE
+  kru_slug)
 
 reasons=""
 # a coordinate is a stale cache: file.ext:NN, its approximate "file.ext ~:NN" /

@@ -130,7 +130,7 @@ The focus ring moves to the card, since the link's own box is just the title.
 **Pattern:** a (!) icon button with a tooltip sits beside the status and carries the reason; the tooltip opens on focus and press as well as hover. The table keeps one row per record.
 **Default it corrects:** an extra row or sub-line under the record that explains the status, so the table doubles in height and the columns lose their rhythm.
 **Why:** the mark tells the reader there is a reason, and the tooltip gives it to the one who asks. The status stays in its own ink (`text-and-icons.md`, *A status is bare text in its own ink, never a chip*); the (!) adds the reason without a second row to scan.
-**Applies when:** the reason is short and only some rows have one. The icon button is named for its row (*A repeated control names its own row*, above). A design system that settles the mark in writing wins.
+**Applies when:** the reason is short and only some rows have one. The icon button is named for its row (*A repeated control names its own row*, above). A (?) tooltip that explains the interface rather than a row's status is cut (`text-and-icons.md`, *Explanatory prose enters on request, and the request is a defect report*). A design system that settles the mark in writing wins.
 
 ## A table's filter is a bare icon button in its column header
 

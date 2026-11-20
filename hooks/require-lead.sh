@@ -13,10 +13,9 @@
 # stands; anything unparsed keeps it, because a miss here is a silent ungated
 # build and a false gate costs one message.
 #
-# it fires once per session: a gated call that blocks, or fails open on an
-# unreadable transcript, marks the session, and no later call is judged. a call
-# that passes because the contract is loaded leaves no mark, so each later call
-# reads the transcript again and finds the same load. a /kru: command in flight
+# it fires once per session: a gated call that blocks, fails open on an
+# unreadable transcript, or passes because the contract is loaded marks the
+# session, and no later call is judged or re-reads the transcript. a /kru: command in flight
 # exempts its calls without marking, so the first gated call of a plain turn
 # after it still decides. a session that declines is nagged no further, and a
 # subagent's own tool call never trips a gate meant for the lead.
@@ -94,7 +93,7 @@ lead_loaded=$(jq -rn --arg base "${read_base%/}/" "$read_lead_path"'
       (.message.content | test("<command-name>/?kru:(lead|designer)</command-name>")))
   )
 ' "$transcript" 2>/dev/null)
-[ "$lead_loaded" = "true" ] && exit 0
+[ "$lead_loaded" = "true" ] && { mark_session; exit 0; }
 
 # a /kru:<skill> run is that skill's contract, not the lead's — the ones
 # that dispatch load lead themselves. exempt only while the command is still the
