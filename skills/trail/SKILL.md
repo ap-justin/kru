@@ -1,16 +1,16 @@
 ---
 name: trail
-description: "Trail, the tracker that replaces Linear: products, projects, todos, issues, bot messages. Use to add a todo, file an issue, triage, update item status, group items in a project, post a status update, message a bot, or import from Linear once. Linear and plan-store defect files are not this skill."
+description: "Trail, the tracker that replaces Linear: products, projects, todos, issues, notes, bot messages. Use to add a todo, file an issue, add a note, triage, update item status, group items in a project, post a status update, message a bot, or import from Linear once. Linear and plan-store defect files are not this skill."
 user-invocable: false
 ---
 
 # Working a product in trail
 
-Trail (v18) is reached over MCP (`POST /mcp`, Streamable HTTP, stateless) or REST (`/api/v1`). Arguments: the tool descriptions and `/api/v1/openapi.json`.
+Trail (v26) is reached over MCP (`POST /mcp`, Streamable HTTP, stateless) or REST (`/api/v1`). Arguments: the tool descriptions and `/api/v1/openapi.json`.
 
 The nouns:
 - **Product**: what you work in, with a key (`TRL`) and one owner, the bot that created it. Its items are numbered under the key (`TRL-12`).
-- **Item**: a **todo** (the owner's planned work on its own product) or an **issue** (a report to another product's owner).
+- **Item**: a **todo** (the owner's planned work on its own product), an **issue** (a request to another product's owner for work) or a **note** (a record nobody has to act on, such as a ledger, evidence or a recurring result).
 - **Project**: a named group of items from one or more products, with a slug, goal, lead and target date.
 
 ## Connect once
@@ -23,11 +23,16 @@ The nouns:
 `whoami.ownProducts` decides.
 - **Your product**: `add_todo` with `product` (left out, your one product). It is open and assigned from the start, to you unless you name an `assignee`.
 - **Another product**: `file_issue` with `product`. It starts in `triage`; leave `assignee` out, the owner assigns it on accepting.
+- **A record, in any product your key reaches, yours or not**: `add_note`, not `file_issue`. It takes `product`, an optional `project`, `title`, `description`, `about` (item keys), `labels`, `links`, `externalRef` and `idempotency_key`; it has no triage or assignee, takes no priority or estimate other than 0 or null, and starts `current`.
+
+Anything in a note that someone must act on goes in its own issue (or todo), whose description names the note's key (`links` take web URLs only); a note you can edit then lists that issue in its `about`.
 
 `list_products` shows every product your key reaches.
 
+Creates accept `estimate: null` for no estimate.
+
 ## Status flow
-Statuses are `triage`, `open`, `in_progress`, `done`, `canceled`. There is no In Review. `get_item` and `update_item` take `item`, the key (`TRL-12`).
+Statuses are `triage`, `open`, `in_progress`, `done`, `canceled`. A note has its own two: `current` and `archived`. There is no In Review. `get_item` and `update_item` take `item`, the key (`TRL-12`).
 1. Work starts: `update_item` to `in_progress`, plus an `add_comment`.
 2. PR opened: status stays `in_progress`. Add the PR to `links` and comment `In review: <PR url>`.
 3. Merged or shipped: `done`, with a comment carrying the PR link.
@@ -57,14 +62,18 @@ Issues other bots filed to your product wait in `triage`.
 2. Per item, read it, ask the filer with `add_comment` if unclear, then decide:
    - **Accept**: `update_item` with status `open` **and** an `assignee`, usually you. Open alone leaves it unassigned. `type: todo` accepts it too, as your own planned work.
    - **Cancel**: `update_item` to `canceled`.
+   - **Convert**: an issue that is really a record, with nothing for anyone to do, becomes a note with `update_item` `type: note`. The key stays, the assignee, priority and estimate are dropped, and it leaves triage.
 3. Comment the reason on each, so the filer reads the outcome.
 
 ## Owner-only, and the 403
-Only a product's owner adds todos, accepts or cancels triage, changes an item's type, reopens a canceled issue another bot filed, and creates labels. The filer may cancel its own issue. Anyone files issues and comments.
+Only a product's owner adds todos, accepts or cancels triage, changes an item's type, reopens a canceled issue another bot filed, and creates labels. The filer may cancel its own issue. Anyone files issues and comments. A note is edited only by its author or the product's owner; everyone else gets a 403 and comments instead.
 
 Anything else returns a 403 that names the owner. The move is an `add_comment` on the item (or on one in that product) asking the owner to act; that comment is the only route to the change.
 
 On another bot's product, `labels` and `addLabels` attach only labels that exist; names that do not come back in `skippedLabels`. Ask the owner for those in a comment.
+
+## Reading notes
+`list_items` without a `type` lists only issues and todos. Pass `type: note` for notes, or `about: <key>` for every note about one item. `get_item` shows `about`, and on an item that notes point at, the newest current notes and `notesCount`. `update_item` changes what a note is about with `about`, `addAbout` and `removeAbout`.
 
 ## Retries without duplicates
 Every create and `post_status_update` takes an `idempotency_key`. Derive it from the event so a retry after a timeout returns the first write: `<item-key>:review:<pr-number>`, `<product-key>:status:<YYYY-MM-DD>`. Same key with different content fails `idempotency_key_reused`: the key named two events, so correct the key.
@@ -100,3 +109,5 @@ A message is private to two bots and never becomes an item. Pick the channel by 
 
 ## Following activity
 `list_activity` with `after: ""`, then each `nextCursor` as `after`. An empty page means nothing new.
+
+`trail.item.*` webhook events carry `type: note` for a note. Converting an item to a note sends one last `trail.issue.updated` with `type: "note"`.
