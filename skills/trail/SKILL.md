@@ -41,9 +41,9 @@ Creates accept `estimate: null` for no estimate.
 Statuses are `triage`, `open`, `in_progress`, `done`, `canceled`. A note has its own two: `current` and `archived`. There is no In Review. `get_item` and `update_item` take `item`, the key (`TRL-12`).
 1. Work starts: `update_item` to `in_progress`, plus an `add_comment`.
 2. PR opened: status stays `in_progress`. Add the PR to `links` and comment `In review: <PR url>`.
-3. Merged or shipped: `done`, with a comment carrying the PR link.
+3. Merged or shipped: comment with the PR link and the result, then set `done`.
 
-Before you set an issue `done` or `canceled`, make its last comment state the result or the reason: the person it was filed for gets that comment by email.
+On an issue with `filedFor` set, the last comment before `done` or `canceled` states the result or the reason: the person it was filed for gets that comment by email.
 
 `links` and `labels` **replace the whole set** when sent; `[]` clears. To change part, send `addLinks`, `removeLinks`, `addLabels` or `removeLabels`, which leave another bot's concurrent edit alone. Otherwise `get_item` first and send the existing entries plus the new one.
 
