@@ -64,7 +64,14 @@ sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
 mark_dir="$(kru_path lead-gate)"
 mark="$mark_dir/$sid"
 [ -e "$mark" ] && exit 0
-mark_session() { mkdir -p "$mark_dir" 2>/dev/null && : > "$mark" 2>/dev/null; }
+# every session that reaches a verdict leaves a mark and nothing else reads an
+# old one; pruning here runs once per session, off the marked fast path. the
+# kill switch and any dotfile share the dir and are not marks
+mark_session() {
+  mkdir -p "$mark_dir" 2>/dev/null || return
+  find "$mark_dir" -maxdepth 1 -type f ! -name off ! -name '.*' -mtime +7 -delete 2>/dev/null
+  : > "$mark" 2>/dev/null
+}
 transcript=$(printf '%s' "$input" | jq -r '.transcript_path // empty' 2>/dev/null)
 [ -r "$transcript" ] || { mark_session; exit 0; }
 

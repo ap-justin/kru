@@ -245,6 +245,13 @@ agent_id=a1b2c3 check allow Edit "" "$p" subfirst
 mark_is absent subfirst "a subagent call marked the session"
 check refuse Edit "" "$p" subfirst
 mark_is present subfirst "the lead's blocked call left no mark"
+# writing a mark prunes marks older than a week, and nothing else in the dir
+touch -d '8 days ago' "$home/.kru/lead-gate/stale" "$home/.kru/lead-gate/.keep"
+touch "$home/.kru/lead-gate/fresh"
+check allow Edit "" "$tx/lead.jsonl" pruner
+mark_is absent stale "a mark older than a week was not pruned"
+mark_is present fresh "a fresh mark was pruned"
+mark_is present .keep "an old file that is not a session mark was pruned"
 
 # read-only bash is an inspection
 check allow Bash "ls" "$p"
