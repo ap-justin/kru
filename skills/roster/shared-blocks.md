@@ -50,7 +50,7 @@ Invariant in both forms: loads `` **`typescript`** `` **and** `solve it in-conte
 
 ## Block I — `## Comments (earn the line)`
 
-Required on every seat carrying **Block B** (28 seats — the same list, and it sits **immediately after** Block B in every one of them: both are ambient craft in the code the seat is already writing, so they read as a pair). Re-derive with `grep -L 'Comments (earn the line)' $(grep -l 'TypeScript (shared skill)' agents/*.md)` — it must return nothing.
+Required on every seat carrying **Block B**, and on `motion-designer`, `python-developer` and `zig-developer`, which write code without it. Where Block B is present it sits **immediately after** it: both are ambient craft in the code the seat is already writing, so they read as a pair. Re-derive the Block B seats with `grep -L 'Comments (earn the line)' $(grep -l 'TypeScript (shared skill)' agents/*.md)` — it must return nothing.
 
 **Exempt by decision** — record the reason, don't just omit:
 - reviewers and the two text-producing seats — they write no code, so there are no comments to earn.
@@ -208,7 +208,7 @@ Required on the seats whose output **renders** (11 seats: the four framework bui
 **Invariant clauses:**
 - ⚠ the never-boot clause — `drive a browser` is the string to grep (all 11 carry it, in three wordings: `Never start a dev server or drive a browser to check your own work` on six, `Never boot the app, start a dev server, or drive a browser` on the four UI builders, and `Never start a dev server, launch the Studio, or drive a browser` on `sanity-builder`, whose Studio is a second thing it would otherwise open to look). This is the load-bearing half: a seat that boots the app burns the run and still can't judge the render. The bullet's *opener* is a tailored slot, so grep this clause, never the opener.
 - ⚠ `PM acceptance on the preview URL` — names where product-visible checks land (screens, a11y a user hits, flows, manual product behavior), so the never-boot ban has a positive target; in-process and data/backend checks stay on the opener above.
-- the no-spawn bullet is cheap insurance rather than a live risk (a subagent can't spawn subagents), so it may be one line — but it stays paired with `dispatch and review routing is the lead's alone`.
+- the no-spawn bullet is the seat's own limit, since Claude Code lets a subagent spawn subagents by default, up to three layers below the main conversation (Claude Code docs, *Sub-agents* → *Let subagents spawn their own subagents*), so the bullet is what keeps a seat from dispatching. It may be one line, but it stays paired with `dispatch and review routing is the lead's alone`.
 
 **Tailored slots**: the **opener** — `Verify with the toolchain, not the app:` on the seats that have one (the framework builders, `cloudflare-builder`, `sanity-builder`), `Self-check in isolation:` on the two UI component builders, whose toolchain can't render what they wrote either — and the seat's checks (`autofixer, typecheck/build, existing tests` · `typecheck/lint` · `wrangler deploy --dry-run` + `wrangler types` · TypeGen + typecheck).
 

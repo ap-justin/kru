@@ -3,7 +3,7 @@ name: lead
 description: How this engineering team works — load before building, reviewing or dispatching any seat. Also the entry for a project from scratch and for planning work past one context.
 ---
 
-You are the engineering lead. **The user is the PM** — the team exists to execute their ideas, not to prioritize for them. You run in the main thread — you are the orchestrator, not a subagent (subagents can't spawn subagents). You scope, route, delegate, integrate, run in-build gates, gather evidence, and report. **Neither you nor a seat accepts work for the PM** — tests, CI, and a `Return pass:` line are evidence; acceptance is theirs after Step 5.
+You are the engineering lead. **The user is the PM** — the team exists to execute their ideas, not to prioritize for them. You run in the main thread — you are the orchestrator, not a subagent (dispatch and review routing are the lead's alone, so seats never dispatch). You scope, route, delegate, integrate, run in-build gates, gather evidence, and report. **Neither you nor a seat accepts work for the PM** — tests, CI, and a `Return pass:` line are evidence; acceptance is theirs after Step 5.
 
 **Capture, listing, and the persisted brief are the PM's skills** — `skills/todo` · `issue` · `todos` · `issues` · `todos-loop` · `issues-loop` · `brainstorm` · **`brief`** · `briefs`. Asked to log, list, or grill with no build running, `Read` the matching file under `${CLAUDE_PLUGIN_ROOT}/skills/` and run it; your own mid-task capture is Step 4.5.
 

@@ -19,11 +19,11 @@ for (const item of items) {
 }
 ```
 
-`scheduler.yield()` is Limited (Chromium and Firefox, not Safari), so the `setTimeout` branch is what Safari runs [break-up-long-tasks]. Inside a `postTask` callback, feature-detect `postTask` on its own as well.
+`scheduler.yield()` is Limited (Chromium and Firefox, not Safari), so the `setTimeout` branch is what Safari runs [break-up-long-tasks]. `scheduler.postTask` has support of its own: check `globalThis.scheduler?.postTask` before calling it (Safari has no `scheduler` global, so `'postTask' in scheduler` throws there).
 
 ## Priorities across work streams
 - Three levels: `user-blocking` (input handling, the view being shown), `user-visible` (default), `background` (analytics, indexing, prefetch) [schedule-tasks-by-priority].
-- A page that needs cross-task ordering or `setPriority()` loads `scheduler-polyfill` by dynamic `import()` behind a `'postTask' in scheduler` check, so supporting browsers pay nothing. A page that only pushes work off the current turn degrades to `setTimeout(cb, 0)` and checks `signal?.aborted` first when it passes a signal [schedule-tasks-by-priority].
+- A page that needs cross-task ordering or `setPriority()` loads `scheduler-polyfill` by dynamic `import()` behind a `globalThis.scheduler?.postTask` check, so supporting browsers pay nothing. A page that only pushes work off the current turn degrades to `setTimeout(cb, 0)` and checks `signal?.aborted` first when it passes a signal [schedule-tasks-by-priority].
 - Abort queued work on navigation and promote prefetched work when it is opened: both go through one `TaskController` whose `signal` is the only scheduling option passed [schedule-tasks-by-priority].
 
 ## Attribution fields
