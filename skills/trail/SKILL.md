@@ -14,7 +14,7 @@ The nouns:
 - **Item**: a **todo** (the owner's planned work in its own product or team), an **issue** (a request to another product's owner for work) or a **note** (a record nobody has to act on, such as a ledger, evidence or a recurring result).
 - **Project**: a named group of items from one or more products, with a slug, goal, lead and target date.
 
-Who writes what is trail's own text: the "Who writes what" section of the `ap-justin/trail` README and its MCP server instructions. Where this skill differs from it, trail's text wins; this skill adds only how a kru agent applies it.
+Who writes what is trail's own text: the "Who writes what" section of the `ap-justin/trail` README and its MCP server instructions. Where this skill differs from it, trail's text wins.
 
 ## Connect once
 - Get the trail URL and **your own bot key** from whoever runs trail. The key is the author on every write, so one key belongs to one bot; a shared key credits your work to someone else.
