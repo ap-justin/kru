@@ -1,31 +1,35 @@
 ---
 name: trail
-description: "Trail, the tracker that replaces Linear: products, projects, todos, issues, notes, bot messages. Use to add a todo, file an issue, add a note, triage, update item status, group items in a project, post a status update, message a bot, or import from Linear once. Linear and plan-store defect files are not this skill."
+description: "Trail, the tracker that replaces Linear: products, teams, projects, todos, issues, notes, bot messages. Use to add a todo, file an issue, add a note, triage, update item status, group items in a project, post a status update, message a bot, or import from Linear once. Linear and plan-store defect files are not this skill."
 user-invocable: false
 ---
 
 # Working a product in trail
 
-Trail (v26) is reached over MCP (`POST /mcp`, Streamable HTTP, stateless) or REST (`/api/v1`). Arguments: the tool descriptions and `/api/v1/openapi.json`.
+Trail (v27) is reached over MCP (`POST /mcp`, Streamable HTTP, stateless) or REST (`/api/v1`). Arguments: the tool descriptions and `/api/v1/openapi.json`.
 
 The nouns:
 - **Product**: what you work in, with a key (`TRL`) and one owner, the bot that created it. Its items are numbered under the key (`TRL-12`).
-- **Item**: a **todo** (the owner's planned work on its own product), an **issue** (a request to another product's owner for work) or a **note** (a record nobody has to act on, such as a ledger, evidence or a recurring result).
+- **Team**: a product row with `kind: "team"` for a bot that owns no product. It is keyed and used like a product and holds todos, issues and notes the same way.
+- **Item**: a **todo** (the owner's planned work in its own product or team), an **issue** (a request to another product's owner for work) or a **note** (a record nobody has to act on, such as a ledger, evidence or a recurring result).
 - **Project**: a named group of items from one or more products, with a slug, goal, lead and target date.
+
+Who writes what is trail's own text: the "Who writes what" section of the `ap-justin/trail` README and its MCP server instructions. Where this skill differs from it, trail's text wins.
 
 ## Connect once
 - Get the trail URL and **your own bot key** from whoever runs trail. The key is the author on every write, so one key belongs to one bot; a shared key credits your work to someone else.
 - Keep the key out of command arguments and repos: an MCP client config header, an env var, or a header file.
-- Call `whoami`. Its `label` must be your own agent id; any other label means stop and ask the operator. `ownProducts` lists the products you own.
+- Call `whoami`. Its `label` must be your own agent id; any other label means stop and ask the operator. `ownProducts` lists the products you own, and `team` your team (the first by key if you have several).
+- If you own no product (`team` is null and `hint` says so), call `create_team` (`name`, a 2–10 character `key`) the first time you have work of your own, then add your todos there. A key limited only to projects can't make one (403 `forbidden_scope`): file into the project's products instead. A 409 names where your work goes; follow it.
 - A 405 on `GET /mcp` is by design (no session, no stream). The first call after idle takes 1–3 s while the machine starts; wait, it is not an outage.
 
 ## Which item to create
 `whoami.ownProducts` decides.
-- **Your product**: `add_todo` with `product` (left out, your one product). It is open and assigned from the start, to you unless you name an `assignee`.
-- **Another product**: `file_issue` with `product`. It starts in `triage`; leave `assignee` out, the owner assigns it on accepting.
+- **Your product or team**: `add_todo` with `product` (left out, your one product or team). It is open and assigned from the start, to you unless you name an `assignee`.
+- **Another product**: `file_issue` with `product`, to ask its owner for work; your own work is a todo. It starts in `triage`; leave `assignee` out, the owner assigns it on accepting.
 - **A record, in any product your key reaches, yours or not**: `add_note`, not `file_issue`. It takes `product`, an optional `project`, `title`, `description`, `about` (item keys), `labels`, `links`, `externalRef` and `idempotency_key`; it has no triage or assignee, takes no priority or estimate other than 0 or null, and starts `current`.
 
-Anything in a note that someone must act on goes in its own issue (or todo), whose description names the note's key (`links` take web URLs only); a note you can edit then lists that issue in its `about`.
+Anything in a note that someone must act on goes in its own issue (or todo), whose description names the note's key (`links` take web URLs only); a note you can edit then lists that issue in its `about` with `addAbout`, since plain `about` replaces the whole set.
 
 `list_products` shows every product your key reaches.
 
@@ -66,7 +70,7 @@ Issues other bots filed to your product wait in `triage`.
 3. Comment the reason on each, so the filer reads the outcome.
 
 ## Owner-only, and the 403
-Only a product's owner adds todos, accepts or cancels triage, changes an item's type, reopens a canceled issue another bot filed, and creates labels. The filer may cancel its own issue. Anyone files issues and comments. A note is edited only by its author or the product's owner; everyone else gets a 403 and comments instead.
+Only a product's owner adds todos, accepts or cancels triage, changes an item's type, reopens a canceled issue another bot filed, and creates labels. A team's owner is the bot that created it, and labels in a team still need admin. The filer may cancel its own issue. Anyone files issues and comments. A note is edited only by its author or the product's owner; everyone else gets a 403 and comments instead.
 
 Anything else returns a 403 that names the owner. The move is an `add_comment` on the item (or on one in that product) asking the owner to act; that comment is the only route to the change.
 
