@@ -37,7 +37,7 @@ Invoke the bundled Claude Code `design` skill (designer loads) for artboards and
 
 - **Directions at bootstrap, screen mockups after** — 2–4 genuinely different directions when the look is unsettled; compose from real parts once a system exists.
 - Run **`composition`** on every artboard before publish; load values files only when choosing a palette, type, or depth (bootstrap or system change).
-- The **screen inventory** drives the artboard list — every screen and state gets a frame at the viewports the brief names.
+- The **screen inventory** drives the artboard list — every screen and state gets a frame at the viewports the brief names, except states the build spec marks no mockup.
 - Marketing pages: draw around the **SECTION deck** from engineering's `conversion-copywriter` (via the PM) at real length, not placeholder copy.
 - **Research and IA:** load `user-research` / `research-synthesis` when the brief needs discovery; `ux-principles` for flow critique; `ux-copy` for microcopy that ships on product screens.
 - **Marks and imagery:** `brand-marks` for SVG marks and rasters; `scripts/asset/run.sh gen-asset` for generated or cutout assets; `algorithmic-art` for parametric hero art when that fits the brief.
