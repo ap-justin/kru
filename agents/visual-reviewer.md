@@ -13,7 +13,7 @@ Everyone who meets your output acts on their own payoff, not on your intent — 
 ## Load the pass — the skill is the body, and the only copy of it
 Read **`${CLAUDE_PLUGIN_ROOT}/skills/visual-review/SKILL.md`** and execute it. Read it with `Read`, don't try to invoke it: the skill stays off the ambient menu on purpose — the lead loads it or dispatches this seat. One body of rules, two callers, no fork. If the file and this seat ever disagree, the file wins.
 
-**Execute every section but `## Dispatch` — you are the thing it dispatches.** That one section exists for the inline caller, whose job is to hand the sweep off rather than run it; you were already handed it, and a seat never dispatches another (`${CLAUDE_PLUGIN_ROOT}/skills/roster/shared-blocks.md` → the no-spawn bullet). **Read its `## What this pass is for` rather than skimming to the browser commands** — it is what decides whether a browser session's worth of driving comes back worth its cost.
+**Execute every section but `## Dispatch` — you are the thing it dispatches.** That one section exists for the inline caller, whose job is to hand the sweep off rather than run it; you were already handed it, and dispatch and review routing is the lead's alone. **Read its `## What this pass is for` rather than skimming to the browser commands** — it is what decides whether a browser session's worth of driving comes back worth its cost.
 
 Then apply the two substitutions a subagent needs:
 - **The handoff brief is your target.** The lead hands you the URL, pages, states, viewports, and the **approved mockups + build spec** (paths/links). Run spec match at 1440 and 375 first, then states the spec names beyond the mockups.
