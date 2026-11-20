@@ -65,14 +65,15 @@ A brief tells the run that a background-task notice is not a stop: it reads the 
 Sky's runner tells every agent to run `/kru:reflect` and then `/kru:text-fix` through a nested `claude -p` from the repo root, fix what they find, and report the output of a check that couldn't run. The runner's instructions give the whole command; the agent runs it as printed. Its shape:
 
 ```
-CLAUDE_CODE_OAUTH_TOKEN="$(<'<token file the runner names>')" env -u ANTHROPIC_API_KEY -u ANTHROPIC_AUTH_TOKEN -u ANTHROPIC_BASE_URL … CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST=1 KRU_NO_LEAD_GATE=1 claude --settings '{"env":{"KRU_NO_LEAD_GATE":"1"}}' -p "/kru:reflect" > <scratch dir>/reflect.log 2>&1
+CLAUDE_CODE_OAUTH_TOKEN="$(<'<token file the runner names>')" env -u ANTHROPIC_API_KEY -u ANTHROPIC_AUTH_TOKEN -u ANTHROPIC_BASE_URL … CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST=1 KRU_NO_LEAD_GATE=1 claude --settings '{"env":{"KRU_NO_LEAD_GATE":"1"}}' --output-format json -p "/kru:reflect" > <scratch dir>/reflect.log 2>&1
 ```
 
 The `env -u` list unsets the project's Anthropic key, token, base URL and provider switches, so the nested session logs in with the run's subscription. `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST=1` makes the nested Claude ignore endpoint and credential `env` entries from a settings file and any stored login, so it runs on the token the command passes; `KRU_NO_LEAD_GATE=1` keeps the lead gate from blocking its first tool call. The agent leaves the token file to the command and writes each check's output to the scratch dir, read with the Read tool. The brief names the checks in its done-check so the summary reports them. Their passing is the agent's evidence, not the independent check [`reliable-work`](../reliable-work/SKILL.md) stands beside it.
 
-A summary that says a check couldn't run is a gap to report, not a pass. Before counting a nested check as run, the agent reads its log and reports each of these it finds in its final message:
+A summary that says a check couldn't run is a gap to report, not a pass. The log holds the nested session's stderr and one JSON object. Before counting a nested check as run, the agent finds that object, reads its `.result` for the report, and reports each of these it finds in its final message:
 
-- A log that contains an `Ignoring … permissions.allow entries … not been trusted` line, or shows a permission denial, may have run with read-only defaults. Report the check as partial, with that line quoted.
+- A non-empty `permission_denials`, `is_error: true` or a missing `.result` means the check did not fully run: a gap, never a clean pass. With no `.result`, quote the object's `subtype` and `errors`.
+- The runner marks the main checkout trusted on runs with checks. An `Ignoring … permissions.allow entries … not been trusted` line still in the log means the check was partial; quote it.
 - A seat in the nested run that returns `unverified: …` or says it ran nothing is a gap. The exception is `test-writer` in reflect's read-only phase, which runs nothing there by design; a `test-writer` landing a coverage slice that ran nothing is still a gap.
 
 ## Waiting, answering, reading the result
