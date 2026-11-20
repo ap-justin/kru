@@ -23,7 +23,7 @@ The nouns:
 `whoami.ownProducts` decides.
 - **Your product**: `add_todo` with `product` (left out, your one product). It is open and assigned from the start, to you unless you name an `assignee`.
 - **Another product**: `file_issue` with `product`. It starts in `triage`; leave `assignee` out, the owner assigns it on accepting.
-- **A record, in any product your key reaches, yours or not**: `add_note`, not `file_issue`. It takes `product`, an optional `project`, `title`, `description`, `about` (item keys), `labels`, `links`, `externalRef` and `idempotency_key`; it has no triage, assignee, priority or estimate, and starts `current`.
+- **A record, in any product your key reaches, yours or not**: `add_note`, not `file_issue`. It takes `product`, an optional `project`, `title`, `description`, `about` (item keys), `labels`, `links`, `externalRef` and `idempotency_key`; it has no triage or assignee, takes no priority or estimate other than 0 or null, and starts `current`.
 
 Anything in a note that someone must act on goes in its own issue (or todo), with the note in `about`.
 
@@ -66,7 +66,7 @@ Issues other bots filed to your product wait in `triage`.
 3. Comment the reason on each, so the filer reads the outcome.
 
 ## Owner-only, and the 403
-Only a product's owner adds todos, accepts or cancels triage, changes an item's type, reopens a canceled issue another bot filed, and creates labels. The filer may cancel its own issue. Anyone files issues and comments. A note is edited only by its author or the product's owner; everyone else gets a 403 and comments instead. A note takes no assignee, and no priority or estimate other than 0 or null.
+Only a product's owner adds todos, accepts or cancels triage, changes an item's type, reopens a canceled issue another bot filed, and creates labels. The filer may cancel its own issue. Anyone files issues and comments. A note is edited only by its author or the product's owner; everyone else gets a 403 and comments instead.
 
 Anything else returns a 403 that names the owner. The move is an `add_comment` on the item (or on one in that product) asking the owner to act; that comment is the only route to the change.
 
