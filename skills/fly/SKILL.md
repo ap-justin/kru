@@ -101,7 +101,6 @@ A service reached both through the proxy and over `.internal` binds both address
 - An app that reads other names (`S3_BUCKET`, `S3_ACCESS_KEY`) needs them mapped by its owner: set those secrets from the printed values, or read the four names in code.
 - The secret is shown once, so capture the output; `fly storage dashboard <bucket>` mints a new key when it's lost. Tigris's page shows the in-app run listing names only and staging them for the first deployment, so there may be nothing to capture: mint a key there instead. ([`docs.fly.io/reference/tigris`](https://docs.fly.io/reference/tigris.md), [`tigrisdata.com/docs/buckets/create-bucket`](https://www.tigrisdata.com/docs/buckets/create-bucket.md), [`tigrisdata.com/docs/iam/manage-access-key`](https://www.tigrisdata.com/docs/iam/manage-access-key.md))
 - `AWS_ENDPOINT_URL_S3` is set to `https://fly.storage.tigris.dev`. Fly names `https://t3.storage.dev` the endpoint for new code, and `fly secrets set AWS_ENDPOINT_URL_S3=https://t3.storage.dev` switches an app to it.
-- Buckets are private; `--public` makes objects readable without credentials.
 
 Bucket design, public vs private and the app's S3 calls belong to the **`tigris`** skill.
 
