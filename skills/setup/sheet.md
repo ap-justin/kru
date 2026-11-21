@@ -37,9 +37,9 @@ alone and write no second one: it is the repo's own policy, and a re-run must no
 
 ## The answers
 
-Everything between the pointer and the gate is this repo's answers, one line per key: the key, its value, then `←` and its derivation. The
+Everything else in the team section is this repo's answers, one line per key: the key, its value, then `←` and its derivation. The
 fixed keys are setup step 1's fields, spelled as there: `project seats` · `skills` · `tokens` · `screens`
-· `test` · `verify` · `mcp`. A seat line's key is the one-word lane it owns in this repo (`routes`, `ui`,
+· `uncovered` · `test` · `verify` · `mcp`. A seat line's key is the one-word lane it owns in this repo (`routes`, `ui`,
 `data`, `api`), and the line itself names the seat. Each line cites what it was derived
 from — a manifest entry, or on a blank repo the decision standing in for one (`← decided 2026-09-04 · /setup`).
 A seat line names the directories its seat owns, each in backticks: the handoff gate checks every file

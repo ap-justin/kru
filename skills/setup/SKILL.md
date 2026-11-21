@@ -48,6 +48,7 @@ before this step writes anything: step 4 overwrites the stamp, and step 6's repo
 | `skills` | the same manifests, run through **`${CLAUDE_PLUGIN_ROOT}/references/routing.md`** → *Conditional skills* | a seat reading `package.json` for its libraries on every dispatch — and the silence when a seat that never carried the skill writes against the library anyway |
 | `tokens` | the design system's file, and the gate that closes it (hook config, test script) | a builder's hunt for the `## Design system` pointer — and the from-scratch design chain, since a system already exists |
 | `screens` | whether this repo renders UI, and what starts its dev server | the screen passes and the PM's design-spec gate |
+| `uncovered` | every stack and path no seat above owns, each by path or stack name, found by reading the source tree against the seats the rows above named | a nearby seat pressed into a stack it doesn't own |
 | `test` | the runner, its command, and **what a run costs** | rediscovering the repo's testing conventions |
 | `verify` | typecheck and lint commands | the behavior gate's generic form |
 | `mcp` | `claude mcp list` and `claude plugin list`, against the seats the rows above named and their **`${CLAUDE_PLUGIN_ROOT}/SOURCES.md`** rows | a seat reaching mid-run for a server this repo never enabled, and a dispatch spent finding that out |
@@ -349,7 +350,9 @@ installed `VERSION`.
 
 ### 5. Write, returning product cuts to the PM
 **A caller's write scope binds every file in steps 1c–5**, and a file the scope stops is a gap in the
-return (step 6), never a silent skip: note it as you reach it. `.claude/CLAUDE.md` is checked in and read by everyone who clones the repo — teammates without this
+return (step 6), never a silent skip: note it as you reach it.
+
+`.claude/CLAUDE.md` is checked in and read by everyone who clones the repo — teammates without this
 plugin included, and the hand that wrote whatever you are proposing to cut. The sheet's lines and the
 pass's edits that cut a copy another file answers are the team's: write them. Before cutting a rule
 a human authored whose only copy is here, **return one question** — in their words, with what dropping
