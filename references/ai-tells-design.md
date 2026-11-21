@@ -2,6 +2,8 @@
 
 The look a model reaches for when it tries to "look designed". One tell proves little; a canvas that carries several, or that could be any product's, reads as templated. A tell is judged against the product it is drawn for: the repo's design system wins where it settles the point in writing, and a brief that asks for the pattern outranks the list.
 
+`${CLAUDE_PLUGIN_ROOT}` below is the plugin's install dir: the directory above `references/`, when you `Read` this file rather than have it injected.
+
 Adapted from taste-skill v2 (MIT). Cited as `v2 §n`: the `SKILL.md` of taste-skill-v2-experimental, section n. Cited as `copy-tells`: the `copy-tells.md` reference of taste-skill's own skill. Cited as `CHANGELOG 2.5.1`: taste-skill's `CHANGELOG.md`. Only tells that show on a product screen are kept.
 
 `${CLAUDE_PLUGIN_ROOT}/skills/composition/reference/directions.md` → *Ornament that reads as generated* and *A working screen dressed as a template* already cover pill badges, icon-topped feature cards, gradient fills, resting shadows, tracked caps and the template dashboard; where a line below touches one of those, that file's rule governs. The same holds for `${CLAUDE_PLUGIN_ROOT}/skills/ui-patterns/reference/lists-and-rows.md` → *Each fact about an item gets its own place* and *A rule between neighbours needs a reason spacing can't give*, and `${CLAUDE_PLUGIN_ROOT}/skills/ui-patterns/reference/text-and-icons.md` → *A status is bare text in its own ink, never a chip*: the dot, separator and divider lines below name the tell, and those entries say what to draw.
