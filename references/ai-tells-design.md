@@ -4,11 +4,13 @@ The look a model reaches for when it tries to "look designed". One tell proves l
 
 Adapted from taste-skill v2 (MIT), the same text as the team's design-taste copy. Cited as `v2 §n`: the `SKILL.md` of taste-skill-v2-experimental, section n. Cited as `copy-tells`: the `copy-tells.md` reference of taste-skill's own skill. Cited as `CHANGELOG 2.5.1`: taste-skill's `CHANGELOG.md`. Only tells that show on a product screen are kept; marketing-page rules are not.
 
+`skills/composition/reference/directions.md` → *Ornament that reads as generated* and *A working screen dressed as a template* already cover pill badges, icon-topped feature cards, gradient fills, resting shadows, tracked caps and the template dashboard; where a line below touches one of those, that file's rule governs.
+
 Each line: the tell, what to draw instead, the source.
 
 ## Visual
 
-- **Glows and neon**: an inner border or a shadow tinted to the surface. `v2 §9.A`, `§4.4`.
+- **Glows and neon**: an inner border; a shadow only on what floats, tinted to the surface. `v2 §9.A`, `§4.4`.
 - **Gradient text** on a large heading: one solid color. `v2 §9.A`.
 - **A purple or blue gradient default, or an oversaturated accent**: neutral surfaces and one desaturated accent. `v2 §4.2` (max one accent, the Lila rule), `§9.A`.
 - **More than one accent, or an accent that changes between frames**: pick one and use it on every frame. `v2 §4.2` (color consistency lock).
