@@ -4,7 +4,7 @@ The look a model reaches for when it tries to "look designed". One tell proves l
 
 Adapted from taste-skill v2 (MIT), the same text as the team's design-taste copy. Cited as `v2 §n`: the `SKILL.md` of taste-skill-v2-experimental, section n. Cited as `copy-tells`: the `copy-tells.md` reference of taste-skill's own skill. Cited as `CHANGELOG 2.5.1`: taste-skill's `CHANGELOG.md`. Only tells that show on a product screen are kept; marketing-page rules are not.
 
-`skills/composition/reference/directions.md` → *Ornament that reads as generated* and *A working screen dressed as a template* already cover pill badges, icon-topped feature cards, gradient fills, resting shadows, tracked caps and the template dashboard; where a line below touches one of those, that file's rule governs.
+`skills/composition/reference/directions.md` → *Ornament that reads as generated* and *A working screen dressed as a template* already cover pill badges, icon-topped feature cards, gradient fills, resting shadows, tracked caps and the template dashboard; where a line below touches one of those, that file's rule governs. The same holds for `skills/ui-patterns/reference/lists-and-rows.md` → *Each fact about an item gets its own place* and *A rule between neighbours needs a reason spacing can't give*, and `skills/ui-patterns/reference/text-and-icons.md` → *A status is bare text in its own ink, never a chip*: the dot, separator and divider lines below name the tell, and those entries say what to draw.
 
 Each line: the tell, what to draw instead, the source.
 
@@ -42,8 +42,8 @@ Each line: the tell, what to draw instead, the source.
 
 ## Content
 
-- **Fake-perfect numbers** (`99.99%`, `50%`, `1234567`): data that looks measured (`47.2%`, `+1 (312) 847-1928`). `v2 §9.D`.
-- **An invented stat strip** (three or four round figures in a row with no source): show a figure the product holds, or no strip. `copy-tells` (*Current tells*).
+- **Fake-perfect numbers** (`99.99%`, `50%`, `1234567`): in sample rows of a data view, values with real texture (`47.2%`, `+1 (312) 847-1928`); a stat or claim the product makes is the next line's. `v2 §9.D`.
+- **An invented stat strip** (three or four round figures in a row with no source): show a figure the product holds, or no strip. `copy-tells` (*Second generation*, the strip of figures).
 - **Generic names and avatars** (`John Doe`, a default-cast name, an egg or user-icon avatar): realistic names of the right locale and a specific avatar treatment. `v2 §9.D`, `copy-tells`.
 - **Startup-slop names** (`Acme`, `Nexus`, `SmartFlow`): a contextual name that could be real. `v2 §9.D`.
 - **Filler verbs** (*elevate*, *seamless*, *unleash*) and the rest of the copy tells: `skills/copywriting/references/ai-tells.md` and the AI tells line in `skills/prose-fix/SKILL.md` cover them. `v2 §9.D`.

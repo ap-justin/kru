@@ -20,8 +20,9 @@ copies deviate from upstream — is in `SOURCES.md` → *Vendored resources*.
 | `cloudflare/skills` | Apache-2.0 (`LICENSE` per directory) | `skills/cloudflare/`, `skills/wrangler/` |
 | `honojs/skills` | MIT (`skills/hono/LICENSE`) | `skills/hono/` |
 | `tursodatabase/agent-skills` | MIT (`LICENSE` per directory) | `skills/turso-db/`, `skills/turso-cloud/` |
+| `Leonxlnx/taste-skill`, `Leonxlnx/taste-skill-classics` | MIT | `references/ai-tells-design.md` — team-adapted, not verbatim |
 | `dgreenheck/webgpu-claude-skill` | MIT per the upstream README; no license file upstream | `skills/webgpu-threejs-tsl/` |
 
 Everything else in this repository — the lead skill, the seat definitions under
-`agents/`, the hooks, the first-party skills, and the reference documents — is
-original work under the MIT license above.
+`agents/`, the hooks, the first-party skills, and the reference documents not
+listed above — is original work under the MIT license above.
