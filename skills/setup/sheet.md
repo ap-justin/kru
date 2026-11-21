@@ -24,8 +24,8 @@ A slice reaching a stack no seat above covers is a question for the user, naming
 need — never a nearby seat pressed into the gap.
 ```
 
-**The browser-support line**, written into a repo that renders client-side web UI (`screens`), into
-whichever section of the host file already owns the repo's conventions. Modern Web Guidance
+**The browser-support line**, for a repo that renders client-side web UI (`screens`), goes into
+whichever section of the host file already owns the repo's conventions; Modern Web Guidance
 (`${CLAUDE_PLUGIN_ROOT}/SOURCES.md` → *Client-side web platform*) reads its wording:
 
 ```
@@ -53,7 +53,7 @@ that seat pair (Hono's is *Hono splits by what a route renders*).
 WebSocket room server, a renderer, an in-app SDK agent). It is the gate's evidence: a slice reaching an
 entry there asks the user.
 
-**Shared code is listed by path, never described.** A directory both sides import gets its backticked
+**Shared code is listed by path, never described.** A directory client and server both import gets its backticked
 paths on a seat line, because the routing above reads paths and a description matches nothing. Split
 it by what the files are, with the longest-match rule above: wire-contract files (the request,
 response and event types, the contract the server owns) go on the server seat's line; shared logic

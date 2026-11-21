@@ -51,7 +51,7 @@ before this step writes anything: step 4 overwrites the stamp, and step 6's repo
 | `skills` | the same manifests, run through **`${CLAUDE_PLUGIN_ROOT}/references/routing.md`** → *Conditional skills* | a seat reading `package.json` for its libraries on every dispatch — and the silence when a seat that never carried the skill writes against the library anyway |
 | `tokens` | the design system's file, and the gate that closes it (hook config, test script) | a builder's hunt for the `## Design system` pointer — and the from-scratch design chain, since a system already exists |
 | `screens` | whether this repo renders UI, and what starts its dev server | the screen passes and the PM's design-spec gate |
-| `uncovered` | every stack and path no seat above owns, each by path or stack name, found by reading the source tree against the seats the rows above named | a nearby seat pressed into a stack it doesn't own |
+| `uncovered` | the source tree, read against the seats the rows above named: every stack and path none of them owns | a nearby seat pressed into a stack it doesn't own |
 | `test` | the runner, its command, and **what a run costs** | rediscovering the repo's testing conventions |
 | `verify` | typecheck and lint commands | the behavior gate's generic form |
 | `mcp` | `claude mcp list` and `claude plugin list`, against the seats the rows above named and their **`${CLAUDE_PLUGIN_ROOT}/SOURCES.md`** rows | a seat reaching mid-run for a server this repo never enabled, and a dispatch spent finding that out |
@@ -237,8 +237,7 @@ per-machine and kept out of version control, and the repo's `.gitignore` is what
 
 Completion: every grant traces to evidence the derivation already produced, the `verify` skill
 matches the sheet's line, is the repo's own or is named as a gap for step 6, the memory path is
-ignored or named as a gap for step 6, and the report names what
-the team may now do unasked (step 6).
+ignored or named as a gap for step 6, and the report names what the team may now do unasked (step 6).
 
 ### 1e. Encode what the seats would otherwise be told — *full run*
 **`${CLAUDE_PLUGIN_ROOT}/references/lint-rules.md`** is the catalog of seat rules a check can hold. Take the rows whose stack
@@ -398,7 +397,8 @@ report: "since vX.Y.Z: new seat `<name>` matches `<signal>`" when the sheet's se
 yet, "since vX.Y.Z: changed seat `<name>` matches `<signal>`" when they do.
 
 **A new seat match moves only what that seat claims.** Take the paths and stacks the seat owns off the
-`uncovered` line; every other entry stays, each by its path or stack name. Shared directories are re-listed by path as `sheet.md` → *The answers* says.
+`uncovered` line and leave every other entry; a shared directory is re-listed by path, as `sheet.md` →
+*The answers* says.
 
 **The citations are what make a re-run an edit rather than a second copy.** Each derived line carries
 what it came from, so a re-run reads the file, re-derives, and edits the lines it can account for.
