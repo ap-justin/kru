@@ -83,7 +83,7 @@ Type and motion primitives, with the gotchas measured:
 - Icons are hand-drawn paths: no emoji, no icon fonts.
 - `word_reveal(str, x, y, t, t0, opts)`: per-word opacity ramp from about 40% to full at the pace *The discipline* states.
 - `morph(shape_a, shape_b, p)`: resample both outlines to one point count, then `lerp` the points.
-- `draw_on(path, p)`: a hairline drawn on with `setLineDash([len·p, len])`.
+- `draw_on(path, p)`: a hairline drawn on with `setLineDash([len·p, len])`, `len` measured from an off-screen `<path>`'s `getTotalLength()` (`Path2D` has none).
 - `bokeh(t)`: a few large soft discs, positions and sizes from `hash`, drifting slowly.
 - Camera punch on impacts is opt-in, off by default: `1 + a·exp(-8d)·|cos(22d)|`; the `abs` keeps it ≥ 1, or the canvas edge flashes.
 - A finishing pass: tiled film grain (overlay, faint, about 2–3% alpha, offset per frame via `hash`) and a soft vignette.
