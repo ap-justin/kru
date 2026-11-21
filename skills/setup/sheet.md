@@ -2,26 +2,44 @@
      `.claude/CLAUDE.md` in that file's own idiom. What each line says is derived from the repo; how
      it is laid out is derived from the host file. A repo's copy is a cache the next re-run rewrites. -->
 
-Two lines in the team section carry fixed wording, because each does a job its phrasing decides. **The pointer** — the
-one line that makes the sheet act rather than sit, since a session that never loads `lead` has
-answers and no practice:
+## Fixed wording
+
+Each fenced block in this section is a line written exactly, because the job it does is decided by its phrasing.
+This section is the one list `skills/text-fix/SKILL.md` reads, so a new fixed line is a new block here.
+
+**The pointer** — the one line that makes the sheet act rather than sit, since a session that never
+loads `lead` has answers and no practice:
 
 ```
 Load **`skills/lead/SKILL.md`** before building, reviewing, or dispatching a seat — it carries how the
 team works.
 ```
 
-And **the gate**, which decides what happens at the edge of those answers, since a nearby seat is
-always available and an uncovered slice otherwise routes itself:
+**The gate**, which decides what happens at the edge of those answers, since a nearby seat is
+always available and an uncovered slice otherwise routes itself. It closes the team section, below the
+seat lines and `uncovered`, because its "no seat above" reads them:
 
 ```
 A slice reaching a stack no seat above covers is a question for the user, naming the seat it would
 need — never a nearby seat pressed into the gap.
 ```
 
-Everything between them is this repo's answers, one line per key: the key, its value, then `←` and its derivation. The
+**The browser-support line**, for a repo that renders client-side web UI (`screens`), goes into
+whichever section of the host file already owns the repo's conventions; Modern Web Guidance
+(`${CLAUDE_PLUGIN_ROOT}/SOURCES.md` → *Client-side web platform*) reads its wording:
+
+```
+**Browser Support:** Baseline Widely available
+```
+
+Where the repo's `AGENTS.md` or `CLAUDE.md` already carries a `**Browser Support:**` line, leave it
+alone and write no second one: it is the repo's own policy, and a re-run must not reset it.
+
+## The answers
+
+Everything else in the team section is this repo's answers, one line per key: the key, its value, then `←` and its derivation. The
 fixed keys are setup step 1's fields, spelled as there: `project seats` · `skills` · `tokens` · `screens`
-· `test` · `verify` · `mcp`. A seat line's key is the one-word lane it owns in this repo (`routes`, `ui`,
+· `uncovered` · `test` · `verify` · `mcp`. A seat line's key is the one-word lane it owns in this repo (`routes`, `ui`,
 `data`, `api`), and the line itself names the seat. Each line cites what it was derived
 from — a manifest entry, or on a blank repo the decision standing in for one (`← decided 2026-09-04 · /setup`).
 A seat line names the directories its seat owns, each in backticks: the handoff gate checks every file
@@ -30,6 +48,16 @@ by path: the gate credits every backticked path on a seat line to that seat, and
 wins, so each seat line names only the paths it keeps, and the shared directory itself sits on the line
 of the seat that keeps the rest. The split follows the `${CLAUDE_PLUGIN_ROOT}/references/routing.md` tie-break for
 that seat pair (Hono's is *Hono splits by what a route renders*).
+
+**`uncovered`** is the line for what no seat owns, each entry a backticked path or a stack name (a
+WebSocket room server, a renderer, an in-app SDK agent). It is the gate's evidence: a slice reaching an
+entry there asks the user.
+
+**Shared code is listed by path, never described.** A directory client and server both import gets its backticked
+paths on a seat line, because the routing above reads paths and a description matches nothing. Split
+it by what the files are, with the longest-match rule above: wire-contract files (the request,
+response and event types, the contract the server owns) go on the server seat's line; shared logic
+both sides run goes on the line of a seat that owns it, or on `uncovered` by path.
 
 ## Renderings
 
@@ -62,7 +90,8 @@ manifest entry it came from (`${CLAUDE_PLUGIN_ROOT}/references/routing.md` → *
 ## The fields past the seats
 
 A repo whose own always-loaded docs already carry its commands, its token file and the gate that
-closes it **ends at the seats and their skills** — those are the repo's lines to state and the sheet's to leave alone.
+closes it **ends at the seats, their skills, `uncovered` and the gate line under them (*Fixed wording*)**; the commands, token
+file and token gate are the repo's lines to state and the sheet's to leave alone.
 Where one of them is genuinely unwritten anywhere, it joins in the same shape, with its evidence, in
 whichever section of the host file already owns that subject:
 
@@ -78,14 +107,3 @@ user-scope few named once as the set the repo inherits rather than repeated per 
 A cost line is the one field with no file to read it off, so it is the one to be most careful about:
 measure it or cite the config that sets it. A plausible cost asserted from the runner's reputation is
 the failure this shape invites — the sheet is read as derived fact on every later session.
-
-**The browser-support line** is the one field in a repo that renders client-side web UI (`screens`) whose
-wording Modern Web Guidance (`${CLAUDE_PLUGIN_ROOT}/SOURCES.md` → *Client-side web platform*) reads, so it is
-written exactly, into whichever section of the host file already owns the repo's conventions:
-
-```
-**Browser Support:** Baseline Widely available
-```
-
-Where the repo's `AGENTS.md` or `CLAUDE.md` already carries a `**Browser Support:**` line, leave it
-alone and write no second one: it is the repo's own policy, and a re-run must not reset it.

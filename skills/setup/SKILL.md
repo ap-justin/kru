@@ -29,6 +29,9 @@ it is a bigger hammer than the pruning needs.
 
 ## Do
 
+**A caller's write scope binds every file setup writes**; note each file it stops as you reach it, for
+step 6's report.
+
 ### 0. Load the standard
 **Load `writing-for-agents`.** Every line you write and every line you touch is always-loaded context
 in every session in this repo — the strictest tier that standard governs. Its `SKILL-MECHANICS.md` is
@@ -48,6 +51,7 @@ before this step writes anything: step 4 overwrites the stamp, and step 6's repo
 | `skills` | the same manifests, run through **`${CLAUDE_PLUGIN_ROOT}/references/routing.md`** → *Conditional skills* | a seat reading `package.json` for its libraries on every dispatch — and the silence when a seat that never carried the skill writes against the library anyway |
 | `tokens` | the design system's file, and the gate that closes it (hook config, test script) | a builder's hunt for the `## Design system` pointer — and the from-scratch design chain, since a system already exists |
 | `screens` | whether this repo renders UI, and what starts its dev server | the screen passes and the PM's design-spec gate |
+| `uncovered` | the source tree read against the seats the rows above named — every stack and path none of them owns | a nearby seat pressed into a stack it doesn't own |
 | `test` | the runner, its command, and **what a run costs** | rediscovering the repo's testing conventions |
 | `verify` | typecheck and lint commands | the behavior gate's generic form |
 | `mcp` | `claude mcp list` and `claude plugin list`, against the seats the rows above named and their **`${CLAUDE_PLUGIN_ROOT}/SOURCES.md`** rows | a seat reaching mid-run for a server this repo never enabled, and a dispatch spent finding that out |
@@ -87,7 +91,8 @@ same fields as above minus the skill pin. The lockfile is the evidence either wa
 Completion: every field carries a value with its derivation, or is absent — because this repo has no
 answer for it, or because the repo's own docs already are the answer (step 2); every repo-held recipe a
 plugin skill lacks has an inbox line; every package a major behind its skill's pin has a todo line, and
-every other outdated one is on the catch-up line or its own major's.
+every other outdated one is on the catch-up line or its own major's. A line the write scope stopped
+meets the criterion once it is named as a gap for step 6.
 
 ### 1b. Blank repo — grill, then deploy — *full run*
 Nothing on disk answers step 1, so the PM's task carries the subject and stack, or setup grills one
@@ -231,8 +236,8 @@ per-machine and kept out of version control, and the repo's `.gitignore` is what
 .claude/agent-memory-local/x` answers that), so the first `git add -A` after a build leaves it behind.
 
 Completion: every grant traces to evidence the derivation already produced, the `verify` skill
-matches the sheet's line or is the repo's own, the memory path is ignored, and the report names what
-the team may now do unasked (step 6).
+matches the sheet's line, is the repo's own or is named as a gap for step 6, the memory path is
+ignored or named as a gap for step 6, and the report names what the team may now do unasked (step 6).
 
 ### 1e. Encode what the seats would otherwise be told — *full run*
 **`${CLAUDE_PLUGIN_ROOT}/references/lint-rules.md`** is the catalog of seat rules a check can hold. Take the rows whose stack
@@ -241,7 +246,8 @@ step 1 found, diff each against the repo's own config (`biome.json` rules and `p
 and file each unwired row as a slice for its owner — a lint rule is the team's call, not the
 user's, and setup's part ends at the filing. The report counts them in one clause.
 
-Completion: every catalog row for this stack is wired or filed as a slice for its owner.
+Completion: every catalog row for this stack is wired, filed as a slice for its owner, or named as a
+gap for step 6.
 
 ### 2. Read what the repo already says
 Open the repo's `CLAUDE.md`, `.claude/CLAUDE.md`, `.claude/rules/*`, `AGENTS.md`, and any nested
@@ -365,6 +371,10 @@ repo had never written down, and what the team may now do without asking (step 1
 The pass's edits, filed lint slices and inbox lines ride as one counted
 clause ("plus 6 cleanups to the project notes"); the diff is there if asked.
 
+**Every file setup would write but was told not to is a gap, named in the return** with its path and
+the limit that stopped it (`.gitignore`: write scope limited to `.claude/`). A skipped `verify` skill,
+seat or skill file counts the same, each named on its own line.
+
 Completion: before you send it, check yourself — every line that went in traces to a derivation, and
 every line that came out to the file that answers it. That accounting is your check, not the report's
 content.
@@ -385,6 +395,10 @@ Compare the sheet's stamp (`<!-- kru vX.Y.Z`, step 4) with the installed `VERSIO
 and whose detection signal matches this repo — the same check step 1 runs — write one line for step 6's
 report: "since vX.Y.Z: new seat `<name>` matches `<signal>`" when the sheet's seat lines don't name it
 yet, "since vX.Y.Z: changed seat `<name>` matches `<signal>`" when they do.
+
+**A new seat match moves only what that seat claims.** Take the paths and stacks the seat owns off the
+`uncovered` line and leave every other entry; a shared directory is re-listed by path, as `sheet.md` →
+*The answers* says.
 
 **The citations are what make a re-run an edit rather than a second copy.** Each derived line carries
 what it came from, so a re-run reads the file, re-derives, and edits the lines it can account for.
