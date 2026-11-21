@@ -37,7 +37,7 @@ Return: {what the lead gets back — paths, commands run, what the next seat sti
 
 Required on every seat that **writes or edits TypeScript**. `python-developer` and `zig-developer` are the code-writing seats outside it — their artifacts are Python and Zig with their packaging, with no TS surface at all, so there is nothing for the block to bind; each carries Block I on its own, and the `Comments`-follows-`TypeScript` grep is unaffected because it never enters that grep's input set.
 
-Full form (23 seats — the default for any seat writing app code; re-derive with `grep -lc 'cheat-sheet baseline' agents/*.md` rather than trusting this number):
+Full form (25 seats — the default for any seat writing app code; re-derive with `grep -lc 'cheat-sheet baseline' agents/*.md` rather than trusting this number):
 
 ```
 ## TypeScript (shared skill)
@@ -129,7 +129,7 @@ Your context is your own; the lead's is the scarce one, and it pays for every wo
 
 ## Block D — `## Test-first (shared skill)`
 
-Required on every seat that implements **executable behavior with a specifiable contract** (22 seats: the four framework builders, `go-fullstack-builder`, `cloudflare-builder`, `hono-builder`, both data architects, `turso-specialist`, `better-auth-specialist`, `stripe-specialist`, `paypal-specialist`, `chariot-specialist`, `nowpayments-specialist`, `quickbooks-specialist`, `zapier-specialist`, `web-components-builder`, `python-developer`, `node-developer`, `zig-developer`, `extension-builder`).
+Required on every seat that implements **executable behavior with a specifiable contract** (23 seats: the four framework builders, `go-fullstack-builder`, `cloudflare-builder`, `hono-builder`, `express-builder`, both data architects, `turso-specialist`, `better-auth-specialist`, `stripe-specialist`, `paypal-specialist`, `chariot-specialist`, `nowpayments-specialist`, `quickbooks-specialist`, `zapier-specialist`, `web-components-builder`, `python-developer`, `node-developer`, `zig-developer`, `extension-builder`).
 
 **Exempt by decision** — record the reason, don't just omit:
 - `react-ui-builder`, `svelte-ui-builder`, `hono-ui-builder` — you can't go red on a layout or a motion curve; pixels and motion on the preview are **PM acceptance** (lead Step 5), not tests in your run. Logic-dense component internals (a reducer, validation rules) route to `test-writer` after the build.
@@ -171,7 +171,7 @@ What you verify before return is whatever a user could **not** confirm by using 
 
 ## Block F — `## Scope — build the real path, not every path`
 
-Required on every seat that **writes app code** (the four framework builders, `go-fullstack-builder`, `cloudflare-builder`, `hono-builder`, `sanity-builder`, both data architects, `turso-specialist`, `better-auth-specialist`, `stripe-specialist`, `paypal-specialist`, `chariot-specialist`, `nowpayments-specialist`, `quickbooks-specialist`, `zapier-specialist`, the four UI component builders, `python-developer`, `node-developer`, `zig-developer`, `extension-builder`, `motion-designer`). Reviewers, config seats and the two text-producing seats don't build, so there is no breadth to bound.
+Required on every seat that **writes app code** (the four framework builders, `go-fullstack-builder`, `cloudflare-builder`, `hono-builder`, `express-builder`, `sanity-builder`, both data architects, `turso-specialist`, `better-auth-specialist`, `stripe-specialist`, `paypal-specialist`, `chariot-specialist`, `nowpayments-specialist`, `quickbooks-specialist`, `zapier-specialist`, the four UI component builders, `python-developer`, `node-developer`, `zig-developer`, `extension-builder`, `motion-designer`). Reviewers, config seats and the two text-producing seats don't build, so there is no breadth to bound.
 
 ```
 ## Scope — build the real path, not every path
@@ -202,7 +202,7 @@ Required on the seats whose output **renders** (11 seats: the four framework bui
 - `vercel-perf-optimizer` — measuring a running app **is** the job; `## Prove the win` is its version of this rule.
 - `motion-designer` — rendering a project and reading its frames **is** the job. It carries its own `## Build and return — no self-dispatch`: the no-spawn bullet and the PM-acceptance pointer, with the render and contact sheets allowed.
 - `toolchain-engineer`, `vercel-platform-engineer`, `fly-platform-engineer` — config; nothing renders to be tempted by.
-- the data/auth/billing specialists, `python-developer`, `node-developer`, `zig-developer`, `extension-builder` and `hono-builder` — no rendered surface, and their gate is the suite (Block D). The Python, Node, Zig, extension and Hono seats carry the never-boot clause anyway, tailored: `zig-developer` verifies a process that stays up with a test that spawns it, drives it over its pipes and asserts on its exit, never a long-running binary, `--watch` or `--fuzz` left going; an MCP server is verified by calling its tools in-process from a test, never by launching it and driving a client, a long-running Node process by a test that spawns it, signals it and asserts on its exit, a Vite plugin through Vite's JavaScript API rather than a dev server, and a Hono app through `app.request()` and the Hono CLI, both in-process.
+- the data/auth/billing specialists, `python-developer`, `node-developer`, `zig-developer`, `extension-builder`, `hono-builder` and `express-builder` — no rendered surface, and their gate is the suite (Block D). The Python, Node, Zig, extension, Hono and Express seats carry the never-boot clause anyway, tailored: `express-builder` drives the exported `app` in-process with a test client, never a listening socket left open; `zig-developer` verifies a process that stays up with a test that spawns it, drives it over its pipes and asserts on its exit, never a long-running binary, `--watch` or `--fuzz` left going; an MCP server is verified by calling its tools in-process from a test, never by launching it and driving a client, a long-running Node process by a test that spawns it, signals it and asserts on its exit, a Vite plugin through Vite's JavaScript API rather than a dev server, and a Hono app through `app.request()` and the Hono CLI, both in-process.
 - reviewers and the two text-producing seats — they don't build.
 
 **Invariant clauses:**
@@ -214,7 +214,7 @@ Required on the seats whose output **renders** (11 seats: the four framework bui
 
 ## Block H — `## Match the repo`
 
-Required on the seats that write app code **into an existing tree** (16 seats: the four framework builders, `go-fullstack-builder`, `hono-builder`, the four UI component builders, `sanity-builder`, `vercel-perf-optimizer`, `python-developer`, `node-developer`, `zig-developer`, `extension-builder`). The specialists that own a whole layer (data, auth, billing, platform, toolchain) carry their own brownfield rule instead — `toolchain-engineer`'s "match the repo's actual package manager" is that rule, and converging it onto this block would lose the package-manager specifics.
+Required on the seats that write app code **into an existing tree** (17 seats: the four framework builders, `go-fullstack-builder`, `hono-builder`, `express-builder`, the four UI component builders, `sanity-builder`, `vercel-perf-optimizer`, `python-developer`, `node-developer`, `zig-developer`, `extension-builder`). The specialists that own a whole layer (data, auth, billing, platform, toolchain) carry their own brownfield rule instead — `toolchain-engineer`'s "match the repo's actual package manager" is that rule, and converging it onto this block would lose the package-manager specifics.
 
 ```
 ## Match the repo
@@ -265,7 +265,7 @@ Required on the four **UI component builders** (`react-ui-builder`, `svelte-ui-b
 
 ## Block K — `## Validation and forms (the repo's libraries)`
 
-Required on the six **network-boundary seats** (`nextjs-builder`, `react-router-builder`, `tanstack-start-builder`, `sveltekit-builder`, `cloudflare-builder`, `hono-builder`) — the seats that own a parse boundary. One section per seat whatever the library: the library choice is a repo fact the brief carries (`references/routing.md` → *Conditional skills*), and each library's traps live in its own skill, so a new conditional skill adds a routing row and touches no seat.
+Required on the seven **network-boundary seats** (`nextjs-builder`, `react-router-builder`, `tanstack-start-builder`, `sveltekit-builder`, `cloudflare-builder`, `hono-builder`, `express-builder`) — the seats that own a parse boundary. One section per seat whatever the library: the library choice is a repo fact the brief carries (`references/routing.md` → *Conditional skills*), and each library's traps live in its own skill, so a new conditional skill adds a routing row and touches no seat.
 
 ```
 ## Validation and forms (the repo's libraries)
@@ -277,7 +277,7 @@ Before a parse boundary or a form action, load the skill for this repo's schema 
 - ⚠ ``the brief names them, `package.json` when it doesn't`` — the brief is the sheet's answer; `package.json` is the environment for a direct spawn or a repo with no sheet.
 - `Parse once at the edge and pass the parsed value inward` — the seat's own invariant, which no library skill states because none owns the route.
 
-**Tailored slots**: `{framework}` in the wiring clause, and `{the seat's edges}`. `cloudflare-builder` and `hono-builder` have no form library: their heading is `## Validation at the boundary (the repo's schema library)`, the form-action trigger and the wiring clause drop, and the edge sentence reads ``Parse once in the `fetch` handler and pass the parsed value inward; bundle size decides the import on a Worker, and the skill carries the numbers.`` on `cloudflare-builder`, and names the route's validator middleware and `c.req.valid()` on `hono-builder`.
+**Tailored slots**: `{framework}` in the wiring clause, and `{the seat's edges}`. `cloudflare-builder`, `hono-builder` and `express-builder` have no form library: their heading is `## Validation at the boundary (the repo's schema library)`, the form-action trigger and the wiring clause drop, and the edge sentence reads ``Parse once in the `fetch` handler and pass the parsed value inward; bundle size decides the import on a Worker, and the skill carries the numbers.`` on `cloudflare-builder`, and names the route's validator middleware and `c.req.valid()` on `hono-builder`, and the route's validation middleware and the handler's read of only the parsed value on `express-builder`.
 
 ## Block L — the props-contract handback bullet
 
@@ -311,7 +311,7 @@ Required on the four **UI component builders** (`react-ui-builder`, `svelte-ui-b
 
 ## Block N — `## Exhaust the {library|tool|platform|database} before you write around it`
 
-Required on every seat that **writes code or config** (31 seats: Block F's 27 plus the four config seats — `toolchain-engineer`, `vercel-platform-engineer`, `fly-platform-engineer`, `vercel-perf-optimizer`, whose `turbo.json` / `vercel.json` / `fly.toml` / caching surfaces hand-roll the same way app code does). Reviewers and the two text-producing seats don't build.
+Required on every seat that **writes code or config** (32 seats: Block F's 28 plus the four config seats — `toolchain-engineer`, `vercel-platform-engineer`, `fly-platform-engineer`, `vercel-perf-optimizer`, whose `turbo.json` / `vercel.json` / `fly.toml` / caching surfaces hand-roll the same way app code does). Reviewers and the two text-producing seats don't build.
 
 It sits **immediately after the seat's official-source section** (`## Official source first` · `## Consult current docs` · `## Always consult the source of truth`) — it's a trigger for that same lookup, and `the source chain above` resolves only there.
 
@@ -333,7 +333,7 @@ Reaching to hand-write something — {four examples from this seat's surface} �
 
 ## Block O — `## The return pass`
 
-Required on the same 31 seats as Block N — every seat that **writes code or config**. Reviewers and the two text-producing seats don't build, so there is no slice to read back; `code-reviewer` carries the **read side** instead (below).
+Required on the same 32 seats as Block N — every seat that **writes code or config**. Reviewers and the two text-producing seats don't build, so there is no slice to read back; `code-reviewer` carries the **read side** instead (below).
 
 **Exempt by decision** — record the reason, don't just omit:
 - `test-writer` — its completion criterion is already hard and external (*the suite is green*), and a green suite is the one bound that resists premature completion without being asked to. It writes tests, not app code, which is also why it sits outside Blocks F and N.
@@ -383,7 +383,7 @@ Required on every seat whose source chain **leads with an MCP server or a plugin
 
 ## Block Q — `## Memory (this repo's facts)`
 
-Required on the 32 seats that **write code or config into the working repo** — Block O's 31 plus `test-writer`, whose repo-specific suite quirks are the facts most worth keeping. Each carries `memory: local` in its frontmatter, and the harness supplies the directory, its read/write instructions and the index on every run. What it can't supply is where a fact goes on *this* team, which is the whole block.
+Required on the 33 seats that **write code or config into the working repo** — Block O's 32 plus `test-writer`, whose repo-specific suite quirks are the facts most worth keeping. Each carries `memory: local` in its frontmatter, and the harness supplies the directory, its read/write instructions and the index on every run. What it can't supply is where a fact goes on *this* team, which is the whole block.
 
 **Exempt by decision** — record the reason, don't just omit:
 - reviewers and auditors — `memory` grants `Write`/`Edit`, and *reports; does not edit* is their contract. A recurring finding still reaches the team as an inbox line.
@@ -409,7 +409,7 @@ Write to your memory only what the next run in this repo would otherwise pay to 
 
 ## Block R — `## Design for what they'll actually do`
 
-Required on **every seat** (40 — `ls agents/*.md | wc -l`). Config and tooling seats included: an operator, a maintainer or the next builder acts on their output too, and every seat is itself an actor with a payoff. It sits **immediately before the seat's first `## ` section**, after the opening paragraph — it frames how the rest of the prompt is read, so it comes before any of it.
+Required on **every seat** (41 — `ls agents/*.md | wc -l`). Config and tooling seats included: an operator, a maintainer or the next builder acts on their output too, and every seat is itself an actor with a payoff. It sits **immediately before the seat's first `## ` section**, after the opening paragraph — it frames how the rest of the prompt is read, so it comes before any of it.
 
 The block is the principle; the **`incentives`** skill holds the per-domain recipes and the sources. Block F is this principle's scope case and stays as written — Block R grounds it and never restates it, so a copy that adds a scope sentence here is drift.
 
