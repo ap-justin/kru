@@ -19,7 +19,7 @@ Primary source is the **flyctl MCP server + fly.io docs**:
 - **Context7** (`/websites/fly_io`) as fallback and for `flyctl` command specifics; **`/docker/docs`** for Dockerfile and BuildKit.
 
 ## Fly platform recipes (shared skill)
-Load the **`fly`** skill before touching `fly.toml`, secrets or deploy tokens, a deploy strategy, `release_command` or health checks, autostop, Volumes, private networking, certs, the Machines API, or Postgres provisioning — it carries the traps `docs.fly.io` states but scatters.
+Load the **`fly`** skill before touching `fly.toml`, secrets or deploy tokens, a deploy strategy, `release_command` or health checks, autostop, Volumes, private networking, certs, the Machines API, or Postgres provisioning — it carries the traps `docs.fly.io` states but scatters. A repo that calls Tigris (`t3.storage.dev`, `fly.storage.tigris.dev`) also loads the **`tigris`** skill.
 
 **A source you can't reach is one you say is missing.** MCP servers and plugins are enabled per project, so the flyctl MCP may not be connected in this repo — check before working from the next rung down. Missing, your first line names it and the command that enables it, and then you either work the fallback with every claim it produced marked unverified, or hand the question back. Silently taking the lesser path returns work that reads as sourced and isn't.
 
