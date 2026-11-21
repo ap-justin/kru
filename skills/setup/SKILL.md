@@ -348,7 +348,8 @@ Completion: the section reads as though the file's own author wrote it, and the 
 installed `VERSION`.
 
 ### 5. Write, returning product cuts to the PM
-`.claude/CLAUDE.md` is checked in and read by everyone who clones the repo — teammates without this
+**A caller's write scope binds every file in steps 1c–5**, and a file the scope stops is a gap in the
+return (step 6), never a silent skip: note it as you reach it. `.claude/CLAUDE.md` is checked in and read by everyone who clones the repo — teammates without this
 plugin included, and the hand that wrote whatever you are proposing to cut. The sheet's lines and the
 pass's edits that cut a copy another file answers are the team's: write them. Before cutting a rule
 a human authored whose only copy is here, **return one question** — in their words, with what dropping
@@ -364,6 +365,10 @@ will do differently for it — the seats this repo runs, anything the derivation
 repo had never written down, and what the team may now do without asking (step 1d) in one line.
 The pass's edits, filed lint slices and inbox lines ride as one counted
 clause ("plus 6 cleanups to the project notes"); the diff is there if asked.
+
+**Every file setup would write but was told not to is a gap, named in the return** with its path and
+the limit that stopped it (`.gitignore`: write scope limited to `.claude/`). A skipped `verify` skill,
+seat or skill file counts the same, and none is folded into a count.
 
 Completion: before you send it, check yourself — every line that went in traces to a derivation, and
 every line that came out to the file that answers it. That accounting is your check, not the report's
@@ -385,6 +390,10 @@ Compare the sheet's stamp (`<!-- kru vX.Y.Z`, step 4) with the installed `VERSIO
 and whose detection signal matches this repo — the same check step 1 runs — write one line for step 6's
 report: "since vX.Y.Z: new seat `<name>` matches `<signal>`" when the sheet's seat lines don't name it
 yet, "since vX.Y.Z: changed seat `<name>` matches `<signal>`" when they do.
+
+**A new seat match moves only what that seat claims.** Take the paths and stacks the seat owns off the
+`uncovered` row; every other entry stays, each by its path or stack name. A seat that matches part of
+the stack never replaces the row. Shared directories are re-listed by path as `sheet.md` says.
 
 **The citations are what make a re-run an edit rather than a second copy.** Each derived line carries
 what it came from, so a re-run reads the file, re-derives, and edits the lines it can account for.
