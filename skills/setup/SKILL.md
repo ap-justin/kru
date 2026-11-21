@@ -29,6 +29,9 @@ it is a bigger hammer than the pruning needs.
 
 ## Do
 
+**A caller's write scope binds every file setup writes**; note each file it stops as you reach it, for
+step 6's report.
+
 ### 0. Load the standard
 **Load `writing-for-agents`.** Every line you write and every line you touch is always-loaded context
 in every session in this repo — the strictest tier that standard governs. Its `SKILL-MECHANICS.md` is
@@ -232,7 +235,8 @@ per-machine and kept out of version control, and the repo's `.gitignore` is what
 .claude/agent-memory-local/x` answers that), so the first `git add -A` after a build leaves it behind.
 
 Completion: every grant traces to evidence the derivation already produced, the `verify` skill
-matches the sheet's line or is the repo's own, the memory path is ignored, and the report names what
+matches the sheet's line, is the repo's own or is named as a gap for step 6, the memory path is
+ignored or named as a gap for step 6, and the report names what
 the team may now do unasked (step 6).
 
 ### 1e. Encode what the seats would otherwise be told — *full run*
@@ -349,9 +353,6 @@ Completion: the section reads as though the file's own author wrote it, and the 
 installed `VERSION`.
 
 ### 5. Write, returning product cuts to the PM
-**A caller's write scope binds every file in steps 1c–5**; note each file it stops as you reach it, for
-step 6's return.
-
 `.claude/CLAUDE.md` is checked in and read by everyone who clones the repo — teammates without this
 plugin included, and the hand that wrote whatever you are proposing to cut. The sheet's lines and the
 pass's edits that cut a copy another file answers are the team's: write them. Before cutting a rule
@@ -395,7 +396,7 @@ report: "since vX.Y.Z: new seat `<name>` matches `<signal>`" when the sheet's se
 yet, "since vX.Y.Z: changed seat `<name>` matches `<signal>`" when they do.
 
 **A new seat match moves only what that seat claims.** Take the paths and stacks the seat owns off the
-`uncovered` row; every other entry stays, each by its path or stack name. Shared directories are re-listed by path as `sheet.md` says.
+`uncovered` line; every other entry stays, each by its path or stack name. Shared directories are re-listed by path as `sheet.md` → *The answers* says.
 
 **The citations are what make a re-run an edit rather than a second copy.** Each derived line carries
 what it came from, so a re-run reads the file, re-derives, and edits the lines it can account for.

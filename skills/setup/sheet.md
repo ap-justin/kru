@@ -16,7 +16,8 @@ team works.
 ```
 
 **The gate**, which decides what happens at the edge of those answers, since a nearby seat is
-always available and an uncovered slice otherwise routes itself:
+always available and an uncovered slice otherwise routes itself. It closes the team section, below the
+seat lines and `uncovered`, because its "no seat above" reads them:
 
 ```
 A slice reaching a stack no seat above covers is a question for the user, naming the seat it would
@@ -89,7 +90,7 @@ manifest entry it came from (`${CLAUDE_PLUGIN_ROOT}/references/routing.md` → *
 ## The fields past the seats
 
 A repo whose own always-loaded docs already carry its commands, its token file and the gate that
-closes it **ends at the seats and their skills** — those are the repo's lines to state and the sheet's to leave alone.
+closes it **ends at the seats, their skills and `uncovered`** — those are the repo's lines to state and the sheet's to leave alone.
 Where one of them is genuinely unwritten anywhere, it joins in the same shape, with its evidence, in
 whichever section of the host file already owns that subject:
 
