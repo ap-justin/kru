@@ -5,8 +5,7 @@
 ## Fixed wording
 
 Each fenced block in this section is a line written exactly, because the job it does is decided by its phrasing.
-This section is the one list `skills/text-fix/SKILL.md` reads: a line in a repo's sheet copy that matches a
-block here stays as written. A new fixed line is a new block here, and nowhere else.
+This section is the one list `skills/text-fix/SKILL.md` reads, so a new fixed line is a new block here.
 
 **The pointer** — the one line that makes the sheet act rather than sit, since a session that never
 loads `lead` has answers and no practice:

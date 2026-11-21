@@ -28,7 +28,7 @@ Four classes of text, four standards, and a real target almost always carries mo
 
 4. **The three `-fix` standards carry their own bounds. The agent-doc rows are a standard rather than a pass, so the bounds are here.** Cut what the bars and the levers name: no-ops, duplication, a re-authored rule whose home is elsewhere, cheap caches of what the environment already answers, stale lines, self-description, a prohibition where the positive target reads better, a pointer whose wording is too weak to fire it. Two things stay: **frontmatter `name` and `disable-model-invocation`**, which are API rather than prose — a `description` is prose and in scope — and a **vendored body**, upstream's text, whose disclosed deviations are the only part that is ours.
 
-   **Fixed wording stays fixed.** In a repo's sheet copy, a line matching a block under `${CLAUDE_PLUGIN_ROOT}/skills/setup/sheet.md` → *Fixed wording* (the pointer, the gate, the browser-support line) is left as written, and the report names each one left. One list in the file that owns the lines is the smallest mechanism that holds: it needs no marker to copy into repos and no second copy to drift.
+   **Fixed wording stays fixed.** In a repo's sheet copy, a line matching a block under `${CLAUDE_PLUGIN_ROOT}/skills/setup/sheet.md` → *Fixed wording* (the pointer, the gate, the browser-support line) is left as written, and the report names each one left.
 
    A **sprawl** call — a document simply too long, whose cure is splitting by branch or disclosing reference behind a pointer — goes in the report. Restructuring a document the whole repo reads is a design call, and this pass changes wording.
 
