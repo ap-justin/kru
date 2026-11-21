@@ -13,13 +13,12 @@
 # stands; anything unparsed keeps it, because a miss here is a silent ungated
 # build and a false gate costs one message.
 #
-# it fires once per session: a gated call that blocks, or fails open on an
-# unreadable transcript, marks the session, and no later call is judged. a call
-# that passes because the contract is loaded leaves no mark, so each later call
-# reads the transcript again and finds the same load. a /kru: command in flight
-# exempts its calls without marking, so the first gated call of a plain turn
-# after it still decides. a session that declines is nagged no further, and a
-# subagent's own tool call never trips a gate meant for the lead.
+# it fires once per session: a gated call that blocks, fails open on an
+# unreadable transcript, or passes because the contract is loaded marks the
+# session, and no later call is judged or re-reads the transcript. a /kru:
+# command in flight exempts its calls without marking, so the first gated call
+# of a plain turn after it still decides. a session that declines is nagged no
+# further, and a subagent's own tool call never trips a gate meant for the lead.
 #
 # fail open on anything that isn't a clear miss. kill switch: touch the file
 # the resolver's `lead-gate/off`. a marker file rather than a flag alone, because
@@ -65,7 +64,14 @@ sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
 mark_dir="$(kru_path lead-gate)"
 mark="$mark_dir/$sid"
 [ -e "$mark" ] && exit 0
-mark_session() { mkdir -p "$mark_dir" 2>/dev/null && : > "$mark" 2>/dev/null; }
+# every session that reaches a verdict leaves a mark and nothing else reads an
+# old one; pruning here runs once per session, off the marked fast path. the
+# kill switch and any dotfile share the dir and are not marks
+mark_session() {
+  mkdir -p "$mark_dir" 2>/dev/null || return
+  find "$mark_dir" -maxdepth 1 -type f ! -name off ! -name '.*' -mtime +7 -delete 2>/dev/null
+  : > "$mark" 2>/dev/null
+}
 transcript=$(printf '%s' "$input" | jq -r '.transcript_path // empty' 2>/dev/null)
 [ -r "$transcript" ] || { mark_session; exit 0; }
 
@@ -94,7 +100,7 @@ lead_loaded=$(jq -rn --arg base "${read_base%/}/" "$read_lead_path"'
       (.message.content | test("<command-name>/?kru:(lead|designer)</command-name>")))
   )
 ' "$transcript" 2>/dev/null)
-[ "$lead_loaded" = "true" ] && exit 0
+[ "$lead_loaded" = "true" ] && { mark_session; exit 0; }
 
 # a /kru:<skill> run is that skill's contract, not the lead's — the ones
 # that dispatch load lead themselves. exempt only while the command is still the

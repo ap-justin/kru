@@ -229,6 +229,30 @@ check refuse Edit "" "$tx/cmd-then-turn.jsonl" seat2
 check allow Edit "" "$tx/cmd-latest.jsonl" cmdfirst
 check refuse Edit "" "$tx/cmd-then-turn.jsonl" cmdfirst
 
+# a call that passes because the lead is loaded marks the session, so a later call
+# passes on the mark alone: the same session id against a transcript with no load
+mark_is() { # <present|absent> <sid> <label>
+  local want=$1 sid=$2
+  if { [ "$want" = present ] && [ -e "$home/.kru/lead-gate/$sid" ]; } || { [ "$want" = absent ] && [ ! -e "$home/.kru/lead-gate/$sid" ]; }; then pass=$((pass + 1)); else
+    fail=$((fail + 1)); printf 'FAIL: %s (mark for %s should be %s)\n' "$3" "$sid" "$want"; fi
+}
+check allow Edit "" "$tx/lead.jsonl" loaded
+mark_is present loaded "a call passing on a loaded lead left no mark"
+check allow Edit "" "$p" loaded
+# a subagent's call has no verdict to give and leaves no mark, so the lead's own
+# first call in that session is still gated
+agent_id=a1b2c3 check allow Edit "" "$p" subfirst
+mark_is absent subfirst "a subagent call marked the session"
+check refuse Edit "" "$p" subfirst
+mark_is present subfirst "the lead's blocked call left no mark"
+# writing a mark prunes marks older than a week, and nothing else in the dir
+touch -d '8 days ago' "$home/.kru/lead-gate/stale" "$home/.kru/lead-gate/.keep"
+touch "$home/.kru/lead-gate/fresh"
+check allow Edit "" "$tx/lead.jsonl" pruner
+mark_is absent stale "a mark older than a week was not pruned"
+mark_is present fresh "a fresh mark was pruned"
+mark_is present .keep "an old file that is not a session mark was pruned"
+
 # read-only bash is an inspection
 check allow Bash "ls" "$p"
 check allow Bash "ls -la hooks" "$p"
@@ -285,7 +309,8 @@ check refuse Edit "" "$tx/cmd-meta-then-turn.jsonl"
 check allow Edit "" "$sandbox/missing.jsonl"
 input=$(jq -nc --arg p "$p" '{transcript_path:$p, tool_name:"Edit", tool_input:{}}')
 out=$(printf '%s' "$input" | env -u KRU_HOME -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_STORE_REPO -u CLAUDE_CODE_REMOTE -u KRU_NO_LEAD_GATE -u CLAUDE_PLUGIN_OPTION_KRU_NO_LEAD_GATE HOME="$home" bash "$hook" "$root" 2>&1); code=$?
-if [ "$code" -eq 0 ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (allow, exit %s): missing session_id\n  %s\n' "$code" "$out"; fi
+# no session to judge: silent pass
+if [ "$code" -eq 0 ] && [ -z "$out" ]; then pass=$((pass + 1)); else fail=$((fail + 1)); printf 'FAIL (allow, exit %s): missing session_id should pass silently\n  %s\n' "$code" "$out"; fi
 # a root with the store resolver but no lead skill: the plain transcript would be
 # gated, so a pass here is the skill check's
 bare="$sandbox/bareroot"; mkdir -p "$bare" && ln -s "$root/scripts" "$bare/scripts"

@@ -12,7 +12,7 @@ Read from `https://api.webstatus.dev/v1/features/<id>` on 2026-11-14. Recompute 
 | `inert` | Widely (2023-04-11) | hidden SPA views |
 | `event-timing` | Newly (2025-12-12) | INP and its subparts |
 | `scrollend` | Newly (2025-12-12) | deferring work to the end of a scroll |
-| `scheduler` | Limited: Chromium 129+, Firefox 142+, no Safari | `postTask`, `yield` |
+| `scheduler` | Limited: `postTask` Chromium 94+, `yield` Chromium 129+, both Firefox 142+, no Safari | `postTask`, `yield` |
 | `long-animation-frames` | Limited: Chromium 123+ only | script attribution |
 | `speculation-rules` | Limited: Chromium 109+ only | prefetch, prerender |
 | `blocking-render` | Limited: Chromium 105+, Safari 18.2+, no Firefox | flicker-free experiments |

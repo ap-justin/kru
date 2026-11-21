@@ -196,5 +196,29 @@ sheet_check kru:react-ui-builder "Build the card in \`packages/ui/card.tsx\`; re
 # the gate stays out of unknown seats
 check allow general-purpose "Preserve existing comments in the file."
 
+# the supplied report path carries the store's slug (scripts/kru-store.sh), not the directory name
+mkrepo() { git init -q "$sandbox/$1" && { [ -z "${2:-}" ] || git -C "$sandbox/$1" remote add origin "$2"; }; }
+mkrepo clone-a https://github.com/acme/widgets.git
+mkrepo clone-b git@github.com:acme/gadgets.git
+mkrepo clone-c
+mkdir -p "$sandbox/clone-a/src/deep" "$sandbox/plain" "$sandbox/pinned-dir"
+# slug_is <name> <want> <cwd> [VAR=value...]
+slug_is() {
+  local name=$1 want=$2 cwd=$3 out; shift 3
+  out=$(jq -nc --arg c "$cwd" '{session_id:"slug", cwd:$c, tool_input:{subagent_type:"kru:code-reviewer", prompt:"Review the diff. inbox.md", description:"t"}}' |
+    env -u KRU_HOME -u KRU_PROJECT -u KRU_PROJECT_STORE -u KRU_STORE_URL -u KRU_NO_GATE -u CLAUDE_PROJECT_DIR -u CLAUDE_PLUGIN_ROOT \
+      HOME="$sandbox/home" "$@" bash "$hook" "$root" 2>&1)
+  if printf '%s' "$out" | grep -qF "/kru-review/$want/code-reviewer-t.md"; then pass=$((pass + 1)); else
+    fail=$((fail + 1)); printf 'FAIL (slug): %s — want %s in\n  %s\n' "$name" "$want" "$out"; fi
+}
+slug_is "https origin names the repo" widgets "$sandbox/clone-a"
+slug_is "a subdirectory reads as its repo" widgets "$sandbox/clone-a/src/deep"
+slug_is "ssh origin names the repo" gadgets "$sandbox/clone-b"
+slug_is "no origin falls back to the directory name" clone-c "$sandbox/clone-c"
+slug_is "KRU_PROJECT pins the slug" pinned "$sandbox/clone-a" KRU_PROJECT=pinned
+slug_is "outside a repo CLAUDE_PROJECT_DIR names it" pinned-dir "$sandbox/plain" CLAUDE_PROJECT_DIR="$sandbox/pinned-dir"
+slug_is "leaked GIT_DIR and GIT_WORK_TREE are ignored" widgets "$sandbox/clone-a" \
+  GIT_DIR="$sandbox/clone-b/.git" GIT_WORK_TREE="$sandbox/clone-b"
+
 printf '%d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]

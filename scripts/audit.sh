@@ -54,6 +54,14 @@ blocks=$(for f in $(grep -l '^## The return pass' agents/*.md); do
   sed -n '/^## The return pass/,/^## /{/^## /!p;}' "$f" | md5sum; done | sort -u | wc -l)
 [ "$blocks" -le 1 ] || bad "## The return pass differs across seats ($blocks variants)"
 
+# no-spawn guard: every seat carries the no-spawn bullet or a tools: list that leaves out Agent
+for f in agents/*.md; do
+  grep -q 'Never spawn agents' "$f" && continue
+  tools=$(sed -n '2,/^---$/s/^tools: *//p' "$f")
+  [ -n "$tools" ] && ! grep -qE '(^|,) *Agent *(,|$)' <<<"$tools" \
+    || bad "$f: no no-spawn bullet, and no tools: list that leaves out Agent"
+done
+
 # skills and hooks wiring
 for d in skills/*/; do [ -f "$d/SKILL.md" ] || bad "$d has no SKILL.md"; done
 for f in skills/*/SKILL.md; do
