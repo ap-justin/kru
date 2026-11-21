@@ -2,7 +2,7 @@
 
 The look a model reaches for when it tries to "look designed". One tell proves little; a canvas that carries several, or that could be any product's, reads as templated. A tell is judged against the product it is drawn for: the repo's design system wins where it settles the point in writing, and a brief that asks for the pattern outranks the list.
 
-Adapted from taste-skill v2 (MIT), the same text as the team's design-taste copy. Cited as `v2 §n`: the `SKILL.md` of taste-skill-v2-experimental, section n. Cited as `copy-tells`: taste-skill's `skills/taste-skill/references/copy-tells.md`. Cited as `CHANGELOG 2.5.1`: taste-skill's `CHANGELOG.md`. Only tells that show on a product screen are kept; marketing-page rules are not.
+Adapted from taste-skill v2 (MIT), the same text as the team's design-taste copy. Cited as `v2 §n`: the `SKILL.md` of taste-skill-v2-experimental, section n. Cited as `copy-tells`: the `copy-tells.md` reference of taste-skill's own skill. Cited as `CHANGELOG 2.5.1`: taste-skill's `CHANGELOG.md`. Only tells that show on a product screen are kept; marketing-page rules are not.
 
 Each line: the tell, what to draw instead, the source.
 
