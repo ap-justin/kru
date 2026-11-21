@@ -1,6 +1,6 @@
 ---
 name: tigris
-description: Tigris object storage from app code over the S3 SDK — bucket and key design, public vs private, presigned URLs, caching and stale objects, multipart, the secrets the app reads. Use when a repo calls Tigris (`t3.storage.dev` or `fly.storage.tigris.dev`, or a `fly storage` bucket's `AWS_ENDPOINT_URL_S3` + `BUCKET_NAME`). Provisioning is `fly`'s.
+description: Tigris object storage from app code over the AWS JS SDK (`@aws-sdk/client-s3`) — bucket and key design, public vs private, presigned URLs, caching and stale objects, multipart, the secrets the app reads. Use when a repo calls Tigris (`t3.storage.dev` or `fly.storage.tigris.dev`, or a `fly storage` bucket's `AWS_ENDPOINT_URL_S3` + `BUCKET_NAME`). Provisioning is `fly`'s.
 user-invocable: false
 ---
 
@@ -29,11 +29,11 @@ The SDK's credential chain reads the two key variables, so the constructor takes
 | `BUCKET_NAME` | `fly storage create` |
 | `AWS_REGION` | **not set by `fly storage create`**; the app defaults to `auto` |
 
-The two vendors document the key's delivery from `fly storage create` differently (*Tigris buckets* in the `fly` skill), so there may be no key to capture; `fly storage dashboard <bucket>` mints one.
+The two vendors document the key's delivery from `fly storage create` differently (*Tigris buckets* in the `fly` skill), so there may be no key to capture; `fly storage dashboard <bucket>` opens the console to create one.
 
 ## Buckets and keys
 - **A bucket name can't change after creation**, so name it for what it holds (`<app>-<env>-uploads`), one bucket per environment. Default location is `global`; single-region, dual-region and `usa`/`eur` multi-region are set with `LocationConstraint` at creation. ([`docs/buckets/create-bucket`](https://www.tigrisdata.com/docs/buckets/create-bucket.md))
-- **Snapshots are also chosen at creation, and `fly storage create` leaves them off.** They can't be turned on later: a bucket that needs point-in-time restore is created with `tigris buckets create <name> --enable-snapshots` (or from the console or an SDK), with the data moved into it. ([`docs.fly.io/reference/tigris`](https://docs.fly.io/reference/tigris.md))
+- **Snapshots are off on a `fly storage create` bucket.** Turn them on with `tigris buckets enable-snapshots <bucket>` or Dashboard → Bucket Settings → Storage Settings, or create the bucket with `--enable-snapshots`. Fly's page says creation-only; Tigris's says an existing bucket converts (*Tigris buckets* in the `fly` skill). ([`docs/snapshots`](https://www.tigrisdata.com/docs/snapshots.md), [`docs/cli/buckets/enable-snapshots`](https://www.tigrisdata.com/docs/cli/buckets/enable-snapshots.md), [`docs.fly.io/reference/tigris`](https://docs.fly.io/reference/tigris.md))
 - **No dots in a bucket that will be public**: the default public domains' wildcard certificate doesn't cover them. ([`docs/buckets/public-bucket`](https://www.tigrisdata.com/docs/buckets/public-bucket.md))
 - **Prefix by purpose and owner** (`avatars/<user-id>/…`, `renders/<job-id>/…`) so one listing, and one ownership check, covers one kind of object. Build the key on the server from ids; a client-supplied filename is a suffix at most.
 - **Narrow the app's key.** Neither vendor documents the role or scope of the key `fly storage create` mints, so make the app's own key in the console (`fly storage dashboard <bucket>`). A Dashboard key always starts in the `standard` scope: give it ReadWrite on the one bucket, then turn **Default allowed operations** off (the `standard` scope can still create and list buckets). **Admin is for development only.** `tigris access-keys create --default-permissions disable`, or `scope: "no_default_allow"` in `@tigrisdata/iam`, sets it at creation. ([`docs/iam/manage-access-key`](https://www.tigrisdata.com/docs/iam/manage-access-key.md), [`docs.fly.io/reference/tigris`](https://docs.fly.io/reference/tigris.md))
@@ -60,7 +60,7 @@ Caching is on for every bucket with no setting; Tigris returns the cache headers
 ## Uploads
 - **A buffered `PutObjectCommand` holds the whole body in memory**, as the JS page's `readFile` example does. Send big files through `@aws-sdk/lib-storage`'s `Upload`, which splits them into multipart, or let the browser upload to a presigned PUT (CORS rule first, *Presigned URLs*) and save the key after. ([`docs/sdks/s3/aws-js-sdk`](https://www.tigrisdata.com/docs/sdks/s3/aws-js-sdk.md), [`docs/objects/multipart-uploads`](https://www.tigrisdata.com/docs/objects/multipart-uploads.md))
 - **Multipart** follows S3 semantics (objects up to 5 TB). `CompleteMultipartUpload` takes the parts **sorted by part number** or fails with `InvalidPartOrder`. Tigris verifies `x-amz-checksum-sha256` and accepts the other algorithms without verifying them, so send SHA-256 when integrity matters. A finished object's ETag is `<md5>-<parts>`, so it isn't the file's MD5. ([`docs/objects/multipart-uploads`](https://www.tigrisdata.com/docs/objects/multipart-uploads.md))
-- **Abort the uploads that fail.** Tigris doesn't describe clearing incomplete ones itself: on error call `AbortMultipartUpload`, and list stale ones with `ListMultipartUploads` now and then.
+- **Abort the uploads that fail.** Tigris's multipart page says to list stale uploads now and then with `ListMultipartUploads` and abort them with `AbortMultipartUpload`; call the abort on error too. ([`docs/objects/multipart-uploads`](https://www.tigrisdata.com/docs/objects/multipart-uploads.md))
 
 ## Not this skill's job
-Creating the bucket and setting its secrets on the app (`fly storage create`) is the **`fly`** skill's. Tigris's own `@tigrisdata/storage` SDK and CLI have official agent skills at `github.com/tigrisdata/skills`, and Tigris publishes an `llms.txt` at `tigrisdata.com/docs/llms.txt`; this skill covers the standard S3 SDK only.
+Creating the bucket and setting its secrets on the app (`fly storage create`) is the **`fly`** skill's. Tigris's own `@tigrisdata/storage` SDK and CLI have official agent skills at `github.com/tigrisdata/skills`, and Tigris publishes an `llms.txt` at `tigrisdata.com/docs/llms.txt`; this skill covers the AWS SDK for JavaScript v3 only.
