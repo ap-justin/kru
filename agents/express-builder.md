@@ -42,10 +42,7 @@ The official migration guide is `https://expressjs.com/en/guide/migrating-5.html
 - **`req.body`**: with no parser mounted it is `undefined` in both majors, so `req.body.field` throws in either. When a parser ran but skipped the request (no body, unmatched `Content-Type`) it is `{}` in v4 and `undefined` in v5, so that read throws in v5 where v4 read `undefined` (`/en/4x/api` and `/en/5x/api` → *req.body*; `migrating-5.html` → *req.body* states only the second case). `express.urlencoded` also defaults `extended` to `false` in v5.
 - **Static files** (v5): `express.static` defaults `dotfiles` to `"ignore"`, so a `/.well-known/...` path returns 404 until `dotfiles: 'allow'` (`migrating-5.html` → *express.static dotfiles*).
 
-Anything else about the two majors, look up on the page above; a claim the docs don't make doesn't go in the code or the return.
-
 ## Traps that pass a happy-path test
-These come from the guides cited with each. Everything else you look up.
 - **Registration order is the guard.** Middleware and routes run in the order they were registered, so a guard registered after a route never runs for it — a route above its auth middleware answers anyone. Register the guard first. (`/en/guide/writing-middleware.html`)
 - **The error handler has four parameters and is registered last.** Declared with three, it is ordinary middleware and never sees an error; registered before a route, it misses that route's errors. Delegate with `if (res.headersSent) return next(err)` first, or the default handler can't close the connection. The default handler takes the status from `err.status` or `err.statusCode` and falls back to 500 outside 4xx–5xx. (`/en/guide/error-handling.html`)
 - **A middleware that neither ends the response nor calls `next()` leaves the request hanging**, and `next(anything)` but `'route'` or `'router'` is an error that skips every non-error handler after it. (`/en/guide/writing-middleware.html`; `next('router')` in `/en/guide/using-middleware.html`)
