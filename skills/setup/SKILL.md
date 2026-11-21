@@ -91,7 +91,8 @@ same fields as above minus the skill pin. The lockfile is the evidence either wa
 Completion: every field carries a value with its derivation, or is absent — because this repo has no
 answer for it, or because the repo's own docs already are the answer (step 2); every repo-held recipe a
 plugin skill lacks has an inbox line; every package a major behind its skill's pin has a todo line, and
-every other outdated one is on the catch-up line or its own major's.
+every other outdated one is on the catch-up line or its own major's. A line the write scope stopped
+counts once it is named as a gap for step 6.
 
 ### 1b. Blank repo — grill, then deploy — *full run*
 Nothing on disk answers step 1, so the PM's task carries the subject and stack, or setup grills one
@@ -246,7 +247,8 @@ step 1 found, diff each against the repo's own config (`biome.json` rules and `p
 and file each unwired row as a slice for its owner — a lint rule is the team's call, not the
 user's, and setup's part ends at the filing. The report counts them in one clause.
 
-Completion: every catalog row for this stack is wired or filed as a slice for its owner.
+Completion: every catalog row for this stack is wired, filed as a slice for its owner, or named as a
+gap for step 6.
 
 ### 2. Read what the repo already says
 Open the repo's `CLAUDE.md`, `.claude/CLAUDE.md`, `.claude/rules/*`, `AGENTS.md`, and any nested
