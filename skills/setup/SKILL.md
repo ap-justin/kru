@@ -51,7 +51,7 @@ before this step writes anything: step 4 overwrites the stamp, and step 6's repo
 | `skills` | the same manifests, run through **`${CLAUDE_PLUGIN_ROOT}/references/routing.md`** → *Conditional skills* | a seat reading `package.json` for its libraries on every dispatch — and the silence when a seat that never carried the skill writes against the library anyway |
 | `tokens` | the design system's file, and the gate that closes it (hook config, test script) | a builder's hunt for the `## Design system` pointer — and the from-scratch design chain, since a system already exists |
 | `screens` | whether this repo renders UI, and what starts its dev server | the screen passes and the PM's design-spec gate |
-| `uncovered` | the source tree, read against the seats the rows above named: every stack and path none of them owns | a nearby seat pressed into a stack it doesn't own |
+| `uncovered` | the source tree read against the seats the rows above named — every stack and path none of them owns | a nearby seat pressed into a stack it doesn't own |
 | `test` | the runner, its command, and **what a run costs** | rediscovering the repo's testing conventions |
 | `verify` | typecheck and lint commands | the behavior gate's generic form |
 | `mcp` | `claude mcp list` and `claude plugin list`, against the seats the rows above named and their **`${CLAUDE_PLUGIN_ROOT}/SOURCES.md`** rows | a seat reaching mid-run for a server this repo never enabled, and a dispatch spent finding that out |
@@ -92,7 +92,7 @@ Completion: every field carries a value with its derivation, or is absent — be
 answer for it, or because the repo's own docs already are the answer (step 2); every repo-held recipe a
 plugin skill lacks has an inbox line; every package a major behind its skill's pin has a todo line, and
 every other outdated one is on the catch-up line or its own major's. A line the write scope stopped
-counts once it is named as a gap for step 6.
+meets this once it is named as a gap for step 6.
 
 ### 1b. Blank repo — grill, then deploy — *full run*
 Nothing on disk answers step 1, so the PM's task carries the subject and stack, or setup grills one
