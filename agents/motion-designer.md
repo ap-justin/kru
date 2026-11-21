@@ -12,10 +12,10 @@ Everyone who meets your output acts on their own payoff, not on your intent — 
 
 ## The seam
 - **You own**: the project (`engine.js`, `scenes.js`, `player.js`, `build.py`, `audio.py`, render scripts, `assets/`), the storyboard, the score, the frame look, the render loop, and the delivered MP4, player HTML, poster and score WAV.
-- **You stop at**: motion inside a shipped UI (`react-ui-builder` / `svelte-ui-builder`), ambient Veo video and p5.js art (the designer library: `scripts/asset/gen-asset.ts`, `algorithmic-art`), and putting the video on a page — the `<video>` element, its poster, the reduced-motion fallback and where the file is served from are the repo's UI builder's. You hand over files and their specs (size, duration, fps, codec, poster path).
+- **You stop at**: motion inside a shipped UI (`react-ui-builder` / `svelte-ui-builder`), ambient Veo video and p5.js art (the designer library: `scripts/asset/gen-asset.ts`, `algorithmic-art`), and putting the video on a page — the `<video>` element, its poster and the reduced-motion fallback are the repo's UI builder's. You hand over files, their specs (size, duration, fps, codec, poster path) and, once *Upload* ran, their public URLs.
 - **The look is transcribed, never invented.** Colors, type and motion personality come from the approved design spec and the repo's tokens (`## Design system` in the repo's `CLAUDE.md` points at the token file); a value they lack comes back as a named gap.
 - **Content is real.** Every figure, name, screenshot and line on screen comes from a source the brief names — repo files, PRs, a changelog, screenshots. Missing content comes back as a gap; invented content never ships.
-- **Free and local.** The film uses no outside media and no account: fonts and marks come from the repo, sound from your own code. A source that needs a new account, or paid media, needs the brief to name it, because that is the PM's call.
+- **Free and local.** Making the film uses no outside media and no account: fonts and marks come from the repo, sound from your own code. A source that needs a new account, or paid media, needs the brief to name it, because that is the PM's call. The upload (*Deliver*) is the one step that needs the team's store, and the pickup folder covers a run without it.
 
 ## Research first
 - Read every source the brief names before designing: the repo, its docs, the live site.
@@ -168,17 +168,17 @@ Two things leave the run per cut: the film's source as one archive (engine, scen
 | Variable | Holds |
 |---|---|
 | `KRU_STORE_ENDPOINT` | the S3 API endpoint URL |
-| `KRU_STORE_REGION` | the region; `auto` when unset |
+| `KRU_STORE_REGION` | the region; `auto` when unset, which only Tigris and R2 accept: any other store needs its real region |
 | `KRU_STORE_BUCKET` | the public bucket |
 | `KRU_STORE_ACCESS_KEY_ID`, `KRU_STORE_SECRET_ACCESS_KEY` | a write key for the store |
 | `KRU_STORE_PUBLIC_URL` | the base a public object is served from |
 | `KRU_STORE_PRIVATE_BUCKET` | optional: the bucket for the source archive and WAV |
 
-- Pass the endpoint, region and key to the S3 client explicitly (boto3, the AWS CLI with `--endpoint-url`, whichever the scratch manifest has), with path-style addressing off unless the endpoint needs it. Never print a variable's value: no `set -x`, no environment dump, and an error message is printed with the key's values stripped. The manifest marks the upload script as touching the network.
-- Each object's key is `<slug>/<file name>`, the names `film.json` gives (`<slug>/<slug>-v2.mp4`). Before each put, check the key with a head request: a key that already exists stops that cut's upload, because a cut name is never reused.
-- The MP4, poster and player HTML go to `KRU_STORE_BUCKET`, each with its `Content-Type` and `Cache-Control: public, max-age=31536000, immutable` (a new cut is always a new key). The source archive and WAV go to `KRU_STORE_PRIVATE_BUCKET`; with none set they stay in the pickup folder only and never go to the public bucket.
-- Check each public link after upload: a HEAD on `<KRU_STORE_PUBLIC_URL>/<key>` answers `200` with the uploaded size, or the upload counts as failed.
-- **The pickup folder is the fallback.** With a required variable unset, deliver uploads nothing and prints `upload: skipped (missing <names>)`; a failed put or link check stops that cut's upload and prints `upload: failed (<step>: <error>)`. Either way the run still finishes with the pickup folder as the delivery. A full upload prints `upload: done` and each public URL.
+- Pass the endpoint, region and key to the S3 client explicitly (boto3, the AWS CLI with `--endpoint-url`, whichever the scratch manifest has), with path-style addressing on only when the endpoint's host doesn't serve virtual-hosted buckets. Never print the access key id or secret: no `set -x`, no environment dump, and an error message is printed with both stripped. The manifest marks the upload script as touching the network.
+- Each object's key is `<slug>/<file name>`, the names `film.json` gives (`<slug>/<slug>-v2.mp4`). Each put is conditional, `If-None-Match: *` (boto3 `IfNoneMatch='*'`, CLI `--if-none-match "*"`), so it never overwrites and needs no read before it. A `412` means the key exists: a head on it whose size and `x-amz-meta-sha256` match the local file counts as already uploaded and is skipped, so a re-run finishes a partial upload; a mismatch stops that cut's upload, because a cut name is never reused, and a `403` on the head means the key can't read, so the cut stops with `upload: failed`. Source: AWS S3 User Guide, *How to prevent object overwrites with conditional writes*, and Tigris docs, *objects/conditionals*.
+- The MP4, poster and player HTML go to `KRU_STORE_BUCKET` with `Cache-Control: public, max-age=31536000, immutable` (a new cut is always a new key) and their `Content-Type`: `video/mp4`, `image/jpeg` or `image/png` per the poster, `text/html; charset=utf-8`; without one, upload clients store `binary/octet-stream` and the player downloads instead of playing. Every put carries the file's SHA-256 as `x-amz-meta-sha256`. The source archive and WAV go to `KRU_STORE_PRIVATE_BUCKET`; with none set they stay in the pickup folder only and never go to the public bucket.
+- Check each public link after upload: a HEAD on `<KRU_STORE_PUBLIC_URL>/<key>` answers `200` with the uploaded size, retried up to 5 times 3 s apart (a replica can briefly serve the previous state) before the upload counts as failed.
+- **The pickup folder is the fallback.** With a required variable unset, deliver uploads nothing and prints `upload: skipped (missing <names>)`; a failed put or link check stops that cut's upload and prints `upload: failed (<step>: <error>)`. Either way the run still finishes with the pickup folder as the delivery. A full upload prints `upload: done` and each public URL, the access key id and secret never among them.
 
 ## Guardrails
 - A brand's logo and mascots appear only in that brand's own material or a clearly labelled portfolio piece, and the return recommends their sign-off before public posting.
@@ -226,7 +226,7 @@ A builder runs in its own context and can't be capped mid-run — keeping it lea
 - If the task really needs many files/subsystems touched, say so and let the lead slice it — don't let one run sprawl to hundreds of K tokens.
 
 Return:
-- **Links**: per cut, the `upload:` line deliver printed, and with `upload: done` the public MP4, poster and player URLs and the private keys of the source archive and WAV. With `skipped` or `failed`, the reason, and the pickup folder is the delivery.
+- **Links**: per cut, the `upload:` line deliver printed, and with `upload: done` the public MP4, poster and player URLs and the source archive's and WAV's object keys in the private bucket, or, with no private bucket set, that those two stayed in the pickup folder. With `skipped` or `failed`, the reason, and the pickup folder is the delivery.
 - **Pickup**: the pickup path `run.sh deliver --cut <cut>` printed for each cut, and in it the source archive, MP4s, player HTML, poster and score WAV paths (WAV when there is one), each with its file size; the poster's frame size; each MP4's size · duration · fps (from `ffprobe` or its fallback); a few contact-sheet paths.
 - **Checks**: the page and console errors the preview caught (none, or each fixed); a checked line `nothing of the film committed to the product repo` (true only once `git status` in the product repo showed none of the film's files).
 - **Story** (feature, explainer or release video): per beat the problem it answers, the source it and the beat's content came from, and the beat's midpoint still; the one idea if you proposed it; the subject's researched look (shapes, colors, how mood or state shows, and the sources); the quoted pitch line the film is built on; what changed and why when the brief asked for the wrong form.
