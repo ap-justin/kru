@@ -83,7 +83,7 @@ Type and motion primitives, with the gotchas measured:
 - Icons are hand-drawn paths: no emoji, no icon fonts.
 - `word_reveal(str, x, y, t, t0, opts)`: per-word opacity ramp from about 40% to full at the pace *The discipline* states.
 - `morph(shape_a, shape_b, p)`: resample both outlines to one point count, then `lerp` the points.
-- `draw_on(path, p)`: a hairline drawn on with `setLineDash([len·p, len])`, `len` measured from an off-screen `<path>`'s `getTotalLength()` (`Path2D` has none).
+- `draw_on(path, p)`: a hairline drawn on with `setLineDash([len·p, len])`, `len` measured from an off-screen `<path>`'s `getTotalLength()` (`Path2D` has none). The canvas restarts the dash on every subpath, but `getTotalLength()` adds them all up, so draw a path of several strokes one subpath at a time, each with its own `len` and its share of `p`.
 - `bokeh(t)`: a few large soft discs, positions and sizes from `hash`, drifting slowly.
 - Camera punch on impacts is opt-in, off by default: `1 + a·exp(-8d)·|cos(22d)|`; the `abs` keeps it ≥ 1, or the canvas edge flashes.
 - A finishing pass: tiled film grain (overlay, faint, about 2–3% alpha, offset per frame via `hash`) and a soft vignette.
@@ -94,7 +94,7 @@ Scenes and transitions: one function per scene, `s1(t)` … `sN(t)`, each drawin
 - Wave wipe: clip a polygon whose top edge is a moving sine.
 - Push: translate scene A by `-W·p` and scene B by `W·(1-p)`.
 
-Logo resolve: trace the mark's centre line on a grid over the logo image and write it as an SVG path string. Draw it with `Path2D` and `setLineDash([len·p, len])` (`len` from an off-screen `<path>`'s `getTotalLength()`), add a glowing pen tip via `getPointAtLength`, then crossfade the real logo image on top.
+Logo resolve: trace the mark's centre line on a grid over the logo image and write it as an SVG path string. Draw it with `draw_on`, add a glowing pen tip via `getPointAtLength` on the subpath being drawn, then crossfade the real logo image on top.
 
 Fonts are embedded as base64 `@font-face`, and `await document.fonts.load(...)` runs for every weight before the first draw. Embed a mono font too (subset with fontTools; WOFF if Brotli is missing) so code text matches between headless and browsers.
 
