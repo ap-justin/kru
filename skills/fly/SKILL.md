@@ -1,10 +1,10 @@
 ---
 name: fly
-description: Fly.io platform recipes — fly.toml vs the live fleet, secrets and deploy tokens, deploy strategies and release_command, autostop/scale-to-zero, Volumes, private networking, certs, the Machines API, Managed Postgres wiring. Stops where app code begins.
+description: Fly.io platform recipes — fly.toml vs the live fleet, secrets and deploy tokens, deploy strategies and release_command, autostop/scale-to-zero, Volumes, private networking, certs, the Machines API, Managed Postgres wiring, Tigris buckets. Stops where app code begins.
 user-invocable: false
 ---
 
-Claims checked against `docs.fly.io` (its `.md` twin per page) on 2026-10-28; a rule with no citation is a recipe, and the reason stands beside it. Numbers (timeouts, rate limits, retention) are today's — re-read the cited page before relying on one past a platform change.
+Claims checked against `docs.fly.io` (its `.md` twin per page) on 2026-10-28, and the Tigris section on 2026-11-21; a rule with no citation is a recipe, and the reason stands beside it. Numbers (timeouts, rate limits, retention) are today's — re-read the cited page before relying on one past a platform change.
 
 **Most of these deploy clean and fail later.** A deploy goes green with a Machine fleet `fly.toml` no longer describes, a volume holding the only copy, or a stop signal the app ignores. The failure shows up at the next deploy, the next host failure, or the next idle stop.
 
@@ -58,6 +58,7 @@ An app scaled with `fly scale count --max-per-region 1` drops `canary`/`bluegree
 - Set both flags on or both off, unless the app exits by itself when idle (then `auto_start_machines = true`, `auto_stop_machines = "off"`). Stop-without-start strands the app with every Machine stopped.
 - The stop loop runs every few minutes and stops **at most one Machine per region per pass**, measuring excess against each Machine's `soft_limit`, which defaults to 20 when unset ([`docs.fly.io/apps/concurrency`](https://docs.fly.io/apps/concurrency.md)). Set it to what one Machine really handles, or autostop sizes the fleet for a different app.
 - A stopped Machine's **volume still bills at full size**. On a mostly idle app the volume is often the largest line, so keep files in object storage (Tigris) when no local disk is needed.
+- **A Machine's root filesystem is a blank slate on every start**, so an upload written to local disk is gone after the next autostop and start. Durable files go in Tigris (*Tigris buckets*, below) or on a volume, which pins the app to one host (*Volumes*). ([`docs.fly.io/machines/overview`](https://docs.fly.io/machines/overview.md), [`docs.fly.io/volumes/overview`](https://docs.fly.io/volumes/overview.md))
 - A cold start is about 2 s. `"suspend"` resumes in hundreds of ms but has its own requirements ([`docs.fly.io/reference/suspend-resume`](https://docs.fly.io/reference/suspend-resume.md)).
 
 ## Volumes: one disk, one Machine, one server
@@ -93,6 +94,15 @@ A service reached both through the proxy and over `.internal` binds both address
 - **Rate limits are per action, per Machine (or app)**: 1 req/s, burst 3; Get Machine 5 req/s, burst 10. A loop that creates or updates a fleet paces itself or gets throttled. ([`docs.fly.io/machines/api/working-with-machines-api`](https://docs.fly.io/machines/api/working-with-machines-api.md))
 - **Leases are the lock.** A mutating call on a Machine someone else holds the lease on fails with `409 Conflict`; the holder sends the `fly-machine-lease-nonce` header on every call ([`docs.fly.io/api/machines/machines/destroy-machine`](https://docs.fly.io/api/machines/machines/destroy-machine.md)). Create with `lease_ttl` to hold a new Machine until it passes health checks.
 - Waiting for `state=stopped` requires the `instance_id` you're waiting on. Every update can change that id.
+
+## Tigris buckets
+**`fly storage create`** provisions the bucket and prints four secrets: `BUCKET_NAME`, `AWS_ENDPOINT_URL_S3`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`. Run inside an app directory (the one with `fly.toml`) or with `-a <app>`, it sets them on that app itself; run anywhere else, it leaves you to set them. **There is no `AWS_REGION` among them**: the client's region is `auto`. ([`docs.fly.io/reference/tigris`](https://docs.fly.io/reference/tigris.md))
+- Fly's page doesn't say whether setting them restarts the app. Secrets set by hand do (*Secrets*, above), so schedule the command like a deploy.
+- An app that reads other names (`S3_BUCKET`, `S3_ACCESS_KEY`) gets them mapped: set those secrets from the values the command printed, or read the four names in code. The secret is shown once, so capture the output. ([`docs.fly.io/reference/tigris`](https://docs.fly.io/reference/tigris.md), [`tigrisdata.com/docs/iam/manage-access-key`](https://www.tigrisdata.com/docs/iam/manage-access-key.md))
+- `AWS_ENDPOINT_URL_S3` is set to `https://fly.storage.tigris.dev`. Fly names `https://t3.storage.dev` the endpoint for new code, and `fly secrets set AWS_ENDPOINT_URL_S3=https://t3.storage.dev` switches an app to it.
+- Buckets are private; `--public` makes objects readable without credentials.
+
+Bucket design, public vs private and the app's S3 calls belong to the **`tigris`** skill.
 
 ## Managed Postgres wiring
 **`fly mpg` is Managed Postgres. `fly postgres` is the unmanaged app**, which Fly has archived: it is no longer maintained, and Support won't help with it. Default to `fly mpg`. ([`docs.fly.io/unmanaged-postgres`](https://docs.fly.io/unmanaged-postgres/index.md))
