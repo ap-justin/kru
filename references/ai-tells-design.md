@@ -46,8 +46,4 @@ Each line: the tell, what to draw instead, the source.
 - **An invented stat strip** (three or four round figures in a row with no source): show a figure the product holds, or no strip. `copy-tells` (*Current tells*).
 - **Generic names and avatars** (`John Doe`, a default-cast name, an egg or user-icon avatar): realistic names of the right locale and a specific avatar treatment. `v2 §9.D`, `copy-tells`.
 - **Startup-slop names** (`Acme`, `Nexus`, `SmartFlow`): a contextual name that could be real. `v2 §9.D`.
-- **Filler verbs** (*elevate*, *seamless*, *unleash*) and the rest of the copy tells: `skills/copywriting/references/ai-tells.md` and the AI tells line in `skills/prose-fix/SKILL.md` cover them; nothing is copied here. `v2 §9.D`.
-
-## Left out
-
-Scroll cues, hero entrances, scroll and WebGL moments, image and photo dealing, logo walls and testimonials, centered-hero and zig-zag rules, locale and weather strips, decoration text strips, rotated text, custom cursors, and the em-dash ban (the copy skills own it). They fit a marketing page, not a product screen.
+- **Filler verbs** (*elevate*, *seamless*, *unleash*) and the rest of the copy tells: `skills/copywriting/references/ai-tells.md` and the AI tells line in `skills/prose-fix/SKILL.md` cover them. `v2 §9.D`.

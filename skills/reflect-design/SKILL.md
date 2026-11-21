@@ -17,7 +17,7 @@ The rules live in these files; read each one at its heading on every run, so a r
 | The repo's design system | what `${CLAUDE_PLUGIN_ROOT}/skills/designer/SKILL.md` step 1 read: token file, ledger, closed lists, the sources `## Design system` names |
 | The part map | `designer/SKILL.md` step 2: every element tied to a ledger row or class, every icon to a named glyph |
 | The designer's rules | `${CLAUDE_PLUGIN_ROOT}/references/designer-handoff.md` → *Draw it right*, *Match the existing app*, the canvas list's *Motion* bullet, *Questions and approval* |
-| The generic AI look | `${CLAUDE_PLUGIN_ROOT}/references/ai-tells-design.md`: every tell, plus *Left out* for what does not apply |
+| The generic AI look | `${CLAUDE_PLUGIN_ROOT}/references/ai-tells-design.md`: every tell |
 | The spec's rules | `${CLAUDE_PLUGIN_ROOT}/references/design-spec.md` → the build spec list (render conditions, copy, states) and *Current state only* |
 | Component patterns | `${CLAUDE_PLUGIN_ROOT}/skills/ui-patterns/SKILL.md` → the index, then the one `reference/` group per kind of thing the frame draws |
 | The system's shape | `${CLAUDE_PLUGIN_ROOT}/skills/design-system/SKILL.md` → color, typography, shells |
@@ -28,7 +28,7 @@ Where the repo's system settles a point in writing and a house look in these hom
 
 ## The pass
 
-1. **Look at the whole canvas first**, as a set: a contact sheet of every frame, or the frames side by side. Ask whether it reads as a templated AI look: one accent on grey, the same card everywhere, nothing specific to this product. A whole-look finding can't be fixed frame by frame, so it goes to the open questions in the final message with a recommendation, usually a redraw from a different direction (`${CLAUDE_PLUGIN_ROOT}/references/designer-handoff.md` → *Canvas*, the *Directions at bootstrap* bullet); it is never left out of the list. A clean look says `whole look: specific to <product>, because …`, with the reason drawn from what the frames show.
+1. **Look at the whole canvas first**, as a set: a contact sheet of every frame, or the frames side by side. Ask whether it reads as a templated AI look: one accent on grey, the same card everywhere, nothing specific to this product. A whole-look finding can't be fixed frame by frame, so it goes to the open questions in the final message with a recommendation, usually a redraw from a different direction (`${CLAUDE_PLUGIN_ROOT}/references/designer-handoff.md` → *Canvas*, the *Directions at bootstrap* bullet); it always gets a line in the list. A clean look needs a reason drawn from what the frames show.
 2. **Read each frame as the browser drew it**: its HTML and its screenshot, at the frame's own width (`${CLAUDE_PLUGIN_ROOT}/skills/doop/SKILL.md` for a `/c/<id>` canvas; the exported files and images otherwise). Either alone misleads.
 3. **Check each frame against each home.** The pass is done when every frame has been checked against every home and each finding names the frame and the home's heading or named rule. An element missing from the part map is a finding, as is a value or part the repo's system already settles.
 4. **Fix each finding on the canvas.** A frame with a human sign-off the run did not make is reported to the PM instead of edited, since an edit voids its approval (`skills/doop/SKILL.md` → *Build from the frame, leave the canvas alone*). A finding that turns on a product call goes to the open questions in the final message, with your recommendation.
