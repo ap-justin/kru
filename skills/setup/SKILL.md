@@ -92,7 +92,7 @@ Completion: every field carries a value with its derivation, or is absent — be
 answer for it, or because the repo's own docs already are the answer (step 2); every repo-held recipe a
 plugin skill lacks has an inbox line; every package a major behind its skill's pin has a todo line, and
 every other outdated one is on the catch-up line or its own major's. A line the write scope stopped
-meets this once it is named as a gap for step 6.
+meets the criterion once it is named as a gap for step 6.
 
 ### 1b. Blank repo — grill, then deploy — *full run*
 Nothing on disk answers step 1, so the PM's task carries the subject and stack, or setup grills one
