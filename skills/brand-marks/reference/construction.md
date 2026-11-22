@@ -26,9 +26,9 @@ Measure the master against the system in `SKILL.md` §3.
 - **Near-white field, neutral grays only**, with no colour or effects.
 - **Three tiers that read at a glance**: primary solid and dark, secondary dashed and mid-dark, auxiliary thin solid or dotted in mid gray. If a tier is barely visible on the render, darken or thicken it.
 - **Small hollow nodes** at key anchors, a centre marker, and small squares at the bounding-box corners.
-- **The logo stays the hero**: a copy of the master path as it stands after any rebuild, with a flat fill of about 10% black and a dark outline; a stroked master keeps no fill and its stroke width, with the stroke in about 10% black. The board never redraws it.
+- **The logo stays the hero**: a copy of the master path as it stands after any rebuild, with a flat fill of about 10% black and a dark outline; a stroked master is shown as its stroke band at the master's width, about 10% black inside a thin dark outline, with nothing filled inside its path. The board never redraws it.
 - **Breathing room**: 16:9, the mark about 40–45% of the board's height and centred, guides running only a short, even distance past the mark.
-- **SVG layers**, as `<g id>` from bottom to top: `auxiliary`, `secondary`, `primary`, `logo`, `anchors`, `labels`.
+- **SVG layers**, as `<g id>` from bottom to top: `auxiliary`, `secondary`, `primary`, `logo`, `anchors`, `labels`; in a line-built mark `auxiliary` sits just above `logo`, so the centre-line arcs show.
 
 ## Prove it
 Render the board to PNG and read it. Check that nothing runs off the board, that arcs sit on the logo's edges (on the stroke centre-lines, in a line-built mark), that the tiers are distinct, that every label is legible and clear of the mark, and that the logo still leads. Fix what you find and render once more. The board lands beside the master as `brand/construction.svg` + `.png`.
