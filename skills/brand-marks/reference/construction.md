@@ -12,11 +12,11 @@ Read the geometry from the master's path, not from what you meant to draw: use a
 When a relation fits only approximately, or holds only because of a correction made by eye, draw the real shape and name it in the return.
 
 ## Check the system
-The master is built from one golden-ratio circle system (`SKILL.md` §3): a base radius r, and only radii in the φ series (r·φⁿ, φ ≈ 1.618) or the Fibonacci set (1, 2, 3, 5, 8, 13, 21 units).
-- Express each fitted radius as r·φⁿ or a Fibonacci unit. State the tolerance you accept, such as 1% of r, and the residual you measured.
-- **A radius outside the system is a finding.** Mark it on the board and list it in the return as a finding. Rebuild the arc from a system circle. An arc within 2% of r of a system circle, named as an optical correction, is an exception, not a finding.
-- Check that every edge is an arc of a system circle, or a line tangent to two of them, and that joins are tangent. A corner at the crossing of two system circles is allowed and named. Any other straight edge, free curve or join is a finding.
-- Check that proportions between parts follow φ: mass to gap, part to part, a stroke to the space beside it.
+Measure the master against the system in `SKILL.md` §3 (base radius r; radii in the φ series or the Fibonacci set).
+- Express each fitted radius as r·φⁿ or a Fibonacci unit, and record the residual you measured against a tolerance of 1% of r.
+- **A radius outside the system is a finding.** Mark it on the board, list it in the return, and rebuild the arc from a system circle. A named optical correction within the §3 bound is an exception, not a finding.
+- A non-tangent join, a free curve or a straight edge that is not a tangent to two system circles is a finding. A named corner at the crossing of two system circles is not.
+- Proportions between parts (mass to gap, part to part, stroke to the space beside it) follow φ.
 
 ## Draw
 - **Draw every system circle** that cuts an edge of the mark, each as a thin line and each labelled with its radius (r·φⁿ or the Fibonacci unit). Draw a circle as the arc on the mark's edge plus a short, even run past it, not as a full circle, so nothing leaves the board. Add the other strongest relationships the mark has: axes, extended edges. Cap the guides other than system circles near 25–35. Drop anything decorative or redundant, and any guide that nearly coincides with an edge or another guide, because a near-miss reads as a mistake. A system circle is never dropped for coinciding with an edge: its label is the point.
