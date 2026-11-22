@@ -31,7 +31,7 @@ sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
 # the store's slug is the engagement stamp, same as check-handoff.sh
 cwd=$(printf '%s' "$input" | jq -r '.cwd // empty' 2>/dev/null)
 cwd_slug=$(
-  if [ -n "$cwd" ]; then cd "$cwd" 2>/dev/null || { basename "$cwd"; exit 0; }; fi
+  if [ -n "$cwd" ]; then cd "$cwd" 2>/dev/null || { printf '%s' "${KRU_PROJECT:-$(basename "$cwd")}"; exit 0; }; fi
   unset GIT_DIR GIT_WORK_TREE
   kru_slug)
 
