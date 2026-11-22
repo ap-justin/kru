@@ -15,11 +15,11 @@ The categories — wordmark, letterform, emblem, pictorial, abstract — blur (W
 ### Explore the subject before choosing
 The product owner's house rule, not the books'.
 
-- **A real object qualifies only when it is the subject or plainly stands for it without explanation.** A cultural reference, an insider reference, a pun or a metaphor the viewer has to be told fails (*Traps* in `SKILL.md`).
+- **A real object qualifies only when it is the subject or plainly stands for it without explanation.** What fails is listed under *Traps* in `SKILL.md`.
 - **Draw at least four genuinely different concepts, each built from the subject.** Each is in solid mass, rendered at 128 and 48 px, with one line on what it shows of the subject.
-- **Give each a stranger check** beside appropriate / simple / memorable: would someone who doesn't know the product read the subject?
+- **Give each the stranger check** (`SKILL.md` §4) beside appropriate / simple / memorable.
 - **Judge each in the home-screen tile too** (`SKILL.md` §3). Prefer shapes that fill a square. A wide, thin or tall, thin silhouette is reframed: a closer view, a top-down or three-quarter view, or the one part that carries the idea. If it can't be reframed, it loses to a shape that fills the square.
-- **The common category glyph doesn't count as one of the four** (*Traps* in `SKILL.md`). The parts may be the subject's own; the idea that combines them must be the product's.
+- **The common category glyph doesn't count as one of the four** (*Traps* in `SKILL.md`).
 - **Then narrow to the routes and name your preferred one.** Keep up to three that can work as routes, mark the one you prefer and say why, and give each its appropriate / simple / memorable / stranger verdict. Log every concept you drew in your return, with a one-line reason for each one you dropped (`SKILL.md` §5).
 
 ## Wordmarks
