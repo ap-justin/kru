@@ -133,7 +133,7 @@ Required on every seat that implements **executable behavior with a specifiable 
 
 **Exempt by decision** — record the reason, don't just omit:
 - `react-ui-builder`, `svelte-ui-builder`, `hono-ui-builder` — you can't go red on a layout or a motion curve; pixels and motion on the preview are **PM acceptance** (lead Step 5), not tests in your run. Logic-dense component internals (a reducer, validation rules) route to `test-writer` after the build.
-- `web-components-builder` is the **partial**, and it's in rather than out: its element's public API (attribute→property reflection and the pre-upgrade path, emitted events and their `detail`, `ElementInternals` form value/validity, idempotent connect/disconnect) is a specifiable contract other people's pages depend on, and every one of its failures is invisible on screen — so Block D applies to it in full. What it *renders* is PM acceptance on the preview, not a red test in your run.
+- `web-components-builder` is the **partial**, and it's in rather than out: its element's public API (attribute→property reflection and the pre-upgrade path, emitted events and their `detail`, `ElementInternals` form value/validity, idempotent connect/disconnect), or in a plain TypeScript DOM app a module's exported signature (root and data in, callbacks or events out, idempotent mount, a teardown that releases its listeners), is a specifiable contract other code depends on, and every one of its failures is invisible on screen — so Block D applies to it in full. What it renders as layout and look is PM acceptance on the preview, not a red test in your run.
 - `motion-designer` — **visual/motion**: its artifact is a rendered video, and you can't go red on a timeline or a look. Its check is contact sheets of rendered frames, named in the seat, and the frames are read before return.
 - `sanity-builder` — its primary artifact is declarative schema; TypeGen is the correctness gate on GROQ.
 - `vercel-perf-optimizer` — already carries the same discipline in a different currency: `## Prove the win` demands a measured before/after.
@@ -307,7 +307,7 @@ Required on the four **UI component builders** (`react-ui-builder`, `svelte-ui-b
 - `padding is the shell's own and stays inside` — the bound: the rule is about margin, and a copy that drops this reads as "no spacing at all".
 - `fits one mount point and fights every other` — the reason.
 
-**Tailored slots**: `{the passthrough}` — ``the `className` passthrough in the props contract`` on `react-ui-builder`, ``the `class` passthrough in the props contract`` on `svelte-ui-builder` and `hono-ui-builder`, `the host element, which the mounting page styles` on `web-components-builder`.
+**Tailored slots**: `{the passthrough}` — ``the `className` passthrough in the props contract`` on `react-ui-builder`, ``the `class` passthrough in the props contract`` on `svelte-ui-builder` and `hono-ui-builder`, `the host element, which the mounting page styles, or in a plain DOM module the container the caller passes in and owns` on `web-components-builder`.
 
 ## Block N — `## Exhaust the {library|tool|platform|database} before you write around it`
 
