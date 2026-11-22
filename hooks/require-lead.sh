@@ -15,10 +15,11 @@
 #
 # it fires once per session: a gated call that blocks, fails open on an
 # unreadable transcript, or passes because the contract is loaded marks the
-# session, and no later call is judged or re-reads the transcript. a /kru:
-# command in flight exempts its calls without marking, so the first gated call
-# of a plain turn after it still decides. a session that declines is nagged no
-# further, and a subagent's own tool call never trips a gate meant for the lead.
+# session, and no later call is judged or re-reads the transcript. a
+# /kru:<skill> command in flight exempts its calls without marking, so the first
+# gated call of a plain turn after it still decides. a session that declines is
+# nagged no further, and a subagent's own tool call never trips a gate meant for
+# the lead.
 #
 # fail open on anything that isn't a clear miss. kill switch: touch the file
 # the resolver's `lead-gate/off`. a marker file rather than a flag alone, because

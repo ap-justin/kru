@@ -122,6 +122,7 @@ slug_is "outside a repo CLAUDE_PROJECT_DIR names it" pinned-dir "$sandbox/plain"
 slug_is "leaked GIT_DIR and GIT_WORK_TREE are ignored" widgets "$sandbox/clone-a" \
   GIT_DIR="$sandbox/clone-b/.git" GIT_WORK_TREE="$sandbox/clone-b"
 slug_is "a cwd that is gone keeps its directory name" myrepo /work/myrepo
+slug_is "KRU_PROJECT pins the slug when the cwd is gone" pinned /work/myrepo KRU_PROJECT=pinned
 
 printf '%d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]

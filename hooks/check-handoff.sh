@@ -36,8 +36,10 @@ cwd=$(printf '%s' "$input" | jq -r '.cwd // empty' 2>/dev/null)
 # own slug, since a directory name differs by clone and by the subdirectory the
 # lead ran from, so one repo reads as several engagements and a team-wide
 # preference grades as one client's. a leaked GIT_DIR would point git at another repo.
+# KRU_PROJECT, an explicit pin, wins in every case: kru_slug returns it first, and a
+# dispatch cwd that is gone falls back to its directory name only when it is unset.
 cwd_slug=$(
-  if [ -n "$cwd" ]; then cd "$cwd" 2>/dev/null || { basename "$cwd"; exit 0; }; fi
+  if [ -n "$cwd" ]; then cd "$cwd" 2>/dev/null || { printf '%s' "${KRU_PROJECT:-$(basename "$cwd")}"; exit 0; }; fi
   unset GIT_DIR GIT_WORK_TREE
   kru_slug)
 

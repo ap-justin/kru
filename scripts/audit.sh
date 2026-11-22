@@ -54,12 +54,22 @@ blocks=$(for f in $(grep -l '^## The return pass' agents/*.md); do
   sed -n '/^## The return pass/,/^## /{/^## /!p;}' "$f" | md5sum; done | sort -u | wc -l)
 [ "$blocks" -le 1 ] || bad "## The return pass differs across seats ($blocks variants)"
 
-# no-spawn guard: every seat carries the no-spawn bullet or a tools: list that leaves out Agent
+# no-spawn guard: every seat carries the no-spawn bullet or a tools: list that leaves out the
+# spawn tool. the forms follow code.claude.com/docs/en/sub-agents (Frontmatter reference →
+# `tools`): a comma-separated string or a YAML list (the bracketed flow form is one), omitted =
+# inherits every tool, and the spawn tool is Agent, formerly Task. in a subagent definition
+# `Agent(type)` is still Agent: the type list restricts only a `claude --agent` main thread.
+# a `*` value is not documented there; it reads as every tool, so it can spawn too. a block list
+# (`- Read` lines) leaves the tools: line empty, which reads as "can spawn" and wants the bullet.
+can_spawn() { # tools: value -> 0 when the seat may spawn, or when the value says nothing
+  local t=${1//[\[\]\"\']/}
+  [ -n "${t//[[:space:]]/}" ] || return 0
+  grep -qE '(^|,) *(Agent|Task)( *\(.*\))? *(,|$)|(^|,) *\* *(,|$)' <<<"$t"
+}
 for f in agents/*.md; do
   grep -q 'Never spawn agents' "$f" && continue
-  tools=$(sed -n '2,/^---$/s/^tools: *//p' "$f")
-  [ -n "$tools" ] && ! grep -qE '(^|,) *Agent *(,|$)' <<<"$tools" \
-    || bad "$f: no no-spawn bullet, and no tools: list that leaves out Agent"
+  can_spawn "$(sed -n '2,/^---$/s/^tools: *//p' "$f")" \
+    && bad "$f: no no-spawn bullet, and no tools: list that leaves out Agent (or Task)"
 done
 
 # skills and hooks wiring

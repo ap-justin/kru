@@ -216,6 +216,8 @@ slug_is "a subdirectory reads as its repo" widgets "$sandbox/clone-a/src/deep"
 slug_is "ssh origin names the repo" gadgets "$sandbox/clone-b"
 slug_is "no origin falls back to the directory name" clone-c "$sandbox/clone-c"
 slug_is "KRU_PROJECT pins the slug" pinned "$sandbox/clone-a" KRU_PROJECT=pinned
+slug_is "a missing cwd falls back to its directory name" gone "$sandbox/nowhere/gone"
+slug_is "KRU_PROJECT pins the slug when the cwd is gone" pinned "$sandbox/nowhere/gone" KRU_PROJECT=pinned
 slug_is "outside a repo CLAUDE_PROJECT_DIR names it" pinned-dir "$sandbox/plain" CLAUDE_PROJECT_DIR="$sandbox/pinned-dir"
 slug_is "leaked GIT_DIR and GIT_WORK_TREE are ignored" widgets "$sandbox/clone-a" \
   GIT_DIR="$sandbox/clone-b/.git" GIT_WORK_TREE="$sandbox/clone-b"
