@@ -8,7 +8,7 @@ The categories — wordmark, letterform, emblem, pictorial, abstract — blur, a
 - **A long or unwieldy name, or parts to unify → a symbol** that stands in for it; a long wordmark would have to shrink into small spaces (Identify, HarperCollins; Merck; Chase Manhattan).
 - **A generic name → treat one part of it visually** to make it distinctive (Identify, Showtime; Centro).
 - **Initials → only when people already use them**, and never one letter pulled out of an acronym people say whole (Identify, EPA; NBC). The house rule adds that the brief must ask for that form or give a reason.
-- **An abstract mark needs a reason**, such as a broad or technical offer with no subject that can be drawn so a stranger reads it, **stated in the brief or named as an assumption in your return**. It is the hardest form to do well and gains meaning through exposure (Wheeler p. 58; Identify, Chase Manhattan).
+- **An abstract mark needs the brief to ask for it or give a reason**, such as a broad or technical offer with no subject that can be drawn so a stranger reads it (house rule). It is the hardest form to do well and gains meaning through exposure (Wheeler p. 58; Identify, Chase Manhattan).
 - **A name inside a shape** is the hardest form to read small (Wheeler p. 60) — unless the name is set tight to the edges of a square tile, which holds on stickers and poster corners (Identify, Mount Sinai; UNDP; Downtown Alliance). A ring of type around a symbol keeps a bare version with the type moved below for small uses (Identify, Bicentennial). A plain disc behind the mark is different: it shields it on dark or busy ground (Identify, PBS; WTA; Smithsonian; Mobil).
 - **Beside other marks it would fight** — sub-brands, partner logos — drop the symbol (Identify, Hearst).
 
