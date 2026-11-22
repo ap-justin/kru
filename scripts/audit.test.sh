@@ -40,5 +40,32 @@ out=$(run) && ok || no "a tools list without Agent should pass: $out"
 { sed -n '1,/^model:/p' "$sandbox/seat.orig"; echo 'tools: Read, Agent'; sed -n '/^model:/,$p' "$sandbox/seat.orig" | tail -n +2; } > "$seat"
 out=$(run) && ok || no "the bullet alone should pass: $out"
 
-echo "audit.test: $pass passed, $fail failed"
+# the bullet stripped and a tools: line spliced in (none when the value is empty)
+with_tools() {
+  { sed -n '1,/^model:/p' "$sandbox/seat.orig"; [ -z "$1" ] || echo "tools: $1"
+    sed -n '/^model:/,$p' "$sandbox/seat.orig" | tail -n +2 | grep -v 'Never spawn agents'; } > "$seat"
+}
+# tools_case <name> <fails|passes> <tools: value>
+tools_case() {
+  with_tools "$3"
+  if out=$(run); then
+    [ "$2" = passes ] && ok || no "$1: should fail"
+  else
+    [ "$2" = fails ] && grep -q 'stripe-specialist.md: no no-spawn bullet' <<<"$out" && ok || no "$1: should pass: $out"
+  fi
+}
+tools_case "Task is the spawn tool too" fails 'Read, Task, Bash'
+tools_case "a Task(type) restriction still spawns" fails 'Read, Task(worker)'
+tools_case "an Agent(type) restriction still spawns" fails 'Read, Agent(worker)'
+tools_case "a * tools value can spawn" fails '*'
+tools_case "no tools: line can spawn" fails ''
+tools_case "a bracketed list naming Agent can spawn" fails '[Read, Agent]'
+tools_case "a bracketed list without Agent or Task is a guard" passes '[Read, Grep]'
+tools_case "a bracketed quoted list is a guard" passes '["Read", "Grep"]'
+tools_case "a list without either tool is a guard" passes 'Read, Grep, Bash'
+# the bullet still covers every spawning form
+{ sed -n '1,/^model:/p' "$sandbox/seat.orig"; echo 'tools: *'; sed -n '/^model:/,$p' "$sandbox/seat.orig" | tail -n +2; } > "$seat"
+out=$(run) && ok || no "the bullet should cover a * tools value: $out"
+
+echo "audit.test:$pass passed, $fail failed"
 [ "$fail" = 0 ]
