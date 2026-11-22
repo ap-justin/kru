@@ -3,7 +3,7 @@
 ## Choosing the form
 The categories — wordmark, letterform, emblem, pictorial, abstract — blur, and none is right by rule (Wheeler pp. 48–49); the product owner's house rule outranks that. **The default form is a symbol anchored in the product's own subject**: what it is or what it does (weather for a weather app, money moving for a payments app), drawn with the geometry, solid-mass, gap and thumbnail rules in `SKILL.md` §3. This is Wheeler's pictorial mark, which reads fast in a cluttered setting (Identify, Old Chatham). The branch is the name and where the mark lives:
 
-- **No one-letter or monogram mark**, and no letter as the app icon or the small-size shorthand, unless the brief asks for one. A lone letter is a lazy default: nothing in it comes from the product.
+- **No one-letter or monogram mark**, and no letter as the app icon or the small-size shorthand, unless the brief asks for one; a wordmark-only kit's icon never takes a letter (*Lockups*). Initials allowed below aren't a monogram, and their icon follows *Lockups* too. A lone letter is a lazy default: nothing in it comes from the product.
 - **A short, distinctive name → a wordmark** alone is often enough (Identify, Introduction; Dime). The house rule allows it only when the brief asks for a wordmark-only kit or gives a reason.
 - **A long or unwieldy name, or parts to unify → a symbol** that stands in for it; a long wordmark would have to shrink into small spaces (Identify, HarperCollins; Merck; Chase Manhattan).
 - **A generic name → treat one part of it visually** to make it distinctive (Identify, Showtime; Centro).
