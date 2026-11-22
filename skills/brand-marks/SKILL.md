@@ -19,7 +19,7 @@ The product owner's house rule: the default is a symbol anchored in the product'
 
 ## 3. Draw it
 - **Build the symbol from geometry, then judge it in solid mass at thumbnail size** before any detail or colour. You write coordinates, you don't sketch, so a curve guessed point by point comes out wobbly. Use shared circles instead, drawn as one golden-ratio system (house rule):
-  - Pick one base radius r. Every arc in the symbol is a segment of a circle whose radius is in the φ series (r, rφ, rφ², rφ³, …, φ ≈ 1.618) or the Fibonacci set (1, 2, 3, 5, 8, 13, 21 units, with r as one unit). Use one set per mark: the Fibonacci set is whole-number steps that approach φ.
+  - Pick one base radius r. Every arc in the symbol is a segment of a circle whose radius is in the φ series (r·φⁿ: … rφ⁻², rφ⁻¹, r, rφ, rφ², …, φ ≈ 1.618) or the Fibonacci set (1, 2, 3, 5, 8, 13, 21 units, with r as one unit). Use one set per mark: the Fibonacci set is whole-number steps that approach φ. Steps below r are for small details, such as the arc that softens a cusp.
   - Cut each edge where two system circles meet or touch, tangent at the join, so one arc flows into the next. Where the idea needs a point, a corner is allowed at the crossing of two system circles; name each one in your return. Every edge is an arc of a system circle, or a line tangent to two of them; any other edge is a gap in the construction, so add a system circle.
   - Proportions between parts of different size follow φ: mass to gap, a larger part to a smaller one, a stroke to the space beside it. Repeated parts and a single stroke weight (below) stay equal.
   - Write coordinates to two decimals; the arcs come from the circles, not from a grid.
