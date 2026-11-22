@@ -13,10 +13,10 @@ When a relation fits only approximately, or holds only because of a correction m
 
 ## Check the system
 Measure the master against the system in `SKILL.md` §3 (base radius r; radii in the φ series or the Fibonacci set).
-- Express each fitted radius as r·φⁿ or a Fibonacci unit, and record the residual you measured against a tolerance of 1% of r.
-- **A radius outside the system is a finding.** Mark it on the board, list it in the return, and rebuild the arc from a system circle. A named optical correction within the §3 bound is an exception, not a finding.
+- Express each fitted radius as r·φⁿ or a Fibonacci unit, and record how far it sits from that system radius. A gap above 1% of r is a radius outside the system. This is separate from the fit residual above.
+- **A radius outside the system is a finding.** Mark it on the board, list it in the return, and rebuild the arc from a system circle. A named optical correction (`SKILL.md` §3) is an exception, not a finding.
 - A non-tangent join, a free curve or a straight edge that is not a tangent to two system circles is a finding. A named corner at the crossing of two system circles is not.
-- Proportions between parts (mass to gap, part to part, stroke to the space beside it) follow φ.
+- Proportions between parts of different size (mass to gap, larger part to smaller, stroke to the space beside it) follow φ; repeated parts stay equal.
 
 ## Draw
 - **Draw every system circle** that cuts an edge of the mark, each as a thin line and each labelled with its radius (r·φⁿ or the Fibonacci unit). Draw a circle as the arc on the mark's edge plus a short, even run past it, not as a full circle, so nothing leaves the board. Add the other strongest relationships the mark has: axes, extended edges. Cap the guides other than system circles near 25–35. Drop anything decorative or redundant, and any guide that nearly coincides with an edge or another guide, because a near-miss reads as a mistake. A system circle is never dropped for coinciding with an edge: its label is the point.
@@ -32,4 +32,4 @@ Measure the master against the system in `SKILL.md` §3 (base radius r; radii in
 Render the board to PNG and read it. Check that nothing runs off the board, that arcs sit on the logo's edges, that the tiers are distinct, that every label is legible and clear of the mark, and that the logo still leads. Fix what you find and render once more. The board lands beside the master as `brand/construction.svg` + `.png`.
 
 ## Return
-List every circle: its radius as r·φⁿ or the Fibonacci unit, its centre, and the base radius r in the master's units. Then list each finding (a radius outside the system, a non-tangent join, a free edge) and each optical correction by name.
+List every circle: its radius as r·φⁿ or the Fibonacci unit, its centre, and the base radius r in the master's units. Then list each named corner with the two circles it sits on, each finding (a radius outside the system, a non-tangent join, a free edge) and each optical correction by name.
