@@ -1,6 +1,6 @@
 ---
 name: brand-marks
-description: Logo and identity craft from *Identify* (Wheeler, Airey) — the brief, symbol vs. wordmark vs. letterform, building the mark, the appropriate/simple/memorable test, lockups, presenting concepts. Use when drawing, judging or presenting a logo, mark, wordmark or app icon.
+description: Logo and identity craft from *Identify* (Wheeler, Airey) — the brief, a symbol drawn from a real object by default, wordmark, building the mark, the appropriate/simple/memorable test, lockups, presenting concepts. Use when drawing, judging or presenting a logo, mark, wordmark or app icon.
 user-invocable: false
 ---
 
@@ -15,10 +15,10 @@ You have no client in the room, so these come from the brief. One the brief leav
 - **What already exists** — the current mark and its equity. Tweak before replacing; discard equity only for a stated reason (Identify, Armani Exchange; National Geographic; Wheeler p. 92).
 
 ## 2. Choose the form before drawing it
-The first question is whether it needs a symbol at all, or only a memorable treatment of the name (Identify, Introduction). The branch is in [`reference/form-and-type.md`](reference/form-and-type.md) — load it now, and again for the wordmark and lockups of the kit.
+The product owner's house rule: the default is a symbol drawn from a real object whose meaning ties to the product, never a lone letter, and an abstract mark needs a reason stated in the brief. Wordmark-only is allowed when the brief asks for it or the name alone is the mark (Identify, Introduction). The branch, and the four-object exploration that comes before the pick, are in [`reference/form-and-type.md`](reference/form-and-type.md) — load it now, and again for the wordmark and lockups of the kit.
 
 ## 3. Draw it
-- **Build the symbol from geometry, then judge it in solid mass at thumbnail size** before any detail or colour. You write coordinates, you don't sketch, so a curve guessed point by point comes out wobbly. Use a few shared shapes instead: circles and arcs from one family of radii, a small set of angles, one module, all on whole numbers. The idea still comes first; the computer "often just gets in the way" of it (Identify, Introduction; Bank of Taipei; Univision; MIAD). A wordmark is outlined from its face, not rebuilt; only a custom letterform gets built this way. The kit carries the construction as a board: [`reference/construction.md`](reference/construction.md).
+- **Build the symbol from geometry, then judge it in solid mass at thumbnail size** before any detail or colour. You write coordinates, you don't sketch, so a curve guessed point by point comes out wobbly. Use a few shared shapes instead: circles and arcs from one family of radii, a small set of angles, one module, all on whole numbers. The idea still comes first; the computer "often just gets in the way" of it (Identify, Introduction; Bank of Taipei; Univision; MIAD). A wordmark is outlined from its face, not rebuilt; only a custom letterform the brief asks for gets built this way. The kit carries the construction as a board: [`reference/construction.md`](reference/construction.md).
 - **Correct by eye where the geometry reads wrong** — a circle overshoots a square's edges to look the same size, joins thin where strokes meet, a mathematical centre sits low. Each correction outranks the construction's tidiness; keep it and name it.
 - **Judge solid mass first** — cut the idea out of a solid shape before reaching for outline strokes; a line-built mark holds one stroke weight (below). The finals are solid forms with white gaps; the rejected variants beside them are outlines or carry more parts (Identify, Scripps Howard; Karsan; Amesco; PBS; NBC).
 - **Let the gap between two parts draw the missing element** — a head, a letter, a divider — so the mark reads twice (Identify, NBC; RFK; GF; Armani Exchange).
@@ -37,10 +37,10 @@ The checks that make the test concrete:
 - **Draw it from memory** after a glance — if you can't, it isn't simple enough (Identify, Introduction).
 - **Could anyone else use it?** A mark easy to imagine on another organisation is not specific enough (Identify, Library of Congress).
 - **Put it where it lives, not on blank paper.** A mark rejected alone on white was approved in context (Identify, Armani Exchange). Show it as a small corner signature on busy full-bleed content and cropped oversized as a graphic, not only centred as a hero (Identify, Gemini; Big Apple Circus; Pan Am; Merck; Factset).
-- **Small sizes come from the master's simplicity.** Where the master can't hold, the icon is a **shorthand** pulled from it — one letter or one part, often reversed in a tile or disc — never a shrunken copy (Identify, American Republic; Do@; El Mall; Showtime; National Geographic).
+- **Small sizes come from the master's simplicity.** Where the master can't hold, the icon is a **shorthand** pulled from the symbol — one part of the object, or the whole object simplified, often reversed in a tile or disc — never a shrunken copy and never a letter unless the brief asks for one (Identify, American Republic; Do@; El Mall; Showtime; National Geographic).
 
 ## 5. Present for a pick
-- **Up to three routes, each a different idea with its own rationale**, plus the one you prefer and why (Airey p. 47; Wheeler p. 48). When one idea is plainly right, show it and its variations instead of padding the set (Identify, HarperCollins).
+- **Up to three routes, each a different idea with its own rationale**, plus the one you prefer and why (Airey p. 47; Wheeler p. 48). The four-object exploration (form reference) is listed in the return beside the pick; the routes shown are drawn from it. When one idea is plainly right, show it and its variations instead of padding the set (Identify, HarperCollins).
 - **Show only concepts that can work** — a weak one included for contrast is one the user may pick (Identify, Introduction).
 - **A new mark feels foreign at first.** Say so with the set: a first reaction ("I don't like blue") is not a verdict, and testing a mark on gut response rejects the unfamiliar (Identify, Introduction; Conservation International).
 - Before presenting, view every render. For each route say what it could be mistaken for.
@@ -51,5 +51,7 @@ The checks that make the test concrete:
 - **Depicting the building, or anything that can disappear** — it says nothing about what the org does and dates with the thing (Identify, Library of Congress; Alliance for Downtown New York).
 - **A symbol added because marks have symbols.** Have a reason for it (Identify, Merck). Decoration is right when the brief asks for it, and then the parts are drawn to work as pattern too (Identify, Shinsegae).
 - **An ownable-looking common shape.** A circle, a check, a letter in a square can't be owned; replace it with a new form of the same idea, and note that a search is due before anyone commits (Identify, Amesco; NBC).
+- **A lone letter or monogram as the mark.** It is a lazy default, not an idea: nothing in it comes from the product. Draw a real object instead.
+- **The common category icon** — a sun behind a cloud, a plain drop, a gear, a lightbulb — is every competitor's mark. It doesn't count as a concept in the exploration.
 - **A character mark** dates first (Wheeler p. 64). An animal or object mark stays free of letters, so it reads as the creature or the thing.
 - **Clean construction taken for an idea.** Circles and a module make any mark look finished, including a generic one. Precision isn't distinctiveness, so a well-built mark gets the "could anyone else use it?" check harder, not softer.
