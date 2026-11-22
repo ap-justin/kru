@@ -21,7 +21,7 @@ Measure the master against the system in `SKILL.md` §3.
 - **Rebuild each finding from system circles, then measure again.** Mark on the board and list in the return only what remains. A mark kept from before is not rebuilt: list its findings as they stand.
 
 ## Draw
-- **Draw every system circle** that cuts an edge of the mark (for a line-built mark, a stroke centre-line), each in the auxiliary tier below. Draw a circle as the arc on the mark's edge plus a short, even run past it, so nothing leaves the board. Add the other strongest relationships the mark has: axes, extended edges. Cap the guides other than system circles near 25–35. Drop anything decorative or redundant, and any guide that nearly coincides with an edge or another guide, because a near-miss reads as a mistake. A system circle stays even where it coincides with an edge: its label is the point.
+- **Draw every system circle** that cuts an edge of the mark (for a line-built mark, a stroke centre-line), each in the auxiliary tier below. Draw a circle as the arc on that edge or centre-line plus a short, even run past it, so nothing leaves the board. Add the other strongest relationships the mark has: axes, extended edges. Cap the guides other than system circles near 25–35. Drop anything decorative or redundant, and any guide that nearly coincides with an edge or another guide, because a near-miss reads as a mistake. A system circle stays even where it coincides with an edge: its label is the point.
 - **Text only as labels**: each circle's radius as r·φⁿ or the Fibonacci unit, and the base radius r once. Set labels small and neutral gray, placed clear of the mark. A circle whose radius falls outside the system is labelled with its measured value and flagged by a heavier stroke; an optical correction is labelled as a correction, with no flag.
 - **Near-white field, neutral grays only**, with no colour or effects.
 - **Three tiers that read at a glance**: primary solid and dark, secondary dashed and mid-dark, auxiliary thin solid or dotted in mid gray. If a tier is barely visible on the render, darken or thicken it.
@@ -31,7 +31,7 @@ Measure the master against the system in `SKILL.md` §3.
 - **SVG layers**, as `<g id>` from bottom to top: `auxiliary`, `secondary`, `primary`, `logo`, `anchors`, `labels`.
 
 ## Prove it
-Render the board to PNG and read it. Check that nothing runs off the board, that arcs sit on the logo's edges, that the tiers are distinct, that every label is legible and clear of the mark, and that the logo still leads. Fix what you find and render once more. The board lands beside the master as `brand/construction.svg` + `.png`.
+Render the board to PNG and read it. Check that nothing runs off the board, that arcs sit on the logo's edges (on the stroke centre-lines, in a line-built mark), that the tiers are distinct, that every label is legible and clear of the mark, and that the logo still leads. Fix what you find and render once more. The board lands beside the master as `brand/construction.svg` + `.png`.
 
 ## Return
 List the base radius r in the master's units, then every circle with its radius as r·φⁿ or the Fibonacci unit and its centre. Then list each named corner with the two circles it sits on, each finding that remains from *Check the system* (including a proportion miss), and each optical correction by name and size.
