@@ -1,6 +1,6 @@
 # The construction board
 
-One board per kit that shows how the master is built. A wordmark-only kit skips the board, and the return says why in one line.
+One board per kit that shows how the master is built. A wordmark-only kit, or initials set from a face, skips the board and its checks, and the return says why in one line.
 
 ## Measure, don't recall
 Read the geometry from the master's path, not from what you meant to draw: use a scratch script that parses the `d` attribute.
@@ -13,7 +13,7 @@ When a relation fits only approximately, or holds only because of a correction m
 
 ## Check the system
 Measure the master against the system in `SKILL.md` §3.
-- Express each fitted radius as r·φⁿ or a Fibonacci unit, within the one set the mark chose, and record how far it sits from the matched system radius. A gap above 1% of that radius is a radius outside the system. This is separate from the fit residual above. A line-built mark is measured on its stroke centre-lines.
+- Express each fitted radius as r·φⁿ or a Fibonacci unit, within the one set the mark chose, and record how far it sits from the matched system radius. A gap above 1% of that radius is a radius outside the system. This is separate from the fit residual above. A line-built mark is measured on its stroke centre-lines. A kept mark with no recorded r and set gets none: record and label its measured radii, say it wasn't built on the system, and skip the radius and φ checks.
 - **A radius outside the system is a finding.**
 - A non-tangent join, a free curve or a straight edge that is not the tangent segment between the two arcs it joins is a finding. A join passes as tangent within two-decimal coordinate rounding. A curve built as an arc of a system circle is not free; a curve drawn by control points with no system circle behind it is, however closely it fits one. A named corner at the crossing of two system circles, or a straight edge ending at a named corner and tangent to one system circle at its other end, is not a finding; nor is a line-built mark's centre-line, straight or arc, that ends free or on another centre-line.
 - Check the equal repeats and the φ proportions that `SKILL.md` §3 sets. A miss is a finding.
@@ -26,7 +26,7 @@ Measure the master against the system in `SKILL.md` §3.
 - **Near-white field, neutral grays only**, with no colour or effects.
 - **Three tiers that read at a glance**: primary solid and dark, secondary dashed and mid-dark, auxiliary thin solid or dotted in mid gray. If a tier is barely visible on the render, darken or thicken it.
 - **Small hollow nodes** at key anchors, a centre marker, and small squares at the bounding-box corners.
-- **The logo stays the hero**: a copy of the master path as it stands after any rebuild, with a flat fill of about 10% black and a dark outline. The board never redraws it.
+- **The logo stays the hero**: a copy of the master path as it stands after any rebuild, with a flat fill of about 10% black and a dark outline; a stroked master keeps no fill and its stroke width, with the stroke in about 10% black. The board never redraws it.
 - **Breathing room**: 16:9, the mark about 40–45% of the board's height and centred, guides running only a short, even distance past the mark.
 - **SVG layers**, as `<g id>` from bottom to top: `auxiliary`, `secondary`, `primary`, `logo`, `anchors`, `labels`.
 
@@ -34,4 +34,4 @@ Measure the master against the system in `SKILL.md` §3.
 Render the board to PNG and read it. Check that nothing runs off the board, that arcs sit on the logo's edges (on the stroke centre-lines, in a line-built mark), that the tiers are distinct, that every label is legible and clear of the mark, and that the logo still leads. Fix what you find and render once more. The board lands beside the master as `brand/construction.svg` + `.png`.
 
 ## Return
-List the base radius r in the master's units, then every circle with its radius as r·φⁿ or the Fibonacci unit and its centre. Then list each named corner with the two circles or edges that meet there, each finding that remains from *Check the system*, and each optical correction by name and size.
+List the base radius r in the master's units, then every circle with its radius as r·φⁿ or the Fibonacci unit and its centre (for a kept mark with no r, the measured radius). Then list each named corner with the two circles or edges that meet there, each finding that remains from *Check the system*, and each optical correction by name and size.
