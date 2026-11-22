@@ -47,7 +47,7 @@ prose in its seat.
 | class names are whole literals | template literal inside `class` / `className` | `tailwind` → *The scan is text*; `panda-css` |
 | full-height sections use `dvh` | `h-screen` in a class literal | UI builders → *Quality floor* |
 | no legacy Stripe surface | `stripe.charges.create`, Card Element, Sources/Tokens | `stripe-specialist` → *Product choices* |
-| a crossing `CustomEvent` is `composed` | `new CustomEvent` without `composed: true` | `web-components-builder` → *The seam* |
+| a crossing `CustomEvent` is `composed` | `new CustomEvent` without `composed: true`, in a file that defines a custom element (`customElements.define` or `attachShadow`) | `web-components-builder` → *The seam* |
 | no `transition: all` | `language css;` declaration `transition: all` | UI builders → *Motion*; `design-system` |
 
 ## TypeScript — compiler
