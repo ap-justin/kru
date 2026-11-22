@@ -13,7 +13,7 @@ The categories — wordmark, letterform, emblem, pictorial, abstract — blur, a
 - **Beside other marks it would fight** — sub-brands, partner logos — drop the symbol (Identify, Hearst).
 
 ### Explore the subject before choosing
-The product owner's house rule, not the books'. It applies to a symbol only. A wordmark, initials, an abstract mark or an existing mark being kept skips the exploration and the stranger check, and presents routes of its own form (`SKILL.md` §5).
+The product owner's house rule, not the books'. It applies to a symbol only (`SKILL.md` §2, §5).
 
 - **Draw at least four genuinely different concepts, each built from the subject.** Each is in solid mass, rendered at 128 and 48 px, with one line on what it shows of the subject. Which real objects qualify is *An object whose meaning needs explaining* under *Traps* in `SKILL.md`.
 - **Judge each by appropriate / simple / memorable and the stranger check** (`SKILL.md` §4).
