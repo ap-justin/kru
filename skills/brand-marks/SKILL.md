@@ -59,6 +59,6 @@ The checks that make the test concrete:
 - **A lone letter or monogram as the mark** when the brief didn't ask for one. Draw a real object instead (house rule).
 - **The common category icon** — a sun behind a cloud, a plain drop, a gear, a lightbulb — is every competitor's mark. It doesn't count as a concept in the exploration (house rule).
 - **A character mark** dates first (Wheeler p. 64). An animal or object mark carries no letter unless the brief asks, so it reads as the creature or the thing.
-- **A stray detached part.** A drop, star, spark or dot floating beside the symbol reads as out of place and drops out at 16 px. Every part joins the main form or is drawn by its gaps. Keep a loose element only when the gap draws it or the brief asks for it.
+- **A stray detached part.** A drop, star, spark or dot floating beside the symbol reads as out of place and drops out at 16 px. Keep a loose element only when the gap draws it or the brief asks for it.
 - **A wide, thin or tall, thin silhouette** that shrinks to a band in the tile with empty space above and below. Reframe it or pick an object that fills the square (`reference/form-and-type.md`).
 - **Clean construction taken for an idea.** Circles and a module make any mark look finished, including a generic one. Precision isn't distinctiveness, so a well-built mark gets the "could anyone else use it?" check harder, not softer.
