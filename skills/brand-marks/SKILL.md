@@ -48,7 +48,7 @@ Judge on what works, never on taste: **appropriate, simple, memorable** (Identif
 The checks that make the test concrete:
 - **Draw it from memory** after a glance — if you can't, it isn't simple enough (Identify, Introduction).
 - **Could anyone else use it?** A mark easy to imagine on another organisation is not specific enough (Identify, Library of Congress). Ask it of the idea that combines the parts, not of the parts (house rule; *The common category glyph* under *Traps*).
-- **For a symbol: would someone who doesn't know the product read the subject?** If the reading needs the product's name or an explanation, the mark fails (house rule). A wordmark, initials, an abstract mark or a kept mark skips this check.
+- **For a symbol you draw: would someone who doesn't know the product read the subject?** If the reading needs the product's name or an explanation, the mark fails (house rule).
 - **Put it where it lives, not on blank paper.** A mark rejected alone on white was approved in context (Identify, Armani Exchange). Show it as a small corner signature on busy full-bleed content and cropped oversized as a graphic, not only centred as a hero (Identify, Gemini; Big Apple Circus; Pan Am; Merck; Factset).
 - **Small sizes come from the master's simplicity.** Where the master can't hold, the icon is a **shorthand** pulled from the symbol — one part of it, or the whole symbol simplified, often reversed in a tile or disc — never a shrunken copy (Identify, American Republic; Do@; El Mall; Showtime; National Geographic). Some of those cases pulled one letter; the house rule allows a letter only when the brief asks. A wordmark-only kit has no symbol: its icon follows *Lockups* in [`reference/form-and-type.md`](reference/form-and-type.md).
 
