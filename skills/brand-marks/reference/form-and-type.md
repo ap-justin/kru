@@ -1,7 +1,7 @@
 # Form, wordmarks and lockups
 
 ## Choosing the form
-The categories — wordmark, letterform, emblem, pictorial, abstract — blur (Wheeler pp. 48–49). The book treats them as an even choice; the product owner's house rule outranks it. **The default form is a symbol anchored in the product's own subject**: what it is or what it does (weather for a weather app, money moving for a payments app), so that someone who has never heard of the product recognises the subject at a glance. It is then drawn with the geometry, solid-mass, gap and thumbnail rules in `SKILL.md` §3. This is Wheeler's pictorial mark, which reads fast in a cluttered setting (Identify, Old Chatham). The branch is the name and where the mark lives:
+The categories — wordmark, letterform, emblem, pictorial, abstract — blur (Wheeler pp. 48–49). The book treats them as an even choice; the product owner's house rule outranks it. **The default form is a symbol anchored in the product's own subject**: what it is or what it does (weather for a weather app, money moving for a payments app), drawn with the geometry, solid-mass, gap and thumbnail rules in `SKILL.md` §3. This is Wheeler's pictorial mark, which reads fast in a cluttered setting (Identify, Old Chatham). The branch is the name and where the mark lives:
 
 - **No one-letter or monogram mark**, and no letter as the app icon or the small-size shorthand, unless the brief asks for one. A lone letter is a lazy default: nothing in it comes from the product.
 - **A short, distinctive name → a wordmark** alone is often enough (Identify, Introduction; Dime). The house rule allows it when the brief asks for a wordmark-only kit or the name alone is the mark.
@@ -15,12 +15,10 @@ The categories — wordmark, letterform, emblem, pictorial, abstract — blur (W
 ### Explore the subject before choosing
 The product owner's house rule, not the books'.
 
-- **A real object qualifies only when it is the subject or plainly stands for it without explanation.** What fails is listed under *Traps* in `SKILL.md`.
-- **Draw at least four genuinely different concepts, each built from the subject.** Each is in solid mass, rendered at 128 and 48 px, with one line on what it shows of the subject.
-- **Give each the stranger check** (`SKILL.md` §4) beside appropriate / simple / memorable.
+- **Draw at least four genuinely different concepts, each built from the subject.** Each is in solid mass, rendered at 128 and 48 px, with one line on what it shows of the subject. Which real objects qualify is *An object whose meaning needs explaining* under *Traps* in `SKILL.md`.
 - **Judge each in the home-screen tile too** (`SKILL.md` §3). Prefer shapes that fill a square. A wide, thin or tall, thin silhouette is reframed: a closer view, a top-down or three-quarter view, or the one part that carries the idea. If it can't be reframed, it loses to a shape that fills the square.
 - **The common category glyph doesn't count as one of the four** (*Traps* in `SKILL.md`).
-- **Then narrow to the routes and name your preferred one.** Keep up to three that can work as routes, mark the one you prefer and say why, and give each its appropriate / simple / memorable / stranger verdict. Log every concept you drew in your return, with a one-line reason for each one you dropped (`SKILL.md` §5).
+- **Then narrow to the routes and name your preferred one.** Keep up to three that can work as routes, mark the one you prefer and say why, and give each its appropriate / simple / memorable / stranger verdict (the stranger check is in `SKILL.md` §4). Log every concept you drew in your return, with a one-line reason for each one you dropped (`SKILL.md` §5).
 
 ## Wordmarks
 - **Simple lettering plus one device** — the red O, the dot, the check (Identify, Mobil; Dime). Shown twice where once goes unnoticed (Identify, Gemini). The strongest devices **remove** rather than add: a missing crossbar or spine, the gap carrying the idea (Identify, Centro; WTA; Factset).
