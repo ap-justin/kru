@@ -55,7 +55,7 @@ blocks=$(for f in $(grep -l '^## The return pass' agents/*.md); do
 [ "$blocks" -le 1 ] || bad "## The return pass differs across seats ($blocks variants)"
 
 # no-spawn guard: every seat carries the no-spawn bullet or a tools: list that leaves out the
-# subagent tool. the forms follow code.claude.com/docs/en/sub-agents (Configuration → `tools`):
+# spawn tool. the forms follow code.claude.com/docs/en/sub-agents (Configuration → `tools`):
 # a comma-separated string or a YAML list (the bracketed flow form is one), omitted = inherits
 # every tool, and the spawn tool is Agent, formerly Task, with `Agent(type)` a restriction on it.
 # a `*` value is not documented there; it reads as every tool, so it can spawn too. a block list

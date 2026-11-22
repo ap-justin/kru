@@ -73,7 +73,7 @@ tools_case "a list without either tool is a guard" passes 'Read, Grep, Bash'
 tools_case "Agentic and TaskStop are not spawn tools" passes 'Read, Agentic, TaskStop'
 # a block list leaves the tools: line empty, which reads as can-spawn
 tools_case "a YAML block list can spawn" fails $'\n  - Read\n  - Grep'
-# the bullet still covers every spawning form
+# the bullet passes a seat whose tools: value can spawn
 { sed -n '1,/^model:/p' "$sandbox/seat.orig"; echo 'tools: *'; sed -n '/^model:/,$p' "$sandbox/seat.orig" | tail -n +2; } > "$seat"
 out=$(run) && ok || no "the bullet should cover a * tools value: $out"
 
