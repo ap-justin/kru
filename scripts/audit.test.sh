@@ -64,6 +64,11 @@ tools_case "no tools: line can spawn" fails ''
 tools_case "a bracketed list naming Agent can spawn" fails '[Read, Agent]'
 tools_case "a bracketed list without Agent or Task is a guard" passes '[Read, Grep]'
 tools_case "a bracketed quoted list is a guard" passes '["Read", "Grep"]'
+tools_case "a bracketed double-quoted list naming Agent can spawn" fails '["Read", "Agent"]'
+tools_case "a single-quoted list naming Task can spawn" fails "'Read', 'Task'"
+tools_case "Agent alone can spawn" fails 'Agent'
+tools_case "Task first in the list can spawn" fails 'Task, Read'
+tools_case "a trailing * member can spawn" fails 'Read, *'
 tools_case "a list without either tool is a guard" passes 'Read, Grep, Bash'
 tools_case "Agentic and TaskStop are not spawn tools" passes 'Read, Agentic, TaskStop'
 # a block list leaves the tools: line empty, which reads as can-spawn
