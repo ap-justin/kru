@@ -51,7 +51,9 @@ tools_case() {
   if out=$(run); then
     [ "$2" = passes ] && ok || no "$1: should fail"
   else
-    [ "$2" = fails ] && grep -q 'stripe-specialist.md: no no-spawn bullet' <<<"$out" && ok || no "$1: should pass: $out"
+    if [ "$2" != fails ]; then no "$1: should pass: $out"
+    elif grep -q 'stripe-specialist.md: no no-spawn bullet' <<<"$out"; then ok
+    else no "$1: failed, but not with the no-spawn message: $out"; fi
   fi
 }
 tools_case "Task is the spawn tool too" fails 'Read, Task, Bash'
@@ -63,9 +65,12 @@ tools_case "a bracketed list naming Agent can spawn" fails '[Read, Agent]'
 tools_case "a bracketed list without Agent or Task is a guard" passes '[Read, Grep]'
 tools_case "a bracketed quoted list is a guard" passes '["Read", "Grep"]'
 tools_case "a list without either tool is a guard" passes 'Read, Grep, Bash'
+tools_case "Agentic and TaskStop are not spawn tools" passes 'Read, Agentic, TaskStop'
+# a block list leaves the tools: line empty, which reads as can-spawn
+tools_case "a YAML block list can spawn" fails $'\n  - Read\n  - Grep'
 # the bullet still covers every spawning form
 { sed -n '1,/^model:/p' "$sandbox/seat.orig"; echo 'tools: *'; sed -n '/^model:/,$p' "$sandbox/seat.orig" | tail -n +2; } > "$seat"
 out=$(run) && ok || no "the bullet should cover a * tools value: $out"
 
-echo "audit.test:$pass passed, $fail failed"
+echo "audit.test: $pass passed, $fail failed"
 [ "$fail" = 0 ]
