@@ -1,6 +1,6 @@
 ---
 name: brand-marks
-description: Logo and identity craft from *Identify* (Wheeler, Airey) — the brief, a symbol drawn from a real object by default, wordmark, building the mark, the appropriate/simple/memorable test, lockups, presenting concepts. Use when drawing, judging or presenting a logo, mark, wordmark or app icon.
+description: Logo and identity craft from *Identify* (Wheeler, Airey) — the brief, symbol or wordmark, building the mark, the appropriate/simple/memorable test, lockups, presenting concepts. Use when drawing, judging or presenting a logo, mark, wordmark or app icon.
 user-invocable: false
 ---
 
