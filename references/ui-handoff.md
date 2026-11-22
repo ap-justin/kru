@@ -1,6 +1,6 @@
 # The UI handoff — the seam, the closed set, and what rides with the builders
 
-Detail behind `lead` → Step 3, and `visual-reviewer`'s spec-match pass. Reached when the change list contains a `.tsx`/`.svelte`/custom-element file; a change that touches no component never loads this.
+Detail behind `lead` → Step 3, and `visual-reviewer`'s spec-match pass. Reached when the change list contains a `.tsx`/`.svelte`/custom-element file or a plain TypeScript DOM module; a change that touches no component never loads this.
 
 Four things live here: **who writes components** (the seam), **why conformance is a handoff property rather than a review finding** (the closed set), and the two crafts that ride *with* the UI builders instead of getting a hop of their own (**motion**, **primitives**).
 
