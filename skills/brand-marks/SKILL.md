@@ -37,7 +37,7 @@ The checks that make the test concrete:
 - **Draw it from memory** after a glance — if you can't, it isn't simple enough (Identify, Introduction).
 - **Could anyone else use it?** A mark easy to imagine on another organisation is not specific enough (Identify, Library of Congress).
 - **Put it where it lives, not on blank paper.** A mark rejected alone on white was approved in context (Identify, Armani Exchange). Show it as a small corner signature on busy full-bleed content and cropped oversized as a graphic, not only centred as a hero (Identify, Gemini; Big Apple Circus; Pan Am; Merck; Factset).
-- **Small sizes come from the master's simplicity.** Where the master can't hold, the icon is a **shorthand** pulled from the symbol — one part of the object, or the whole object simplified, often reversed in a tile or disc — never a shrunken copy (Identify, American Republic; Do@; El Mall; Showtime; National Geographic).
+- **Small sizes come from the master's simplicity.** Where the master can't hold, the icon is a **shorthand** pulled from the symbol — one part of the object, or the whole object simplified, often reversed in a tile or disc — never a shrunken copy, never a letter unless the brief asks (Identify, American Republic; Do@; El Mall; Showtime; National Geographic).
 
 ## 5. Present for a pick
 - **Up to three routes, each a different idea with its own rationale**, plus the one you prefer and why (Airey p. 47; Wheeler p. 48). The routes shown are drawn from the four-object exploration (form reference). When one idea is plainly right, show it and its variations instead of padding the set (Identify, HarperCollins).

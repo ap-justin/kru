@@ -30,4 +30,4 @@ The categories — wordmark, letterform, emblem, pictorial, abstract — blur (W
 - **A secondary name is set apart by one contrast** — smaller and lighter, aligned to the name's edge rather than the symbol's (Identify, Merck; Hearst), or the same size in another colour or italic (Identify, Grey; Harvard Maintenance; Smithsonian; National Geographic).
 - **Symbol and wordmark also stand apart.** A lockup too crowded for a space is split, not shrunk (Identify, Mobil; Beehouse).
 - **Ship each colour positive and reversed in a box**, as a set (Identify, Showtime; El Mall).
-- **The app icon** takes the symbol: one part of the object, or the whole object simplified. A wordmark fits the tile only if it stays legible at tile size (Wheeler p. 75; Identify, Do@).
+- **The app icon** takes the symbol: one part of the object, or the whole object simplified, never a letter unless the brief asks. A wordmark fits the tile only if it stays legible at tile size (Wheeler p. 75; Identify, Do@).
