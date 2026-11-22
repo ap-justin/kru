@@ -8,7 +8,7 @@ The categories — wordmark, letterform, emblem, pictorial, abstract — blur (W
 - **A long or unwieldy name, or parts to unify → a symbol** that stands in for it; a long wordmark would have to shrink into small spaces (Identify, HarperCollins; Merck; Chase Manhattan).
 - **A generic name → treat one part of it visually** to make it distinctive (Identify, Showtime; Centro).
 - **Initials → only when people already use them and the brief asks for an initials mark**, and never one letter pulled out of an acronym people say whole (Identify, EPA; NBC).
-- **An abstract mark needs a reason stated in the brief or named as an assumption in your return**, such as a broad or technical offer with no object that stands for it. It is the hardest form to do well and gains meaning through exposure (Wheeler p. 58; Identify, Chase Manhattan).
+- **An abstract mark needs a reason stated in the brief or named as an assumption in your return**, such as a broad or technical offer with no subject that can be drawn so a stranger reads it. It is the hardest form to do well and gains meaning through exposure (Wheeler p. 58; Identify, Chase Manhattan).
 - **A name inside a shape** is the hardest form to read small (Wheeler p. 60) — unless the name is set tight to the edges of a square tile, which holds on stickers and poster corners (Identify, Mount Sinai; UNDP; Downtown Alliance). A ring of type around a symbol keeps a bare version with the type moved below for small uses (Identify, Bicentennial). A plain disc behind the mark is different: it shields it on dark or busy ground (Identify, PBS; WTA; Smithsonian; Mobil).
 - **Beside other marks it would fight** — sub-brands, partner logos — drop the symbol (Identify, Hearst).
 
@@ -18,7 +18,7 @@ The product owner's house rule, not the books'.
 - **A real object qualifies only when it is the subject or plainly stands for it without explanation.** A cultural reference, an insider reference, a pun or a metaphor the viewer has to be told fails (*Traps* in `SKILL.md`).
 - **Draw at least four genuinely different concepts, each built from the subject.** Each is in solid mass, rendered at 128 and 48 px, with one line on what it shows of the subject.
 - **Give each a stranger check** beside appropriate / simple / memorable: would someone who doesn't know the product read the subject?
-- **Judge each in the home-screen tile too** (`SKILL.md` §3). Prefer shapes that fill a square. A wide, thin or tall, thin silhouette is reframed: a closer view, a top-down or three-quarter view, or the one part that carries the idea. If it can't be reframed, it loses to an object that fills the square.
+- **Judge each in the home-screen tile too** (`SKILL.md` §3). Prefer shapes that fill a square. A wide, thin or tall, thin silhouette is reframed: a closer view, a top-down or three-quarter view, or the one part that carries the idea. If it can't be reframed, it loses to a shape that fills the square.
 - **The common category glyph doesn't count as one of the four** (*Traps* in `SKILL.md`). The parts may be the subject's own; the idea that combines them must be the product's.
 - **Then narrow to the routes and name your preferred one.** Keep up to three that can work as routes, mark the one you prefer and say why, and give each its appropriate / simple / memorable / stranger verdict. Log every concept you drew in your return, with a one-line reason for each one you dropped (`SKILL.md` §5).
 
