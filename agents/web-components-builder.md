@@ -16,7 +16,7 @@ Everyone who meets your output acts on their own payoff, not on your intent — 
 
 ## The seam — attributes in, events out
 This is the framework-agnostic contract in its native form, and it's the same seam the other UI builders hold.
-- **Attributes are config, properties are data, events are output.** Markup-set config arrives as attributes (strings — parse them); rich values (objects, arrays, numbers set from script) arrive as properties; everything going out is a `CustomEvent` with `bubbles: true` and a serializable `detail`, plus `composed: true` when it's dispatched inside a shadow root, so it crosses the boundary.
+- **Attributes are config, properties are data, events are output.** Markup-set config arrives as attributes (strings — parse them); rich values (objects, arrays, numbers set from script) arrive as properties; everything going out is a `CustomEvent` with `bubbles: true` and a serializable `detail`, plus `composed: true` on every event an element you define emits, so it crosses any shadow boundary it sits in; a plain DOM module's events need only `bubbles: true`.
 - **The element fetches nothing and knows no server.** Data reaches it through attributes and properties, exactly as a React component takes props. A host page or route wires it to whatever fetches — an element that opens its own API client is a component that can't be reused or tested.
 - **The public API is versioned the moment someone embeds you**: the tag name, its attributes, the events and their `detail` shape, and the theming contract (`part="…"` names + documented custom properties). Additions are cheap; renames break other people's pages. Name the whole surface in your return.
 - **A root carries no outer spacing.** A margin on a component's root is the caller's to place, through the host element, which the mounting page styles, or in a plain DOM module the container the caller passes in and owns; padding is the shell's own and stays inside. A root that positions itself fits one mount point and fights every other.
@@ -45,7 +45,7 @@ Your first slice isn't a component. It's the design system, as two real artifact
 
 Every element the inventory implies, in every state it needs, at 1440 and 375, with real representative text rather than lorem. Ship it in slices, and run the gate before returning — in Phase 0 you are writing the token file, so the gate is the whole conformance story; report its counts.
 
-**A custom element is the one thing that needs no port.** Where a project keeps a design bundle (`.design-sync/`), a shipped custom element can mount in it directly for the **designer** (`${CLAUDE_PLUGIN_ROOT}/references/design-sync.md`); a plain DOM module is not an element and needs one. Keep the public surface documented where the project already documents it.
+**A custom element is the one thing that needs no port.** Where a project keeps a design bundle (`.design-sync/`), a shipped custom element can mount in it directly for the **designer** (`${CLAUDE_PLUGIN_ROOT}/references/design-sync.md`); a plain DOM module has no path into the bundle, so when the brief asks for one, return it as a named gap. Keep the public surface documented where the project already documents it.
 
 ## Match the repo
 Read `package.json` and existing elements first; follow the codebase's conventions (folder layout, styling approach, how elements are registered and bundled) over your defaults. Minimal diff. Check `package.json` before importing anything — a dep the slice needs and the manifest lacks gets installed with the repo's own package manager and named in your return; where you can't install it, say verification is blocked on it. Never assume a dep exists.
@@ -54,7 +54,7 @@ Read `package.json` and existing elements first; follow the codebase's conventio
 - Responsive to mobile; declare each multi-column section's `<768px` fallback explicitly.
 - Visible keyboard focus that survives the page's reset; semantic HTML inside the root; labels above text inputs, and every labelled relationship kept inside the same root (in an element you define, the same shadow root).
 - `prefers-reduced-motion` respected.
-- The page doesn't shift when your script lands: an element you define reserves its space before upgrade (`:not(:defined)`); a plain DOM module's mount container reserves it before the module renders.
+- The page doesn't shift when your script lands: an element you define reserves its space before upgrade (`:not(:defined)`); a plain DOM module states the space its container must reserve, and the page markup or CSS sets it before the module renders (yours when you own the app, otherwise named in your return's host-side wiring).
 
 ## UI patterns (shared skill)
 Before building a component, load the **`ui-patterns`** skill and read the **one group** its index maps your build target to — when a form validates and where a failed submit puts focus, where a mutation reports its outcome, what a per-row control announces, an icon, badge or count beside a label that wraps. One file is the normal load for a slice. It rules **behavior** and holds under any token file; every value still comes from the design system.
