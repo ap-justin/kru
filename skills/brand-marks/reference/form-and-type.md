@@ -16,7 +16,7 @@ The categories — wordmark, letterform, emblem, pictorial, abstract — blur (W
 The product owner's house rule, not the books'.
 
 - **Draw at least four genuinely different real objects.** Each is in solid mass, rendered at 128 and 48 px, with one line on what it means for this product.
-- **Judge each in the home-screen tile at 48 px, beside neutral neighbouring icons, as well as in solid mass.** Prefer objects whose silhouette fills a square. A wide, thin or tall, thin silhouette is reframed: a closer view, a top-down or three-quarter view, or the one part that carries the idea. If it can't be reframed, it loses to an object that fills the square.
+- **Judge each in the home-screen tile too** (`SKILL.md` §3). Prefer objects whose silhouette fills a square. A wide, thin or tall, thin silhouette is reframed: a closer view, a top-down or three-quarter view, or the one part that carries the idea. If it can't be reframed, it loses to an object that fills the square.
 - **The common category icon doesn't count as one of the four** (*Traps* in `SKILL.md`).
 - **Then narrow to the routes and name your preferred one.** Keep up to three that can work as routes, mark the one you prefer and say why, and give each its appropriate / simple / memorable verdict. Log every object you drew in your return, with a one-line reason for each one you dropped (`SKILL.md` §5).
 
@@ -33,4 +33,4 @@ The product owner's house rule, not the books'.
 - **A secondary name is set apart by one contrast** — smaller and lighter, aligned to the name's edge rather than the symbol's (Identify, Merck; Hearst), or the same size in another colour or italic (Identify, Grey; Harvard Maintenance; Smithsonian; National Geographic).
 - **Symbol and wordmark also stand apart.** A lockup too crowded for a space is split, not shrunk (Identify, Mobil; Beehouse).
 - **Ship each colour positive and reversed in a box**, as a set (Identify, Showtime; El Mall).
-- **The app icon** takes the symbol: one part of it, or the whole symbol simplified, never a letter unless the brief asks (house rule). The symbol spans most of the safe area in width and height (`SKILL.md` §3), so prefer an object whose silhouette fills a square. A wordmark fits the tile only if it stays legible at tile size (Wheeler p. 75).
+- **The app icon** takes the symbol: one part of it, or the whole symbol simplified, never a letter unless the brief asks (house rule). The symbol spans most of the safe area in width and height (`SKILL.md` §3). A wordmark fits the tile only if it stays legible at tile size (Wheeler p. 75).
