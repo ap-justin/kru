@@ -2,7 +2,7 @@
 
 `scripts/build-codex.sh` generates a Codex plugin from this tree. Nothing it writes is committed, so the build cannot fall behind the Claude Code plugin: both come from the same skills, seat files and hook scripts. `scripts/verify.sh` builds into a temp dir and checks the result on every run.
 
-This file says what each part becomes, every rewrite rule, and what does not carry over. How to build and install it is in `codex/README.md`. Source lines are in the Codex repository at tag `rust-v0.172.0`; each is `path:lines` under `codex-rs/`. The build has not been run in a live Codex session. Every mapping below rests on reading those sources, and each one a live session could contradict is marked **unverified**.
+This file says what each part becomes, every rewrite rule, and what does not carry over. How to build and install it is in `codex/README.md`. Source lines are in the Codex repository at tag `rust-v0.172.0`; each is `path:lines` under `codex-rs/`. Every mapping below rests on reading those sources, not on a live Codex session, and each one a live session could contradict is marked **unverified**.
 
 ```
 scripts/build-codex.sh <out-dir>               build the plugin tree
@@ -38,11 +38,11 @@ enabled = true
 
 ## Skills
 
-Every `skills/<name>/` is built, 119 today. Files in a skill folder other than `SKILL.md` are copied, with the rules below applied to the Markdown ones. A skill name is at most 64 characters and a description is required (`skills/src/parser.rs:82-85`); `--check` enforces both and that the folder name equals the frontmatter `name`.
+Every `skills/<name>/` is built. Files in a skill folder other than `SKILL.md` are copied, with the rules below applied to the Markdown ones. A skill name is at most 64 characters and a description is required (`skills/src/parser.rs:82-85`); `--check` enforces both and that the folder name equals the frontmatter `name`.
 
 ### Manual-only skills
 
-A skill with `disable-model-invocation: true` (32 today) becomes a skill, not a command, with `agents/openai.yaml` beside its `SKILL.md`:
+A skill with `disable-model-invocation: true` becomes a skill, not a command, with `agents/openai.yaml` beside its `SKILL.md`:
 
 ```yaml
 policy:
@@ -53,8 +53,6 @@ Why a skill and not a command:
 
 - A skill can be kept from implicit use. The file is `agents/openai.yaml` (`ext/skills/src/loader/mod.rs:22-23`), its `policy.allow_implicit_invocation` is read by `skills/src/metadata.rs:53-56,93-98`, and a skill without it is implicit by default (`skills/src/model.rs:23-28`). Explicit selection by `$name` does not consult the field (`skills/src/selection.rs:44-112`).
 - A command is not a separate thing in 0.172. The manifest's `commands` paths are migrated into skills named `source-command-<name>` (`core-plugins/src/command_migration.rs:14,339-341`, `core-plugins/src/command_migration/plugin.rs:25-53`), nothing in the migration marks them manual-only, and a migrated command is dropped when it uses `$ARGUMENTS`, `!` shell lines or `@` file references (`command_migration.rs:418-427`) or runs past 4,000 bytes (`command_migration/plugin.rs:17`). kru's manual skills hit all three.
-
-So the plugin has no `commands`, and "commands" in the install listing is 0.
 
 A skill is called with `$name`, `$kru:name` for a plugin skill (`skills/src/mentions.rs:41,79-86`; `:226-228` lets a name hold a colon).
 
@@ -177,8 +175,6 @@ The scripts then run unchanged on a transcript that has what they scan for. A sk
 - **Tool allowlists.** A seat's `tools:` line does not become a restriction. The read-only seats get a sandbox instead. Reviewers are told to write their report under `$TMPDIR/kru-review`, which a read-only sandbox may refuse. **Unverified.**
 - **`reflect` and `text-fix`.** They stop with a notice, as above.
 - **Skill text about Claude Code.** Rewritten mechanically; see *Rewrite rules*.
-- **MCP servers, apps, `interface` assets.** None are declared. The Claude plugin has none.
-- **Events with no kru hook.** `PermissionRequest`, `PreCompact`, `PostCompact`, `SessionEnd`, `SubagentStart`, `Interrupt` and the model-request events have no kru behaviour behind them.
 - **A live run.** Nothing here has been run in a Codex session. What is checked is what a build can check: the manifest parses, every skill folder name matches its frontmatter, every role file parses as TOML and carries a name, description and instructions, no `CLAUDE_PLUGIN_ROOT`, Claude Code tool name or Claude model name is left in the files `--check` scans (listed after this section), and every plugin-root path that resolves in the source resolves in the build. The hook tests, `hooks/codex-adapter.test.sh` among them, are not part of `--check`; `scripts/verify.sh` runs them in a step of their own.
 - **Hook messages (known gap).** The adapter passes hook stdout and stderr through as the scripts write them, so the `SessionStart` context and the block reasons the model reads still use Claude Code terms: `Read`, `Grep` and `Glob` as tool names, `kru:lead` and `kru:designer` as skills to invoke, and `/kru:` commands. A Codex model has to map them to `$kru:lead` and its own tools. Nothing checks this output.
 
