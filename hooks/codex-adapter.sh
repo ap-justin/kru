@@ -47,17 +47,26 @@ fi
 script="$here/$hook.sh"
 [ -f "$script" ] || exit 0
 
+# a shell read counts as a Read only as one command with one path, bare or in balanced quotes: no
+# separator, redirect, expansion or escape anywhere, since a false match lets a command past the gates.
+# require-lead still decides whether the path is the plugin's own contract
 norm=$(printf '%s' "$input" | jq -c --arg shadow "$shadow" '
   (.tool_input.command? // "" | if type == "string" then . else "" end) as $cmd
+  | "skills/(lead|designer|brainstorm|brief)/SKILL\\.md" as $file
+  | "[^\\s\\x27\"`$\\\\|;&<>()]*" as $bare
+  | "[^\\n\\x27\"`$\\\\|;&<>()]*" as $quoted
+  | ("^\\s*(cat|head|tail|nl|bat|sed -n ([0-9,]+p|\\x27[0-9,]+p\\x27|\"[0-9,]+p\"))[ \\t]+"
+      + "(\\x27(?<sq>" + $quoted + $file + ")\\x27|\"(?<dq>" + $quoted + $file + ")\"|(?<bare>" + $bare + $file + "))\\s*$") as $read_re
+  | ([$cmd | capture($read_re)][0]) as $read
   | if .tool_name == "spawn_agent" then
       .tool_input = {
         subagent_type: (.tool_input.agent_type // ""),
         prompt: (.tool_input.message // ""),
         description: (.tool_input.task_name // "")
       }
-    elif .tool_name == "Bash" and ($cmd | test("^\\s*(cat|head|tail|nl|bat|sed -n [0-9,]+p)\\s+[^|;&<>`$()]*skills/(lead|designer|brainstorm|brief)/SKILL\\.md\\s*$")) then
+    elif .tool_name == "Bash" and $read != null then
       .tool_name = "Read"
-      | .tool_input = {file_path: ($cmd | capture("(?<p>[^\\s\"\\x27]*skills/(lead|designer|brainstorm|brief)/SKILL\\.md)").p)}
+      | .tool_input = {file_path: ($read.sq // $read.dq // $read.bare)}
     else . end
   | if $shadow != "" and .hook_event_name == "PreToolUse" then .transcript_path = $shadow else . end' 2>/dev/null) || exit 0
 [ -n "$norm" ] || exit 0

@@ -6,12 +6,19 @@
 #   build-codex.sh --check <dir>          scan a built tree: manifest, skill names, role TOML,
 #                                         leftover Claude Code names, plugin-root paths
 #   build-codex.sh --verify               build into a temp dir, check it, remove it (what verify.sh runs)
-# bash, jq and python3 (3.11+, for tomllib) only. the same input builds the same bytes, so a rerun
-# replaces the tree it made and nothing else. every mapping is explained, with the Codex source line
-# it rests on, in codex/PORTING.md.
+#   build-codex.sh --help                 this text, on stdout
+# exit: 0 done · 1 failed: a broken source tree, an output path it won't replace, a role file it
+# didn't write in the way, --check problems, a missing or old python3 · 64 bad flags or arguments.
+# needs bash and python3 3.11+ (tomllib). the same input builds the same bytes. a build goes into a
+# temp sibling and moves into place whole, so a failed run leaves the previous tree as it was and a
+# rerun replaces the tree it made and nothing else. every mapping is explained, with the Codex source
+# line it rests on, in codex/PORTING.md.
 set -u
 repo=$(cd "$(dirname "$0")/.." && pwd)
-command -v python3 >/dev/null 2>&1 || { echo "build-codex: needs python3" >&2; exit 2; }
+python3 -c 'import sys; sys.exit(sys.version_info < (3, 11))' 2>/dev/null || {
+  echo "build-codex: needs python3 3.11 or newer (for tomllib); found: $(python3 --version 2>&1 || echo none)" >&2
+  exit 1
+}
 KRU_REPO=$repo exec python3 - "$@" <<'PY'
 import json, os, re, shutil, sys, tempfile, tomllib
 from pathlib import Path
@@ -88,7 +95,7 @@ MODEL_TABLE = [
             "visual-reviewer", "accessibility-reviewer"],
      {OPUS: "moonshotai/kimi-k3.1-pro", SONNET: "moonshotai/kimi-k3"}),
     ("independent reviewer", ["code-reviewer", "architecture-reviewer"],
-     {"*": "deepseek/deepseek-v4.1-flash"}),
+     {"*": "openai/gpt-6.2-sol"}),
     ("other", ["better-auth-specialist", "chariot-specialist", "cloudflare-builder", "dispatch-auditor",
                "express-builder", "fly-platform-engineer", "go-fullstack-builder", "hono-builder",
                "nextjs-builder", "node-developer", "nowpayments-specialist", "paypal-specialist",
@@ -99,7 +106,9 @@ MODEL_TABLE = [
                "zapier-specialist", "zig-developer"],
      {OPUS: "zai/glm-5.3", SONNET: "zai/glm-5.3-flash", HAIKU: "zai/glm-5.3-flash"}),
 ]
-MODELS_ALL = {m for _, _, by_tier in MODEL_TABLE for m in by_tier.values()}
+# available and assigned to no seat kind
+UNASSIGNED_MODELS = ["deepseek/deepseek-v4.1-flash"]
+MODELS_ALL = {m for _, _, by_tier in MODEL_TABLE for m in by_tier.values()} | set(UNASSIGNED_MODELS)
 
 def table_problems():
     """what is wrong with the table against the seat files, one line each."""
@@ -149,7 +158,7 @@ LEGAL = ["LICENSE", "NOTICE", "VERSION"]
 
 def die(msg):
     print(f"build-codex: {msg}", file=sys.stderr)
-    sys.exit(2)
+    sys.exit(1)
 
 def split_fm(text, where):
     if not text.startswith("---\n"):
@@ -353,16 +362,37 @@ def build_hooks(out):
 
 # ---- the plugin ----------------------------------------------------------------------------------
 
+def claim(out):
+    """die unless out is absent, an empty directory, or a tree this script built."""
+    if not out.exists():
+        return
+    if not out.is_dir():
+        die(f"{out} is not a directory")
+    if any(out.iterdir()) and not (out / MARKER).is_file():
+        die(f"{out} exists and is not a tree this script built; pick an empty directory")
+
 def build(out, root):
     out = Path(out)
     problems = table_problems()
     if problems:
         die("\n".join(problems))
-    if out.exists() and any(out.iterdir()):
-        if not (out / MARKER).is_file():
-            die(f"{out} exists and is not a tree this script built; pick an empty directory")
-        shutil.rmtree(out)
-    out.mkdir(parents=True, exist_ok=True)
+    claim(out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    tmp = Path(tempfile.mkdtemp(prefix=f".{out.name}.", suffix=".kru-tmp", dir=out.parent))
+    old = tmp.with_name(tmp.name + ".old")
+    try:
+        umask = os.umask(0); os.umask(umask)
+        tmp.chmod(0o777 & ~umask)            # mkdtemp makes it 0700; out gets what mkdir would give it
+        roles = build_tree(tmp, root)
+        if out.exists():
+            out.rename(old)
+        tmp.rename(out)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+        shutil.rmtree(old, ignore_errors=True)
+    return roles
+
+def build_tree(out, root):
     version = (REPO / "VERSION").read_text().strip()
     claude = json.loads((REPO / ".claude-plugin/plugin.json").read_text())
     manifest = {
@@ -392,21 +422,28 @@ def build(out, root):
     write(out / MARKER, f"root={root}\n")
     return roles
 
+def wrote_role(path):
+    return path.is_file() and path.read_text(encoding="utf-8").startswith(ROLE_MARK + "\n")
+
 def install(home):
     home = Path(home).resolve()
     plugin = home / "plugins" / "cache" / PLUGIN_ID[1] / PLUGIN_ID[0] / "local"
-    roles = build(plugin, str(plugin))
     agents = home / "agents"
+    # every refusal before the first write: a role file in the way stops the install with the plugin
+    # and the agents folder as they were
+    taken = [agents / f"{f.stem}.toml" for f in sorted((REPO / "agents").glob("*.md"))]
+    taken = [t for t in taken if t.exists() and not wrote_role(t)]
+    if taken:
+        die("these exist and are not role files this script wrote; move them aside:\n"
+            + "\n".join(f"  {t}" for t in taken))
+    roles = build(plugin, str(plugin))
     agents.mkdir(parents=True, exist_ok=True)
     fresh = {f.name for f in (plugin / "roles").glob("*.toml")}
     for old in agents.glob("*.toml"):
-        if old.name not in fresh and old.read_text(encoding="utf-8").startswith(ROLE_MARK + "\n"):
+        if old.name not in fresh and wrote_role(old):
             old.unlink()
     for f in sorted((plugin / "roles").glob("*.toml")):
-        target = agents / f.name
-        if target.exists() and not target.read_text(encoding="utf-8").startswith(ROLE_MARK + "\n"):
-            die(f"{target} exists and is not one this script wrote; move it aside")
-        shutil.copyfile(f, target)
+        shutil.copyfile(f, agents / f.name)
     print(f"installed kru {(REPO / 'VERSION').read_text().strip()}")
     print(f"  plugin  {plugin}")
     print(f"  roles   {roles} files in {agents}")
@@ -421,6 +458,8 @@ def check(out):
     bad = []
     def fail(msg): bad.append(msg)
     marker = out / MARKER
+    if not out.is_dir():
+        die(f"{out} is not a directory")
     if not marker.is_file():
         die(f"{out} is not a tree this script built")
     root = marker.read_text().strip().removeprefix("root=")
@@ -527,8 +566,19 @@ def check(out):
     print(f"build-codex: ok ({len(built)} skills, {len(roles)} roles, "
           f"{sum(len(g['hooks']) for gs in hj['hooks'].values() for g in gs)} hook commands)")
 
+USAGE = """\
+usage: build-codex.sh <out-dir>              build the plugin tree into <out-dir>
+       build-codex.sh --install <codex-home> build into <codex-home>/plugins/cache/kru/kru/local and
+                                             write the role files into <codex-home>/agents
+       build-codex.sh --check <dir>          scan a built tree
+       build-codex.sh --verify               build into a temp dir, check it, remove it
+exit: 0 done, 1 failed (source tree, output path, --check problems), 64 bad flags or arguments
+"""
+
 def main(argv):
-    if len(argv) == 2 and not argv[1].startswith("-"):
+    if len(argv) == 2 and argv[1] in ("-h", "--help"):
+        sys.stdout.write(USAGE)
+    elif len(argv) == 2 and not argv[1].startswith("-"):
         n = build(argv[1], ROOT_TOKEN)
         print(f"built kru {(REPO / 'VERSION').read_text().strip()} for Codex into {argv[1]} ({n} roles)")
     elif len(argv) == 3 and argv[1] == "--install":
@@ -543,8 +593,12 @@ def main(argv):
         finally:
             shutil.rmtree(tmp, ignore_errors=True)
     else:
-        print("usage: build-codex.sh <out-dir> | --install <codex-home> | --check <dir> | --verify", file=sys.stderr)
+        print("build-codex: usage: build-codex.sh <out-dir> | --install <codex-home> | --check <dir> | --verify\n"
+              "Run 'build-codex.sh --help' for more.", file=sys.stderr)
         sys.exit(64)
 
-main(sys.argv)
+try:
+    main(sys.argv)
+except OSError as e:                     # a path that can't be read or written: one line, not a traceback
+    die(str(e))
 PY

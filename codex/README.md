@@ -8,6 +8,8 @@ bash scripts/build-codex.sh --install ~/.codex        # into a Codex home: the p
 bash scripts/build-codex.sh --check /tmp/kru-codex    # the checks scripts/verify.sh runs on a build
 ```
 
+The build needs bash and Python 3.11 or later (it reads TOML with `tomllib`); the hooks need `jq` at run time.
+
 The install leaves `config.toml` alone and prints the two lines that turn the plugin on. Hook commands need a one-time trust in Codex.
 
 ## What is missing

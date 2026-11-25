@@ -78,6 +78,88 @@ prompt s5 "go"
 run PreToolUse require-lead "$(payload PreToolUse s5 "$(jq -nc --arg p "$patch" '{tool_name:"apply_patch", tool_use_id:"u1", agent_id:"a1", agent_type:"code-reviewer", tool_input:{command:$p}}')")"
 report "a sub-agent's own call is never gated" "$([ "$code" -eq 0 ] && [ -z "$err" ] && echo true || echo false)" "exit $code [$err]"
 
+# a shell command is rewritten into a Read only as one reader with one plugin-contract path. a false
+# match is the dangerous direction: it turns a command into a "Read" that opens the lead gate, so each
+# separator, expansion and escape has its own held case beside the forms that must open it.
+# `open` = the contract counts as loaded: neither call is blocked. `held` = a call is blocked with the
+# gate's message (the bash call itself when the command is not read-only, else the edit after it)
+n=0
+read_case() { # <open|held> <label> <command>
+  n=$((n+1)); prompt rd$n "go"
+  run PreToolUse require-lead "$(bash_call rd$n "$3")"; c1=$code; e1=$err
+  run PreToolUse require-lead "$(edit_call rd$n)"; c2=$code; e2=$err
+  local ok=false
+  if [ "$1" = open ]; then [ "$c1" -eq 0 ] && [ "$c2" -eq 0 ] && [ -z "$e1$e2" ] && ok=true
+  else printf '%s%s' "$e1" "$e2" | grep -q 'has not loaded the lead contract' && { [ "$c1" -eq 2 ] || [ "$c2" -eq 2 ]; } && ok=true; fi
+  report "$2" "$ok" "bash rc $c1 [$e1], edit rc $c2 [$e2]: $3"
+}
+L=$root/skills/lead/SKILL.md
+read_case open "a bare cat of the lead contract counts as a Read" "cat $L"
+read_case open "a single-quoted cat counts as a Read" "cat '$L'"
+read_case open "a double-quoted cat counts as a Read" "cat \"$L\""
+read_case open "a sed range in quotes counts as a Read" "sed -n '1,200p' $L"
+read_case open "head counts as a Read" "head $L"
+read_case open "head of a quoted path counts as a Read" "head '$L'"
+read_case held "a command after a semicolon is not a Read" "cat $L; touch x"
+read_case held "a second command after && is not a Read" "cat '$L' && touch x"
+read_case held "a redirect is not a Read" "cat '$L' > x"
+read_case held "a command substitution is not a Read" "cat \$(echo '$L')"
+read_case held "a pipe is not a Read" "cat '$L' | sh"
+read_case held "a second file is not a Read" "cat '$L' /etc/passwd"
+read_case held "a skill path outside the plugin is not the contract" "cat '/tmp/elsewhere/skills/lead/SKILL.md'"
+read_case held "an unbalanced quote is not a Read" "cat '$L"
+read_case held "a semicolon inside quotes is not a Read" "cat '$L;x'"
+read_case held "a dollar expansion inside quotes is not a Read" "cat \"\$HOME$L\""
+read_case held "a backtick substitution is not a Read" "cat \`echo '$L'\`"
+read_case held "a backslash escape is not a Read" "cat \\'$L\\'"
+read_case held "mismatched quotes are not a Read" "cat '$L\""
+read_case held "a bare path with parentheses is not a Read" "cat $L(x)"
+read_case held "a bare background ampersand is not a Read" "cat $L&"
+read_case held "a sed script that writes is not a Read" "sed -n '1,200p;w x' $L"
+# the contract path as the tail of a longer word: the separator or expansion sits mid-path, so the
+# string still ends in skills/lead/SKILL.md and a looser character class would match it
+read_case held "a semicolon mid-path is not a Read" "cat $root/x;$L"
+read_case held "an && mid-path is not a Read" "cat $root/x&&$L"
+read_case held "a pipe mid-path is not a Read" "cat $root/x|$L"
+read_case held "a redirect mid-path is not a Read" "cat $root/x>$L"
+read_case held "parentheses mid-path are not a Read" "cat $root/x(y)$L"
+read_case held "a backslash mid-path is not a Read" "cat $root/x\\$L"
+read_case held "a dollar mid-path is not a Read" "cat $root/x\$HOME$L"
+read_case held "a semicolon mid-path in single quotes is not a Read" "cat '$root/x;$L'"
+read_case held "an ampersand mid-path in double quotes is not a Read" "cat \"$root/x&$L\""
+read_case held "a pipe mid-path in quotes is not a Read" "cat '$root/x|$L'"
+read_case held "a dollar mid-path in double quotes is not a Read" "cat \"$root/x\$HOME$L\""
+read_case held "a backtick mid-path in quotes is not a Read" "cat \"$root/x\`id\`$L\""
+read_case held "a backslash mid-path in quotes is not a Read" "cat '$root/x\\$L'"
+read_case held "a parenthesis mid-path in quotes is not a Read" "cat '$root/x($L'"
+read_case held "a redirect mid-path in quotes is not a Read" "cat '$root/x>$L'"
+read_case held "a newline mid-path in quotes is not a Read" "cat '$root/x
+$L'"
+read_case held "a double quote inside a single-quoted path is not a Read" "cat '$root/x\"y$L'"
+read_case held "a command on a line before the read is not a Read" "touch x
+cat '$L'"
+
+# a $kru: mention opens the gate only as the whole word the skill is named by
+n=0
+mention_case() { # <label> <prompt text>
+  n=$((n+1)); prompt mn$n "$2"
+  run PreToolUse require-lead "$(edit_call mn$n)"
+  report "$1" "$([ "$code" -eq 2 ] && printf '%s' "$err" | grep -q 'has not loaded the lead contract' && echo true || echo false)" "exit $code [$err]: $2"
+}
+mention_case "a mention of another skill name does not load the contract" 'use $kru:leader for this'
+mention_case "a mention glued to a word does not load the contract" 'use x$kru:lead for this'
+mention_case "a mention without the dollar does not load the contract" 'use kru:lead for this'
+mention_case "a mention that continues into a longer name does not load the contract" 'use $kru:lead-x for this'
+
+# a session id is a file name in the shadow dir and nothing more
+prompt '../escape' 'build it with $kru:lead please'
+prompt 'a/b' 'hello'
+shadows=$(find "$home" -name '*escape*' -o -name 'a_b*' | sort)
+inside=$(find "$home/.kru" -path '*/codex-transcripts/*' \( -name '*escape*' -o -name 'a_b*' \) | sort)
+report "a session id with slashes stays one file inside the shadow dir" "$([ -n "$shadows" ] && [ "$shadows" = "$inside" ] && [ "$(printf '%s\n' "$shadows" | wc -l | tr -d ' ')" = 2 ] && echo true || echo false)" "found [$shadows]"
+run PreToolUse require-lead "$(edit_call '../escape')"
+report "the traversal-shaped session id still carries its own mention" "$([ "$code" -eq 0 ] && [ -z "$err" ] && echo true || echo false)" "exit $code [$err]"
+
 # --- brainstorm-guard: no writes between the brainstorm load and the unlock ----------------------------
 prompt b1 'let us brainstorm: $kru:brainstorm a new cli'
 run PreToolUse brainstorm-guard "$(edit_call b1)"
