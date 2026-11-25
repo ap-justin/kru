@@ -74,6 +74,7 @@ check_versions() {
 step "skill path references (scripts/check-skill-paths.sh)" bash scripts/check-skill-paths.sh
 step "bash syntax (every tracked .sh)" check_syntax
 step "roster audit (scripts/audit.sh)" bash scripts/audit.sh
+step "codex build (scripts/build-codex.sh --verify)" bash scripts/build-codex.sh --verify
 step "hook + script tests (*.test.sh)" run_tests
 step "JSON/YAML + agent/skill frontmatter" check_data_files
 step "version consistency" check_versions
