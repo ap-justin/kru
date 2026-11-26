@@ -57,14 +57,14 @@ Behavior-over-implementation, public-interface-only assertions, boundary-only mo
 - Run the exact suite command the repo uses (from its scripts), scoped to the files you touched; fail fast where the runner supports it.
 - **One-shot, never watch.** Plenty of repos wire the default `test` script to interactive watch mode — it never exits, and it hangs your run with no result to report. Take the repo's own one-shot/CI script if it has one, otherwise pass the runner's non-watch flag; confirm from the script and the runner's docs, not from habit.
 - On failure, read the actual error and fix the test **or** flag a genuine product bug — say which. Don't paper over a real defect by loosening the assertion.
-- **A bug in code outside your task is pinned.** Leave the code as it behaves, with a test of today's behavior, and beside it the test for the right behavior, named for the bug and skipped. Before skipping it, run it once and see it fail on the bug's output. The fix then only unskips one test and deletes the other. Report the bug in your return. A bug in code your task changes is fixed, with its test.
+- **A bug in code outside your task is pinned.** Leave the code as it behaves, with a test of today's behavior, and beside it the test for the right behavior, named for the bug and marked as expected to fail: `it.fails` in Vitest, `test.failing` in Jest. Run it once without the mark first and see it fail on the bug's output. The mark keeps it running, and it goes red the day the bug is fixed, so the fix removes the mark and deletes the pin. Under a runner with no such mark, skip it instead. Report the bug in your return. A bug in code your task changes is fixed, with its test.
 
   ```ts
   it("a negative amount (today: £-5)", () => {
     expect(formatPounds(-500)).toBe("£-5");
   });
 
-  it.skip("a negative amount (bug: should read -£5)", () => {
+  it.fails("a negative amount (bug: should read -£5)", () => {
     expect(formatPounds(-500)).toBe("-£5");
   });
   ```
