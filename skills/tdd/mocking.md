@@ -13,6 +13,15 @@ Don't mock:
 - Internal collaborators
 - Anything you control
 
+## A fake that can't drift
+
+A hand-written fake beats a mock at a boundary your code owns the interface of (a repository, the app's own `Payments` or `Mailer` interface):
+
+- **It implements the interface.** `class FakeOrders implements Orders`, kept next to the real one and shared by every test that needs it, never copied. Its rows sit in public arrays or maps the test reads. A vendor's fake implements the app's interface for that vendor, never the vendor SDK's types.
+- **It passes the real one's tests.** Run the repository's own round-trip suite against both the real repository and the fake. A guarantee the fake gives that no shared test covers (a uniqueness check, a lock) is one it can drop silently: add the shared test.
+- **Assert state, not calls.** Read what the fake now holds (the row written, the email sent), compared whole. Assert a call only for a port that changes the outside world, as the fake's recorded list.
+- **Time and IDs are constructor arguments.** `now: () => Date` and the ID source come in through the constructor, and the test fixes both and writes out the values they produce, with no fake timers.
+
 ## Designing for Mockability
 
 At system boundaries, design interfaces that are easy to mock:
