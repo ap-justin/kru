@@ -52,4 +52,4 @@ Comments are the deliverable. The house standard, in one line: **a comment carri
 ## Don't
 
 - Don't touch code a finding doesn't need: a fix that reflowed or renamed something in passing makes the pass unreviewable.
-- Don't run the formatter or the whole-repo build afterwards: the formatter's diff hides yours, and step 5's focused check is the run that proves a fix.
+- Don't run the formatter or the whole-repo build afterwards: the formatter's diff hides yours, and the test or check step 5 runs is what proves a fix.
