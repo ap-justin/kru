@@ -1,12 +1,12 @@
 ---
 name: sky
-description: "Handing a build to Sky, the self-hosted service that runs Claude Code agents in sandboxes. Use when starting a Sky run, waiting on it, answering its questions or approvals, previewing its build, setting up a repo's Sky environment, or when Sky is down. Running Claude Code directly: claude-code-delegation."
+description: "Handing a build to Sky, the self-hosted service that runs Claude Code or Codex agents in sandboxes. Use when starting a Sky run, switching an environment to Codex, waiting on it, answering its questions or approvals, previewing its build, setting up a repo's Sky environment, or when Sky is down. Running Claude Code directly: claude-code-delegation."
 user-invocable: false
 ---
 
 # Handing a build to Sky
 
-Sky runs each agent in its own Claude Code session, git branch and worktree inside the environment's sandbox (one sprite per environment), and holds the run when the agent needs an answer or an approval. Sky's `docs/driving-agents.md` is the walk-through; its `README.md` lists the routes, MCP tools and webhook events.
+Sky runs each agent in its own Claude Code session, git branch and worktree inside the environment's sandbox (one sprite per environment), and holds the run when the agent needs an answer or an approval. A run can drive Codex instead (*Codex runs* below). Sky's `docs/driving-agents.md` is the walk-through; its `README.md` lists the routes, MCP tools and webhook events.
 
 Install the CLI from the Sky you run; it needs Node 24 or later and `SKY_URL` set as an environment variable (per *Once per agent* below; with only the config file, put its `url` in the command instead): `mkdir -p ~/.local/bin && curl -fsSL "$SKY_URL/cli/sky.mjs" -o ~/.local/bin/sky && chmod +x ~/.local/bin/sky` (`~/.local/bin` on `PATH`), then check it with `sky --version`. Rerun the `curl` to update; the file matches the API it came from. Every `sky` command reads the config `sky apply` reads (`SKY_URL`, `SKY_API_KEY` or the config file) and takes `--json` to print the API's object instead of a line. The MCP server (`POST /mcp`) has matching tools: `launch`, `wait_for_events`, `status`, `list_agents`, `answer`, `approve` (which also denies, with `decision: "deny"`), `followup`, `stop`, `archive`, `create_env`, `preview`.
 
@@ -69,6 +69,8 @@ CLAUDE_CODE_OAUTH_TOKEN="$(<'<token file the runner names>')" env -u ANTHROPIC_A
 ```
 
 The `env -u` list unsets the project's Anthropic key, token, base URL and provider switches, so the nested session logs in with the run's subscription. `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST=1` makes the nested Claude ignore endpoint and credential `env` entries from a settings file and any stored login, so it runs on the token the command passes; `KRU_NO_LEAD_GATE=1` keeps the lead gate from blocking its first tool call. The agent leaves the token file to the command and writes each check's output to the scratch dir, read with the Read tool. The brief names the checks in its done-check so the summary reports them. Their passing is the agent's evidence, not the independent check [`reliable-work`](../reliable-work/SKILL.md) stands beside it.
+
+A Codex run has no Claude login, so it reports these checks as not run (*Codex runs*).
 
 A summary that says a check couldn't run is a gap to report, not a pass. The log holds the nested session's stderr and one JSON object. Before counting a nested check as run, the agent finds that object, reads its `.result` for the report, and reports each of these it finds in its final message:
 
@@ -137,10 +139,23 @@ Each run refreshes kru at start with a 30-second limit. A failed refresh logs on
 
 An environment runs on one subscription unless it is set to a pool (`sky env set-claude <env> pool`), which moves its runs to the subscription with the most headroom. A run that hits its subscription's usage limit is retried once on the pay-per-use API key (a pool tries its next subscription first). With no key on the server, or the environment's fallback set to `none`, a launch while the subscription is limited fails with `claude_limited` and the reset time.
 
+## Codex runs
+
+A run can drive OpenAI's Codex CLI instead of Claude Code, with its model served by the Vercel AI Gateway. Sky's `README.md` → *Codex runs* is the source.
+
+- **Turning it on.** `sky` has no Codex flag: the runtime comes from `SKY_RUNTIME=codex`, set as an environment secret for every run there (`printf codex | sky secret set <env> SKY_RUNTIME`), or in one run's `envVars` for that run alone. Only the REST launch takes `envVars` (`"envVars": {"SKY_RUNTIME": "codex"}` in the body of `POST /v1/agents` or of a follow-up run); `sky agent start`, `sky agent follow-up` and the MCP `launch` and `followup` don't. The environment needs the `AI_GATEWAY_API_KEY` secret. `SKY_CODEX_MODEL` picks the model by the gateway's name for it; unset, the run uses the runner's default.
+- **Plugins.** `SKY_CODEX_PLUGINS=<plugin>@<marketplace>,...`, such as `kru@kru`, lists the plugins a run turns on. The environment's `setup` installs them under the run's Codex home, `$HOME/.sky/codex` (or `SKY_CODEX_HOME`). Before each run Sky rewrites `config.toml` there and deletes `hooks.json`; other files, such as `plugins/cache/` and `agents/`, stay. So a setup's hooks ship inside a plugin, never in a loose `hooks.json`. With any plugin named, Codex runs every hook without its trust prompt. Kru's Codex build is [kru-codex](https://github.com/salasjustin/kru-codex); its README has the install.
+- **The gateway key stays in the runner.** Codex reaches the gateway through a loopback proxy the runner starts for the run, with a token made for that run. Hooks get Codex's env, token included, so with plugins on, treat the token as within the agent's reach: a command can change a plugin hook that later sees it. The token is good for model calls while the run lasts; the key itself never reaches Codex, its commands or its hooks.
+- **Publishing and approvals.** The agent publishes with the `sky_publish` tool and refreshes with `sky_sync`, in place of `node /opt/sky/runner.mjs publish` and `sync`; each opens one approval, as `publish` and `sync` do. Codex asks before every file change and every command its own list doesn't call safe, and Sky answers from the environment's `approvalPolicy` as it does for Claude Code, except that a change to a file outside the worktree always waits for a person.
+- **No Kru checks inside the run.** A check that runs `claude` can't run there, so `/kru:reflect` and `/kru:text-fix` come back as not run. Run them yourself on the published branch before merging ([`claude-code-delegation`](../claude-code-delegation/SKILL.md)).
+- **Not carried over from Claude Code runs:** the base profile's MCP servers, background tasks, the default git identity, and the outside-read gate. Codex runs the commands it counts as read-only, such as `cat`, `ls` and `grep`, without asking, wherever they read.
+- **Switching back.** `sky secret delete <env> SKY_RUNTIME` returns the environment's runs to Claude Code, on its Claude credential (*Usage limit*). The nested Kru checks need a subscription login, which a run on the API key doesn't have. On a subscription or pool credential, `sky env set-claude <env> <credential> --fallback=none` (admin key only) keeps runs off the API key, and a launch while the subscription is limited then fails with `claude_limited`.
+
 ## Known gaps
 
 These are gaps in the current Sky, not features to build on:
 
+- Sky's README says an environment made before Codex was added needs `sky apply` once to install it. `sky apply` with an unchanged `env.yaml` can answer "up to date" without installing it, and the Codex launch then fails with `ENOENT … /opt/sky/node_modules/.bin/codex`. Tell whoever runs your Sky deploy. Don't rebuild the sprite to fix it: a rebuild drops every agent's session.
 - When an environment's sprite is gone, the next launch marks the environment `failed`. Running `sky apply` again retries it and recreates the sprite. The rebuild drops every agent's session, so a follow-up after it starts a fresh conversation on the agent's branch.
 - Archiving an agent whose sprite is gone archives it but returns `worktree_remove_failed`.
 
