@@ -4,13 +4,13 @@ description: Audit the comments in a target — working tree, path, branch or PR
 disable-model-invocation: true
 ---
 
-<!-- the fix-the-cause and encode-the-constraint steps adapt ideas from Cursor pstack's `no-comments` skill (MIT, commit 2f87c854fe3e2fcda44ca86b46ede35aad3c46b7), in kru's own wording; see SOURCES.md. -->
+<!-- step 5, fix the cause and encode the constraint, adapts ideas from Cursor pstack's `no-comments` skill and `comment-sicko` agent (MIT, commit 2f87c854fe3e2fcda44ca86b46ede35aad3c46b7), in kru's own wording; see SOURCES.md. -->
 
-Comments are the deliverable; code and tests move only where a finding needs it. The house standard, in one line: **a comment carries what the code can't, in the voice of the comments around it, written for the next person to read the code and never for the person who asked for the change.** An agent-written diff drifts off that standard in two directions at once — it adds notes addressed to the prompter, and it drops the notes that were already there.
+Comments are the deliverable. The house standard, in one line: **a comment carries what the code can't, in the voice of the comments around it, written for the next person to read the code and never for the person who asked for the change.** An agent-written diff drifts off that standard in two directions at once — it adds notes addressed to the prompter, and it drops the notes that were already there.
 
 **Every hunk in the resulting diff is either a comment edit or the smallest code or test change that resolves a finding inside the target.** Nothing unrelated moves, nothing reformats, no imports churn. That's the completion criterion, and it's checkable: read `git diff` at the end, tie each non-comment hunk to a finding the report names, and revert anything else the pass or a formatter touched.
 
-**Under `text-fix`, this is a comments-only pass:** every hunk it writes is a comment line, and each step 5 fix goes in the report as an offer. Only a direct `comment-fix` run changes code or tests.
+**Under `text-fix`, this is a comments-only pass:** every hunk it writes is a comment line, and each step 5 fix goes in the report as an offer.
 
 ## Do
 
@@ -34,7 +34,7 @@ Comments are the deliverable; code and tests move only where a finding needs it.
    - **Position markers** — a section banner (`// ---- helpers ----`) or a closing-brace tag (`} // end try`) marks structure a named extraction should carry. Cut the reflexive ones; a banner survives only where the grouping is real and the file already leans on the convention. The extraction the marker implies is code and out of scope — name it in the report instead.
    - **Stale** — the comment describes behavior the code no longer has. Rewrite it to the truth, or cut it. A wrong comment outranks the code in the reader's head, which is why it's the worst line in the file. A comment imprecise from its first commit (*returns when closed* on a method that really waits a timeout and throws) is stale one commit early — exact, or absent.
 4. **Keep, always:**
-   - **Anything answering *why*** — the constraint, the ordering that matters, the bug a workaround exists for, the value chosen after the obvious one failed. Two shapes of it read like cut classes and aren't: the one fact that rules out a correct-looking alternative (`throw, not cast: sdk returns null on rate-limit` — tighten a paragraph of weighing down to it, don't cut it), and an outside constraint this line must obey that names where it lives (`≤ queue visibility timeout in wrangler.jsonc`). Chatty-and-load-bearing beats terse-and-gone: when a *why* comment reads badly, tighten the wording and leave the fact. When the *why* explains a surprise in our own code rather than a vendor, platform or protocol, step 5 fixes the cause. A verified vendor, platform or protocol constraint with no enforceable replacement stays as a short factual comment; a true hazard never goes invisible because the comment read badly.
+   - **Anything answering *why*** — the constraint, the ordering that matters, the bug a workaround exists for, the value chosen after the obvious one failed. Two shapes of it read like cut classes and aren't: the one fact that rules out a correct-looking alternative (`throw, not cast: sdk returns null on rate-limit` — tighten a paragraph of weighing down to it, don't cut it), and an outside constraint this line must obey that names where it lives (`≤ queue visibility timeout in wrangler.jsonc`). Chatty-and-load-bearing beats terse-and-gone: when a *why* comment reads badly, tighten the wording and leave the fact. When the *why* explains a surprise in our own code rather than a vendor, platform or protocol, step 5 fixes the cause. A verified vendor, platform or protocol constraint with no enforceable replacement stays as a short factual comment.
    - **Directives** — `eslint-disable-next-line`, `@ts-expect-error`, `biome-ignore`, `# noqa`, `# type: ignore`, `@vite-ignore`, `prettier-ignore`, shebangs, license headers, `Code generated … DO NOT EDIT` banners. These are API, not prose; recasing or rewording one silently turns a tool off. Look up the rule each suppression silences. One guarding correctness or safety (`no-floating-promises`, a `@ts-expect-error` over a nullable read) gets the step 5 fix and the suppression comes off when the fix is in scope; a style-only suppression or one over a faulty rule may stay. Shebangs, license headers, generated-file banners and formatter directives stay as they are.
    - **Doc comments on an exported surface** — JSDoc/TSDoc/docstrings carry their own conventions (capitalized sentences, `@param`). Correct them for accuracy; leave the case.
    - **A file written to teach** — a tutorial, an example, a template whose annotations mark what a later run replaces. Its comment density is the file's purpose; hold its comments to *exact*, not to the cut list.
@@ -52,4 +52,4 @@ Comments are the deliverable; code and tests move only where a finding needs it.
 ## Don't
 
 - Don't touch code a finding doesn't need: a fix that reflowed or renamed something in passing makes the pass unreviewable.
-- Don't run the formatter or the whole-repo build afterwards; their diff hides yours.
+- Don't run the formatter or the whole-repo build afterwards: the formatter's diff hides yours, and step 5's focused check is the run that proves a fix.
