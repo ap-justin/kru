@@ -32,11 +32,11 @@ Four classes of text, four standards, and a real target almost always carries mo
 
    A **sprawl** call — a document simply too long, whose cure is splitting by branch or disclosing reference behind a pointer — goes in the report. Restructuring a document the whole repo reads is a design call, and this pass changes wording.
 
-5. **Each standard's own "only thing that moves" line is scoped to its class here, and the union above is the bound.** `comment-fix` alone says every hunk is a comment line; here that means every hunk *it* writes is a comment line. Where two passes meet in one file, both are yours and each edit answers to its own standard — the hand-off notes those files carry (*a hit inside a comment is `comment-fix`'s; leave it and say so*) resolve to *fix it under the other pass* rather than to a line in the report.
+5. **Each standard's own "only thing that moves" line is scoped to its class here, and the union above is the bound.** `comment-fix` run directly also lands its step 5 code and test fixes; here it stays a comments-only pass, so every hunk *it* writes is a comment line and each such fix goes in its report section as an offer. Where two passes meet in one file, both are yours and each edit answers to its own standard — the hand-off notes those files carry (*a hit inside a comment is `comment-fix`'s; leave it and say so*) resolve to *fix it under the other pass* rather than to a line in the report.
 
    One conflict has a winner: `doc-fix` and `prose-fix` ban `—` binary because a human reads that text, and an agent doc is not that text. **The file's class decides**, so a `—` in `README.md` goes and the same character in `CLAUDE.md` stays.
 
-6. **Report, one section per pass that ran**, each a counted summary with its notable changes, as its own standard specifies; the per-edit lists with `file:line` on request. Then the passes that were skipped, and step 4's fixed-wording lines and sprawl calls. Then the union diff check from the top of this file, in a line: what moved, and that it was text only.
+6. **Report, one section per pass that ran**, each a counted summary with its notable changes, as its own standard specifies; the per-edit lists with `file:line` on request. Then the passes that were skipped, step 4's fixed-wording lines and sprawl calls, and the code or test fixes `comment-fix` offered under its step 5. Then the union diff check from the top of this file, in a line: what moved, and that it was text only.
 
 ## Don't
 
