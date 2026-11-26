@@ -10,6 +10,8 @@ Comments are the deliverable; code and tests move only where a finding needs it.
 
 **Every hunk in the resulting diff is either a comment edit or the smallest code or test change that resolves a finding inside the target.** Nothing unrelated moves, nothing reformats, no imports churn. That's the completion criterion, and it's checkable: read `git diff` at the end, tie each non-comment hunk to a finding the report names, and revert anything else the pass or a formatter touched.
 
+**Under `text-fix`, this is a comments-only pass:** every hunk it writes is a comment line, and each step 5 fix goes in the report as an offer. Only a direct `comment-fix` run changes code or tests.
+
 ## Do
 
 1. **Resolve the target** from the invoking task (path, branch name, or PR number; default working tree):
@@ -39,8 +41,8 @@ Comments are the deliverable; code and tests move only where a finding needs it.
    - **Vendored and generated files** — not yours to restyle.
 5. **Fix the cause, then encode the constraint.** A comment that excuses surprising code, and a suppression over a real hazard, points at something the code could say itself.
    - **Trace first.** Read the named symbol or call before judging; the comment may be stale, the workaround may be dead, or the API it dodges may have a real entry point.
-   - **Own-code workaround.** Make the smallest rename, extraction, type, real API use or other root-cause fix that makes the rationale unnecessary, then delete the rationale. When code moves, add or update a focused test that pins the behavior.
-   - **Enforceable constraint** (*do not remove*, *must stay in sync*, *call before X*). Encode it in the cheapest seam that exists: a type, a runtime invariant, a focused test, or a lint or CI rule the repo already runs. Once the encoding passes, delete the prose it replaces.
+   - **Own-code workaround.** Make the smallest rename, extraction, type, real API use or other root-cause fix that makes the rationale unnecessary, then delete the rationale. When code moves, add or update a focused test that pins the behavior, and run it.
+   - **Enforceable constraint** (*do not remove*, *must stay in sync*, *call before X*). Encode it in the cheapest seam that exists: a type, a runtime invariant, a focused test, or a lint or CI rule the repo already runs. Run that check, and once it passes, delete the prose it replaces.
    - **Out of scope or unenforceable.** Keep the minimum accurate *why* comment and report the exact remaining root cause. A new CI workflow, a public API change or a broad refactor is an offer in the report, not part of this diff.
 6. **Restore what the change dropped.** The other half of the standard: moving or refactoring code preserves its comments. Read the target's deletions — a comment that vanished while its code moved goes back at the code's new home. A comment left heading code inserted between it and its line is orphaned the same way — move it back down to its line. A comment deleted *with* the code it described is correctly gone.
 7. **Bring the prose that's left into the file's voice** — inline explanatory comments only, with step 4's directives and doc comments exempt. Case and grammar follow the comments around it: sentences where the file writes them, lowercase fragments where it has none to match. A comment already in the file's voice is left alone. Edit only what the language's own comment syntax opens: a `//` inside a string, a template literal, or JSX text is not a comment.
@@ -49,5 +51,5 @@ Comments are the deliverable; code and tests move only where a finding needs it.
 
 ## Don't
 
-- Keep code changes to what a finding needs: the smallest fix inside the target, nothing reflowed or renamed in passing, so the diff stays reviewable.
-- Run the focused test for any code you moved or encoded. Skip the formatter and the whole-repo build; their diff hides yours.
+- Don't touch code a finding doesn't need: a fix that reflowed or renamed something in passing makes the pass unreviewable.
+- Don't run the formatter or the whole-repo build afterwards; their diff hides yours.
