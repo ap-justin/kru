@@ -57,7 +57,7 @@ Behavior-over-implementation, public-interface-only assertions, boundary-only mo
 - Run the exact suite command the repo uses (from its scripts), scoped to the files you touched; fail fast where the runner supports it.
 - **One-shot, never watch.** Plenty of repos wire the default `test` script to interactive watch mode — it never exits, and it hangs your run with no result to report. Take the repo's own one-shot/CI script if it has one, otherwise pass the runner's non-watch flag; confirm from the script and the runner's docs, not from habit.
 - On failure, read the actual error and fix the test **or** flag a genuine product bug — say which. Don't paper over a real defect by loosening the assertion.
-- **A bug in code your task doesn't change is pinned, not fixed.** Leave the code as it behaves, with a test that pins today's behavior, and beside it the test for the right behavior, named for the bug and skipped. Before skipping it, run it once and see it fail on the bug's output. The fix then only unskips one test and deletes the other. Report the bug in your return. A bug in code your task changes is fixed, with its test.
+- **A bug in code outside your task is pinned.** Leave the code as it behaves, with a test of today's behavior, and beside it the test for the right behavior, named for the bug and skipped. Before skipping it, run it once and see it fail on the bug's output. The fix then only unskips one test and deletes the other. Report the bug in your return. A bug in code your task changes is fixed, with its test.
 
   ```ts
   it("a negative amount (today: £-5)", () => {
